@@ -14,6 +14,7 @@ import LoginScreen from '../screens/Login';
 import Components from '../screens/Components';
 import Articles from '../screens/Articles';
 import Onboarding from '../screens/Onboarding';
+import PropertyLocationScreen from '../screens/PropertyLocation';
 
 // settings
 import SettingsScreen from '../screens/Settings';
@@ -171,6 +172,12 @@ const AppStack = createDrawerNavigator(
     },
     Documentation: {
       screen: DocumentationScreen,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+    PropertyLocation: {
+      screen: PropertyLocationScreen,
       navigationOptions: {
         drawerLabel: () => { }
       }

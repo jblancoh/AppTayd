@@ -3,6 +3,7 @@ const Onboarding          = require('../assets/imgs/getPro-bg-1.png');
 const Logo                = require('../assets/imgs/tayd-logo.png');
 const LogoTayder          = require('../assets/imgs/tayd-logo-tayder.png');
 const TaydLogo            = require('../assets/imgs/tayd-logo2.png');
+const TaydRegistro        = require('../assets/imgs/tayd-registro.png');
 const ProfileBackground   = require('../assets/imgs/bg5.png');
 const RegisterBackground  = require('../assets/imgs/register-bg.png');
 const Pro                 = require('../assets/imgs/bg.png');
@@ -27,10 +28,15 @@ const Products = {
   path: require('../assets/imgs/bg15.jpg')
 };
 
+const Icons = {
+  Ubicacion   : require('../assets/icons/T-Ubicacion.png'),
+};
+
 export default {
   Onboarding,
   Logo,
   TaydLogo,
+  TaydRegistro,
   LogoTayder,
   ProfileBackground,
   ProfilePicture,
@@ -42,5 +48,6 @@ export default {
   iOSLogo,
   androidLogo,
   CreativeTimLogo,
-  InvisionLogo
+  InvisionLogo,
+  Icons
 };

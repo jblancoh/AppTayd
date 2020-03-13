@@ -65,6 +65,7 @@ class DocumentationScreen extends React.Component {
   }
 
   render() {
+    const { navigation } = this.props;
     return (
       <DismissKeyboard>
         {
@@ -175,6 +176,7 @@ class DocumentationScreen extends React.Component {
                                   style={{ fontFamily: 'montserrat-bold' }}
                                   size={14}
                                   color={nowTheme.COLORS.WHITE}
+                                  onPress={() => navigation.navigate('PropertyLocation')}
                                 >
                                   Subir documentos
                                 </Text>

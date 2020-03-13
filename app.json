@@ -16,9 +16,16 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
+    "android": {
+      "package": "com.tayd.taydApp",
+      "config": {
+        "googleMaps": { "apiKey": "AIzaSyA8qjUbL-Zbv1pWZS9TBRD1QbdTM5_GsII" }   
+     }
+    },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.tayd.taydApp"
     },
     "packagerOpts": {
       "assetExts": ["ttf"]

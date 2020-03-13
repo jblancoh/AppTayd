@@ -36,7 +36,7 @@ class RegisterScreen extends React.Component {
                     </Block>
 
                     <Block middle>
-                      <Image source={Images.LogoTayder} style={styles.logoTayder} />
+                      <Image source={Images.TaydRegistro} style={styles.logoTayder} />
                     </Block>
                   </Block>
 
