@@ -5,7 +5,10 @@ import MapView from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 
+import PropertyTypeService from '../services/propertyType';
+
 import { Icon, Input } from '../components';
+import PropertyType from '../components/PropertyTypes';
 import { Images, nowTheme } from '../constants';
 
 const { width, height } = Dimensions.get('screen');
@@ -22,15 +25,29 @@ const DismissKeyboard = ({ children }) => (
 class PropertyLocationScreen extends React.Component {
     constructor(props) {
         super(props);
-    
         this.state = {
             isLoading: true,
             markers: [],
             location : null,
+            locationSelected: false,
             errorMessage: null,
+
+            propertyTypes: [],
+            propertyTypeValue: 1
         };
 
         this._getLocationAsync();
+    }
+
+    async componentWillMount() {
+      await PropertyTypeService.getAll()
+        .then(response => {
+          this.setState({propertyTypes : response.propertyTypes});
+        })
+        .catch(error => {
+          console.error(error);
+          alert('Ocurrió un error al hacer la petición al servidor.');
+        })
     }
 
     _getLocationAsync = async () => {
@@ -45,8 +62,16 @@ class PropertyLocationScreen extends React.Component {
       this.setState({ location });
     }
 
+    handleBottomButton = () => {
+      if(this.state.locationSelected) {
+        navigation.navigate('Home');
+      } else {
+        this.setState({locationSelected : true});
+      }
+    }
+
     render() {
-      let { location, errorMessage } = this.state;
+      let { location, errorMessage, locationSelected } = this.state;
         return (
         <DismissKeyboard>
           {
@@ -76,34 +101,64 @@ class PropertyLocationScreen extends React.Component {
                 </MapView>
                 
                 <View style={styles.bottomContainer}>
-                    <View style={{justifyContent: 'center', alignContent: 'center', paddingTop: 25}}>
-                      <Text style={{fontFamily: 'montserrat-regular', textAlign: 'center', fontWeight: '700'}} color={nowTheme.COLORS.SECONDARY} size={25}>
-                        Dirección
+                    <View style={[{ justifyContent: 'center', alignContent: 'center', paddingTop: 15 }, locationSelected ? styles.titleBorder : null]}>
+                      <Text style={{fontFamily: 'montserrat-regular', textAlign: 'center', fontWeight: '700', paddingBottom: 10}} color={nowTheme.COLORS.SECONDARY} size={25}>
+                        { locationSelected ? 'Confirmar dirección' : 'Dirección' }
                       </Text>
                     </View>
 
-                    <View style={{justifyContent: 'center', alignContent: 'center', paddingTop: 5}}>
-                      <Text style={{fontFamily: 'montserrat-regular', textAlign: 'center', fontWeight: '400'}} color={nowTheme.COLORS.SECONDARY} size={12}>
-                        Usa el PIN para verificar tu domicilio en el mapa.
-                      </Text>
-                    </View>
+                    {
+                      !locationSelected
+                      ? (
+                        <View>
+                          <View style={{justifyContent: 'center', alignContent: 'center', paddingTop: 5}}>
+                            <Text style={{fontFamily: 'montserrat-regular', textAlign: 'center', fontWeight: '500'}} color={nowTheme.COLORS.SECONDARY} size={12}>
+                              Usa el PIN para verificar tu domicilio en el mapa.
+                            </Text>
+                          </View>
 
-                    <View style={{ marginBottom: 5, justifyContent: 'center', alignContent: 'center', paddingTop: 10, }}>
-                      <Input
-                        placeholder="Av. Paseo Tabasco #457"
-                        editable={false}
-                        style={styles.inputs}
-                        iconContent={
-                          <Image style={styles.inputIcons} source={Images.Icons.Ubicacion} />
-                        }
-                      />
-                    </View>
+                          <View style={{ marginBottom: 5, justifyContent: 'center', alignContent: 'center', paddingTop: 10, }}>
+                            <Input
+                              placeholder="Av. Paseo Tabasco #457"
+                              editable={false}
+                              style={styles.inputs}
+                              iconContent={
+                                <Image style={styles.inputIcons} source={Images.Icons.Ubicacion} />
+                              }
+                              />
+                          </View>
+                        </View>
+                      )
+                      : (
+                        <View>
+                          <View style={{justifyContent: 'center', alignContent: 'center', padding: 10, borderBottomWidth: 1, borderBottomColor: '#E3E3E3' }}>
+                            <Text style={{ fontFamily: 'montserrat-regular', textAlign: 'center', fontWeight: '600' }} color={'#E3E3E3'} size={18}>
+                              Av. Paseo Tabasco 1234567 C.P. 20990 Esq. 1234 Abcd
+                            </Text>
+                          </View>
+
+                          <View style={{ justifyContent: 'center', alignContent: 'center', paddingTop: 5 }}>
+                            <Text style={{ fontFamily: 'montserrat-regular', textAlign: 'center', fontWeight: '500' }} color={nowTheme.COLORS.SECONDARY} size={12}>
+                              El domicilio es:
+                            </Text>
+                          </View>
+
+                          <View style={{ justifyContent: 'center', alignContent: 'center', paddingTop: 5 }}>
+                            {
+                              this.state.propertyTypes.map((value) => {
+                                <PropertyType newValue={this.state.propertyTypeValue} value={value.id} label={value.name} />
+                              })
+                            }
+                          </View>
+                        </View>
+                      )
+                    }
                 </View>
 
                 <Block center>
-                  <Button color={nowTheme.COLORS.BASE} round style={styles.createButton} onPress={() => navigation.navigate('Documentation')}>
+                  <Button color={nowTheme.COLORS.BASE} round style={styles.createButton} onPress={() => this.handleBottomButton()}>
                     <Text style={{ fontFamily: 'montserrat-bold' }} size={14} color={nowTheme.COLORS.WHITE}>
-                      SIGUIENTE
+                          { locationSelected ? 'CONFIRMAR' : 'SIGUIENTE' }
                     </Text>
                   </Button>
                 </Block>
@@ -125,6 +180,11 @@ const styles = StyleSheet.create({
   },
   mapStyle: {
     ...StyleSheet.absoluteFillObject,
+  },
+
+  titleBorder: {
+    borderBottomWidth : 1,
+    borderBottomColor: '#E3E3E3'
   },
 
   inputIcons: {

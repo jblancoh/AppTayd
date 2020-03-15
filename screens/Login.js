@@ -5,12 +5,15 @@ import {
   Dimensions,
   StatusBar,
   TouchableWithoutFeedback,
-  Keyboard
+  Keyboard,
+  Alert,
+  AsyncStorage,
 } from 'react-native';
-import { Block, Checkbox, Text, Button as GaButton, theme } from 'galio-framework';
+import { Block, Text, Button, theme } from 'galio-framework';
 
-import { Button, Icon, Input, Switch } from '../components';
+import { Icon, Input } from '../components';
 import { Images, nowTheme } from '../constants';
+import AuthenticationService from '../services/authentication';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -22,13 +25,50 @@ class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isTayder : false
+      email     : '',
+      password  : ''
     };
   }
 
-  render() {
-    const { navigation } = this.props;
+  _handleLogin = () => {
+    if(this.state.email != '' && this.state.password != '') {
+      this._handleRequest();
+    } else {
+      Alert.alert('Upps!', 'Al parecer el formulario de acceso se encuentra incompleto.');
+    }
+  }
+  
+  async _handleRequest() {
+    let params = {
+      email     : this.state.email,
+      password  : this.state.password
+    };
 
+    await AuthenticationService.login(params)
+      .then(async (response) => {
+        if(response.user != null) {
+          try {
+            await AsyncStorage.setItem('access_token', response.access_token);
+            await AsyncStorage.setItem('expires_at', response.expires_at);
+            await AsyncStorage.setItem('user', JSON.stringify(response.user));
+
+            this.props.navigation.navigate('Home')
+          } catch (error) {
+            console.error(error);
+            that.setState({ isLoading: false });
+            Alert.alert('Inicio de sesión', 'Ocurrió un error inesperado al iniciar sesión.');
+          }
+        } else {
+          that.setState({ isLoading: false });
+          Alert.alert('Inicio de sesión', 'Correo o contraseña incorrectas.');
+        }
+      })
+      .catch(error => {
+        Alert.alert('Upps!', 'Correo o contraseña incorrectas.');
+      })
+  }
+
+  render() {
     return (
       <DismissKeyboard>
         <Block flex middle>
@@ -42,14 +82,7 @@ class LoginScreen extends React.Component {
                 <Block flex space="evenly">
                   <Block flex={0.4} middle style={styles.socialConnect}>
                     <Block flex={0.5} middle>
-                      <Text
-                        style={{
-                          fontFamily: 'montserrat-regular',
-                          textAlign: 'center'
-                        }}
-                        color="#333"
-                        size={24}
-                      >
+                      <Text style={{fontFamily: 'montserrat-regular', textAlign: 'center'}} color="#333" size={24} >
                         Inicio de sesión
                       </Text>
                     </Block>
@@ -61,9 +94,10 @@ class LoginScreen extends React.Component {
                         <Block>
                           <Block width={width * 0.8} style={{ marginBottom: 5 }}>
                             <Input
-                              placeholder="Número telefónico"
-                              type="phone-pad"
+                              placeholder="Email"
+                              type="email-address"
                               style={styles.inputs}
+                              onChangeText={(text) => this.setState({email : text})}
                               iconContent={
                                 <Icon
                                   size={16}
@@ -81,6 +115,7 @@ class LoginScreen extends React.Component {
                               password
                               viewPass
                               style={styles.inputs}
+                              onChangeText={(text) => this.setState({ password: text })}
                               iconContent={
                                 <Icon
                                   size={16}
@@ -92,22 +127,9 @@ class LoginScreen extends React.Component {
                               }
                             />
                           </Block>
-                          <Block row middle space="between" style={{ marginBottom: theme.SIZES.BASE }}>
-                            <Text
-                              style={{ fontFamily: 'montserrat-regular' }}
-                              size={14}
-                              color={nowTheme.COLORS.TEXT}
-                            >
-                              ¿Eres Tayder?
-                            </Text>
-                            <Switch
-                              value={this.state.isTayder}
-                              onValueChange={(value) => this.setState({isTayder : !this.state.isTayder})}
-                            />
-                        </Block>
                         </Block>
                         <Block center>
-                          <Button color="primary" round style={styles.createButton} onPress={() => navigation.navigate('Home')}>
+                          <Button color="primary" round style={styles.createButton} onPress={() => this._handleLogin()}>
                             <Text
                               style={{ fontFamily: 'montserrat-bold' }}
                               size={14}
