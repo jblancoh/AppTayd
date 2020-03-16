@@ -52,7 +52,7 @@ class LoginScreen extends React.Component {
             await AsyncStorage.setItem('expires_at', response.expires_at);
             await AsyncStorage.setItem('user', JSON.stringify(response.user));
 
-            this.props.navigation.navigate('Home')
+            this.props.navigation.navigate('PropertyLocation')
           } catch (error) {
             console.error(error);
             that.setState({ isLoading: false });

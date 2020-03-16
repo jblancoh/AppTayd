@@ -6,6 +6,7 @@ import { Switch } from '../components';
 const { height, width } = Dimensions.get('screen');
 import { Images, nowTheme } from '../constants/';
 import { HeaderHeight } from '../constants/utils';
+import Actions from '../lib/actions';
 
 export default class Onboarding extends React.Component {
   constructor(props) {
@@ -15,9 +16,16 @@ export default class Onboarding extends React.Component {
     };
   }
 
+  componentWillMount() {
+    Actions.extractUserData().then((result) => {
+      if (result != null) {
+        this.props.navigation.navigate('PropertyLocation')
+      }
+    });
+  }
+
   render() {
     const { navigation } = this.props;
-
     return (
       <Block flex style={[styles.container, this.state.isTayder ? styles.containerBlack:styles.containerRed]}>
         <StatusBar barStyle="light-content" />

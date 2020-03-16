@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Image, Dimensions, StatusBar, TouchableWithoutFeedback, Keyboard, View} from 'react-native';
+import {StyleSheet, Image, Dimensions, StatusBar, TouchableWithoutFeedback, Keyboard, View, Alert} from 'react-native';
 import { Block, Checkbox, Text, Button, theme } from 'galio-framework';
 import MapView from 'react-native-maps';
 import * as Location from 'expo-location';
@@ -33,7 +33,8 @@ class PropertyLocationScreen extends React.Component {
             errorMessage: null,
 
             propertyTypes: [],
-            propertyTypeValue: 1
+            propertyTypeValue: 1,
+            address: ''
         };
 
         this._getLocationAsync();
@@ -62,24 +63,40 @@ class PropertyLocationScreen extends React.Component {
       this.setState({ location });
     }
 
+    updatePropertyType = (value) => {
+      this.setState({ propertyTypeValue: value });
+    }
+
     handleBottomButton = () => {
       if(this.state.locationSelected) {
         navigation.navigate('Home');
-      } else {
+      } else if(this.state.address != '') {
         this.setState({locationSelected : true});
+      } else {
+        Alert.alert("Upps!", "No se ha colocado la dirección de la propiedad.");
       }
     }
 
     render() {
-      let { location, errorMessage, locationSelected } = this.state;
+      let { location, propertyTypes, locationSelected, address } = this.state;
         return (
         <DismissKeyboard>
           {
             (location != null) ?
             (
               <View style={styles.container}>
+                {
+                  locationSelected && (
+                    <View style={[styles.overlay, { height: height }]} />
+                  )
+                }
+
                 <MapView 
                     style={styles.mapStyle}
+                    pitchEnabled={!locationSelected ? true : false}
+                    rotateEnabled={!locationSelected ? true : false}
+                    scrollEnabled={!locationSelected ? true : false}
+                    zoomEnabled={!locationSelected ? true : false}
                     initialRegion={{
                         latitude: location.coords.latitude,
                         longitude: location.coords.longitude,
@@ -89,7 +106,7 @@ class PropertyLocationScreen extends React.Component {
                 >
                   <MapView.Marker
                     key={0}
-                    draggable
+                    draggable={!locationSelected ? true : false}
                     onDragEnd={(e) => alert(JSON.stringify(e.nativeEvent.coordinate))}
                     coordinate={{
                       latitude: location.coords.latitude,
@@ -100,15 +117,15 @@ class PropertyLocationScreen extends React.Component {
                   />
                 </MapView>
                 
-                <View style={styles.bottomContainer}>
-                    <View style={[{ justifyContent: 'center', alignContent: 'center', paddingTop: 15 }, locationSelected ? styles.titleBorder : null]}>
-                      <Text style={{fontFamily: 'montserrat-regular', textAlign: 'center', fontWeight: '700', paddingBottom: 10}} color={nowTheme.COLORS.SECONDARY} size={25}>
-                        { locationSelected ? 'Confirmar dirección' : 'Dirección' }
-                      </Text>
-                    </View>
+                <View style={[styles.bottomContainer, !locationSelected ? { height: 160 } : {height: 250}]}>
+                  <View style={[{ justifyContent: 'center', alignContent: 'center', paddingTop: 15 }, locationSelected ? styles.titleBorder : null]}>
+                    <Text style={{fontFamily: 'montserrat-regular', textAlign: 'center', fontWeight: '700', paddingBottom: 10}} color={nowTheme.COLORS.SECONDARY} size={25}>
+                      { locationSelected ? 'Confirmar dirección' : 'Dirección' }
+                    </Text>
+                  </View>
 
-                    {
-                      !locationSelected
+                  {
+                    !locationSelected
                       ? (
                         <View>
                           <View style={{justifyContent: 'center', alignContent: 'center', paddingTop: 5}}>
@@ -120,7 +137,7 @@ class PropertyLocationScreen extends React.Component {
                           <View style={{ marginBottom: 5, justifyContent: 'center', alignContent: 'center', paddingTop: 10, }}>
                             <Input
                               placeholder="Av. Paseo Tabasco #457"
-                              editable={false}
+                              onChangeText={(text) => this.setState({address : text})}
                               style={styles.inputs}
                               iconContent={
                                 <Image style={styles.inputIcons} source={Images.Icons.Ubicacion} />
@@ -133,7 +150,7 @@ class PropertyLocationScreen extends React.Component {
                         <View>
                           <View style={{justifyContent: 'center', alignContent: 'center', padding: 10, borderBottomWidth: 1, borderBottomColor: '#E3E3E3' }}>
                             <Text style={{ fontFamily: 'montserrat-regular', textAlign: 'center', fontWeight: '600' }} color={'#E3E3E3'} size={18}>
-                              Av. Paseo Tabasco 1234567 C.P. 20990 Esq. 1234 Abcd
+                              { address }
                             </Text>
                           </View>
 
@@ -143,10 +160,10 @@ class PropertyLocationScreen extends React.Component {
                             </Text>
                           </View>
 
-                          <View style={{ justifyContent: 'center', alignContent: 'center', paddingTop: 5 }}>
+                          <View style={{ justifyContent: 'center', alignContent: 'center', flexDirection: 'row', paddingTop: 5 }}>
                             {
-                              this.state.propertyTypes.map((value) => {
-                                <PropertyType newValue={this.state.propertyTypeValue} value={value.id} label={value.name} />
+                              propertyTypes.map((value) => {
+                                return <PropertyType newValue={this.state.propertyTypeValue} value={value.id} label={value.name} updateValue={this.updatePropertyType} />
                               })
                             }
                           </View>
@@ -178,7 +195,18 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
+  overlay: {
+    flex: 1,
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    opacity: 0.5,
+    backgroundColor: 'black',
+    width: width,
+    zIndex: 1
+  },
   mapStyle: {
+    zIndex: -1,
     ...StyleSheet.absoluteFillObject,
   },
 
@@ -199,10 +227,10 @@ const styles = StyleSheet.create({
   },
 
   bottomContainer: {
+    zIndex: 2,
     backgroundColor: nowTheme.COLORS.WHITE,
     borderRadius: 50,
     width: width * 0.88,
-    height: 160,
     paddingHorizontal: 20,
     shadowColor: nowTheme.COLORS.BLACK,
     shadowOffset: {
