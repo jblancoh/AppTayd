@@ -1,21 +1,14 @@
 import React from 'react';
-import {
-  StyleSheet,
-  ImageBackground,
-  Dimensions,
-  StatusBar,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Alert,
-  AsyncStorage,
-} from 'react-native';
-import { Block, Text, Button, theme } from 'galio-framework';
-
+import { Image, StyleSheet, StatusBar, Dimensions, Platform, TouchableHighlight, View , TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { Block, Button, Text, theme } from 'galio-framework';
 import { Icon, Input } from '../components';
-import { Images, nowTheme } from '../constants';
-import AuthenticationService from '../services/authentication';
 
-const { width, height } = Dimensions.get('screen');
+import { Images, nowTheme } from '../constants/';
+import { HeaderHeight } from '../constants/utils';
+import AuthenticationService from '../services/authentication';
+import { withNavigation } from 'react-navigation';
+
+const { height, width } = Dimensions.get('screen');
 
 const DismissKeyboard = ({ children }) => (
   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
@@ -71,163 +64,149 @@ class LoginScreen extends React.Component {
   render() {
     return (
       <DismissKeyboard>
-        <Block flex middle>
-          <ImageBackground
-            source={Images.RegisterBackground}
-            style={styles.imageBackgroundContainer}
-            imageStyle={styles.imageBackground}
-          >
-            <Block flex middle>
-              <Block style={styles.registerContainer}>
-                <Block flex space="evenly">
-                  <Block flex={0.4} middle style={styles.socialConnect}>
-                    <Block flex={0.5} middle>
-                      <Text style={{fontFamily: 'montserrat-regular', textAlign: 'center'}} color="#333" size={24} >
-                        Inicio de sesión
-                      </Text>
-                    </Block>
-                  </Block>
+        <Block flex middle style={styles.containerRed}>
+          <StatusBar barStyle="light-content" />
+          <Block flex middle>
+            <Block style={styles.registerContainer}>
+              <Block flex space="evenly">
+                <Block middle>
+                  <Image source={Images.Logo} style={styles.logoTayder} />
+                </Block>
 
-                  <Block flex={1} middle space="between">
-                    <Block center flex={0.9}>
-                      <Block flex space="between">
-                        <Block>
-                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
-                            <Input
-                              placeholder="Email"
-                              type="email-address"
-                              style={styles.inputs}
-                              onChangeText={(text) => this.setState({email : text})}
-                              iconContent={
-                                <Icon
-                                  size={16}
-                                  color="#ADB5BD"
-                                  name="lock"
-                                  family="FontAwesome"
-                                  style={styles.inputIcons}
-                                />
-                              }
-                            />
-                          </Block>
-                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
-                            <Input
-                              placeholder="Contraseña"
-                              password
-                              viewPass
-                              style={styles.inputs}
-                              onChangeText={(text) => this.setState({ password: text })}
-                              iconContent={
-                                <Icon
-                                  size={16}
-                                  color="#ADB5BD"
-                                  name="lock-circle-open2x"
-                                  family="NowExtra"
-                                  style={styles.inputIcons}
-                                />
-                              }
-                            />
-                          </Block>
+                <Block middle>
+                  <Text style={{ fontFamily: 'montserrat-regular', textAlign: 'center', fontWeight: '700' }} color={nowTheme.COLORS.WHITE} size={40}>
+                    Iniciar sesión
+                  </Text>
+                </Block>
+
+                <Block flex={1} middle space="between">
+                  <Block center flex={0.9}>
+                    <Block flex space="between">
+                      <Block>
+                        <Block width={width * 0.8}>
+                          <Input
+                            placeholder="Correo electrónico"
+                            placeholderTextColor={nowTheme.COLORS.WHITE}
+                            color={nowTheme.COLORS.WHITE}
+                            onChangeText={(text) => this.setState({ email: text })}
+                            style={styles.inputs}
+                            iconContent={
+                              <Image style={styles.inputIcons} source={Images.Icons.Perfil} />
+                            }
+                          />
                         </Block>
-                        <Block center>
-                          <Button color="primary" round style={styles.createButton} onPress={() => this._handleLogin()}>
-                            <Text
-                              style={{ fontFamily: 'montserrat-bold' }}
-                              size={14}
-                              color={nowTheme.COLORS.WHITE}
-                            >
-                              Accesar
-                            </Text>
-                          </Button>
+
+                        <Block width={width * 0.8}>
+                          <Input
+                            placeholder="Contraseña"
+                            placeholderTextColor={nowTheme.COLORS.WHITE}
+                            color={nowTheme.COLORS.WHITE}
+                            password
+                            viewPass
+                            onChangeText={(text) => this.setState({ email: text })}
+                            style={styles.inputs}
+                            iconContent={
+                              <Image style={styles.inputIcons} source={Images.Icons.Contrasena} />
+                            }
+                          />
                         </Block>
+                      </Block>
+
+                      <Block width={width * 0.8} style={{ marginTop: theme.SIZES.BASE * 0.8, marginBottom: theme.SIZES.BASE * 2 }}>
+                        <View style={{ flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>
+                          <Text style={{ fontFamily: 'trueno', fontSize: 12 }} color={nowTheme.COLORS.WHITE}>¿Aún no tienes una cuenta? </Text>
+                          <TouchableHighlight onPress={() => { }}>
+                            <View>
+                              <Text style={{ fontFamily: 'trueno-semibold', fontSize: 12, fontWeight: '700' }} color={nowTheme.COLORS.WHITE}> Regístrate</Text>
+                            </View>
+                          </TouchableHighlight>
+                        </View>
+                      </Block>
+
+                      <Block center>
+                        <Button color={nowTheme.COLORS.WHITE} round style={styles.createButton} onPress={() => this._handleLogin()}>
+                          <Text style={{ fontFamily: 'montserrat-bold' }} size={14} color={nowTheme.COLORS.BASE}>
+                            INGRESAR
+                          </Text>
+                        </Button>
                       </Block>
                     </Block>
                   </Block>
                 </Block>
               </Block>
             </Block>
-          </ImageBackground>
+           </Block> 
         </Block>
       </DismissKeyboard>
     );
   }
 }
 
+export default withNavigation(LoginScreen);
+
 const styles = StyleSheet.create({
-  imageBackgroundContainer: {
-    width: width,
-    height: height,
-    padding: 0,
-    zIndex: 1
-  },
-  imageBackground: {
-    width: width,
-    height: height
+  containerRed: {
+    backgroundColor: nowTheme.COLORS.BASE,
   },
   registerContainer: {
-    marginTop: 55,
     width: width * 0.9,
-    height: height < 812 ? height * 0.8 : height * 0.8,
-    backgroundColor: nowTheme.COLORS.WHITE,
-    borderRadius: 4,
-    shadowColor: nowTheme.COLORS.BLACK,
-    shadowOffset: {
-      width: 0,
-      height: 4
-    },
-    shadowRadius: 8,
-    shadowOpacity: 0.1,
-    elevation: 1,
-    overflow: 'hidden'
+    height: height < 812 ? height * 0.9 : height * 0.9,
+    marginTop: 45,
+    marginBottom: 20,
   },
-  socialConnect: {
-    backgroundColor: nowTheme.COLORS.WHITE
-    // borderBottomWidth: StyleSheet.hairlineWidth,
-    // borderColor: "rgba(136, 152, 170, 0.3)"
+
+  logoTayder: {
+    width: 450,
+    height: 450,
   },
-  socialButtons: {
-    width: 120,
-    height: 40,
-    backgroundColor: '#fff',
-    shadowColor: nowTheme.COLORS.BLACK,
-    shadowOffset: {
-      width: 0,
-      height: 4
-    },
-    shadowRadius: 8,
-    shadowOpacity: 0.1,
-    elevation: 1
-  },
-  socialTextButtons: {
-    color: nowTheme.COLORS.PRIMARY,
-    fontWeight: '800',
-    fontSize: 14
-  },
-  inputIcons: {
-    marginRight: 12,
-    color: nowTheme.COLORS.ICON_INPUT
-  },
+
   inputs: {
     borderWidth: 1,
     borderColor: '#E3E3E3',
-    borderRadius: 21.5
+    borderRadius: 21.5,
+    backgroundColor: 'transparent'
   },
-  passwordCheck: {
-    paddingLeft: 2,
-    paddingTop: 6,
-    paddingBottom: 15
+  inputIcons: {
+    marginRight: 25,
+    width: 25,
+    height: 25,
   },
+
   createButton: {
     width: width * 0.5,
     marginTop: 25,
     marginBottom: 40
   },
-  social: {
-    width: theme.SIZES.BASE * 3.5,
-    height: theme.SIZES.BASE * 3.5,
-    borderRadius: theme.SIZES.BASE * 1.75,
-    justifyContent: 'center',
-    marginHorizontal: 10
-  }
+  
+  /* container: {
+    marginTop: Platform.OS === 'android' ? - HeaderHeight : 0,
+    backgroundColor: nowTheme.COLORS.BASE,
+  },
+
+  logoTayd: {
+    width: 480,
+    height: 480,
+    bottom: 25
+  },
+
+  sloganText: {
+    fontFamily: 'trueno-semibold',
+    position: 'absolute',
+    letterSpacing: 2,
+    paddingHorizontal: 20,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  padded: {
+    paddingHorizontal: theme.SIZES.BASE * 2,
+    bottom: Platform.OS === 'android' ? theme.SIZES.BASE * 2 : theme.SIZES.BASE * 3
+  },
+  button: {
+    width: width - theme.SIZES.BASE * 4,
+    height: theme.SIZES.BASE * 3,
+    borderRadius: 50,
+  },
+
+   */
 });
 
-export default LoginScreen;

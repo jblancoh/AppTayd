@@ -1,7 +1,8 @@
 import React from "react";
-import { View, TouchableWithoutFeedback, StyleSheet, Image } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import PropTypes from 'prop-types';
 import { Text } from 'galio-framework'
+import PropertyTypeService from '../services/propertyType';
 
 const icons = [
     require('../assets/icons/T-casa.png'),
@@ -19,58 +20,72 @@ export default class PropertyType extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            newValue: props.newValue,
-            value: props.value,
-            label: props.label
+            propertyTypes   : [],
+            newValue        : this.props.value,
         };
     }
 
+    async componentWillMount() {
+        await PropertyTypeService.getAll()
+            .then(response => {
+                this.setState({ propertyTypes: response.propertyTypes });
+            })
+            .catch(error => {
+                console.error(error);
+                alert('Ocurrió un error al hacer la petición al servidor.');
+            })
+    }
+
     _onPress(_id) {
-        this.setState({ value: _id });
+        this.setState({ newValue: _id });
         this.props.updateValue(_id);
     }
 
     render() {
-        const { newValue, value, label } = this.state;
+        const { propertyTypes, newValue } = this.state;
         return (
-            <TouchableWithoutFeedback key={value} onPress={() => this._onPress(value)}>
-                <View style={styles.checkboxContainer}>
-                    {
-                        (newValue == value)
-                        ? (
-                            <Image source={icons[value - 1]} style={{width: 50, height: 50}}/>
-                        ) 
-                        : (
-                            <Image source={iconsDisabled[value - 1]} style={{ width: 50, height: 50 }}/>
+            <View style={{ justifyContent: 'center', alignContent: 'center', flexDirection: 'row' }}>
+                {
+                    propertyTypes.map((value) => {
+                        return (
+                            <TouchableOpacity style={{backgroundColor: 'transparent'}} key={value.id} onPress={() => this._onPress(value.id)}>
+                                <View style={styles.checkboxContainer}>
+                                    {
+                                        (newValue == value.id)
+                                        ? (
+                                            <Image source={icons[value.id - 1]} style={{width: 50, height: 50}}/>
+                                        ) 
+                                        : (
+                                            <Image source={iconsDisabled[value.id - 1]} style={{ width: 50, height: 50 }}/>
+                                        )
+                                    }
+                                    <View style={{ marginLeft: 5 }}>
+                                        <Text style={styles.label}>{ value.name }</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
                         )
-                    }
-                    <View style={{ marginLeft: 5 }}>
-                        <Text style={styles.label}>{ label }</Text>
-                    </View>
-                </View>
-            </TouchableWithoutFeedback>
+                    })
+                }
+            </View>
         );
     }
 }
 
 PropertyType.propTypes = {
-    value       : PropTypes.number,
     newValue    : PropTypes.number,
     label       : PropTypes.string,
 };
 
 const styles = StyleSheet.create({
     checkboxContainer: {
-        flexDirection: 'column',
         alignItems: 'center',
-        padding: 15,
+        padding: 10,
     },
     label: {
-        fontFamily: 'montserrat-regular',
+        //fontFamily: 'montserrat-regular',
         textAlign: 'center',
         fontWeight: '400',
-        lineHeight: 1,
-        letterSpacing: 1,
         color: '#444444',
     }
 });

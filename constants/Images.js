@@ -30,6 +30,8 @@ const Products = {
 
 const Icons = {
   Ubicacion   : require('../assets/icons/T-Ubicacion.png'),
+  Perfil      : require('../assets/icons/T-perfil.png'),
+  Contrasena  : require('../assets/icons/T-contrasena.png'),
 };
 
 export default {

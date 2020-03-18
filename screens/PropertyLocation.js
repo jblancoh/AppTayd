@@ -5,8 +5,6 @@ import MapView from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 
-import PropertyTypeService from '../services/propertyType';
-
 import { Icon, Input } from '../components';
 import PropertyType from '../components/PropertyTypes';
 import { Images, nowTheme } from '../constants';
@@ -26,29 +24,18 @@ class PropertyLocationScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoading: true,
-            markers: [],
-            location : null,
+            isLoading       : true,
+            markers         : [],
+            location        : null,
             locationSelected: false,
-            errorMessage: null,
+            errorMessage    : null,
 
-            propertyTypes: [],
-            propertyTypeValue: 1,
-            address: ''
+            
+            propertyTypeValue : null,
+            address           : ''
         };
 
         this._getLocationAsync();
-    }
-
-    async componentWillMount() {
-      await PropertyTypeService.getAll()
-        .then(response => {
-          this.setState({propertyTypes : response.propertyTypes});
-        })
-        .catch(error => {
-          console.error(error);
-          alert('Ocurrió un error al hacer la petición al servidor.');
-        })
     }
 
     _getLocationAsync = async () => {
@@ -69,7 +56,7 @@ class PropertyLocationScreen extends React.Component {
 
     handleBottomButton = () => {
       if(this.state.locationSelected) {
-        navigation.navigate('Home');
+        this.props.navigation.navigate('Home');
       } else if(this.state.address != '') {
         this.setState({locationSelected : true});
       } else {
@@ -78,7 +65,7 @@ class PropertyLocationScreen extends React.Component {
     }
 
     render() {
-      let { location, propertyTypes, locationSelected, address } = this.state;
+      let { location, locationSelected, address } = this.state;
         return (
         <DismissKeyboard>
           {
@@ -160,19 +147,15 @@ class PropertyLocationScreen extends React.Component {
                             </Text>
                           </View>
 
-                          <View style={{ justifyContent: 'center', alignContent: 'center', flexDirection: 'row', paddingTop: 5 }}>
-                            {
-                              propertyTypes.map((value) => {
-                                return <PropertyType newValue={this.state.propertyTypeValue} value={value.id} label={value.name} updateValue={this.updatePropertyType} />
-                              })
-                            }
+                          <View style={{ justifyContent: 'center', alignContent: 'center', paddingTop: 5 }}>
+                            <PropertyType value={this.state.propertyTypeValue} updateValue={this.updatePropertyType} />
                           </View>
                         </View>
                       )
                     }
                 </View>
 
-                <Block center>
+                <Block center style={{zIndex : 2}}>
                   <Button color={nowTheme.COLORS.BASE} round style={styles.createButton} onPress={() => this.handleBottomButton()}>
                     <Text style={{ fontFamily: 'montserrat-bold' }} size={14} color={nowTheme.COLORS.WHITE}>
                           { locationSelected ? 'CONFIRMAR' : 'SIGUIENTE' }
