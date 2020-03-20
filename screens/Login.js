@@ -1,10 +1,9 @@
 import React from 'react';
-import { Image, StyleSheet, StatusBar, Dimensions, Platform, TouchableHighlight, View , TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { Image, StyleSheet, StatusBar, Dimensions, Platform, TouchableHighlight, View , TouchableWithoutFeedback, Keyboard, Alert, AsyncStorage } from 'react-native';
 import { Block, Button, Text, theme } from 'galio-framework';
 import { Icon, Input } from '../components';
 
 import { Images, nowTheme } from '../constants/';
-import { HeaderHeight } from '../constants/utils';
 import AuthenticationService from '../services/authentication';
 import { withNavigation } from 'react-navigation';
 
@@ -19,7 +18,8 @@ class LoginScreen extends React.Component {
     super(props);
     this.state = {
       email     : '',
-      password  : ''
+      password  : '',
+      isLoading : false,
     };
   }
 
@@ -32,6 +32,7 @@ class LoginScreen extends React.Component {
   }
   
   async _handleRequest() {
+    this.setState({isLoading : true});
     let params = {
       email     : this.state.email,
       password  : this.state.password
@@ -45,18 +46,25 @@ class LoginScreen extends React.Component {
             await AsyncStorage.setItem('expires_at', response.expires_at);
             await AsyncStorage.setItem('user', JSON.stringify(response.user));
 
-            this.props.navigation.navigate('PropertyLocation')
+            this.setState({ isLoading: false });
+            if(!response.user.first_login && !response.user.isTayder) {
+              this.props.navigation.navigate('PropertyLocation')
+            } else if(response.user.first_login && !response.user.isTayder) {
+              this.props.navigation.navigate('Home')
+            }
+
           } catch (error) {
             console.error(error);
-            that.setState({ isLoading: false });
+            this.setState({ isLoading: false });
             Alert.alert('Inicio de sesión', 'Ocurrió un error inesperado al iniciar sesión.');
           }
         } else {
-          that.setState({ isLoading: false });
+          this.setState({ isLoading: false });
           Alert.alert('Inicio de sesión', 'Correo o contraseña incorrectas.');
         }
       })
       .catch(error => {
+        this.setState({ isLoading: false });
         Alert.alert('Upps!', 'Correo o contraseña incorrectas.');
       })
   }
@@ -88,6 +96,7 @@ class LoginScreen extends React.Component {
                             placeholder="Correo electrónico"
                             placeholderTextColor={nowTheme.COLORS.WHITE}
                             color={nowTheme.COLORS.WHITE}
+                            type="email-address"
                             onChangeText={(text) => this.setState({ email: text })}
                             style={styles.inputs}
                             iconContent={
@@ -95,7 +104,6 @@ class LoginScreen extends React.Component {
                             }
                           />
                         </Block>
-
                         <Block width={width * 0.8}>
                           <Input
                             placeholder="Contraseña"
@@ -103,7 +111,7 @@ class LoginScreen extends React.Component {
                             color={nowTheme.COLORS.WHITE}
                             password
                             viewPass
-                            onChangeText={(text) => this.setState({ email: text })}
+                            onChangeText={(text) => this.setState({ password: text })}
                             style={styles.inputs}
                             iconContent={
                               <Image style={styles.inputIcons} source={Images.Icons.Contrasena} />
@@ -112,10 +120,10 @@ class LoginScreen extends React.Component {
                         </Block>
                       </Block>
 
-                      <Block width={width * 0.8} style={{ marginTop: theme.SIZES.BASE * 0.8, marginBottom: theme.SIZES.BASE * 2 }}>
+                      <Block width={width * 0.8} style={{ marginTop: theme.SIZES.BASE * 0.8, marginBottom: 10 }}>
                         <View style={{ flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>
                           <Text style={{ fontFamily: 'trueno', fontSize: 12 }} color={nowTheme.COLORS.WHITE}>¿Aún no tienes una cuenta? </Text>
-                          <TouchableHighlight onPress={() => { }}>
+                          <TouchableHighlight onPress={() => this.props.navigation.navigate('Onboarding')}>
                             <View>
                               <Text style={{ fontFamily: 'trueno-semibold', fontSize: 12, fontWeight: '700' }} color={nowTheme.COLORS.WHITE}> Regístrate</Text>
                             </View>
@@ -123,8 +131,27 @@ class LoginScreen extends React.Component {
                         </View>
                       </Block>
 
+                      <Block width={width * 0.8} style={{marginBottom: theme.SIZES.BASE * 2 }}>
+                        <View style={{alignSelf: 'center', justifyContent: 'center' }}>
+                          <TouchableHighlight onPress={() => { }}>
+                            <View>
+                              <Text style={{ fontFamily: 'trueno-semibold', fontSize: 12, fontWeight: '700' }} color={nowTheme.COLORS.WHITE}>
+                                ¿No puedes acceder a tu cuenta?
+                              </Text>
+                            </View>
+                          </TouchableHighlight>
+                        </View>
+                      </Block>
+
                       <Block center>
-                        <Button color={nowTheme.COLORS.WHITE} round style={styles.createButton} onPress={() => this._handleLogin()}>
+                        <Button
+                          round
+                          color={nowTheme.COLORS.WHITE}
+                          style={styles.createButton}
+                          loading={this.state.isLoading}
+                          loadingColor={nowTheme.COLORS.BASE}
+                          disabled={this.state.isLoading}
+                          onPress={() => this._handleLogin()}>
                           <Text style={{ fontFamily: 'montserrat-bold' }} size={14} color={nowTheme.COLORS.BASE}>
                             INGRESAR
                           </Text>
@@ -174,39 +201,8 @@ const styles = StyleSheet.create({
 
   createButton: {
     width: width * 0.5,
-    marginTop: 25,
     marginBottom: 40
   },
-  
-  /* container: {
-    marginTop: Platform.OS === 'android' ? - HeaderHeight : 0,
-    backgroundColor: nowTheme.COLORS.BASE,
-  },
 
-  logoTayd: {
-    width: 480,
-    height: 480,
-    bottom: 25
-  },
-
-  sloganText: {
-    fontFamily: 'trueno-semibold',
-    position: 'absolute',
-    letterSpacing: 2,
-    paddingHorizontal: 20,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  padded: {
-    paddingHorizontal: theme.SIZES.BASE * 2,
-    bottom: Platform.OS === 'android' ? theme.SIZES.BASE * 2 : theme.SIZES.BASE * 3
-  },
-  button: {
-    width: width - theme.SIZES.BASE * 4,
-    height: theme.SIZES.BASE * 3,
-    borderRadius: 50,
-  },
-
-   */
 });
 

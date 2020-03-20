@@ -8,8 +8,16 @@ function login(user) {
     });
 }
 
+function signup(user) {
+    return request({
+        url: 'auth/signup',
+        method: 'POST',
+        data: user
+    });
+}
+
 const AuthenticationService = {
-    login
+    login, signup
 }
 
 export default AuthenticationService;
