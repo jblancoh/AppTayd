@@ -47,6 +47,7 @@ export default class App extends React.Component {
       'montserrat-regular': require('./assets/font/Montserrat-Regular.ttf'),
       'montserrat-bold'   : require('./assets/font/Montserrat-Bold.ttf'),
       'trueno-semibold'   : require('./assets/font/TruenoSBd.ttf'),
+      'trueno'            : require('./assets/font/TruenoRg.ttf'),
     });
 
     this.setState({ fontLoaded: true });

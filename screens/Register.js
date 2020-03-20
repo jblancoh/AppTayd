@@ -1,16 +1,10 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Image,
-  Dimensions,
-  StatusBar,
-  TouchableWithoutFeedback,
-  Keyboard
-} from 'react-native';
-import { Block, Checkbox, Text, Button, theme } from 'galio-framework';
+import { StyleSheet, Image, Dimensions, TouchableWithoutFeedback, Keyboard, Alert, ActivityIndicator } from 'react-native';
+import { Block, Checkbox, Text, Button, } from 'galio-framework';
 
 import { Icon, Input } from '../components';
 import { Images, nowTheme } from '../constants';
+import AuthenticationService from '../services/authentication';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -19,9 +13,53 @@ const DismissKeyboard = ({ children }) => (
 );
 
 class RegisterScreen extends React.Component {
-  render() {
-    const { navigation } = this.props;
+  constructor(props) {
+    super(props);
+    this.state = {
+      isTayder  : this.props.navigation.state.params.isTayder,
+      phone     : '',
+      email     : '',
+      name      : '',
+      lastname  : '',
+      password  : '',
+      confirm   : '',
+      chkTerms  : false,
+      isLoading : false
+    };
+  }
 
+  _handleLogin = () => {
+    if(this.state.email != '' && this.state.password != '') {
+      this._handleRequest();
+    } else {
+      Alert.alert('Upps!', 'Al parecer el formulario de acceso se encuentra incompleto.');
+    }
+  }
+
+  async _handleRequest() {
+    this.setState({isLoading : true});
+
+    let params = {
+      email     : this.state.email,
+      password  : this.state.password,
+      isTayder  : this.state.isTayder,
+      name      : this.state.name,
+      last_name : this.state.lastname,
+      phone     : this.state.phone,
+    };
+
+    await AuthenticationService.signup(params)
+      .then(async (response) => {
+        this.setState({ isLoading: false });
+        this.props.navigation.navigate('Onboarding', {hasMessage: true, message: 'Registro exitoso!'});
+      })
+      .catch(error => {
+        this.setState({ isLoading: false });
+        Alert.alert('Upps!', 'Oucrrió un error al realizar tu registro.');
+      })
+  }
+
+  render() {
     return (
       <DismissKeyboard>
         <Block flex middle style={styles.containerRed}>
@@ -47,101 +85,81 @@ class RegisterScreen extends React.Component {
                           <Block width={width * 0.8}>
                             <Input
                               placeholder="Número telefónico"
+                              placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
                               type="phone-pad"
                               style={styles.inputs}
                               iconContent={
-                                <Icon
-                                  size={16}
-                                  color="#ADB5BD"
-                                  name="phone"
-                                  family="FontAwesome"
-                                  style={styles.inputIcons}
-                                />
+                                <Image style={styles.inputIcons} source={Images.Icons.Telefono} />
                               }
+                              onChangeText={(text) => this.setState({ phone: text })}
                             />
                           </Block>
                           <Block width={width * 0.8}>
                             <Input
                               placeholder="Correo electrónico"
+                              placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
                               type="email-address"
                               style={styles.inputs}
                               iconContent={
-                                <Icon
-                                  size={16}
-                                  color="#ADB5BD"
-                                  name="email-852x"
-                                  family="NowExtra"
-                                  style={styles.inputIcons}
-                                />
+                                <Image style={styles.inputIcons} source={Images.Icons.Correo} />
                               }
+                              onChangeText={(text) => this.setState({ email: text })}
                             />
                           </Block>
                           <Block width={width * 0.8}>
                             <Input
                               placeholder="Nombre(s)"
+                              placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
                               style={styles.inputs}
                               iconContent={
-                                <Icon
-                                  size={16}
-                                  color="#ADB5BD"
-                                  name="profile-circle"
-                                  family="NowExtra"
-                                  style={styles.inputIcons}
-                                />
+                                <Image style={styles.inputIcons} source={Images.Icons.Nombre} />
                               }
+                              onChangeText={(text) => this.setState({ name: text })}
                             />
                           </Block>
                           <Block width={width * 0.8}>
                             <Input
                               placeholder="Apellido(s)"
+                              placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
                               style={styles.inputs}
                               iconContent={
-                                <Icon
-                                  size={16}
-                                  color="#ADB5BD"
-                                  name="profile-circle"
-                                  family="NowExtra"
-                                  style={styles.inputIcons}
-                                />
+                                <Image style={styles.inputIcons} source={Images.Icons.Apellido} />
                               }
+                              onChangeText={(text) => this.setState({lastname: text })}
                             />
                           </Block>
                           <Block width={width * 0.8}>
                             <Input
                               placeholder="Contraseña"
+                              placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
                               password
                               viewPass
                               style={styles.inputs}
                               iconContent={
-                                <Icon
-                                  size={16}
-                                  color="#ADB5BD"
-                                  name="lock-circle-open2x"
-                                  family="NowExtra"
-                                  style={styles.inputIcons}
-                                />
+                                <Image style={styles.inputIcons} source={Images.Icons.Contrasena} />
                               }
+                              onChangeText={(text) => this.setState({password: text })}
                             />
                           </Block>
-                          <Block width={width * 0.75} style={{ marginVertical: 10, marginLeft: 15}} row>
+                          <Block width={width * 0.6} style={{justifyContent: 'center', alignSelf: 'center', marginVertical: 10, marginLeft: 15}} row>
                             <Checkbox
-                              checkboxStyle={{
-                                borderWidth: 1,
-                                borderRadius: 2,
-                                borderColor: '#E3E3E3'
-                              }}
+                              checkboxStyle={{borderWidth: 1, borderRadius: 2, borderColor: '#C0C0C0'}}
                               color={nowTheme.COLORS.BASE}
-                              labelStyle={{
-                                color: '#E3E3E3',
-                                fontFamily: 'montserrat-regular',
-                                fontSize: 14
-                              }}
+                              labelStyle={{ color: '#C0C0C0', fontFamily: 'montserrat-regular', fontSize: 12}}
                               label="Acepto los términos y condiciones."
+                              initialValue={this.state.chkTerms}
+                              onChange={() => this.setState({chkTerms: !this.state.chkTerms})}
                             />
                           </Block>
                         </Block>
                         <Block center>
-                          <Button color={nowTheme.COLORS.BASE} round style={styles.createButton} onPress={() => navigation.navigate('Documentation')}>
+                          <Button 
+                            round
+                            color={nowTheme.COLORS.BASE}
+                            style={styles.createButton}
+                            loading={this.state.isLoading}
+                            disabled={this.state.isLoading}
+                            onPress={() => this._handleLogin()}>
                             <Text style={{ fontFamily: 'montserrat-bold' }} size={14} color={nowTheme.COLORS.WHITE}>
                               REGISTRAR
                             </Text>
@@ -178,7 +196,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     shadowOpacity: 0.1,
     elevation: 1,
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   titleContainer: {
     backgroundColor: nowTheme.COLORS.WHITE
@@ -189,12 +207,13 @@ const styles = StyleSheet.create({
   },
 
   inputIcons: {
-    marginRight: 12,
-    color: nowTheme.COLORS.ICON_INPUT
+    marginRight: 25,
+    width: 25,
+    height: 25,
   },
   inputs: {
     borderWidth: 1,
-    borderColor: '#E3E3E3',
+    borderColor: '#C0C0C0',
     borderRadius: 21.5
   },
   passwordCheck: {

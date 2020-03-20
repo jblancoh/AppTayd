@@ -1,28 +1,39 @@
 import React from 'react';
 import { Image, StyleSheet, StatusBar, Dimensions, Platform, TouchableHighlight, View } from 'react-native';
-import { Block, Button, Text, theme } from 'galio-framework';
+import { Block, Button, Text, theme, Toast } from 'galio-framework';
 import { Switch } from '../components';
 
 const { height, width } = Dimensions.get('screen');
 import { Images, nowTheme } from '../constants/';
 import { HeaderHeight } from '../constants/utils';
+import Actions from '../lib/actions';
 
 export default class Onboarding extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isTayder : false
+      isTayder  : false,
+      hasMessage: this.props.navigation.state.params ? this.props.navigation.state.params.hasMessage : false,
+      message   : this.props.navigation.state.params ? this.props.navigation.state.params.message : '',
     };
+  }
+
+  componentWillMount() {
+    Actions.extractUserData().then((result) => {
+      if (result != null) {
+        this.props.navigation.navigate('PropertyInfo')
+      }
+    });
   }
 
   render() {
     const { navigation } = this.props;
-
     return (
       <Block flex style={[styles.container, this.state.isTayder ? styles.containerBlack:styles.containerRed]}>
         <StatusBar barStyle="light-content" />
         <Block flex>
           <Block space="between" style={styles.padded}>
+            <Toast isShow={this.state.hasMessage} positionIndicator="top" color="success">{this.state.message}</Toast>
             <Block>
               <Block row style={{justifyContent : 'center'}}>
                 <Image source={this.state.isTayder ? Images.LogoTayder : Images.Logo} style={[this.state.isTayder ? styles.logoTayder : styles.logoTayd]} />
@@ -68,7 +79,7 @@ export default class Onboarding extends React.Component {
                       shadowless
                       style={styles.button}
                       color={nowTheme.COLORS.WHITE}
-                      onPress={() => navigation.navigate('Register')}
+                      onPress={() => navigation.navigate('Register', {isTayder: this.state.isTayder})}
                     >
                       <Text style={{ fontFamily: 'trueno-semibold', fontSize: 20, fontWeight: '600' }} color={nowTheme.COLORS.BASE}>
                         REGISTRARSE
@@ -80,7 +91,7 @@ export default class Onboarding extends React.Component {
                   <Block row style={{marginTop: theme.SIZES.BASE * 0.8,marginBottom: theme.SIZES.BASE * 2}}>
                     <View style={{flexDirection : 'row', alignContent : 'center', justifyContent:'center'}}>
                       <Text style={{ fontFamily: 'trueno-semibold', fontSize: 16 }} color={nowTheme.COLORS.WHITE}>¿Aún no tienes una cuenta? </Text>
-                      <TouchableHighlight onPress={() => {}}>
+                      <TouchableHighlight onPress={() => navigation.navigate('Register', {isTayder: this.state.isTayder})}>
                         <View>
                           <Text style={{ fontFamily: 'trueno-semibold', fontSize: 19, fontWeight: '400' }} color={nowTheme.COLORS.BASE}> Regístrate</Text>
                         </View>

@@ -30,6 +30,27 @@ const Products = {
 
 const Icons = {
   Ubicacion   : require('../assets/icons/T-Ubicacion.png'),
+  Perfil      : require('../assets/icons/T-perfil.png'),
+  Contrasena  : require('../assets/icons/T-contrasena.png'),
+  Nombre      : require('../assets/icons/T-Nombre.png'),
+  Apellido    : require('../assets/icons/T-Apellido.png'),
+  Telefono    : require('../assets/icons/T-Telefono.png'),
+  Correo      : require('../assets/icons/T-Mail.png'),
+
+  Habitacion  : require('../assets/icons/T-Habitacion.png'),
+  Habitacion_G: require('../assets/icons/T-Habitacion-gris.png'),
+  Bano        : require('../assets/icons/T-Bano.png'),
+  Bano_G      : require('../assets/icons/T-Bano-gris.png'),
+  Sala        : require('../assets/icons/T-Sala.png'),
+  Sala_G      : require('../assets/icons/T-Sala-gris.png'),
+  Comedor     : require('../assets/icons/T-Comedor.png'),
+  Comedor_G   : require('../assets/icons/T-Comedor-gris.png'),
+  Cocina      : require('../assets/icons/T-Cocina.png'),
+  Cocina_G    : require('../assets/icons/T-Cocina-gris.png'),
+  Garage      : require('../assets/icons/T-Garage.png'),
+  Garage_G    : require('../assets/icons/T-Garage-gris.png'),
+  Patio       : require('../assets/icons/T-Patio.png'),
+  Patio_G     : require('../assets/icons/T-Patio-gris.png'),
 };
 
 export default {
