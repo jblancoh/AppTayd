@@ -21,7 +21,7 @@ export default class Onboarding extends React.Component {
   componentWillMount() {
     Actions.extractUserData().then((result) => {
       if (result != null) {
-        this.props.navigation.navigate('PropertyInfo')
+        this.props.navigation.navigate('Home')
       }
     });
   }

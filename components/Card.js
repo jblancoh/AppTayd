@@ -1,7 +1,7 @@
 import React from 'react';
 import { withNavigation } from 'react-navigation';
 import PropTypes from 'prop-types';
-import { StyleSheet, Image, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Image, TouchableWithoutFeedback, View } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
 
 import { nowTheme } from '../constants';
@@ -10,95 +10,47 @@ class Card extends React.Component {
   render() {
     const {
       navigation,
-      item,
       horizontal,
       full,
       style,
-      ctaColor,
+      image,
       imageStyle,
-      ctaRight,
-      titleStyle
+      title,
+      titleStyle,
+      subtitle,
+      description
     } = this.props;
 
     const imageStyles = [full ? styles.fullImage : styles.horizontalImage, imageStyle];
     const titleStyles = [styles.cardTitle, titleStyle];
     const cardContainer = [styles.card, styles.shadow, style];
-    const imgContainer = [
-      styles.imageContainer,
-      horizontal ? styles.horizontalStyles : styles.verticalStyles,
-      styles.shadow
-    ];
+    const imgContainer = [styles.imageContainer, horizontal ? styles.horizontalStyles : styles.verticalStyles, styles.shadow];
 
     return (
       <Block row={horizontal} card flex style={cardContainer}>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('Product', { product: item })}>
-          <Block flex style={imgContainer}>
-            <Image resizeMode="cover" source={item.image} style={imageStyles} />
-          </Block>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('Product', { product: item })}>
-          <Block flex space="between" style={styles.cardDescription}>
-            <Block flex>
-              <Text
-                style={{ fontFamily: 'montserrat-regular' }}
-                size={14}
-                style={titleStyles}
-                color={nowTheme.COLORS.SECONDARY}
-              >
-                {item.title}
-              </Text>
-              {item.subtitle ? (
-                <Block flex center>
-                  <Text
-                    style={{ fontFamily: 'montserrat-regular' }}
-                    size={32}
-                    color={nowTheme.COLORS.BLACK}
-                  >
-                    {item.subtitle}
-                  </Text>
-                </Block>
-              ) : (
-                  <Block />
-                )}
-              {item.description ? (
-                <Block flex center>
-                  <Text
-                    style={{ fontFamily: 'montserrat-regular', textAlign: 'center', padding: 15 }}
-                    size={14}
-                    color={"#9A9A9A"}
-                  >
-                    {item.description}
-                  </Text>
-                </Block>
-              ) : (
-                  <Block />
-                )}
-              {item.body ? (
-                <Block flex left>
-                  <Text
-                    style={{ fontFamily: 'montserrat-regular' }}
-                    size={12}
-                    color={nowTheme.COLORS.TEXT}
-                  >
-                    {item.body}
-                  </Text>
-                </Block>
-              ) : (
-                  <Block />
-                )}
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('Product')}>
+          <View>
+            <Block flex style={imgContainer}>
+              <Image resizeMode="cover" source={image} style={imageStyles} />
             </Block>
-            <Block right={ctaRight ? true : false}>
-              <Text
-                style={styles.articleButton}
-                size={12}
-                muted={!ctaColor}
-                color={ctaColor || nowTheme.COLORS.ACTIVE}
-                bold
-              >
-                {item.cta}
-              </Text>
+            <Block flex space="between" style={styles.cardDescription}>
+              <Block flex>
+                <Text size={18} style={titleStyles} color={nowTheme.COLORS.SECONDARY}>
+                  {title}
+                </Text>
+
+                {subtitle ? (
+                  <Block flex>
+                    <Text style={styles.subtitle} size={12} color={nowTheme.COLORS.SECONDARY}>
+                      {subtitle}
+                    </Text>
+                  </Block>
+                ) : (
+                    <Block />
+                )}
+              </Block>
             </Block>
-          </Block>
+          </View>
         </TouchableWithoutFeedback>
       </Block>
     );
@@ -122,18 +74,24 @@ const styles = StyleSheet.create({
     marginVertical: theme.SIZES.BASE,
     borderWidth: 0,
     minHeight: 114,
-    marginBottom: 4
+    marginBottom: 4,
+    borderRadius: 50
   },
   cardTitle: {
-    paddingHorizontal: 9,
+    fontFamily: 'trueno-extrabold',
+    fontSize: 18,
+    color: nowTheme.COLORS.SECONDARY,
+
+    justifyContent: 'center',
+    alignSelf: 'center',
+    paddingHorizontal: 10,
     paddingTop: 7,
-    paddingBottom: 15
   },
   cardDescription: {
     padding: theme.SIZES.BASE / 2
   },
   imageContainer: {
-    borderRadius: 3,
+    borderRadius: 50,
     elevation: 1,
     overflow: 'hidden'
   },
@@ -153,7 +111,8 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 0
   },
   fullImage: {
-    height: 215
+    height: 300,
+    width: '100%'
   },
   shadow: {
     shadowColor: '#8898AA',
@@ -166,7 +125,15 @@ const styles = StyleSheet.create({
     fontFamily: 'montserrat-bold',
     paddingHorizontal: 9,
     paddingVertical: 7
-  }
+  },
+
+  subtitle: {
+    fontFamily: 'trueno',
+    fontSize: 12,
+    color: nowTheme.COLORS.SECONDARY,
+    paddingHorizontal: 10,
+    
+  },
 });
 
 export default withNavigation(Card);

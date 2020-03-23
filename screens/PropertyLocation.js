@@ -56,7 +56,10 @@ class PropertyLocationScreen extends React.Component {
 
     handleBottomButton = () => {
       if(this.state.locationSelected) {
-        this.props.navigation.navigate('Home');
+        this.props.navigation.navigate('PropertyInfo', {
+          address   : this.state.address,
+          location  : this.state.location.coords
+        });
       } else if(this.state.address != '') {
         this.setState({locationSelected : true});
       } else {
