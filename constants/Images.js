@@ -14,6 +14,16 @@ const ProfilePicture      = require('../assets/imgs/profile-img.jpg');
 const CreativeTimLogo     = require('../assets/imgs/creative-tim-white-slim2.png');
 const InvisionLogo        = require('../assets/imgs/invision-white-slim.png');
 
+const Inicio001           = require('../assets/imgs/Inicio001.png');
+const Inicio002           = require('../assets/imgs/Inicio002.png');
+const Inicio003           = require('../assets/imgs/Inicio003.png');
+const Inicio004           = require('../assets/imgs/Inicio004.png');
+
+const Slide001            = require('../assets/imgs/slide1.jpg');
+const Slide002            = require('../assets/imgs/slide2.jpg');
+const Slide003            = require('../assets/imgs/slide3.jpg');
+const Slide004            = require('../assets/imgs/slide4.jpg');
+
 const Viewed = [
   require('../assets/imgs/project5.jpg'),
   require('../assets/imgs/project7.jpg'),
@@ -29,6 +39,15 @@ const Products = {
 };
 
 const Icons = {
+  Inicio      : require('../assets/icons/T-Inicio.png'),
+  Inicio_G    : require('../assets/icons/T-Inicio-gris.png'),
+  Agenda      : require('../assets/icons/T-Agenda.png'),
+  Agenda_G    : require('../assets/icons/T-Agenda-gris.png'),
+  Historial   : require('../assets/icons/T-Historial.png'),
+  Historial_G : require('../assets/icons/T-Historial-gris.png'),
+  Ayuda       : require('../assets/icons/T-Ayuda.png'),
+  Ayuda_G     : require('../assets/icons/T-Ayuda-gris.png'),
+
   Ubicacion   : require('../assets/icons/T-Ubicacion.png'),
   Perfil      : require('../assets/icons/T-perfil.png'),
   Contrasena  : require('../assets/icons/T-contrasena.png'),
@@ -70,5 +89,15 @@ export default {
   androidLogo,
   CreativeTimLogo,
   InvisionLogo,
-  Icons
+  Icons,
+
+  Inicio001,
+  Inicio002,
+  Inicio003,
+  Inicio004,
+
+  Slide001,
+  Slide002,
+  Slide003,
+  Slide004,
 };

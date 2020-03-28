@@ -131,32 +131,6 @@ const ProfileStack = createStackNavigator(
   }
 );
 
-const HomeStack = createStackNavigator(
-  {
-    Home: {
-      screen: Home,
-      navigationOptions: ({ navigation }) => ({
-        header: <Header title="Inicio" navigation={navigation} />
-      })
-    },
-    Pro: {
-      screen: Pro,
-      navigationOptions: ({ navigation }) => ({
-        header: (
-          <Header left={<Block />} white transparent title="" navigation={navigation} />
-        ),
-        headerTransparent: true
-      })
-    }
-  },
-  {
-    cardStyle: {
-      backgroundColor: '#FFFFFF'
-    },
-    transitionConfig
-  }
-);
-
 const AppStack = createDrawerNavigator(
   {
     Onboarding: {
@@ -196,10 +170,10 @@ const AppStack = createDrawerNavigator(
       }
     },
     Home: {
-      screen: HomeStack,
-      navigationOptions: navOpt => ({
-        drawerLabel: ({ focused }) => <DrawerItem focused={focused} title="Inicio" />
-      })
+      screen: Home,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
     },
     Components: {
       screen: ComponentsStack,
