@@ -6,13 +6,9 @@ const TaydLogo            = require('../assets/imgs/tayd-logo2.png');
 const TaydRegistro        = require('../assets/imgs/tayd-registro.png');
 const ProfileBackground   = require('../assets/imgs/bg5.png');
 const RegisterBackground  = require('../assets/imgs/register-bg.png');
-const Pro                 = require('../assets/imgs/bg.png');
-const NowLogo             = require('../assets/imgs/now-logo.png');
-const iOSLogo             = require('../assets/imgs/ios.png');
-const androidLogo         = require('../assets/imgs/android.png');
 const ProfilePicture      = require('../assets/imgs/profile-img.jpg');
-const CreativeTimLogo     = require('../assets/imgs/creative-tim-white-slim2.png');
-const InvisionLogo        = require('../assets/imgs/invision-white-slim.png');
+
+const AgendaInicio        = require('../assets/imgs/tayd-agenda-inicio.jpg');
 
 const Inicio001           = require('../assets/imgs/Inicio001.png');
 const Inicio002           = require('../assets/imgs/Inicio002.png');
@@ -81,15 +77,9 @@ export default {
   ProfileBackground,
   ProfilePicture,
   RegisterBackground,
-  Viewed,
-  Pro,
-  Products,
-  NowLogo: NowLogo,
-  iOSLogo,
-  androidLogo,
-  CreativeTimLogo,
-  InvisionLogo,
   Icons,
+  
+  AgendaInicio,
 
   Inicio001,
   Inicio002,

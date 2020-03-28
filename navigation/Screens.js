@@ -12,13 +12,14 @@ import RegisterScreen from '../screens/Register';
 import DocumentationScreen from '../screens/Documentation';
 import LoginScreen from '../screens/Login';
 import Components from '../screens/Components';
-import Articles from '../screens/Articles';
 import Onboarding from '../screens/Onboarding';
 import PropertyLocationScreen from '../screens/PropertyLocation';
 import PropertyInfoScreen from '../screens/PropertyInfo';
 
+import AgendaIndexScreen from '../screens/agenda/Index';
+
 // settings
-import SettingsScreen from '../screens/Settings';
+import ProScreen from '../screens/Pro';
 
 // drawer
 import Menu from './Menu';
@@ -81,34 +82,17 @@ const ComponentsStack = createStackNavigator(
   }
 );
 
-const SettingsStack = createStackNavigator(
+const ProStack = createStackNavigator(
   {
-    Settings: {
-      screen: SettingsScreen,
+    Pro: {
+      screen: ProScreen,
       navigationOptions: ({ navigation }) => ({
-        header: <Header title="Settings" navigation={navigation} />
+        header: <Header title="Pro" navigation={navigation} />
       })
     }
   },
   {
     cardStyle: { backgroundColor: '#FFFFFF' },
-    transitionConfig
-  }
-);
-
-const ArticlesStack = createStackNavigator(
-  {
-    Articles: {
-      screen: Articles,
-      navigationOptions: ({ navigation }) => ({
-        header: <Header title="Articles" navigation={navigation} />
-      })
-    }
-  },
-  {
-    cardStyle: {
-      backgroundColor: '#FFFFFF'
-    },
     transitionConfig
   }
 );
@@ -183,13 +167,11 @@ const AppStack = createDrawerNavigator(
         )
       })
     },
-    Articles: {
-      screen: ArticlesStack,
-      navigationOptions: navOpt => ({
-        drawerLabel: ({ focused }) => (
-          <DrawerItem focused={focused} screen="Articles" title="Prueba 2" />
-        )
-      })
+    Agenda: {
+      screen: AgendaIndexScreen,
+      navigationOptions: {
+        drawerLabel: () => {}
+      }
     },
     Profile: {
       screen: ProfileStack,
