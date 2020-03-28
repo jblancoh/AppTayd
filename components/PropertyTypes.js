@@ -59,7 +59,7 @@ export default class PropertyType extends React.Component {
                                             <Image source={iconsDisabled[value.id - 1]} style={{ width: 50, height: 50 }}/>
                                         )
                                     }
-                                    <View style={{ marginLeft: 5 }}>
+                                    <View style={{ marginLeft: 5, paddingTop: 15 }}>
                                         <Text style={styles.label}>{ value.name }</Text>
                                     </View>
                                 </View>
@@ -83,9 +83,10 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     label: {
-        //fontFamily: 'montserrat-regular',
+        fontFamily: 'trueno',
         textAlign: 'center',
         fontWeight: '400',
         color: '#444444',
+        fontSize: 16,
     }
 });

@@ -2,9 +2,10 @@ import React from "react";
 import { StyleSheet, Dimensions, ScrollView, Image, StatusBar } from "react-native";
 import { Block, theme, Text } from "galio-framework";
 
-import { Card, CardFullImage, Button } from "../components";
+import { Card, CardFullImage, Button, TabBar } from "../components";
 import options from "../constants/options";
 import { Images, nowTheme } from '../constants/';
+
 const { width } = Dimensions.get("screen");
 
 class Home extends React.Component {
@@ -21,13 +22,14 @@ class Home extends React.Component {
             </Block>
           </Block>
 
-          <Card full image={require('../assets/imgs/bg40.jpg')} title="La innovación de la limpieza" subtitle="Conoce los servicios que TAYD tiene para tí." />
+          <CardFullImage image={Images.Inicio001} imageStyle={{ height: 300, width: '100%' }} />
+          {/* <Card full image={Images.Inicio001} title="La innovación de la limpieza" subtitle="Conoce los servicios que TAYD tiene para tí." /> */}
 
           <Block flex row>
-            <CardFullImage item={options[3]} style={{marginRight : theme.SIZES.BASE}} />
+            <CardFullImage image={Images.Inicio002} imageStyle={{height : 320, width: '100%'}} style={{marginRight : theme.SIZES.BASE}} />
             <Block flex>
-              <CardFullImage item={options[3]} />
-              <CardFullImage item={options[3]} />
+              <CardFullImage full image={Images.Inicio003} imageStyle={{ height: 155, width: '100%' }} />
+              <CardFullImage full image={Images.Inicio004} imageStyle={{ height: 155, width: '100%' }} />
             </Block>
           </Block>
         </Block>
@@ -39,6 +41,8 @@ class Home extends React.Component {
     return (
       <Block flex center style={styles.home}>
         {this.renderArticles()}
+
+        <TabBar {...this.props} activeScreen="home" />
       </Block>
     );
   }

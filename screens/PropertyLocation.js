@@ -27,11 +27,8 @@ class PropertyLocationScreen extends React.Component {
             isLoading       : true,
             markers         : [],
             location        : null,
-            locationSelected: false,
             errorMessage    : null,
 
-            
-            propertyTypeValue : null,
             address           : ''
         };
 
@@ -50,43 +47,32 @@ class PropertyLocationScreen extends React.Component {
       this.setState({ location });
     }
 
-    updatePropertyType = (value) => {
-      this.setState({ propertyTypeValue: value });
-    }
-
     handleBottomButton = () => {
-      if(this.state.locationSelected) {
+      if(this.state.address != '') {
         this.props.navigation.navigate('PropertyInfo', {
-          address   : this.state.address,
-          location  : this.state.location.coords
+          address: this.state.address,
+          location: this.state.location.coords
         });
-      } else if(this.state.address != '') {
-        this.setState({locationSelected : true});
       } else {
         Alert.alert("Upps!", "No se ha colocado la dirección de la propiedad.");
       }
     }
 
     render() {
-      let { location, locationSelected, address } = this.state;
+      let { location } = this.state;
         return (
         <DismissKeyboard>
           {
             (location != null) ?
             (
               <View style={styles.container}>
-                {
-                  locationSelected && (
-                    <View style={[styles.overlay, { height: height }]} />
-                  )
-                }
 
                 <MapView 
                     style={styles.mapStyle}
-                    pitchEnabled={!locationSelected ? true : false}
-                    rotateEnabled={!locationSelected ? true : false}
-                    scrollEnabled={!locationSelected ? true : false}
-                    zoomEnabled={!locationSelected ? true : false}
+                    pitchEnabled={true}
+                    rotateEnabled={true}
+                    scrollEnabled={true}
+                    zoomEnabled={true}
                     initialRegion={{
                         latitude: location.coords.latitude,
                         longitude: location.coords.longitude,
@@ -96,7 +82,7 @@ class PropertyLocationScreen extends React.Component {
                 >
                   <MapView.Marker
                     key={0}
-                    draggable={!locationSelected ? true : false}
+                    draggable={true}
                     onDragEnd={(e) => alert(JSON.stringify(e.nativeEvent.coordinate))}
                     coordinate={{
                       latitude: location.coords.latitude,
@@ -107,62 +93,36 @@ class PropertyLocationScreen extends React.Component {
                   />
                 </MapView>
                 
-                <View style={[styles.bottomContainer, !locationSelected ? { height: 160 } : {height: 250}]}>
-                  <View style={[{ justifyContent: 'center', alignContent: 'center', paddingTop: 15 }, locationSelected ? styles.titleBorder : null]}>
+                <View style={[styles.bottomContainer, { height: 160 }]}>
+                  <View style={[{ justifyContent: 'center', alignContent: 'center', paddingTop: 15 }]}>
                     <Text style={{fontFamily: 'montserrat-regular', textAlign: 'center', fontWeight: '700', paddingBottom: 10}} color={nowTheme.COLORS.SECONDARY} size={25}>
-                      { locationSelected ? 'Confirmar dirección' : 'Dirección' }
+                      Dirección
                     </Text>
                   </View>
 
-                  {
-                    !locationSelected
-                      ? (
-                        <View>
-                          <View style={{justifyContent: 'center', alignContent: 'center', paddingTop: 5}}>
-                            <Text style={{fontFamily: 'montserrat-regular', textAlign: 'center', fontWeight: '500'}} color={nowTheme.COLORS.SECONDARY} size={12}>
-                              Usa el PIN para verificar tu domicilio en el mapa.
-                            </Text>
-                          </View>
+                  <View>
+                    <View style={{justifyContent: 'center', alignContent: 'center', paddingTop: 5}}>
+                      <Text style={{fontFamily: 'montserrat-regular', textAlign: 'center', fontWeight: '500'}} color={nowTheme.COLORS.SECONDARY} size={12}>
+                        Usa el PIN para verificar tu domicilio en el mapa.
+                      </Text>
+                    </View>
 
-                          <View style={{ marginBottom: 5, justifyContent: 'center', alignContent: 'center', paddingTop: 10, }}>
-                            <Input
-                              placeholder="Av. Paseo Tabasco #457"
-                              onChangeText={(text) => this.setState({address : text})}
-                              style={styles.inputs}
-                              iconContent={
-                                <Image style={styles.inputIcons} source={Images.Icons.Ubicacion} />
-                              }
-                              />
-                          </View>
-                        </View>
-                      )
-                      : (
-                        <View>
-                          <View style={{justifyContent: 'center', alignContent: 'center', padding: 10, borderBottomWidth: 1, borderBottomColor: '#E3E3E3' }}>
-                            <Text style={{ fontFamily: 'montserrat-regular', textAlign: 'center', fontWeight: '600' }} color={'#E3E3E3'} size={18}>
-                              { address }
-                            </Text>
-                          </View>
-
-                          <View style={{ justifyContent: 'center', alignContent: 'center', paddingTop: 5 }}>
-                            <Text style={{ fontFamily: 'montserrat-regular', textAlign: 'center', fontWeight: '500' }} color={nowTheme.COLORS.SECONDARY} size={12}>
-                              El domicilio es:
-                            </Text>
-                          </View>
-
-                          <View style={{ justifyContent: 'center', alignContent: 'center', paddingTop: 5 }}>
-                            <PropertyType value={this.state.propertyTypeValue} updateValue={this.updatePropertyType} />
-                          </View>
-                        </View>
-                      )
-                    }
+                    <View style={{ marginBottom: 5, justifyContent: 'center', alignContent: 'center', paddingTop: 10, }}>
+                      <Input
+                        placeholder="Av. Paseo Tabasco #457"
+                        onChangeText={(text) => this.setState({address : text})}
+                        style={styles.inputs}
+                        iconContent={
+                          <Image style={styles.inputIcons} source={Images.Icons.Ubicacion} />
+                        }
+                        />
+                    </View>
+                  </View>
                 </View>
 
                 <Block center style={{zIndex : 2}}>
                   <Button color={nowTheme.COLORS.BASE} round style={styles.createButton} onPress={() => this.handleBottomButton()}>
-                    <Text style={{ fontFamily: 'montserrat-bold' }} size={14} color={nowTheme.COLORS.WHITE}>
-                          { locationSelected ? 'CONFIRMAR' : 'SIGUIENTE' }
-                    </Text>
+                    <Text style={{ fontFamily: 'montserrat-bold' }} size={14} color={nowTheme.COLORS.WHITE}> SIGUIENTE </Text>
                   </Button>
                 </Block>
               </View>
@@ -194,11 +154,6 @@ const styles = StyleSheet.create({
   mapStyle: {
     zIndex: -1,
     ...StyleSheet.absoluteFillObject,
-  },
-
-  titleBorder: {
-    borderBottomWidth : 1,
-    borderBottomColor: '#E3E3E3'
   },
 
   inputIcons: {

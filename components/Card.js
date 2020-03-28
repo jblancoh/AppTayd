@@ -28,20 +28,20 @@ class Card extends React.Component {
 
     return (
       <Block row={horizontal} card flex style={cardContainer}>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('Product')}>
+        <TouchableWithoutFeedback onPress={() => {}}>
           <View>
             <Block flex style={imgContainer}>
               <Image resizeMode="cover" source={image} style={imageStyles} />
             </Block>
             <Block flex space="between" style={styles.cardDescription}>
               <Block flex>
-                <Text size={18} style={titleStyles} color={nowTheme.COLORS.SECONDARY}>
+                <Text style={titleStyles} color={nowTheme.COLORS.SECONDARY}>
                   {title}
                 </Text>
 
                 {subtitle ? (
                   <Block flex>
-                    <Text style={styles.subtitle} size={12} color={nowTheme.COLORS.SECONDARY}>
+                    <Text style={styles.subtitle} color={nowTheme.COLORS.SECONDARY}>
                       {subtitle}
                     </Text>
                   </Block>
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontFamily: 'trueno-extrabold',
-    fontSize: 18,
+    fontSize: 15,
     color: nowTheme.COLORS.SECONDARY,
 
     justifyContent: 'center',
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 0
   },
   fullImage: {
-    height: 300,
+    height: 220,
     width: '100%'
   },
   shadow: {
@@ -129,10 +129,11 @@ const styles = StyleSheet.create({
 
   subtitle: {
     fontFamily: 'trueno',
-    fontSize: 12,
+    fontSize: 9,
     color: nowTheme.COLORS.SECONDARY,
     paddingHorizontal: 10,
-    
+    justifyContent: 'center',
+    alignSelf: 'center',
   },
 });
 

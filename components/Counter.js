@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignContent: 'center',
         flexDirection: 'row',
-        borderWidth: 1,
+        borderWidth: 2,
         borderRadius: 25
     },
     enabledContainer: {
@@ -84,13 +84,13 @@ const styles = StyleSheet.create({
 
     itemContainer: {
         alignItems: 'center',
-        padding: 10,
+        padding: 5,
     },
     label: {
-        //fontFamily: 'montserrat-regular',
+        fontFamily: 'trueno',
         textAlign: 'center',
         fontWeight: '600',
-        fontSize: 16
+        fontSize: 17
     },
     labelEnabled: {
         color: nowTheme.COLORS.BASE,

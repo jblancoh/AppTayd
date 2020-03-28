@@ -6,12 +6,14 @@ import { HeaderHeight } from '../constants/utils';
 const { height, width } = Dimensions.get('screen');
 import { Images, nowTheme } from '../constants/';
 import Counter from '../components/Counter';
+import PropertyType from '../components/PropertyTypes';
 
 export default class PropertyInfoScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             isLoading       : false,
+            propertyTypeValue: null,
             habitaciones    : 0,
             banos           : 0,
             sala            : 0,
@@ -21,7 +23,7 @@ export default class PropertyInfoScreen extends React.Component {
             patio           : 0,
 
             address         : this.props.navigation.state.params.address,
-            location        : this.props.navigation.state.params.location
+            location        : this.props.navigation.state.params.location,
         };
     }
 
@@ -57,6 +59,10 @@ export default class PropertyInfoScreen extends React.Component {
         }
     }
 
+    updatePropertyType = (value) => {
+        this.setState({ propertyTypeValue: value });
+    }
+
     _handleUploadProperty() {
         this.props.navigation.navigate("Home");
     }
@@ -68,13 +74,17 @@ export default class PropertyInfoScreen extends React.Component {
                 <Block flex style={{ backgroundColor: 'white'}}>
                     <Block space="between" style={styles.padded}>
                         <Block>
-                            <Block row style={{ justifyContent: 'center' }}>
-                                <Image source={require('../assets/imgs/project5.jpg')} style={styles.image} />
-                            </Block>
+                            <Text style={[styles.title, {paddingVertical: 10}]}> Tipo de domicilio </Text>
 
-                            <Block middle style={{ width: width - theme.SIZES.BASE * 4}}>
-                                <Text style={[styles.title]} color="#333333" size={32}>
-                                    Inmueble
+                            <View style={[{ justifyContent: 'center', alignContent: 'center', paddingTop: 5, paddingBottom: 15 }, styles.titleBorder]}>
+                                <PropertyType value={this.state.propertyTypeValue} updateValue={this.updatePropertyType} />
+                            </View>
+
+                            <Block middle style={{ width: width - theme.SIZES.BASE * 4, paddingTop: 15}}>
+                                <Text style={[styles.title]}> Inmueble </Text>
+
+                                <Text style={styles.subtitle} color={nowTheme.COLORS.SECONDARY}>
+                                    Selecciona las áreas idóneas a limpiar
                                 </Text>
                             </Block>
 
@@ -164,7 +174,6 @@ const styles = StyleSheet.create({
         zIndex: 3,
         position: 'absolute',
         bottom: Platform.OS === 'android' ? theme.SIZES.BASE * 2 : theme.SIZES.BASE * 3,
-        //backgroundColor: 'purple'
     },
 
     image: {
@@ -173,10 +182,21 @@ const styles = StyleSheet.create({
         bottom: 10
     },
     title: {
-        fontFamily: 'trueno-semibold',
+        fontFamily: 'trueno-extrabold',
         paddingHorizontal: 20,
+        fontSize: 30,
         fontWeight: '700',
         textAlign: 'center',
+    },
+    titleBorder: {
+        borderBottomWidth: 1,
+        borderBottomColor: '#E3E3E3'
+    },
+    subtitle: {
+        fontFamily: 'trueno',
+        textAlign: 'center',
+        fontSize: 16,
+        paddingBottom: 15,
     },
     itemContainer: {
         flexDirection: 'row',
@@ -193,6 +213,7 @@ const styles = StyleSheet.create({
         fontFamily: 'trueno-semibold',
         fontSize: 16,
         width: 150,
+        marginRight: 20,
     },
 
     createButton: {
