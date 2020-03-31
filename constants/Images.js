@@ -9,6 +9,7 @@ const RegisterBackground  = require('../assets/imgs/register-bg.png');
 const ProfilePicture      = require('../assets/imgs/profile-img.jpg');
 
 const AgendaInicio        = require('../assets/imgs/tayd-agenda-inicio.jpg');
+const AgendaFecha         = require('../assets/imgs/tayd-agenda-fecha.jpg');
 
 const Inicio001           = require('../assets/imgs/Inicio001.png');
 const Inicio002           = require('../assets/imgs/Inicio002.png');
@@ -80,6 +81,7 @@ export default {
   Icons,
   
   AgendaInicio,
+  AgendaFecha,
 
   Inicio001,
   Inicio002,

@@ -6,7 +6,6 @@ import { createAppContainer } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 // screens
 import Home from '../screens/Home';
-import Pro from '../screens/Pro';
 import Profile from '../screens/Profile';
 import RegisterScreen from '../screens/Register';
 import DocumentationScreen from '../screens/Documentation';
@@ -17,6 +16,7 @@ import PropertyLocationScreen from '../screens/PropertyLocation';
 import PropertyInfoScreen from '../screens/PropertyInfo';
 
 import AgendaIndexScreen from '../screens/agenda/Index';
+import AgendaFechaScreen from '../screens/agenda/DateAddressConf';
 
 // settings
 import ProScreen from '../screens/Pro';
@@ -169,6 +169,12 @@ const AppStack = createDrawerNavigator(
     },
     Agenda: {
       screen: AgendaIndexScreen,
+      navigationOptions: {
+        drawerLabel: () => {}
+      }
+    },
+    AgendaFecha: {
+      screen: AgendaFechaScreen,
       navigationOptions: {
         drawerLabel: () => {}
       }

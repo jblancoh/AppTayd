@@ -56,7 +56,7 @@ class AgendaIndexScreen extends React.Component {
                             round
                             color={nowTheme.COLORS.BASE}
                             style={styles.button}
-                            onPress={() => {}}>
+                            onPress={() => navigation.navigate('AgendaFecha')}>
                             <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
                                 AGENDAR
                             </Text>
