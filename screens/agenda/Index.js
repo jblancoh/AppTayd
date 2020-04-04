@@ -27,19 +27,19 @@ class AgendaIndexScreen extends React.Component {
                 <Block flex space="between" style={styles.padded}>
                     <Block middle row style={styles.cardContainer}>
                         <Block middle style={{paddingHorizontal: 40, paddingVertical: 20}}>
-                            <Text style={[styles.title, {paddingBottom: 20}]}>
+                            <Text style={[styles.title, {paddingBottom: 15}]}>
                                 El futuro de la limpieza
                             </Text>
 
-                            <Text style={[styles.subtitle, {paddingBottom: 20}]}>
+                            <Text style={[styles.subtitle, {paddingBottom: 15}]}>
                                 En TAYD ordenamos y limpiamos tu domicilio de manera profesional y segura.
                             </Text>
 
-                            <Text style={[styles.subtitle, {paddingBottom: 30}]}>
+                            <Text style={[styles.subtitle, {paddingBottom: 20}]}>
                                 Nuestros TAYDERS son el mejor equipo capacitado que harán todo.
                             </Text>
 
-                            <Text style={[styles.title, {paddingBottom: 20}]}>
+                            <Text style={[styles.title, {paddingBottom: 15}]}>
                                 ¿Te ayudamos?
                             </Text>
 
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
         backgroundColor: theme.COLORS.BLACK
     },
     cardContainer: {
-        height          : height < 812 ? height * 0.50 : height * 0.50,
+        height          : height < 812 ? height * 0.45 : height * 0.45,
 
         backgroundColor : nowTheme.COLORS.WHITE,
         borderRadius    : 25,

@@ -12,7 +12,7 @@ class Home extends React.Component {
     return (
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
         <Block flex>
-          <StatusBar barStyle="dark-content" />
+          <StatusBar barStyle="light-content" />
           <Block flex row style={{paddingTop: 30}}>
             <Image source={Images.ProfilePicture} style={{borderRadius: 50, height: 60, width: 60, marginRight: 25}} />
             <Block flex>

@@ -1,6 +1,5 @@
 import React from 'react';
-import { Image, StyleSheet, StatusBar, Dimensions, Platform, TouchableHighlight, View } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import { Image, StyleSheet, StatusBar, Dimensions, Platform, View, DatePickerAndroid, DatePickerIOS, TimePickerAndroid } from 'react-native';
 import { Block, Button, Text, theme, Toast } from 'galio-framework';
 import { Icon } from '../../components';
 import { HeaderHeight } from '../../constants/utils';
@@ -15,7 +14,8 @@ export default class AgendaFechaScreen extends React.Component {
         this.state = {
             showDateTime    : false,
             isIphone        : Platform.OS === 'ios',
-            datetime        : new Date(),
+            date            : new Date(),
+            time            : new Date(),
         };
     }
 
@@ -30,6 +30,34 @@ export default class AgendaFechaScreen extends React.Component {
         this.props.navigation.navigate("Home");
     }
 
+    _openDatePicker = async() => {
+        try {
+            const { action, year, month, day } = await DatePickerAndroid.open({
+                date: this.state.date,
+            });
+            if (action !== DatePickerAndroid.dismissedAction) {
+                this.setState({date : new Date(year, month, day)});
+            }
+        } catch ({ code, message }) {
+            console.warn('Cannot open date picker', message);
+        }
+    }
+
+    _openTimePicker = async () => {
+        try {
+            const { action, hour, minute } = await TimePickerAndroid.open({
+                hour    : this.state.time.getHours(),
+                minute  : this.state.time.getMinutes(),
+                is24Hour: false
+            });
+            if (action !== DatePickerAndroid.dismissedAction) {
+                this.setState({ date: new Date(2020, 4, 4, hour, minute) });
+            }
+        } catch ({ code, message }) {
+            console.warn('Cannot open date picker', message);
+        }
+    }
+
     render() {
         const { showDateTime, isIphone } = this.state;
         return (
@@ -42,31 +70,25 @@ export default class AgendaFechaScreen extends React.Component {
                 <Block flex style={{ backgroundColor: 'white' }}>
                     <Block space="between" style={styles.padded}>
                         <Block>
-                            <Text style={[styles.title, {paddingTop: 20}]}> Agendar cita </Text>
+                            <Text style={[styles.title, {paddingTop: 30}]}> Programa tu cita </Text>
+                            <Text style={[styles.subtitle, { paddingTop: 10 }]}> Selecciona el día y hora del servicio </Text>
 
-                            <View style={[{ justifyContent: 'center', alignContent: 'center', paddingTop: 5, paddingBottom: 15, backgroundColor: 'purple' }]}>
-                                <TouchableOpacity onPress={() => this.setState({showDateTime : true})}>
-                                    <Text>Seleccionar fecha</Text>
+                            <View style={[styles.titleBorder, { flexDirection: 'row', justifyContent: 'space-between'}]}>
+                                <Text style={styles.subtitle}>Agendar día</Text>
+                                <TouchableOpacity onPress={() => this._openDatePicker()}>
+                                    <Text style={styles.datetimeText}>Seleccionar fecha</Text>
                                 </TouchableOpacity>
-
-                                {(showDateTime && !isIphone) && (
-                                    <DateTimePicker
-                                        value={this.state.datetime}
-                                        mode="date"
-                                        timeZoneOffsetInMinutes={0}
-                                        display="default"
-                                        onChange={() => this.onChange}
-                                    />
-                                )}
                             </View>
 
-                            <Block middle style={{ width: width - theme.SIZES.BASE * 4, paddingVertical: 15 }}>
-                                <Text style={[styles.subtitle, styles.titleBorder, {fontWeight: '700', paddingHorizontal: 30}]} color={nowTheme.COLORS.BASE}>
-                                    Domingo, 15 de marzo de 2020, 2:00 p.m.
-                                </Text>
-                            </Block>
+                            <View style={[styles.titleBorder, { flexDirection: 'row', justifyContent: 'space-between', paddingTop: 15}]}>
+                                <Text style={styles.subtitle}>Agendar día</Text>
+                                <TouchableOpacity onPress={() => this._openTimePicker()}>
+                                    <Text style={styles.datetimeText}>Seleccionar fecha</Text>
+                                </TouchableOpacity>
+                            </View>
 
                             <Text style={[styles.title, { paddingTop: 20 }]}> Domicilio </Text>
+                            <Text style={[styles.subtitle, { paddingTop: 10 }]}>Confirma el domicilio a limpiar</Text>
 
                             <Block row style={{ width: width - theme.SIZES.BASE * 4, paddingVertical: 15, justifyContent: 'center', alignContent: 'center' }}>
                                 <Text style={[styles.subtitle]} color={nowTheme.COLORS.SECONDARY}>
@@ -133,6 +155,13 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 16,
         paddingBottom: 15,
+    },
+    datetimeText: {
+        fontFamily: 'trueno-extrabold',
+        paddingHorizontal: 20,
+        fontSize: 16,
+        fontWeight: '700',
+        color: nowTheme.COLORS.BASE
     },
     itemContainer: {
         flexDirection: 'row',
