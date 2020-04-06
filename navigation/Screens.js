@@ -17,6 +17,8 @@ import PropertyInfoScreen from '../screens/PropertyInfo';
 
 import AgendaIndexScreen from '../screens/agenda/Index';
 import AgendaFechaScreen from '../screens/agenda/DateAddressConf';
+import AgendaInsumosScreen from '../screens/agenda/SuppliesConf';
+import AgendaCheckoutScreen from '../screens/agenda/CheckoutConf';
 
 // settings
 import ProScreen from '../screens/Pro';
@@ -177,6 +179,18 @@ const AppStack = createDrawerNavigator(
       screen: AgendaFechaScreen,
       navigationOptions: {
         drawerLabel: () => {}
+      }
+    },
+    AgendaInsumos: {
+      screen: AgendaInsumosScreen,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+    AgendaCheckout: {
+      screen: AgendaCheckoutScreen,
+      navigationOptions: {
+        drawerLabel: () => { }
       }
     },
     Profile: {
