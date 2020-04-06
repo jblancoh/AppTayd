@@ -32,7 +32,7 @@ export default class TabBar extends React.Component {
                     <Text style={[styles.tabTitle, this.state.screen == 'historial' ? styles.titleActive : styles.titleInactive]}>Historial</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.tabItem} onPress={() => {}}>
+                <TouchableOpacity style={styles.tabItem} onPress={() => this.props.navigation.navigate("Agenda")}>
                     <Image source={this.state.screen == 'agenda' ? Images.Icons.Agenda : Images.Icons.Agenda_G} style={{ width: 22, height: 22 }} />
                     <Text style={[styles.tabTitle, this.state.screen == 'agenda' ? styles.titleActive : styles.titleInactive]}>Agenda</Text>
                 </TouchableOpacity>

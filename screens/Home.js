@@ -2,18 +2,17 @@ import React from "react";
 import { StyleSheet, Dimensions, ScrollView, Image, StatusBar } from "react-native";
 import { Block, theme, Text } from "galio-framework";
 
-import { Card, CardFullImage, Button, TabBar } from "../components";
-import options from "../constants/options";
+import { CardFullImage, TabBar } from "../components";
 import { Images, nowTheme } from '../constants/';
 
 const { width } = Dimensions.get("screen");
 
 class Home extends React.Component {
-  renderArticles = () => {
+  renderBlocks = () => {
     return (
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.articles}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
         <Block flex>
-          <StatusBar barStyle="dark-content" />
+          <StatusBar barStyle="light-content" />
           <Block flex row style={{paddingTop: 30}}>
             <Image source={Images.ProfilePicture} style={{borderRadius: 50, height: 60, width: 60, marginRight: 25}} />
             <Block flex>
@@ -40,7 +39,7 @@ class Home extends React.Component {
   render() {
     return (
       <Block flex center style={styles.home}>
-        {this.renderArticles()}
+        {this.renderBlocks()}
 
         <TabBar {...this.props} activeScreen="home" />
       </Block>
@@ -64,11 +63,10 @@ const styles = StyleSheet.create({
     lineHeight: 15,
     color: nowTheme.COLORS.SECONDARY,
   },
-  articles: {
+  blocksContainer: {
     width: width - theme.SIZES.BASE * 2,
     paddingVertical: theme.SIZES.BASE,
     paddingHorizontal: 2,
-    fontFamily: 'montserrat-regular'
 
   }
 });
