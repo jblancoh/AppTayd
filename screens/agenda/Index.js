@@ -44,9 +44,7 @@ class AgendaIndexScreen extends React.Component {
                             </Text>
 
                             <Text style={styles.subtitle}>
-                                <Text>Por </Text>
-                                <Text style={{ fontWeight: '500' }}>$350.00 </Text>
-                                <Text>limpiamos un cuarto, un baño, una cocina (incluye la limpieza de trastes, refrigerador y estufa), sala y comedor.</Text>
+                                Agendar una cita con nosotros es fácil, solo sigue los siguientes pasos y comienza a disfrutar de nuestros servicios.
                             </Text>
                         </Block>
                     </Block>

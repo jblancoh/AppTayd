@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Image } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
 
 import Icon from './Icon';
+import Images from '../constants/Images';
 import nowTheme from '../constants/Theme';
 
 class DrawerItem extends React.Component {
@@ -10,83 +11,37 @@ class DrawerItem extends React.Component {
     const { title, focused } = this.props;
 
     switch (title) {
-      case 'Home':
+      case 'Perfil':
         return (
-          <Icon
-            name="app2x"
-            family="NowExtra"
-            size={18}
-            color={focused ? nowTheme.COLORS.PRIMARY : 'white'}
-            style={{ opacity: 0.5 }}
-            />
+          <Image source={Images.Icons.Perfil} style={{width: 30, height: 30}} />
         );
-      case 'Components':
+      case 'Idioma':
         return (
-          <Icon
-            name="atom2x"
-            family="NowExtra"
-            size={18} color={focused ? nowTheme.COLORS.PRIMARY : 'white'}
-            style={{ opacity: 0.5 }}
-            />
+          <Image source={Images.Icons.Idioma} style={{ width: 30, height: 30 }} />
         );
-      case 'Articles':
+      case 'Domicilio':
         return (
-          <Icon
-            name="paper"
-            family="NowExtra"
-            size={18}
-            color={focused ? nowTheme.COLORS.PRIMARY : 'white'}
-            style={{ opacity: 0.5 }}
-            />
+          <Image source={Images.Icons.Ubicacion} style={{ width: 30, height: 30 }} />
         );
-      case 'Profile':
+      case 'Método de pago':
         return (
-          <Icon
-            name="profile-circle"
-            family="NowExtra"
-            size={18}
-            color={focused ? nowTheme.COLORS.PRIMARY : 'white'}
-            style={{ opacity: 0.5 }}
-            />
+          <Image source={Images.Icons.Pagos} style={{ width: 30, height: 30 }} />
         );
-      case 'Account':
+      case 'Cupones':
         return (
-          <Icon
-            name="badge2x"
-            family="NowExtra"
-            size={18}
-            color={focused ? nowTheme.COLORS.PRIMARY : 'white'}
-            style={{ opacity: 0.5 }}
-            />
+          <Image source={Images.Icons.Cupon} style={{ width: 30, height: 30 }} />
         );
-      case 'Examples':
+      case 'Comparte y gana':
         return (
-          <Icon
-            name="album"
-            family="NowExtra"
-            size={14}
-            color={focused ? nowTheme.COLORS.PRIMARY : 'white'}
-          />
+          <Image source={Images.Icons.Compartir} style={{ width: 30, height: 30 }} />
         );
-      case 'GETTING STARTED':
+      case 'Genera ingresos extras':
         return (
-          <Icon
-            name="spaceship2x"
-            family="NowExtra"
-            size={18}
-            style={{ borderColor: 'rgba(0,0,0,0.5)', opacity: 0.5 }}
-            color={focused ? nowTheme.COLORS.PRIMARY : 'white'}
-          />
+          <Image source={Images.Icons.Ingreso} style={{ width: 30, height: 30 }} />
         );
-      case 'LOGOUT':
+      case 'Cerrar sesión':
         return (
-          <Icon
-            name="share"
-            family="NowExtra"
-            size={18}
-            style={{ borderColor: 'rgba(0,0,0,0.5)', opacity: 0.5 }}
-            color={focused ? nowTheme.COLORS.PRIMARY : 'white'}
-          />
+          <Image source={Images.Icons.Salir} style={{ width: 30, height: 30 }} />
         );
       default:
         return null;
@@ -96,25 +51,31 @@ class DrawerItem extends React.Component {
   render() {
     const { focused, title } = this.props;
 
-    const containerStyles = [
-      styles.defaultStyle,
-      focused ? [styles.activeStyle, styles.shadow] : null
-    ];
+    const containerStyles = [styles.defaultStyle, focused ? [styles.activeStyle, styles.shadow] : null];
 
     return (
       <Block flex row style={containerStyles}>
-        <Block middle flex={0.1} style={{ marginRight: 5 }}>
-          {this.renderIcon()}
+        <Block middle flex={0.1} style={{ marginLeft: 25, marginRight: 25 }}>
+          { this.renderIcon() }
         </Block>
+
         <Block row center flex={0.9}>
           <Text
-            style={{ fontFamily: 'montserrat-regular', textTransform: 'uppercase', fontWeight: '300' }}
-            size={12}
-            bold={focused ? true : false}
-            color={focused ? nowTheme.COLORS.PRIMARY : 'white'}
+            style={{ fontFamily: 'trueno-semibold', fontWeight: '700' }}
+            size={14}
+            color={nowTheme.COLORS.SECONDARY}
           >
             {title}
           </Text>
+        </Block>
+
+        <Block middle flex={0.1} style={{ marginRight: 5 }}>
+          <Icon
+            size={22}
+            color={nowTheme.COLORS.SECONDARY}
+            name="chevron-right"
+            family="FontAwesome"
+          />
         </Block>
       </Block>
     );
@@ -125,12 +86,12 @@ const styles = StyleSheet.create({
   defaultStyle: {
     paddingVertical: 15,
     paddingHorizontal: 14,
-    color: 'white'
+    backgroundColor: 'white',
+    color: nowTheme.COLORS.SECONDARY
   },
   activeStyle: {
-    backgroundColor: nowTheme.COLORS.WHITE,
-    borderRadius: 30,
-    color: 'white'
+    backgroundColor: '#EBEBEB',
+    color: nowTheme.COLORS.SECONDARY
   },
   shadow: {
     shadowColor: theme.COLORS.BLACK,
