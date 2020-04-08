@@ -45,6 +45,7 @@ class Header extends React.Component {
     const { back, navigation } = this.props;
     return back ? navigation.goBack() : navigation.openDrawer();
   };
+
   renderRight = () => {
     const { white, title, navigation } = this.props;
     const { routeName } = navigation.state;
@@ -183,6 +184,7 @@ class Header extends React.Component {
       );
     }
   };
+
   render() {
     const {
       back,
@@ -219,6 +221,7 @@ class Header extends React.Component {
               size={16}
               onPress={this.handleLeftPress}
               color={iconColor || nowTheme.COLORS.ICON}
+              style={{fontWeight: '700'}}
             />
           }
           leftStyle={{ paddingVertical: 12, flex: 0.2 }}
@@ -242,9 +245,9 @@ const styles = StyleSheet.create({
   },
   title: {
     width: '100%',
-    fontSize: 16,
-    fontWeight: 'bold',
-    fontFamily: 'montserrat-regular'
+    fontSize: 32,
+    fontFamily: 'trueno-extrabold',
+    textAlign: 'center'
   },
   navbar: {
     paddingVertical: 0,

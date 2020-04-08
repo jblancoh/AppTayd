@@ -10,7 +10,6 @@ import Profile from '../screens/Profile';
 import RegisterScreen from '../screens/Register';
 import DocumentationScreen from '../screens/Documentation';
 import LoginScreen from '../screens/Login';
-import Components from '../screens/Components';
 import Onboarding from '../screens/Onboarding';
 import PropertyLocationScreen from '../screens/PropertyLocation';
 import PropertyInfoScreen from '../screens/PropertyInfo';
@@ -19,9 +18,9 @@ import AgendaIndexScreen from '../screens/agenda/Index';
 import AgendaFechaScreen from '../screens/agenda/DateAddressConf';
 import AgendaInsumosScreen from '../screens/agenda/SuppliesConf';
 import AgendaCheckoutScreen from '../screens/agenda/CheckoutConf';
+import AgendaSuccessScreen from '../screens/agenda/Success';
 
-// settings
-import ProScreen from '../screens/Pro';
+import DomicilioIndexScreen from '../screens/domicilios/Index';
 
 // drawer
 import Menu from './Menu';
@@ -29,6 +28,7 @@ import DrawerItem from '../components/DrawerItem';
 
 // header for screens
 import Header from '../components/Header';
+import { nowTheme } from '../constants';
 
 const transitionConfig = (transitionProps, prevTransitionProps) => ({
   transitionSpec: {
@@ -67,29 +67,15 @@ const transitionConfig = (transitionProps, prevTransitionProps) => ({
   }
 });
 
-const ComponentsStack = createStackNavigator(
+const ProfileStack = createStackNavigator(
   {
-    Components: {
-      screen: Components,
+    Profile: {
+      screen: Profile,
       navigationOptions: ({ navigation }) => ({
-        header: <Header title="Components" navigation={navigation} />
-      })
-    }
-  },
-  {
-    cardStyle: {
-      backgroundColor: '#FFFFFF'
-    },
-    transitionConfig
-  }
-);
-
-const ProStack = createStackNavigator(
-  {
-    Pro: {
-      screen: ProScreen,
-      navigationOptions: ({ navigation }) => ({
-        header: <Header title="Pro" navigation={navigation} />
+        header: (
+          <Header white transparent title="Profile" iconColor={'#CFCFCF'} navigation={navigation} />
+        ),
+        headerTransparent: true
       })
     }
   },
@@ -99,15 +85,15 @@ const ProStack = createStackNavigator(
   }
 );
 
-const ProfileStack = createStackNavigator(
+const DomicilioStack = createStackNavigator(
   {
-    Profile: {
-      screen: Profile,
+    DomicilioIndex: {
+      screen: DomicilioIndexScreen,
       navigationOptions: ({ navigation }) => ({
         header: (
-          <Header white transparent title="Profile" iconColor={'#FFF'} navigation={navigation} />
+          <Header back title="Domicilio" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
         ),
-        headerTransparent: true
+        headerTransparent: false
       })
     }
   },
@@ -161,14 +147,6 @@ const AppStack = createDrawerNavigator(
         drawerLabel: () => { }
       }
     },
-    Components: {
-      screen: ComponentsStack,
-      navigationOptions: navOpt => ({
-        drawerLabel: ({ focused }) => (
-          <DrawerItem focused={focused} screen="Components" title="Mis servicios" />
-        )
-      })
-    },
     Agenda: {
       screen: AgendaIndexScreen,
       navigationOptions: {
@@ -193,11 +171,42 @@ const AppStack = createDrawerNavigator(
         drawerLabel: () => { }
       }
     },
-    Profile: {
+    AgendaSuccess: {
+      screen: AgendaSuccessScreen,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+    Perfil: {
       screen: ProfileStack,
       navigationOptions: navOpt => ({
         drawerLabel: ({ focused }) => (
-          <DrawerItem focused={focused} screen="Profile" title="Mi perfil" />
+          <DrawerItem focused={focused} screen="Profile" title="Perfil" />
+        )
+      })
+    },
+    Idioma: {
+      screen: ProfileStack,
+      navigationOptions: navOpt => ({
+        drawerLabel: ({ focused }) => (
+          <DrawerItem focused={focused} screen="Profile" title="Idioma" />
+        )
+      })
+    },
+    Domicilio: {
+      screen: DomicilioStack,
+      navigationOptions: navOpt => ({
+        drawerLabel: ({ focused }) => (
+          <DrawerItem focused={focused} screen="DomicilioIndex" title="Domicilio" />
+        )
+      })
+    },
+    
+    MetodoPago: {
+      screen: ProfileStack,
+      navigationOptions: navOpt => ({
+        drawerLabel: ({ focused }) => (
+          <DrawerItem focused={focused} screen="Profile" title="Método de pago" />
         )
       })
     },

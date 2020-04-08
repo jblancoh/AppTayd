@@ -12,52 +12,65 @@ const { width } = Dimensions.get('screen');
 
 const Drawer = props => (
   <Block style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
-    <Block style={styles.header}>
-      <Image style={styles.logo} source={Images.Logo} />
+    <Block row style={styles.header}>
+      <Image source={Images.ProfilePicture} style={{ borderRadius: 50, height: 60, width: 60, marginRight: 25 }} />
+      <Block flex>
+        <Text style={styles.nameTitle}>Christopher</Text>
+        <Text>ejemplo@hotmail.com</Text>
+      </Block>
+      {/* <Image style={styles.logo} source={Images.Logo} />
       <Block right style={styles.headerIcon}>
         <Icon name="align-left-22x" family="NowExtra" size={15} color={'white'} />
-      </Block>
+      </Block> */}
     </Block>
 
     <Block flex>
       <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
+        <Text style={styles.sectionTitle}>Cuenta</Text>
+
         <DrawerNavigatorItems {...props} />
-        <Block flex style={{ marginTop: 24, marginVertical: 8, paddingHorizontal: 8 }}>
-          <Block
-            style={{ borderColor: 'white', width: '93%', borderWidth: StyleSheet.hairlineWidth, marginHorizontal: 10}}
-          />
-          <Text
-            color={nowTheme.COLORS.WHITE}
-            style={{ marginTop: 30, marginLeft: 20, marginBottom: 10, fontFamily: 'montserrat-regular', fontWeight: '300', fontSize: 12}}
-          >
-            Soporte
-          </Text>
-        </Block>
-        <TouchableOpacity onPress={() => props.navigation.navigate('Onboarding')}
-          style={{ marginLeft: 10, fontFamily: 'montserrat-regular' }}
-        >
-          <DrawerItem {...props} title="CERRAR SESIÓN" />
+
+        <Text style={styles.sectionTitle}>Extra</Text>
+
+        <TouchableOpacity onPress={() => props.navigation.navigate('Onboarding')} style={{fontFamily: 'trueno-semibold', paddingTop: 20 }}>
+          <DrawerItem {...props} title="Cupones" />
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => props.navigation.navigate('Onboarding')} style={{ fontFamily: 'trueno-semibold' }}>
+          <DrawerItem {...props} title="Comparte y gana" />
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => props.navigation.navigate('Onboarding')} style={{ fontFamily: 'trueno-semibold' }}>
+          <DrawerItem {...props} title="Genera ingresos extras" />
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => props.navigation.navigate('Onboarding')} style={{ fontFamily: 'trueno-semibold' }}>
+          <DrawerItem {...props} title="Cerrar sesión" />
         </TouchableOpacity>
       </ScrollView>
+    </Block>
+
+    <Block style={{justifyContent: 'center', alignSelf: 'center', paddingBottom: 30}}>
+      <Image source={Images.TaydLogoGris} style={{height: 30, width: 140}} />
     </Block>
   </Block>
 );
 
 const Menu = {
   contentComponent: props => <Drawer {...props} />,
-  drawerBackgroundColor: nowTheme.COLORS.PRIMARY,
-  drawerWidth: width * 0.8,
+  drawerBackgroundColor: '#F7F7F7',
+  drawerWidth: width * 0.95,
   contentOptions: {
-    activeTintColor: nowTheme.COLORS.WHITE,
-    inactiveTintColor: nowTheme.COLORS.WHITE,
+    activeTintColor: nowTheme.COLORS.SECONDARY,
+    inactiveTintColor: nowTheme.COLORS.SECONDARY,
     activeBackgroundColor: 'transparent',
     itemStyle: {
-      width: width * 0.75,
+      width: width * 1,
       backgroundColor: 'transparent'
     },
     labelStyle: {
       fontSize: 18,
-      marginLeft: 12,
+      marginLeft: 20,
       fontWeight: 'normal'
     },
     itemsContainerStyle: {
@@ -66,7 +79,7 @@ const Menu = {
       justifyContent: 'center',
       alignContent: 'center',
       alignItems: 'center',
-      overflow: 'hidden'
+      overflow: 'hidden',
     }
   }
 };
@@ -77,9 +90,20 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingHorizontal: 28,
-    paddingBottom: theme.SIZES.BASE,
-    paddingTop: theme.SIZES.BASE * 3,
+    paddingTop: theme.SIZES.BASE,
     justifyContent: 'center'
+  },
+  sectionTitle: {
+    fontFamily: 'trueno-extrabold',
+    fontSize: 32,
+    color: nowTheme.COLORS.SECONDARY,
+    paddingLeft: 20,
+  },
+  nameTitle: {
+    fontFamily: 'trueno-extrabold',
+    fontSize: 24,
+    color: nowTheme.COLORS.SECONDARY,
+    lineHeight: 29,
   },
   headerIcon: {
     marginTop: -20

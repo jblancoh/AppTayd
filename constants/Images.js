@@ -4,10 +4,12 @@ const Logo                = require('../assets/imgs/tayd-logo.png');
 const LogoTayder          = require('../assets/imgs/tayd-logo-tayder.png');
 const TaydLogo            = require('../assets/imgs/tayd-logo2.png');
 const TaydLogoLarge       = require('../assets/imgs/tayd-logo3.png');
+const TaydLogoGris        = require('../assets/imgs/tayd-logo-gris.png');
 const TaydRegistro        = require('../assets/imgs/tayd-registro.png');
 const ProfileBackground   = require('../assets/imgs/bg5.png');
 const RegisterBackground  = require('../assets/imgs/register-bg.png');
 const ProfilePicture      = require('../assets/imgs/profile-img.jpg');
+const LightsBackground    = require('../assets/imgs/tayd-lights.jpg');
 
 const AgendaInicio        = require('../assets/imgs/tayd-agenda-inicio.jpg');
 const AgendaFecha         = require('../assets/imgs/tayd-agenda-fecha.jpg');
@@ -50,6 +52,12 @@ const Icons = {
 
   Ubicacion   : require('../assets/icons/T-Ubicacion.png'),
   Perfil      : require('../assets/icons/T-perfil.png'),
+  Pagos       : require('../assets/icons/T-Pagos.png'),
+  Idioma      : require('../assets/icons/T-Idioma.png'),
+  Compartir   : require('../assets/icons/T-Compartir.png'),
+  Ingreso     : require('../assets/icons/T-Ingresos.png'),
+  Cupon       : require('../assets/icons/T-Cupon.png'),
+  Salir       : require('../assets/icons/T-Salir.png'),
   Contrasena  : require('../assets/icons/T-contrasena.png'),
   Nombre      : require('../assets/icons/T-Nombre.png'),
   Apellido    : require('../assets/icons/T-Apellido.png'),
@@ -78,12 +86,14 @@ export default {
   Logo,
   TaydLogo,
   TaydLogoLarge,
+  TaydLogoGris,
   TaydRegistro,
   LogoTayder,
   ProfileBackground,
   ProfilePicture,
   RegisterBackground,
   Icons,
+  LightsBackground,
   
   AgendaInicio,
   AgendaFecha,

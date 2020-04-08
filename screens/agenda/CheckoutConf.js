@@ -6,7 +6,8 @@ import {
     Dimensions,
     Text,
     View,
-    Image
+    Image,
+    Modal
 } from "react-native";
 import { Block, Button, theme } from "galio-framework";
 import { Icon } from '../../components';
@@ -16,6 +17,14 @@ import Images from "../../constants/Images";
 const { height, width } = Dimensions.get("screen");
 
 class AgendaCheckoutScreen extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            hasError    : false,
+            errorTitle  : '',
+            errorMessage: '',
+        }
+    }
     render() {
         const { navigation } = this.props;
 
@@ -113,7 +122,7 @@ class AgendaCheckoutScreen extends React.Component {
                                 round
                                 color={nowTheme.COLORS.BASE}
                                 style={styles.button}
-                                onPress={() => navigation.navigate('AgendaFecha')}>
+                                onPress={() => this.setState({hasError: true, errorTitle: 'Método de pago rechazado', errorMessage: 'Intenta con otra tarjeta'})}>
                                 <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
                                     AGENDAR
                                 </Text>
@@ -121,6 +130,36 @@ class AgendaCheckoutScreen extends React.Component {
                         </Block>
                     </Block>
                 </Block>
+
+                <Modal
+                    animationType="fade"
+                    transparent
+                    visible={this.state.hasError}
+                    presentationStyle="overFullScreen">
+                    <View style={{ flex: 1, height: height, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end', flexDirection: 'column', }}>
+                        <View style={{ backgroundColor: 'white', padding: 25, paddingBottom: 30, }}>
+                            <View style={{justifyContent: 'center', alignItems: 'center', paddingBottom: 25}}>
+                                <Image source={require('../../assets/icons/warning.png')} style={{height: 70, width: 70}} />
+                                <Text style={styles.errorTitle}>{this.state.errorTitle}</Text>
+                                <Text style={styles.textNormal}>{this.state.errorMessage}</Text>
+                            </View>
+                            <View style={{ alignItems: 'center' }}>
+                                <Button
+                                    round
+                                    color={nowTheme.COLORS.BASE}
+                                    style={styles.button}
+                                    onPress={() => {
+                                        this.setState({hasError: false});
+                                        this.props.navigation.navigate("AgendaSuccess");
+                                    }}>
+                                    <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
+                                        ENTENDIDO
+                                    </Text>
+                                </Button>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
             </Block>
         );
     }
@@ -165,6 +204,13 @@ const styles = StyleSheet.create({
         fontFamily: 'trueno',
         fontSize: 14,
         color: nowTheme.COLORS.SECONDARY,
+    },
+    errorTitle: {
+        fontFamily: 'trueno-extrabold',
+        fontSize: 22,
+        fontWeight: 'bold',
+        color: nowTheme.COLORS.SECONDARY,
+        textAlign: 'center',
     },
     section: {
         flexDirection: 'row',

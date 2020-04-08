@@ -188,20 +188,6 @@ const Profile = () => {
                 View all
                   </Button>
             </Block>
-
-
-            <Block style={{ paddingBottom: -HeaderHeight * 2, paddingHorizontal: 15}}>
-              <Block row space="between" style={{ flexWrap: 'wrap' }}>
-                {Images.Viewed.map((img, imgIndex) => (
-                  <Image
-                    source={img}
-                    key={`viewed-${img}`}
-                    resizeMode="cover"
-                    style={styles.thumb}
-                  />
-                ))}
-              </Block>
-            </Block>
           </Block>
         </ScrollView>
       </Block>
