@@ -16,6 +16,8 @@ const AgendaFecha         = require('../assets/imgs/tayd-agenda-fecha.jpg');
 const AgendaInsumos       = require('../assets/imgs/tayd-agenda-insumos.jpg');
 const AgendaCheckout      = require('../assets/imgs/tayd-agenda-checkout.jpg');
 
+const MetodoPagoAddCard   = require('../assets/imgs/tayd-metodo-pago.jpg');
+
 const Inicio001           = require('../assets/imgs/Inicio001.png');
 const Inicio002           = require('../assets/imgs/Inicio002.png');
 const Inicio003           = require('../assets/imgs/Inicio003.png');
@@ -63,7 +65,12 @@ const Icons = {
   Apellido    : require('../assets/icons/T-Apellido.png'),
   Telefono    : require('../assets/icons/T-Telefono.png'),
   Correo      : require('../assets/icons/T-Mail.png'),
-  TarjetaBancaria : require('../assets/icons/T-TarjetaBancaria.png'),
+  TarjetaBancaria         : require('../assets/icons/T-TarjetaBancaria.png'),
+  TarjetaBancariaGris     : require('../assets/icons/T-TarjetaBancaria-gris.png'),
+  TarjetaBancariaCCV      : require('../assets/icons/T-TarjetaBancaria-CCV.png'),
+  TarjetaBancariaCCVGris  : require('../assets/icons/T-TarjetaBancaria-CVV-gris.png'),
+  TarjetaBancariaFecha    : require('../assets/icons/T-TarjetaBancaria-FechaVencimiento.png'),
+  TarjetaBancariaFechaGris: require('../assets/icons/T-TarjetaBancaria-FechaVencimiento-gris.png'),
 
   Habitacion  : require('../assets/icons/T-Habitacion.png'),
   Habitacion_G: require('../assets/icons/T-Habitacion-gris.png'),
@@ -99,6 +106,8 @@ export default {
   AgendaFecha,
   AgendaInsumos,
   AgendaCheckout,
+
+  MetodoPagoAddCard,
 
   Inicio001,
   Inicio002,

@@ -32,7 +32,7 @@ const Drawer = props => (
 
         <Text style={styles.sectionTitle}>Extra</Text>
 
-        <TouchableOpacity onPress={() => props.navigation.navigate('Onboarding')} style={{fontFamily: 'trueno-semibold', paddingTop: 20 }}>
+        <TouchableOpacity onPress={() => props.navigation.navigate('GeneraIngresoIndex')} style={{fontFamily: 'trueno-semibold', paddingTop: 20 }}>
           <DrawerItem {...props} title="Cupones" />
         </TouchableOpacity>
 
@@ -40,7 +40,7 @@ const Drawer = props => (
           <DrawerItem {...props} title="Comparte y gana" />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => props.navigation.navigate('Onboarding')} style={{ fontFamily: 'trueno-semibold' }}>
+        <TouchableOpacity onPress={() => props.navigation.navigate('GeneraIngreso')} style={{ fontFamily: 'trueno-semibold' }}>
           <DrawerItem {...props} title="Genera ingresos extras" />
         </TouchableOpacity>
 

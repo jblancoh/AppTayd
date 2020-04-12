@@ -212,8 +212,6 @@ class Header extends React.Component {
           title={title}
           style={navbarStyles}
           transparent={transparent}
-          right={this.renderRight()}
-          rightStyle={{ alignItems: 'center' }}
           left={
             <Icon
               name={back ? 'minimal-left2x' : 'align-left-22x'}
@@ -225,11 +223,7 @@ class Header extends React.Component {
             />
           }
           leftStyle={{ paddingVertical: 12, flex: 0.2 }}
-          titleStyle={[
-            styles.title,
-            { color: nowTheme.COLORS[white ? 'WHITE' : 'HEADER'] },
-            titleColor && { color: titleColor }
-          ]}
+          titleStyle={[styles.title, {color: nowTheme.COLORS[white ? 'WHITE' : 'HEADER']}, titleColor && { color: titleColor }]}
           {...props}
         />
         {this.renderHeader()}
@@ -247,7 +241,7 @@ const styles = StyleSheet.create({
     width: '100%',
     fontSize: 32,
     fontFamily: 'trueno-extrabold',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   navbar: {
     paddingVertical: 0,

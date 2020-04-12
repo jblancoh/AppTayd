@@ -13,7 +13,7 @@ const { height, width } = Dimensions.get("screen");
 import nowTheme from "../../constants/Theme";
 import Images from "../../constants/Images";
 
-class DomicilioIndexScreen extends React.Component {
+class MetodoPagoIndexScreen extends React.Component {
     render() {
         const { navigation } = this.props;
 
@@ -22,34 +22,31 @@ class DomicilioIndexScreen extends React.Component {
                 <StatusBar barStyle="light-content" />
                 <Block flex space="between" style={styles.padded}>
                     <Block middle style={styles.cardContainer}>
-                        <View style={{ width: width - theme.SIZES.BASE * 4, flexDirection: 'row', justifyContent: 'flex-end', paddingTop: 10, paddingRight: 10}}>
-                            <Image source={require('../../assets/icons/success.png')} style={{width: 25, height: 25}} />
+                        <View style={{ width: width - theme.SIZES.BASE * 4, flexDirection: 'row', justifyContent: 'flex-end', paddingTop: 10, paddingRight: 10 }}>
+                            <Image source={require('../../assets/icons/success.png')} style={{ width: 25, height: 25 }} />
                         </View>
 
-                        <Block row style={{ width: width - theme.SIZES.BASE * 4, paddingBottom: 10, paddingHorizontal: 15, alignItems: 'center'}}>
-                            <View style={{paddingHorizontal: 25}}>
-                                <Image source={require('../../assets/icons/T-casa.png')} style={{ width: 65, height: 65}} />
+                        <Block row style={{ width: width - theme.SIZES.BASE * 4, paddingBottom: 10, paddingHorizontal: 15, alignItems: 'center' }}>
+                            <View style={{ paddingHorizontal: 25 }}>
+                                <Image source={require('../../assets/icons/T-TarjetaBancaria.png')} style={{ width: 60, height: 35 }} />
                             </View>
 
-                            <View style={{width: 150, marginTop: -15}}>
-                                <Text style={[styles.title]}>
-                                    Casa
-                                </Text>
+                            <View style={{ width: 170, marginTop: -15 }}>
                                 <Text style={[styles.subtitle]} color={nowTheme.COLORS.SECONDARY}>
-                                    Av. Paseo Tabasco 1234567 C.P. 20990 Esq. Av. Ruiz Cortines
+                                    Visa 111 222 333 444 Christopher del ángel
                                 </Text>
                             </View>
                         </Block>
                     </Block>
 
-                    <Block middle flex style={{justifyContent: 'flex-end'}}>
+                    <Block middle flex style={{ justifyContent: 'flex-end' }}>
                         <Button
                             round
                             color={nowTheme.COLORS.WHITE}
                             style={styles.button}
-                            onPress={() => navigation.navigate('Home')}>
+                            onPress={() => navigation.navigate('MetodoPagoAddCard')}>
                             <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.BASE, }} size={14}>
-                                AGREGAR DOMICILIO  +
+                                AGREGAR MÉTODO  +
                             </Text>
                         </Button>
                     </Block>
@@ -67,6 +64,7 @@ const styles = StyleSheet.create({
     },
     cardContainer: {
         backgroundColor: nowTheme.COLORS.WHITE,
+        paddingBottom: 15,
         borderRadius: 25,
         shadowColor: nowTheme.COLORS.BLACK,
         shadowOffset: {
@@ -75,7 +73,7 @@ const styles = StyleSheet.create({
         },
         shadowRadius: 8,
         shadowOpacity: 0.1,
-        elevation: 1,
+        elevation: 4,
         overflow: 'hidden',
     },
     padded: {
@@ -89,8 +87,8 @@ const styles = StyleSheet.create({
         textAlign: 'left',
     },
     subtitle: {
-        fontFamily: 'trueno',
-        fontSize: 14,
+        fontFamily: 'trueno-light',
+        fontSize: 16,
         color: nowTheme.COLORS.SECONDARY,
         textAlign: 'left',
     },
@@ -108,4 +106,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default DomicilioIndexScreen;
+export default MetodoPagoIndexScreen;
