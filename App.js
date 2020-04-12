@@ -49,6 +49,7 @@ export default class App extends React.Component {
       'trueno-extrabold'  : require('./assets/font/TruenoExBd.ttf'),
       'trueno-semibold'   : require('./assets/font/TruenoSBd.ttf'),
       'trueno'            : require('./assets/font/TruenoRg.ttf'),
+      'trueno-light'      : require('./assets/font/TruenoLt.ttf'),
     });
 
     this.setState({ fontLoaded: true });

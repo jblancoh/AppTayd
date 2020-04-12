@@ -22,6 +22,11 @@ import AgendaSuccessScreen from '../screens/agenda/Success';
 
 import DomicilioIndexScreen from '../screens/domicilios/Index';
 
+import MetodoPagoIndexScreen from '../screens/metodosPagos/Index';
+import MetodoPagoAddCardScreen from '../screens/metodosPagos/AddCard';
+
+import GeneraIngresoIndexScreen from '../screens/generarIngresos/Index';
+
 // drawer
 import Menu from './Menu';
 import DrawerItem from '../components/DrawerItem';
@@ -92,6 +97,51 @@ const DomicilioStack = createStackNavigator(
       navigationOptions: ({ navigation }) => ({
         header: (
           <Header back title="Domicilio" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
+        ),
+        headerTransparent: false
+      })
+    }
+  },
+  {
+    cardStyle: { backgroundColor: '#FFFFFF' },
+    transitionConfig
+  }
+);
+
+const MetodoPagoStack = createStackNavigator(
+  {
+    MetodoPagoIndex: {
+      screen: MetodoPagoIndexScreen,
+      navigationOptions: ({ navigation }) => ({
+        header: (
+          <Header back title="Método de pago" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
+        ),
+        headerTransparent: false
+      })
+    }, 
+    MetodoPagoAddCard: {
+      screen: MetodoPagoAddCardScreen,
+      navigationOptions: ({ navigation }) => ({
+        header: (
+          <Header back title="Método de pago" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
+        ),
+        headerTransparent: false
+      })
+    }
+  },
+  {
+    cardStyle: { backgroundColor: '#FFFFFF' },
+    transitionConfig
+  }
+);
+
+const GeneraIngresoStack = createStackNavigator(
+  {
+    GeneraIngresoIndex: {
+      screen: GeneraIngresoIndexScreen,
+      navigationOptions: ({ navigation }) => ({
+        header: (
+          <Header back title="Genera Ingresos" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
         ),
         headerTransparent: false
       })
@@ -203,12 +253,19 @@ const AppStack = createDrawerNavigator(
     },
     
     MetodoPago: {
-      screen: ProfileStack,
+      screen: MetodoPagoStack,
       navigationOptions: navOpt => ({
         drawerLabel: ({ focused }) => (
-          <DrawerItem focused={focused} screen="Profile" title="Método de pago" />
+          <DrawerItem focused={focused} screen="MetodoPagoIndex" title="Método de pago" />
         )
       })
+    },
+
+    GeneraIngreso: {
+      screen: GeneraIngresoStack,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
     },
   },
   Menu
