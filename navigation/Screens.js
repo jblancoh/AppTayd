@@ -6,6 +6,8 @@ import { createAppContainer } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 // screens
 import Home from '../screens/Home';
+import History from '../screens/History';
+import Schedule from '../screens/Schedule';
 import Profile from '../screens/Profile';
 import RegisterScreen from '../screens/Register';
 import DocumentationScreen from '../screens/Documentation';
@@ -193,6 +195,18 @@ const AppStack = createDrawerNavigator(
     },
     Home: {
       screen: Home,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+    History: {
+      screen: History,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+    Schedule: {
+      screen: Schedule,
       navigationOptions: {
         drawerLabel: () => { }
       }
