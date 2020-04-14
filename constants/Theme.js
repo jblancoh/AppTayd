@@ -1,5 +1,6 @@
 const COLORS = {
   BASE: '#E5133A',
+  BACKGROUND: '#F7F7F7',
   DEFAULT: '#888888',
   PRIMARY: '#f96332',
   LABEL: '#FE2472',

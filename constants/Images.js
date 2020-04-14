@@ -11,6 +11,7 @@ const RegisterBackground  = require('../assets/imgs/register-bg.png');
 const ProfilePicture      = require('../assets/imgs/profile-img.jpg');
 const LightsBackground    = require('../assets/imgs/tayd-lights.jpg');
 
+const Agendar             = require('../assets/imgs/tayd-agendar.jpg');
 const AgendaInicio        = require('../assets/imgs/tayd-agenda-inicio.jpg');
 const AgendaFecha         = require('../assets/imgs/tayd-agenda-fecha.jpg');
 const AgendaInsumos       = require('../assets/imgs/tayd-agenda-insumos.jpg');
@@ -65,12 +66,15 @@ const Icons = {
   Apellido    : require('../assets/icons/T-Apellido.png'),
   Telefono    : require('../assets/icons/T-Telefono.png'),
   Correo      : require('../assets/icons/T-Mail.png'),
+  Calendario  : require('../assets/icons/T-Calendar.png'),
   TarjetaBancaria         : require('../assets/icons/T-TarjetaBancaria.png'),
   TarjetaBancariaGris     : require('../assets/icons/T-TarjetaBancaria-gris.png'),
   TarjetaBancariaCCV      : require('../assets/icons/T-TarjetaBancaria-CCV.png'),
   TarjetaBancariaCCVGris  : require('../assets/icons/T-TarjetaBancaria-CVV-gris.png'),
   TarjetaBancariaFecha    : require('../assets/icons/T-TarjetaBancaria-FechaVencimiento.png'),
   TarjetaBancariaFechaGris: require('../assets/icons/T-TarjetaBancaria-FechaVencimiento-gris.png'),
+  FlechaArriba            : require('../assets/icons/T-Subir.png'),
+  FlechaAbajo             : require('../assets/icons/T-Bajar.png'),
 
   Habitacion  : require('../assets/icons/T-Habitacion.png'),
   Habitacion_G: require('../assets/icons/T-Habitacion-gris.png'),
@@ -102,6 +106,7 @@ export default {
   Icons,
   LightsBackground,
   
+  Agendar,
   AgendaInicio,
   AgendaFecha,
   AgendaInsumos,

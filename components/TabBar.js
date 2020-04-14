@@ -24,15 +24,15 @@ export default class TabBar extends React.Component {
             <View style={[styles.tabBar, styles.tabBarLight]}>
                 <TouchableOpacity style={styles.tabItem} onPress={() => this.props.navigation.navigate("Home")}>
                     <Image source={this.state.screen == 'home' ? Images.Icons.Inicio : Images.Icons.Inicio_G} style={{ width: 22, height: 22 }} />
-                    <Text style={[styles.tabTitle, this.state.screen == 'home' ? styles.titleActive : styles.titleWhite]}>Inicio</Text>
+                    <Text style={[styles.tabTitle, this.state.screen == 'home' ? styles.titleActive : styles.titleInactive]}>Inicio</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.tabItem} onPress={() => {}}>
-                    <Image source={this.state.screen == 'historial' ? Images.Icons.Historial : Images.Icons.Historial_G} style={{ width: 22, height: 22 }} />
-                    <Text style={[styles.tabTitle, this.state.screen == 'historial' ? styles.titleActive : styles.titleInactive]}>Historial</Text>
+                <TouchableOpacity style={styles.tabItem} onPress={() => this.props.navigation.navigate("History")}>
+                    <Image source={this.state.screen == 'history' ? Images.Icons.Historial : Images.Icons.Historial_G} style={{ width: 22, height: 22 }} />
+                    <Text style={[styles.tabTitle, this.state.screen == 'history' ? styles.titleActive : styles.titleInactive]}>Historial</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.tabItem} onPress={() => this.props.navigation.navigate("Agenda")}>
+                <TouchableOpacity style={styles.tabItem} onPress={() => this.props.navigation.navigate("Schedule")}>
                     <Image source={this.state.screen == 'agenda' ? Images.Icons.Agenda : Images.Icons.Agenda_G} style={{ width: 22, height: 22 }} />
                     <Text style={[styles.tabTitle, this.state.screen == 'agenda' ? styles.titleActive : styles.titleInactive]}>Agenda</Text>
                 </TouchableOpacity>

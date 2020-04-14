@@ -49,7 +49,8 @@ class Home extends React.Component {
 
 const styles = StyleSheet.create({
   home: {
-    width: width
+    width: width,
+    backgroundColor: nowTheme.COLORS.BACKGROUND,
   },
   nameTitle: {
     fontFamily: 'trueno-extrabold',
