@@ -37,9 +37,9 @@ export default class TabBar extends React.Component {
                     <Text style={[styles.tabTitle, this.state.screen == 'agenda' ? styles.titleActive : styles.titleInactive]}>Agenda</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.tabItem} onPress={() => { }}>
-                    <Image source={this.state.screen == 'ayuda' ? Images.Icons.Ayuda : Images.Icons.Ayuda_G} style={{ width: 22, height: 22 }} />
-                    <Text style={[styles.tabTitle, this.state.screen == 'ayuda' ? styles.titleActive : styles.titleInactive]}>Ayuda</Text>
+                <TouchableOpacity style={styles.tabItem} onPress={() => this.props.navigation.navigate("Soporte")}>
+                    <Image source={this.state.screen == 'soporte' ? Images.Icons.Ayuda : Images.Icons.Ayuda_G} style={{ width: 22, height: 22 }} />
+                    <Text style={[styles.tabTitle, this.state.screen == 'soporte' ? styles.titleActive : styles.titleInactive]}>Ayuda</Text>
                 </TouchableOpacity>
             </View>
         );
