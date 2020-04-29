@@ -1,12 +1,11 @@
 import React from 'react';
 import {StyleSheet, Image, Dimensions, StatusBar, TouchableWithoutFeedback, Keyboard, View, Alert} from 'react-native';
-import { Block, Checkbox, Text, Button, theme } from 'galio-framework';
+import { Block, Text, Button } from 'galio-framework';
 import MapView from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 
 import { Icon, Input } from '../components';
-import PropertyType from '../components/PropertyTypes';
 import { Images, nowTheme } from '../constants';
 
 const { width, height } = Dimensions.get('screen');

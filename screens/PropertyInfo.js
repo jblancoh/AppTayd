@@ -2,17 +2,21 @@ import React from 'react';
 import { Image, StyleSheet, StatusBar, Dimensions, Platform, TouchableHighlight, View } from 'react-native';
 import { Block, Button, Text, theme, Toast } from 'galio-framework';
 import { HeaderHeight } from '../constants/utils';
+import Actions from '../lib/actions';
 
 const { height, width } = Dimensions.get('screen');
 import { Images, nowTheme } from '../constants/';
 import Counter from '../components/Counter';
 import PropertyType from '../components/PropertyTypes';
+import PropertyService from '../services/property';
 
 export default class PropertyInfoScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            userData        : null,
             isLoading       : false,
+
             propertyTypeValue: null,
             habitaciones    : 0,
             banos           : 0,
@@ -25,6 +29,14 @@ export default class PropertyInfoScreen extends React.Component {
             address         : this.props.navigation.state.params.address,
             location        : this.props.navigation.state.params.location,
         };
+    }
+
+    componentWillMount() {
+        Actions.extractUserData().then((result) => {
+            if (result != null) {
+                this.setState({userData: result.user});
+            }
+        });
     }
 
     updatePropertyInfo = (value, label) => {
@@ -63,8 +75,35 @@ export default class PropertyInfoScreen extends React.Component {
         this.setState({ propertyTypeValue: value });
     }
 
-    _handleUploadProperty() {
-        this.props.navigation.navigate("Home");
+    async _handleUploadProperty() {
+        this.setState({ isLoading: true });
+
+        let params = {
+            user_id             : this.state.userData.id,
+            name                : this.state.address,
+            latitude            : this.state.location.latitude.toString(),
+            altitude            : this.state.location.longitude.toString(),
+            is_predetermined    : true,
+            rooms_qty           : this.state.habitaciones,
+            bathrooms_qty       : this.state.banos,
+            living_room_qty     : this.state.habitaciones,
+            dinning_room_qty    : this.state.comedor,
+            kitchen_qty         : this.state.cocina,
+            garage_qty          : this.state.garage,
+            backyard_qty        : this.state.patio,
+            floors_qty          : 1,
+            property_type_id    : this.state.propertyTypeValue
+        };
+
+        await PropertyService.store(params)
+            .then(async (response) => {
+                this.setState({ isLoading: false });
+                this.props.navigation.navigate('Home')
+            })
+            .catch(error => {
+                this.setState({ isLoading: false });
+                Alert.alert('Upps!', 'Correo o contraseña incorrectas.');
+            });
     }
 
     render() {

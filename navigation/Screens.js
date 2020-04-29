@@ -29,6 +29,9 @@ import MetodoPagoAddCardScreen from '../screens/metodosPagos/AddCard';
 
 import GeneraIngresoIndexScreen from '../screens/generarIngresos/Index';
 
+import SoporteIndexScreen from '../screens/soporte/Index';
+import SoporteCitaScreen from '../screens/soporte/Cita';
+
 // drawer
 import Menu from './Menu';
 import DrawerItem from '../components/DrawerItem';
@@ -207,6 +210,18 @@ const AppStack = createDrawerNavigator(
     },
     Schedule: {
       screen: Schedule,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+    Soporte: {
+      screen: SoporteIndexScreen,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+    SoporteCita: {
+      screen: SoporteCitaScreen,
       navigationOptions: {
         drawerLabel: () => { }
       }

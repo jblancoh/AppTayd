@@ -6,6 +6,8 @@ const TaydLogo            = require('../assets/imgs/tayd-logo2.png');
 const TaydLogoLarge       = require('../assets/imgs/tayd-logo3.png');
 const TaydLogoGris        = require('../assets/imgs/tayd-logo-gris.png');
 const TaydRegistro        = require('../assets/imgs/tayd-registro.png');
+const TaydAyuda           = require('../assets/imgs/tayd-ayuda.jpg');
+const TaydAyudaCita       = require('../assets/imgs/tayd-ayuda-cita.jpg');
 const ProfileBackground   = require('../assets/imgs/bg5.png');
 const RegisterBackground  = require('../assets/imgs/register-bg.png');
 const ProfilePicture      = require('../assets/imgs/profile-img.jpg');
@@ -67,6 +69,7 @@ const Icons = {
   Telefono    : require('../assets/icons/T-Telefono.png'),
   Correo      : require('../assets/icons/T-Mail.png'),
   Calendario  : require('../assets/icons/T-Calendar.png'),
+  Close01     : require('../assets/icons/T-Close-01.png'),
   TarjetaBancaria         : require('../assets/icons/T-TarjetaBancaria.png'),
   TarjetaBancariaGris     : require('../assets/icons/T-TarjetaBancaria-gris.png'),
   TarjetaBancariaCCV      : require('../assets/icons/T-TarjetaBancaria-CCV.png'),
@@ -90,6 +93,10 @@ const Icons = {
   Garage_G    : require('../assets/icons/T-Garage-gris.png'),
   Patio       : require('../assets/icons/T-Patio.png'),
   Patio_G     : require('../assets/icons/T-Patio-gris.png'),
+
+  Casa        : require('../assets/icons/T-casa.png'),
+  Departamento: require('../assets/icons/T-Depa.png'),
+  Oficina     : require('../assets/icons/T-Ofi.png'),
 };
 
 export default {
@@ -99,6 +106,8 @@ export default {
   TaydLogoLarge,
   TaydLogoGris,
   TaydRegistro,
+  TaydAyuda,
+  TaydAyudaCita,
   LogoTayder,
   ProfileBackground,
   ProfilePicture,
