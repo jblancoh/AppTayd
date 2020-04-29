@@ -93,6 +93,10 @@ const Icons = {
   Garage_G    : require('../assets/icons/T-Garage-gris.png'),
   Patio       : require('../assets/icons/T-Patio.png'),
   Patio_G     : require('../assets/icons/T-Patio-gris.png'),
+
+  Casa        : require('../assets/icons/T-casa.png'),
+  Departamento: require('../assets/icons/T-Depa.png'),
+  Oficina     : require('../assets/icons/T-Ofi.png'),
 };
 
 export default {

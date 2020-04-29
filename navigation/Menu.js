@@ -1,14 +1,24 @@
 import React from 'react';
 import { DrawerNavigatorItems } from 'react-navigation-drawer';
-import { ScrollView, StyleSheet, Dimensions, Image, TouchableOpacity, Linking } from 'react-native';
+import { ScrollView, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
-import Icon from '../components/Icon';
 import Images from '../constants/Images';
 import { DrawerItem } from '../components/index';
+import Actions from '../lib/actions';
 
 import nowTheme from '../constants/Theme';
 
 const { width } = Dimensions.get('screen');
+
+_logout = props => {
+  Actions.removeUserData().then((response) => {
+    if (response) {
+      setTimeout(() => {
+        props.navigation.navigate('Onboarding')
+      }, 500);
+    }
+  });
+}
 
 const Drawer = props => (
   <Block style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
@@ -44,7 +54,7 @@ const Drawer = props => (
           <DrawerItem {...props} title="Genera ingresos extras" />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => props.navigation.navigate('Onboarding')} style={{ fontFamily: 'trueno-semibold' }}>
+        <TouchableOpacity onPress={() => _logout(props)} style={{ fontFamily: 'trueno-semibold' }}>
           <DrawerItem {...props} title="Cerrar sesión" />
         </TouchableOpacity>
       </ScrollView>
