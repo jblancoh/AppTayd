@@ -10,11 +10,15 @@ import History from '../screens/History';
 import Schedule from '../screens/Schedule';
 import Profile from '../screens/Profile';
 import RegisterScreen from '../screens/Register';
+import RegisterTayderScreen from '../screens/RegisterTayder';
 import DocumentationScreen from '../screens/Documentation';
 import LoginScreen from '../screens/Login';
 import Onboarding from '../screens/Onboarding';
 import PropertyLocationScreen from '../screens/PropertyLocation';
 import PropertyInfoScreen from '../screens/PropertyInfo';
+
+import DocumentosIndexScreen from '../screens/documentos/Index';
+import DocumentosStep1Screen from '../screens/documentos/Step1';
 
 import AgendaIndexScreen from '../screens/agenda/Index';
 import AgendaFechaScreen from '../screens/agenda/DateAddressConf';
@@ -172,8 +176,26 @@ const AppStack = createDrawerNavigator(
         drawerLabel: () => { }
       }
     },
+    RegisterTayder: {
+      screen: RegisterTayderScreen,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
     Documentation: {
       screen: DocumentationScreen,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+    DocumentosIndex: {
+      screen: DocumentosIndexScreen,
+      navigationOptions: {
+        drawerLabel: () => {}
+      }
+    },
+    DocumentosStep1: {
+      screen: DocumentosStep1Screen,
       navigationOptions: {
         drawerLabel: () => { }
       }

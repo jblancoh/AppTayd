@@ -12,6 +12,7 @@ const ProfileBackground   = require('../assets/imgs/bg5.png');
 const RegisterBackground  = require('../assets/imgs/register-bg.png');
 const ProfilePicture      = require('../assets/imgs/profile-img.jpg');
 const LightsBackground    = require('../assets/imgs/tayd-lights.jpg');
+const RegisterTayderBackground  = require('../assets/imgs/fondo-tyd-01.jpg');
 
 const Agendar             = require('../assets/imgs/tayd-agendar.jpg');
 const AgendaInicio        = require('../assets/imgs/tayd-agenda-inicio.jpg');
@@ -26,9 +27,9 @@ const Inicio002           = require('../assets/imgs/Inicio002.png');
 const Inicio003           = require('../assets/imgs/Inicio003.png');
 const Inicio004           = require('../assets/imgs/Inicio004.png');
 
-const Slide001            = require('../assets/imgs/slide1.jpg');
-const Slide002            = require('../assets/imgs/slide2.jpg');
-const Slide003            = require('../assets/imgs/slide3.jpg');
+const Slide001            = require('../assets/imgs/slide1.png');
+const Slide002            = require('../assets/imgs/slide2.png');
+const Slide003            = require('../assets/imgs/slide3.png');
 const Slide004            = require('../assets/imgs/slide4.jpg');
 
 const Viewed = [
@@ -54,6 +55,16 @@ const Icons = {
   Historial_G : require('../assets/icons/T-Historial-gris.png'),
   Ayuda       : require('../assets/icons/T-Ayuda.png'),
   Ayuda_G     : require('../assets/icons/T-Ayuda-gris.png'),
+  Camara      : require('../assets/icons/camara.png'),
+
+  Grupo1      : require('../assets/icons/grupo-1.png'),
+  Grupo2      : require('../assets/icons/grupo-2.png'),
+  Grupo3      : require('../assets/icons/grupo-3.png'),
+  Grupo4      : require('../assets/icons/grupo-4.png'),
+  Grupo5      : require('../assets/icons/grupo-1.png'),
+  Grupo6      : require('../assets/icons/grupo-1.png'),
+
+  INE         : require('../assets/icons/INE.png'),
 
   Ubicacion   : require('../assets/icons/T-Ubicacion.png'),
   Perfil      : require('../assets/icons/T-perfil.png'),
@@ -114,6 +125,7 @@ export default {
   RegisterBackground,
   Icons,
   LightsBackground,
+  RegisterTayderBackground,
   
   Agendar,
   AgendaInicio,
