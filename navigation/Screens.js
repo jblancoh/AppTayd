@@ -19,6 +19,13 @@ import PropertyInfoScreen from '../screens/PropertyInfo';
 
 import DocumentosIndexScreen from '../screens/documentos/Index';
 import DocumentosStep1Screen from '../screens/documentos/Step1';
+import DocumentosStep2Screen from '../screens/documentos/Step2';
+import DocumentosStep3Screen from '../screens/documentos/Step3';
+import DocumentosStep4Screen from '../screens/documentos/Step4';
+import DocumentosSuccessScreen from '../screens/documentos/Success';
+
+import WelcomeScreen from '../t-screens/Welcome';
+import HomeTayder from '../t-screens/Home';
 
 import AgendaIndexScreen from '../screens/agenda/Index';
 import AgendaFechaScreen from '../screens/agenda/DateAddressConf';
@@ -200,6 +207,44 @@ const AppStack = createDrawerNavigator(
         drawerLabel: () => { }
       }
     },
+    DocumentosStep2: {
+      screen: DocumentosStep2Screen,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+    DocumentosStep3: {
+      screen: DocumentosStep3Screen,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+    DocumentosStep4: {
+      screen: DocumentosStep4Screen,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+    DocumentosSuccess: {
+      screen: DocumentosSuccessScreen,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+    Welcome: {
+      screen: WelcomeScreen,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+    HomeTayder: {
+      screen: HomeTayder,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+
+
     PropertyLocation: {
       screen: PropertyLocationScreen,
       navigationOptions: {

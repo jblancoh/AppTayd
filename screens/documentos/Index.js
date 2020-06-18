@@ -33,7 +33,7 @@ class DocumentosIndexScreen extends React.Component {
 
         <Block flex={1} middle space="between" style={styles.padded}>
           <Block center flex={0.9}>
-            <Block middle>
+            <Block middle style={{paddingTop: 30}}>
               <Text style={styles.title}>
                 Hola, Chris
               </Text>
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   subtitle: {
-    fontFamily: 'trueno',
+    fontFamily: 'trueno-light',
     fontSize: 18,
     color: nowTheme.COLORS.WHITE,
     textAlign: 'left',

@@ -8,5 +8,6 @@ import Input from './Input';
 import Switch from './Switch';
 import Select from './Select';
 import TabBar from './TabBar';
+import TabBarTayder from './TabBarTayder';
 
-export { Button, Card, CardFullImage, DrawerItem, Icon, Input, Header, Switch, Select, TabBar };
+export { Button, Card, CardFullImage, DrawerItem, Icon, Input, Header, Switch, Select, TabBar, TabBarTayder };

@@ -14,7 +14,7 @@ const DismissKeyboard = ({ children }) => (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
 );
 
-class DocumentosStep1Screen extends React.Component {
+class DocumentosStep2Screen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -54,8 +54,7 @@ class DocumentosStep1Screen extends React.Component {
             arrFiles.push(photo);
 
             this.setState({ openCamera: false, files: arrFiles });
-
-            this.props.navigation.navigate("DocumentosStep2");
+            this.props.navigation.navigate("DocumentosStep3");
         }
     }
 
@@ -73,14 +72,14 @@ class DocumentosStep1Screen extends React.Component {
                             style={{ flex: 1, justifyContent: 'space-between' }}
                             type={this.state.cameraType}>
                             <View style={{ justifyContent: "center", alignItems: 'center' }}>
-                                <View style={{height: 600, marginTop: 50}}>
-                                    <Image source={Images.Icons.CamaraMarco} style={{height: 550, width: 250}} />
+                                <View style={{ height: 600, marginTop: 50 }}>
+                                    <Image source={Images.Icons.CamaraMarco} style={{ height: 550, width: 250 }} />
                                 </View>
 
-                                    <Text style={[{fontFamily: 'trueno', color: nowTheme.COLORS.WHITE, fontSize: 8}]}>Asegúrate de que el documento sea legible.</Text>
+                                <Text style={[{ fontFamily: 'trueno', color: nowTheme.COLORS.WHITE, fontSize: 8 }]}>Asegúrate de que el documento sea legible.</Text>
 
                                 <TouchableOpacity
-                                    style={{backgroundColor: 'transparent', marginTop: 10}}
+                                    style={{ backgroundColor: 'transparent', marginTop: 10 }}
                                     onPress={() => this.handleCameraPhoto()}
                                 >
                                     <Image source={Images.Icons.CamaraBoton} />
@@ -92,25 +91,22 @@ class DocumentosStep1Screen extends React.Component {
                         <Block flex={1} middle space="between" style={styles.padded}>
                             <Block center flex={1}>
                                 <Block middle>
-                                    <Image source={Images.Icons.INE} style={[styles.itemGroup, { marginTop: 10 }]} />
+                                    <Image source={Images.Icons.RFC} style={[styles.itemGroup, { marginTop: 10 }]} />
 
-                                    <Image source={Images.Icons.Grupo1} style={[styles.imageGroup, styles.itemGroup, { marginTop: 20}]} />
+                                    <Image source={Images.Icons.Grupo2} style={[styles.imageGroup, styles.itemGroup, { marginTop: 20}]} />
 
-                                    <Text style={[styles.title]}>Identificación oficial</Text>
+                                    <Text style={[styles.title]}>R.F.C.</Text>
 
                                     <Text style={[styles.subtitle, {paddingBottom: 40}]}>
-                                        IFE ó INE (Visible) con CURP.
+                                            Realiza tu inscripción o actualización de RFC en el SAT.
                                     </Text>
 
                                     <Text style={[styles.subtitle, styles.itemGroup]}>
-                                        Toma una fotografía de tu
-                                        identificación oficial, te aconsejamos
-                                        que tu ID sea VIGENTE y ORIGINAL.
+                                            Toma una fotografía de tu R.F.C., te aconsejamos se encuentre VIGENTE.
                                     </Text>
                                     <Text style={[styles.subtitle, styles.itemGroup]}>
                                         La imagen debe verse claramente y sin
-                                        obstruir la información y la foto del
-                                        propietario.
+                                        obstruir la información.
                                     </Text>
                                     <Text style={[styles.subtitle, styles.itemGroup, { paddingBottom: 40 }]}>
                                         Te recomendamos evitar el uso del
@@ -142,7 +138,7 @@ class DocumentosStep1Screen extends React.Component {
     }
 }
 
-export default withNavigation(DocumentosStep1Screen);
+export default withNavigation(DocumentosStep2Screen);
 
 const styles = StyleSheet.create({
     container: {

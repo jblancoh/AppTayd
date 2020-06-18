@@ -14,7 +14,7 @@ const DismissKeyboard = ({ children }) => (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
 );
 
-class DocumentosStep1Screen extends React.Component {
+class DocumentosStep2Screen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -54,8 +54,7 @@ class DocumentosStep1Screen extends React.Component {
             arrFiles.push(photo);
 
             this.setState({ openCamera: false, files: arrFiles });
-
-            this.props.navigation.navigate("DocumentosStep2");
+            this.props.navigation.navigate("DocumentosStep4");
         }
     }
 
@@ -73,14 +72,14 @@ class DocumentosStep1Screen extends React.Component {
                             style={{ flex: 1, justifyContent: 'space-between' }}
                             type={this.state.cameraType}>
                             <View style={{ justifyContent: "center", alignItems: 'center' }}>
-                                <View style={{height: 600, marginTop: 50}}>
-                                    <Image source={Images.Icons.CamaraMarco} style={{height: 550, width: 250}} />
+                                <View style={{ height: 600, marginTop: 50 }}>
+                                    <Image source={Images.Icons.CamaraMarco} style={{ height: 550, width: 250 }} />
                                 </View>
 
-                                    <Text style={[{fontFamily: 'trueno', color: nowTheme.COLORS.WHITE, fontSize: 8}]}>Asegúrate de que el documento sea legible.</Text>
+                                <Text style={[{ fontFamily: 'trueno', color: nowTheme.COLORS.WHITE, fontSize: 8 }]}>Asegúrate de que el documento sea legible.</Text>
 
                                 <TouchableOpacity
-                                    style={{backgroundColor: 'transparent', marginTop: 10}}
+                                    style={{ backgroundColor: 'transparent', marginTop: 10 }}
                                     onPress={() => this.handleCameraPhoto()}
                                 >
                                     <Image source={Images.Icons.CamaraBoton} />
@@ -92,32 +91,32 @@ class DocumentosStep1Screen extends React.Component {
                         <Block flex={1} middle space="between" style={styles.padded}>
                             <Block center flex={1}>
                                 <Block middle>
-                                    <Image source={Images.Icons.INE} style={[styles.itemGroup, { marginTop: 10 }]} />
+                                    <Image source={Images.Icons.CLABE} style={[styles.itemGroup, { marginTop: 10, width: 320, height: 250, zIndex: 1 }]} />
 
-                                    <Image source={Images.Icons.Grupo1} style={[styles.imageGroup, styles.itemGroup, { marginTop: 20}]} />
+                                    <View style={{justifyContent: 'center', alignItems: 'center', zIndex: 5, marginTop: -70}}>
+                                        <Image source={Images.Icons.Grupo3} style={[styles.imageGroup, styles.itemGroup, { marginTop: 20}]} />
 
-                                    <Text style={[styles.title]}>Identificación oficial</Text>
+                                        <Text style={[styles.title]}>Clabe interbancaria</Text>
 
-                                    <Text style={[styles.subtitle, {paddingBottom: 40}]}>
-                                        IFE ó INE (Visible) con CURP.
-                                    </Text>
+                                        <Text style={[styles.subtitle, {paddingBottom: 40}]}>
+                                                Herramienta para poder depositar tus ganancias en TAYD
+                                        </Text>
 
-                                    <Text style={[styles.subtitle, styles.itemGroup]}>
-                                        Toma una fotografía de tu
-                                        identificación oficial, te aconsejamos
-                                        que tu ID sea VIGENTE y ORIGINAL.
-                                    </Text>
-                                    <Text style={[styles.subtitle, styles.itemGroup]}>
-                                        La imagen debe verse claramente y sin
-                                        obstruir la información y la foto del
-                                        propietario.
-                                    </Text>
-                                    <Text style={[styles.subtitle, styles.itemGroup, { paddingBottom: 40 }]}>
-                                        Te recomendamos evitar el uso del
-                                        flash de tu teléfono en caso de que
-                                        este pueda sobreexponer la claridad y
-                                        legibilidad de los datos.
-                                    </Text>
+                                        <Text style={[styles.subtitle, styles.itemGroup]}>
+                                            En caso de no tenerla, acércate a tu banco más cercano.
+                                        </Text>
+                                        <Text style={[styles.subtitle, styles.itemGroup]}>
+                                            La imagen debe verse claramente y sin
+                                            obstruir la información.
+                                        </Text>
+                                        <Text style={[styles.subtitle, styles.itemGroup, { paddingBottom: 40 }]}>
+                                            Te recomendamos evitar el uso del
+                                            flash de tu teléfono en caso de que
+                                            este pueda sobreexponer la claridad y
+                                            legibilidad de los datos.
+                                        </Text>
+                                    </View>
+                                        
                                 </Block>
 
                                 <Block center>
@@ -142,7 +141,7 @@ class DocumentosStep1Screen extends React.Component {
     }
 }
 
-export default withNavigation(DocumentosStep1Screen);
+export default withNavigation(DocumentosStep2Screen);
 
 const styles = StyleSheet.create({
     container: {

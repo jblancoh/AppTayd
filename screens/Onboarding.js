@@ -43,7 +43,9 @@ export default class Onboarding extends React.Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    //this.props.navigation.navigate('HomeTayder');
+
     Actions.extractUserData().then((result) => {
       if (result != null) {
         if (!result.user.first_login && !result.user.isTayder) {
