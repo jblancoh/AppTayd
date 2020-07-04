@@ -25,7 +25,8 @@ class LoginScreen extends React.Component {
 
   _handleLogin = () => {
     if(this.state.email != '' && this.state.password != '') {
-      this._handleRequest();
+      this.props.navigation.navigate('Welcome');
+      //this._handleRequest();
     } else {
       Alert.alert('Upps!', 'Al parecer el formulario de acceso se encuentra incompleto.');
     }

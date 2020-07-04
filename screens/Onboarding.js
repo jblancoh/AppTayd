@@ -43,7 +43,9 @@ export default class Onboarding extends React.Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    //this.props.navigation.navigate('HomeTayder');
+
     Actions.extractUserData().then((result) => {
       if (result != null) {
         if (!result.user.first_login && !result.user.isTayder) {
@@ -173,7 +175,7 @@ export default class Onboarding extends React.Component {
                     <Block row style={{marginTop: theme.SIZES.BASE * 0.8,marginBottom: theme.SIZES.BASE * 2}}>
                       <View style={{flexDirection : 'row', alignContent : 'center', justifyContent:'center'}}>
                         <Text style={{ fontFamily: 'trueno-semibold', fontSize: 16 }} color={nowTheme.COLORS.WHITE}>¿Aún no tienes una cuenta? </Text>
-                        <TouchableHighlight onPress={() => navigation.navigate('Register', {isTayder: this.state.isTayder})}>
+                        <TouchableHighlight onPress={() => navigation.navigate('RegisterTayder', {isTayder: this.state.isTayder})}>
                           <View>
                             <Text style={{ fontFamily: 'trueno-semibold', fontSize: 19, fontWeight: '400' }} color={nowTheme.COLORS.BASE}> Regístrate</Text>
                           </View>

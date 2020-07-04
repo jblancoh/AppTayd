@@ -12,6 +12,8 @@ const ProfileBackground   = require('../assets/imgs/bg5.png');
 const RegisterBackground  = require('../assets/imgs/register-bg.png');
 const ProfilePicture      = require('../assets/imgs/profile-img.jpg');
 const LightsBackground    = require('../assets/imgs/tayd-lights.jpg');
+const BlackLightsBackground = require('../assets/imgs/tayd-black-lights.png');
+const RegisterTayderBackground  = require('../assets/imgs/fondo-tyd-01.jpg');
 
 const Agendar             = require('../assets/imgs/tayd-agendar.jpg');
 const AgendaInicio        = require('../assets/imgs/tayd-agenda-inicio.jpg');
@@ -26,24 +28,19 @@ const Inicio002           = require('../assets/imgs/Inicio002.png');
 const Inicio003           = require('../assets/imgs/Inicio003.png');
 const Inicio004           = require('../assets/imgs/Inicio004.png');
 
-const Slide001            = require('../assets/imgs/slide1.jpg');
-const Slide002            = require('../assets/imgs/slide2.jpg');
-const Slide003            = require('../assets/imgs/slide3.jpg');
+const Slide001            = require('../assets/imgs/slide1.png');
+const Slide002            = require('../assets/imgs/slide2.png');
+const Slide003            = require('../assets/imgs/slide3.png');
 const Slide004            = require('../assets/imgs/slide4.jpg');
 
-const Viewed = [
-  require('../assets/imgs/project5.jpg'),
-  require('../assets/imgs/project7.jpg'),
-  require('../assets/imgs/project6.jpg'),
-  require('../assets/imgs/project4.jpg'),
-  require('../assets/imgs/project21.jpg'),
-  require('../assets/imgs/project24.jpg')
-];
-
-const Products = {
-  text: 'View article',
-  path: require('../assets/imgs/bg15.jpg')
-};
+const CarouselIndicador01 = require('../assets/imgs/IND--01.png');
+const CarouselIndicador02 = require('../assets/imgs/IND--02.png');
+const CarouselIndicador03 = require('../assets/imgs/IND--03.png');
+const CarouselIndicador04 = require('../assets/imgs/IND--04.png');
+const CarouselIndicador05 = require('../assets/imgs/IND--05.png');
+const CarouselIndicador06 = require('../assets/imgs/IND--06.png');
+const CarouselIndicador07 = require('../assets/imgs/IND--07.png');
+const CarouselIndicador08 = require('../assets/imgs/IND--08.png');
 
 const Icons = {
   Inicio      : require('../assets/icons/T-Inicio.png'),
@@ -52,8 +49,26 @@ const Icons = {
   Agenda_G    : require('../assets/icons/T-Agenda-gris.png'),
   Historial   : require('../assets/icons/T-Historial.png'),
   Historial_G : require('../assets/icons/T-Historial-gris.png'),
-  Ayuda       : require('../assets/icons/T-Ayuda.png'),
-  Ayuda_G     : require('../assets/icons/T-Ayuda-gris.png'),
+  Ingreso     : require('../assets/icons/T-Ingreso.png'),
+  Ingreso_G   : require('../assets/icons/T-Ingreso-gris.png'),
+  Ayuda: require('../assets/icons/T-Ayuda.png'),
+  Ayuda_G: require('../assets/icons/T-Ayuda-gris.png'),
+  Camara      : require('../assets/icons/camara.png'),
+
+  Grupo1      : require('../assets/icons/grupo-1.png'),
+  Grupo2      : require('../assets/icons/grupo-2.png'),
+  Grupo3      : require('../assets/icons/grupo-3.png'),
+  Grupo4      : require('../assets/icons/grupo-4.png'),
+  Grupo5      : require('../assets/icons/grupo-1.png'),
+  Grupo6      : require('../assets/icons/grupo-1.png'),
+
+  CamaraMarco : require('../assets/icons/marco_camara.png'),
+  CamaraBoton : require('../assets/icons/boton_camara.png'),
+
+  INE         : require('../assets/icons/INE.png'),
+  RFC         : require('../assets/icons/RFC.png'),
+  CLABE       : require('../assets/icons/CLABE.png'),
+  MujerPerfil : require('../assets/icons/mujer_perfil.png'),
 
   Ubicacion   : require('../assets/icons/T-Ubicacion.png'),
   Perfil      : require('../assets/icons/T-perfil.png'),
@@ -114,6 +129,8 @@ export default {
   RegisterBackground,
   Icons,
   LightsBackground,
+  BlackLightsBackground,
+  RegisterTayderBackground,
   
   Agendar,
   AgendaInicio,
@@ -132,4 +149,13 @@ export default {
   Slide002,
   Slide003,
   Slide004,
+
+  CarouselIndicador01,
+  CarouselIndicador02,
+  CarouselIndicador03,
+  CarouselIndicador04,
+  CarouselIndicador05,
+  CarouselIndicador06,
+  CarouselIndicador07,
+  CarouselIndicador08,
 };
