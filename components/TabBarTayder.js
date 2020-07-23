@@ -27,8 +27,8 @@ export default class TabBarTayder extends React.Component {
                     <Text style={[styles.tabTitle, this.state.screen == 'home' ? styles.titleActive : styles.titleInactive]}>Inicio</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.tabItem} onPress={() => this.props.navigation.navigate("Earnings")}>
-                    <Image source={this.state.screen == 'agenda' ? Images.Icons.Agenda : Images.Icons.Agenda_G} style={{ width: 22, height: 22 }} />
+                <TouchableOpacity style={styles.tabItem} onPress={() => this.props.navigation.navigate("EarningsTayder")}>
+                    <Image source={this.state.screen == 'ingresos' ? Images.Icons.Agenda : Images.Icons.Agenda_G} style={{ width: 22, height: 22 }} />
                     <Text style={[styles.tabTitle, this.state.screen == 'ingresos' ? styles.titleActive : styles.titleInactive]}>Ingresos</Text>
                 </TouchableOpacity>
 

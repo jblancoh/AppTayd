@@ -51,7 +51,7 @@ export default class HomeTayder extends React.Component {
     return (
       <View style={styles.blocksContainer}>
         <Block flex>
-          <Block row style={{paddingTop: 30}}>
+          <Block row style={{paddingTop: 10}}>
             <Image source={Images.ProfilePicture} style={{borderRadius: 50, height: 60, width: 60, marginHorizontal: 25}} />
             <Block flex>
               <Text style={styles.nameTitle}>Christopher</Text>
@@ -67,16 +67,26 @@ export default class HomeTayder extends React.Component {
           </Block>
 
           <Block middle style={{paddingVertical: 25}}>
-            <Carousel
-              layout={"default"}
-              data={this.state.carouselIntroItems}
-              sliderWidth={width}
-              itemWidth={300}
-              renderItem={this._renderItem}
-              enableSnap
-              onSnapToItem={this.onSnapToItem} />
+            {
+              this.state.hasAcceptButton ? (
+                <Carousel
+                  layout={"default"}
+                  data={this.state.carouselIntroItems}
+                  sliderWidth={width}
+                  itemWidth={300}
+                  renderItem={this._renderItem}
+                  enableSnap
+                  onSnapToItem={this.onSnapToItem} />
+              ) : (
+                <Block style={styles.cardContainer}>
+                  <Image source={Images.Icons.Agenda} style={{paddingTop: 60, marginBottom: 40, width: 140, height: 140}} />
+
+                  <Text style={styles.title}>Aún no cuentas con citas agendadas</Text>
+                  <Text style={styles.subtitle}>No olvides estar en línea para poder recibir solicitudes</Text>
+                </Block>
+              )
+            }
           </Block>
-        
         </Block>
       </View>
     );
@@ -150,4 +160,31 @@ const styles = StyleSheet.create({
     shadowRadius: 0,
     shadowOpacity: 0
   },
+
+  cardContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+
+    backgroundColor: nowTheme.COLORS.WHITE,
+    borderRadius: 25,
+    width: '90%',
+    height: 600,
+  },
+  title: {
+    fontFamily: 'trueno-semibold',
+    fontSize: 35,
+    lineHeight: 33,
+    textAlign: 'center',
+    color: nowTheme.COLORS.BASE
+  },
+  subtitle: {
+    fontFamily: 'trueno',
+    fontSize: 14,
+    lineHeight: 16,
+    textAlign: 'center',
+    color: nowTheme.COLORS.SECONDARY,
+
+    paddingTop: 20,
+  }
 });

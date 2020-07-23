@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
   registerContainer: {
     width: width * 0.9,
     height: height < 812 ? height * 0.9 : height * 0.9,
-    marginTop: 45,
+    marginTop: 0,
     marginBottom: 20,
   },
 

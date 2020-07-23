@@ -26,6 +26,8 @@ import DocumentosSuccessScreen from '../screens/documentos/Success';
 
 import WelcomeScreen from '../t-screens/Welcome';
 import HomeTayder from '../t-screens/Home';
+import EarningsTayder from '../t-screens/Earnings';
+import HistoryTayder from '../t-screens/History';
 
 import AgendaIndexScreen from '../screens/agenda/Index';
 import AgendaFechaScreen from '../screens/agenda/DateAddressConf';
@@ -239,6 +241,18 @@ const AppStack = createDrawerNavigator(
     },
     HomeTayder: {
       screen: HomeTayder,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+    EarningsTayder: {
+      screen: EarningsTayder,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+    HistoryTayder: {
+      screen: HistoryTayder,
       navigationOptions: {
         drawerLabel: () => { }
       }

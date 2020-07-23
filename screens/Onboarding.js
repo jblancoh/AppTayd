@@ -44,7 +44,7 @@ export default class Onboarding extends React.Component {
   }
 
   componentDidMount() {
-    //this.props.navigation.navigate('HomeTayder');
+    this.props.navigation.navigate('HomeTayder');
 
     Actions.extractUserData().then((result) => {
       if (result != null) {
