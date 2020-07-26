@@ -11,7 +11,6 @@ import Schedule from '../screens/Schedule';
 import Profile from '../screens/Profile';
 import RegisterScreen from '../screens/Register';
 import RegisterTayderScreen from '../screens/RegisterTayder';
-import DocumentationScreen from '../screens/Documentation';
 import LoginScreen from '../screens/Login';
 import Onboarding from '../screens/Onboarding';
 import PropertyLocationScreen from '../screens/PropertyLocation';
@@ -187,12 +186,6 @@ const AppStack = createDrawerNavigator(
     },
     RegisterTayder: {
       screen: RegisterTayderScreen,
-      navigationOptions: {
-        drawerLabel: () => { }
-      }
-    },
-    Documentation: {
-      screen: DocumentationScreen,
       navigationOptions: {
         drawerLabel: () => { }
       }

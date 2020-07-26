@@ -43,15 +43,20 @@ export default class Onboarding extends React.Component {
     };
   }
 
-  componentDidMount() {
-    this.props.navigation.navigate('HomeTayder');
-
-    Actions.extractUserData().then((result) => {
+  async componentDidMount() {
+    await Actions.extractUserData().then((result) => {
+      console.log(result);
       if (result != null) {
-        if (!result.user.first_login && !result.user.isTayder) {
-          this.props.navigation.navigate('PropertyLocation')
-        } else if (result.user.first_login && !result.user.isTayder) {
-          this.props.navigation.navigate('Home')
+        if(!response.user.first_login && !response.user.isTayder) {
+          this.props.navigation.navigate('PropertyLocation');
+        } else if(response.user.first_login && !response.user.isTayder) {
+          this.props.navigation.navigate('Home');
+        } else if(response.user.first_login_tayder && response.user.isTayder && !response.user.confirmed) {
+          this.props.navigation.navigate('DocumentosIndex');
+        } else if(response.user.first_login_tayder && response.user.isTayder && response.use.confirmed) {
+          this.props.navigation.navigate('Welcome');
+        } else if(!response.user.first_login_tayder && response.user.isTayder) {
+          this.props.navigation.navigate('HomeTayder');
         }
       }
     });

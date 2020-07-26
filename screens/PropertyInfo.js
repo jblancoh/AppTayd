@@ -1,12 +1,12 @@
 import React from 'react';
-import { Image, StyleSheet, StatusBar, Dimensions, Platform, TouchableHighlight, View } from 'react-native';
+import { Image, StyleSheet, StatusBar, Dimensions, Platform, ScrollView, View } from 'react-native';
 import { Block, Button, Text, theme, Toast } from 'galio-framework';
 import { HeaderHeight } from '../constants/utils';
 import Actions from '../lib/actions';
 
 const { height, width } = Dimensions.get('screen');
-import { Images, nowTheme } from '../constants/';
-import Counter from '../components/Counter';
+import { nowTheme } from '../constants/';
+import PropertyCounter from '../components/PropertyCounter';
 import PropertyType from '../components/PropertyTypes';
 import PropertyService from '../services/property';
 
@@ -18,6 +18,7 @@ export default class PropertyInfoScreen extends React.Component {
             isLoading       : false,
 
             propertyTypeValue: null,
+            propertyItems   : [],
             habitaciones    : 0,
             banos           : 0,
             sala            : 0,
@@ -31,7 +32,7 @@ export default class PropertyInfoScreen extends React.Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         Actions.extractUserData().then((result) => {
             if (result != null) {
                 this.setState({userData: result.user});
@@ -71,8 +72,9 @@ export default class PropertyInfoScreen extends React.Component {
         }
     }
 
-    updatePropertyType = (value) => {
-        this.setState({ propertyTypeValue: value });
+    updatePropertyType = (value, arrPrices) => {
+        console.log(arrPrices);
+        this.setState({ propertyTypeValue: value, propertyItems: arrPrices });
     }
 
     async _handleUploadProperty() {
@@ -107,97 +109,52 @@ export default class PropertyInfoScreen extends React.Component {
     }
 
     render() {
-        return(
+        let {propertyTypeValue, propertyItems, isLoading} = this.state;
+        return (
             <Block flex style={styles.container}>
                 <StatusBar barStyle="dark-content" />
-                <Block flex style={{ backgroundColor: 'white'}}>
-                    <Block space="between" style={styles.padded}>
-                        <Block>
-                            <Text style={[styles.title, {paddingVertical: 10}]}> Tipo de domicilio </Text>
+                <Block flex style={{ backgroundColor: 'green'}}>
+                    <ScrollView contentContainerStyle={{flex: 1}}>
+                        <Block space="between" style={styles.padded}>
+                            <Block style={{backgroundColor: 'red'}}>
+                                <Text style={[styles.title, {paddingVertical: 10}]}> Tipo de domicilio </Text>
 
-                            <View style={[{ justifyContent: 'center', alignContent: 'center', paddingTop: 5, paddingBottom: 15 }, styles.titleBorder]}>
-                                <PropertyType value={this.state.propertyTypeValue} updateValue={this.updatePropertyType} />
-                            </View>
-
-                            <Block middle style={{ width: width - theme.SIZES.BASE * 4, paddingTop: 15}}>
-                                <Text style={[styles.title]}> Inmueble </Text>
-
-                                <Text style={styles.subtitle} color={nowTheme.COLORS.SECONDARY}>
-                                    Selecciona las áreas idóneas a limpiar
-                                </Text>
-                            </Block>
-
-                            <Block row style={{ marginTop: theme.SIZES.BASE * 0.8}}>
-                                <View style={styles.itemContainer}>
-                                    <Image style={styles.icons} source={this.state.habitaciones > 0 ? Images.Icons.Habitacion : Images.Icons.Habitacion_G} />
-                                    <Text style={styles.labels} color={nowTheme.COLORS.PLACEHOLDER}>Habitaciones</Text>
-                                    <Counter label="habitaciones" updateValue={(value, label) => this.updatePropertyInfo(value, label)} />
+                                <View style={[{ justifyContent: 'center', alignContent: 'center', paddingTop: 5, paddingBottom: 15 }, styles.titleBorder]}>
+                                    <PropertyType value={propertyTypeValue} updateValue={this.updatePropertyType} />
                                 </View>
-                            </Block>
 
-                            <Block row style={{ marginTop: theme.SIZES.BASE * 0.8}}>
-                                <View style={styles.itemContainer}>
-                                    <Image style={styles.icons} source={this.state.banos > 0 ? Images.Icons.Bano : Images.Icons.Bano_G} />
-                                    <Text style={styles.labels} color={nowTheme.COLORS.PLACEHOLDER}>Baños</Text>
-                                    <Counter label="banos" updateValue={(value, label) => this.updatePropertyInfo(value, label)} />
-                                </View>
-                            </Block>
+                                <Block middle style={{ width: width - theme.SIZES.BASE * 4, paddingTop: 15}}>
+                                    <Text style={[styles.title]}> Inmueble </Text>
 
-                            <Block row style={{ marginTop: theme.SIZES.BASE * 0.8}}>
-                                <View style={styles.itemContainer}>
-                                    <Image style={styles.icons} source={this.state.sala > 0 ? Images.Icons.Sala : Images.Icons.Sala_G} />
-                                    <Text style={styles.labels} color={nowTheme.COLORS.PLACEHOLDER}>Sala</Text>
-                                    <Counter label="sala" updateValue={(value, label) => this.updatePropertyInfo(value, label)} />
-                                </View>
-                            </Block>
-
-                            <Block row style={{ marginTop: theme.SIZES.BASE * 0.8}}>
-                                <View style={styles.itemContainer}>
-                                    <Image style={styles.icons} source={this.state.comedor > 0 ? Images.Icons.Comedor : Images.Icons.Comedor_G} />
-                                    <Text style={styles.labels} color={nowTheme.COLORS.PLACEHOLDER}>Comedor</Text>
-                                    <Counter label="comedor" updateValue={(value, label) => this.updatePropertyInfo(value, label)} />
-                                </View>
-                            </Block>
-
-                            <Block row style={{ marginTop: theme.SIZES.BASE * 0.8}}>
-                                <View style={styles.itemContainer}>
-                                    <Image style={styles.icons} source={this.state.cocina > 0 ? Images.Icons.Cocina : Images.Icons.Cocina_G} />
-                                    <Text style={styles.labels} color={nowTheme.COLORS.PLACEHOLDER}>Cocina</Text>
-                                    <Counter label="cocina" updateValue={(value, label) => this.updatePropertyInfo(value, label)} />
-                                </View>
-                            </Block>
-
-                            <Block row style={{ marginTop: theme.SIZES.BASE * 0.8}}>
-                                <View style={styles.itemContainer}>
-                                    <Image style={styles.icons} source={this.state.garage > 0 ? Images.Icons.Garage : Images.Icons.Garage_G} />
-                                    <Text style={styles.labels} color={nowTheme.COLORS.PLACEHOLDER}>Garage</Text>
-                                    <Counter label="garage" updateValue={(value, label) => this.updatePropertyInfo(value, label)} />
-                                </View>
-                            </Block>
-
-                            <Block row style={{ marginTop: theme.SIZES.BASE * 0.8}}>
-                                <View style={styles.itemContainer}>
-                                    <Image style={styles.icons} source={this.state.patio > 0 ? Images.Icons.Patio : Images.Icons.Patio_G} />
-                                    <Text style={styles.labels} color={nowTheme.COLORS.PLACEHOLDER}>Patio</Text>
-                                    <Counter label="patio" updateValue={(value, label) => this.updatePropertyInfo(value, label)} />
-                                </View>
-                            </Block>
-
-                            <Block middle style={{ width: width - theme.SIZES.BASE * 4 }}>
-                                <Button
-                                    round
-                                    color={nowTheme.COLORS.BASE}
-                                    style={styles.createButton}
-                                    loading={this.state.isLoading}
-                                    disabled={this.state.isLoading}
-                                    onPress={() => this._handleUploadProperty()}>
-                                    <Text style={{ fontFamily: 'montserrat-bold' }} size={14} color={nowTheme.COLORS.WHITE}>
-                                        SIGUIENTE
+                                    <Text style={styles.subtitle} color={nowTheme.COLORS.SECONDARY}>
+                                        Selecciona las áreas idóneas a limpiar
                                     </Text>
-                                </Button>
+                                </Block>
+
+                                <View style={{flex: 1, backgroundColor: 'pink'}}>
+                                    {
+                                        propertyItems.map((value) => {
+                                            return <PropertyCounter id={value.id} label={value.key} price={value.price} />
+                                        })
+                                    }
+                                </View>
+
+                                <Block middle style={{ width: width - theme.SIZES.BASE * 4 }}>
+                                    <Button
+                                        round
+                                        color={nowTheme.COLORS.BASE}
+                                        style={styles.createButton}
+                                        loading={isLoading}
+                                        disabled={isLoading}
+                                        onPress={() => this._handleUploadProperty()}>
+                                        <Text style={{ fontFamily: 'montserrat-bold' }} size={14} color={nowTheme.COLORS.WHITE}>
+                                            SIGUIENTE
+                                        </Text>
+                                    </Button>
+                                </Block>
                             </Block>
                         </Block>
-                    </Block>
+                    </ScrollView>
                 </Block>
             </Block>
         );

@@ -7,8 +7,15 @@ function getAll() {
     });
 }
 
+function getPropertyType(id) {
+    return request({
+        url: `properties-types/${id}`,
+        method: 'GET'
+    })
+}
+
 const PropertyTypeService = {
-    getAll
+    getAll, getPropertyType
 }
 
 export default PropertyTypeService;

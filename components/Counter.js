@@ -27,7 +27,7 @@ export default class Counter extends React.Component {
                 _total = this.state.value + 1
                 break;
         }
-        console.log("TOTAL: ", _total);
+
         this.setState({ value: _total });
         this.props.updateValue(_total, this.state.label);
     }

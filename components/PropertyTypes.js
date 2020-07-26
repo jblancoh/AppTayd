@@ -25,20 +25,20 @@ export default class PropertyType extends React.Component {
         };
     }
 
-    async componentWillMount() {
+    async componentDidMount() {
         await PropertyTypeService.getAll()
             .then(response => {
                 this.setState({ propertyTypes: response.propertyTypes });
             })
             .catch(error => {
                 console.error(error);
-                alert('Ocurrió un error al hacer la petición al servidor.');
+                alert('Ocurrió un error al generar los tipos de inmuebles.');
             })
     }
 
-    _onPress(_id) {
+    _onPress(_id, prices) {
         this.setState({ newValue: _id });
-        this.props.updateValue(_id);
+        this.props.updateValue(_id, prices);
     }
 
     render() {
@@ -48,7 +48,7 @@ export default class PropertyType extends React.Component {
                 {
                     propertyTypes.map((value) => {
                         return (
-                            <TouchableOpacity style={{backgroundColor: 'transparent'}} key={value.id} onPress={() => this._onPress(value.id)}>
+                            <TouchableOpacity style={{backgroundColor: 'transparent'}} key={value.id} onPress={() => this._onPress(value.id, value.prices)}>
                                 <View style={styles.checkboxContainer}>
                                     {
                                         (newValue == value.id)

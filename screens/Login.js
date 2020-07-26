@@ -25,8 +25,7 @@ class LoginScreen extends React.Component {
 
   _handleLogin = () => {
     if(this.state.email != '' && this.state.password != '') {
-      this.props.navigation.navigate('Welcome');
-      //this._handleRequest();
+      this._handleRequest();
     } else {
       Alert.alert('Upps!', 'Al parecer el formulario de acceso se encuentra incompleto.');
     }
@@ -49,9 +48,15 @@ class LoginScreen extends React.Component {
 
             this.setState({ isLoading: false });
             if(!response.user.first_login && !response.user.isTayder) {
-              this.props.navigation.navigate('PropertyLocation')
+              this.props.navigation.navigate('PropertyLocation');
             } else if(response.user.first_login && !response.user.isTayder) {
-              this.props.navigation.navigate('Home')
+              this.props.navigation.navigate('Home');
+            } else if(response.user.first_login_tayder && response.user.isTayder && !response.user.confirmed) {
+              this.props.navigation.navigate('DocumentosIndex');
+            } else if(response.user.first_login_tayder && response.user.isTayder && response.use.confirmed) {
+              this.props.navigation.navigate('Welcome');
+            } else if(!response.user.first_login_tayder && response.user.isTayder) {
+              this.props.navigation.navigate('HomeTayder');
             }
 
           } catch (error) {
@@ -101,7 +106,7 @@ class LoginScreen extends React.Component {
                             onChangeText={(text) => this.setState({ email: text })}
                             style={styles.inputs}
                             iconContent={
-                              <Image style={styles.inputIcons} source={Images.Icons.Perfil} />
+                              <Image style={styles.inputIcons} source={Images.Icons.Usuario_L} />
                             }
                           />
                         </Block>
@@ -111,12 +116,12 @@ class LoginScreen extends React.Component {
                             placeholderTextColor={nowTheme.COLORS.WHITE}
                             color={nowTheme.COLORS.WHITE}
                             password
-                            viewPass
                             onChangeText={(text) => this.setState({ password: text })}
                             style={styles.inputs}
                             iconContent={
-                              <Image style={styles.inputIcons} source={Images.Icons.Contrasena} />
+                              <Image style={styles.inputIcons} source={Images.Icons.Password_L} />
                             }
+                            iconColor={'#FFF'}
                           />
                         </Block>
                       </Block>

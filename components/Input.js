@@ -29,7 +29,7 @@ class ArInput extends React.Component {
         iconContent={
           <Icon
             size={14}
-            color={nowTheme.COLORS.ICON}
+            color={'#FFFFFF'}
             name="link"
             family="AntDesign"
           />
