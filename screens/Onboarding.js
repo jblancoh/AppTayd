@@ -45,8 +45,9 @@ export default class Onboarding extends React.Component {
 
   async componentDidMount() {
     await Actions.extractUserData().then((result) => {
-      console.log(result);
       if (result != null) {
+        console.log(result.user.first_login == true);
+        console.log(result.user.isTayder == true);
         if(!response.user.first_login && !response.user.isTayder) {
           this.props.navigation.navigate('PropertyLocation');
         } else if(response.user.first_login && !response.user.isTayder) {

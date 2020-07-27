@@ -19,13 +19,7 @@ export default class PropertyInfoScreen extends React.Component {
 
             propertyTypeValue: null,
             propertyItems   : [],
-            habitaciones    : 0,
-            banos           : 0,
-            sala            : 0,
-            comedor         : 0,
-            cocina          : 0,
-            garage          : 0,
-            patio           : 0,
+            propertyData    : [],
 
             address         : this.props.navigation.state.params.address,
             location        : this.props.navigation.state.params.location,
@@ -40,40 +34,41 @@ export default class PropertyInfoScreen extends React.Component {
         });
     }
 
-    updatePropertyInfo = (value, label) => {
-        switch(label) {
-            case "habitaciones":
-                this.setState({habitaciones : value});
-                break;
+    updatePropertyInfo = (quantity, data) => {
+        let propertyData = this.state.propertyData;
+        if(propertyData.length < 1 && quantity > 0) {
+            propertyData.push({
+                id                      : 0,
+                property_type_price_id  : data.id,
+                quantity                : quantity
+            });
 
-            case "banos":
-                this.setState({ banos: value });
-                break;
+            this.setState({propertyData: propertyData});
+        } else if(propertyData.findIndex(item => item.property_type_price_id == data.id) == -1 && quantity > 0) {
+            propertyData.push({
+                id                      : 0,
+                property_type_price_id  : data.id,
+                quantity                : quantity
+            });
 
-            case "sala":
-                this.setState({ sala: value });
-                break;
+            this.setState({propertyData: propertyData});
+        } else if(quantity == 0) {
+            let index = propertyData.map(element => element.property_type_price_id).indexOf(data.id);
 
-            case "comedor":
-                this.setState({ comedor: value });
-                break;
+            let item = {
+                id                      : 0,
+                property_type_price_id  : data.id,
+                quantity                : quantity
+            };
 
-            case "cocina":
-                this.setState({ cocina: value });
-                break;
-
-            case "garage":
-                this.setState({ garage: value });
-                break;
-
-            case "patio":
-                this.setState({ patio: value });
-                break;
+            propertyData.splice(index, 1, item);
+            this.setState({propertyData: propertyData});
         }
+
+        console.log("Datos", this.state.propertyData);
     }
 
     updatePropertyType = (value, arrPrices) => {
-        console.log(arrPrices);
         this.setState({ propertyTypeValue: value, propertyItems: arrPrices });
     }
 
@@ -113,10 +108,9 @@ export default class PropertyInfoScreen extends React.Component {
         return (
             <Block flex style={styles.container}>
                 <StatusBar barStyle="dark-content" />
-                <Block flex style={{ backgroundColor: 'green'}}>
-                    <ScrollView contentContainerStyle={{flex: 1}}>
+                <Block flex>
                         <Block space="between" style={styles.padded}>
-                            <Block style={{backgroundColor: 'red'}}>
+                            <Block>
                                 <Text style={[styles.title, {paddingVertical: 10}]}> Tipo de domicilio </Text>
 
                                 <View style={[{ justifyContent: 'center', alignContent: 'center', paddingTop: 5, paddingBottom: 15 }, styles.titleBorder]}>
@@ -131,12 +125,14 @@ export default class PropertyInfoScreen extends React.Component {
                                     </Text>
                                 </Block>
 
-                                <View style={{flex: 1, backgroundColor: 'pink'}}>
+                                <View style={{height: height * 0.45}}>
+                                    <ScrollView>
                                     {
                                         propertyItems.map((value) => {
-                                            return <PropertyCounter id={value.id} label={value.key} price={value.price} />
+                                            return <PropertyCounter key={value.id} id={value.id} label={value.name} price={value.price} value={value.key} getValues={(quantity, data) => this.updatePropertyInfo(quantity, data)} />
                                         })
                                     }
+                                    </ScrollView>
                                 </View>
 
                                 <Block middle style={{ width: width - theme.SIZES.BASE * 4 }}>
@@ -154,7 +150,6 @@ export default class PropertyInfoScreen extends React.Component {
                                 </Block>
                             </Block>
                         </Block>
-                    </ScrollView>
                 </Block>
             </Block>
         );

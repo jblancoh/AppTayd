@@ -8,13 +8,16 @@ export default class PropertyCounter extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            label        : this.props.label,
-            counterValue : 0,
+            label           : this.props.label,
+            id              : this.props.id,
+            key             : this.props.value,
+            price           : this.props.price,
+            counterValue    : 0,
         };
     }
 
-    getImage = (label) => {
-        switch(label) {
+    getImage = (key) => {
+        switch(key) {
             case "RECAMARA"         : return this.state.counterValue > 0 ?  Images.Icons.Habitacion : Images.Icons.Habitacion_G;
             case "BANO"             : return this.state.counterValue > 0 ?  Images.Icons.Bano       : Images.Icons.Bano_G;
             case "MEDIO_BANO"       : return this.state.counterValue > 0 ?  Images.Icons.Medio_Bano : Images.Icons.Habitacion_G;
@@ -23,7 +26,7 @@ export default class PropertyCounter extends React.Component {
             case "COCINA"           : return this.state.counterValue > 0 ?  Images.Icons.Cocina     : Images.Icons.Cocina_G;
             case "GARAGE"           : return this.state.counterValue > 0 ?  Images.Icons.Garage     : Images.Icons.Garage_G;
             case "PATIO_TRASERO"    : return this.state.counterValue > 0 ?  Images.Icons.Patio      : Images.Icons.Patio_G;
-            case "TERRAZA"          : return this.state.counterValue > 0 ?  Images.Icons.Terraza : Images.Icons.Habitacion_G;
+            case "TERRAZA"          : return this.state.counterValue > 0 ?  Images.Icons.Terraza    : Images.Icons.Habitacion_G;
             case "ESCALERAS"        : return this.state.counterValue > 0 ?  Images.Icons.Habitacion : Images.Icons.Habitacion_G;
             case "AREA_SERVICIOS"   : return this.state.counterValue > 0 ?  Images.Icons.LavadoServ : Images.Icons.Habitacion_G;
         }
@@ -31,13 +34,19 @@ export default class PropertyCounter extends React.Component {
 
     updateCounter = (value) => {
         this.setState({counterValue: value});
+        this.props.getValues(value, {
+            id          : this.state.id,
+            key         : this.state.key,
+            price       : this.state.price,
+            quantity    : value
+        });
     }
 
     render() {
         return (
             <Block row style={{ marginTop: theme.SIZES.BASE * 0.8}}>
                 <View style={styles.itemContainer}>
-                    <Image style={styles.icons} source={this.getImage(this.state.label)} />
+                    <Image style={styles.icons} source={this.getImage(this.state.key)} />
                     <Text style={styles.labels} color={nowTheme.COLORS.PLACEHOLDER}>{this.state.label}</Text>
                     <Counter updateValue={(value) => this.updateCounter(value)} />
                 </View>
