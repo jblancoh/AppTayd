@@ -1,7 +1,7 @@
 import React from 'react';
-import { Image, StyleSheet, StatusBar, Dimensions, Platform, TouchableHighlight, View , TouchableWithoutFeedback, Keyboard, Alert, AsyncStorage } from 'react-native';
+import { Image, StyleSheet, StatusBar, Dimensions, TouchableHighlight, View , TouchableWithoutFeedback, Keyboard, Alert, AsyncStorage } from 'react-native';
 import { Block, Button, Text, theme } from 'galio-framework';
-import { Icon, Input } from '../components';
+import {  Input } from '../components';
 
 import { Images, nowTheme } from '../constants/';
 import AuthenticationService from '../services/authentication';

@@ -19,14 +19,37 @@ class DomicilioIndexScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            userData: null,
-            properties : []
+            userData    : null,
+            properties  : [],
+            refresh     : this.props.navigation.state.params ? this.props.navigation.state.params.refresh : false,
+        }
+
+        if(this.state.refresh) {
+            this.refreshData();
         }
     }
 
-    componentWillMount() {
+    async componentDidMount() {
+        const { navigation } = this.props;
+
+       await  Actions.extractUserData().then((result) => {
+            if(result != null) {
+                this.setState({userData : result.user});
+            }
+        });
+        
+        this.focusListener = await navigation.addListener('didFocus', () => {
+            this._getProperties();
+        });
+    }
+
+    componentWillUnmount() {
+        this.focusListener.remove();
+    }
+
+    refreshData() {
         Actions.extractUserData().then((result) => {
-            if (result != null) {
+            if(result != null) {
                 this.setState({userData : result.user});
                 this._getProperties();
             }
@@ -59,7 +82,7 @@ class DomicilioIndexScreen extends React.Component {
                                         {item.is_predetermined == true && (<Image source={require('../../assets/icons/success.png')} style={{ width: 25, height: 25 }} />)}
                                     </View>
 
-                                    <Block row style={[{ width: width - theme.SIZES.BASE * 4, paddingBottom: 10, paddingHorizontal: 15, alignItems: 'center' }, !item.is_predetermined && {paddingTop: 25}]}>
+                                    <Block row style={[{ width: width - theme.SIZES.BASE * 4, paddingBottom: 10, paddingHorizontal: 15, alignItems: 'center' }, !item.is_predetermined && {paddingTop: 15}]}>
                                         <View style={{ paddingHorizontal: 25 }}>
                                             {item.property_type_id == 1 && (<Image source={Images.Icons.Casa} style={styles.imageProperty} />) }
                                             {item.property_type_id == 2 && (<Image source={Images.Icons.Departamento} style={styles.imageProperty} />)}
@@ -67,12 +90,8 @@ class DomicilioIndexScreen extends React.Component {
                                         </View>
 
                                         <View style={{ width: 150, marginTop: -15 }}>
-                                            <Text style={[styles.title]}>
-                                                {item.property_type.name}
-                                            </Text>
-                                            <Text style={[styles.subtitle]} color={nowTheme.COLORS.SECONDARY}>
-                                                {item.name}
-                                            </Text>
+                                            <Text style={[styles.title]}>{item.property_type.name == "Departamento" ? "Dpto." : item.property_type.name}</Text>
+                                            <Text style={[styles.subtitle]} color={nowTheme.COLORS.SECONDARY}>{item.name}</Text>
                                         </View>
                                     </Block>
                                 </Block>
@@ -85,7 +104,7 @@ class DomicilioIndexScreen extends React.Component {
                             round
                             color={nowTheme.COLORS.WHITE}
                             style={styles.button}
-                            onPress={() => navigation.navigate('Home')}>
+                            onPress={() => navigation.navigate('DomicilioLocation')}>
                             <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.BASE, }} size={14}>
                                 AGREGAR DOMICILIO  +
                             </Text>

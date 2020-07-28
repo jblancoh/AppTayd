@@ -46,17 +46,15 @@ export default class Onboarding extends React.Component {
   async componentDidMount() {
     await Actions.extractUserData().then((result) => {
       if (result != null) {
-        console.log(result.user.first_login == true);
-        console.log(result.user.isTayder == true);
-        if(!response.user.first_login && !response.user.isTayder) {
+        if(!result.user.first_login && !result.user.isTayder) {
           this.props.navigation.navigate('PropertyLocation');
-        } else if(response.user.first_login && !response.user.isTayder) {
+        } else if(result.user.first_login && !result.user.isTayder) {
           this.props.navigation.navigate('Home');
-        } else if(response.user.first_login_tayder && response.user.isTayder && !response.user.confirmed) {
+        } else if(result.user.first_login_tayder && result.user.isTayder && !result.user.confirmed) {
           this.props.navigation.navigate('DocumentosIndex');
-        } else if(response.user.first_login_tayder && response.user.isTayder && response.use.confirmed) {
+        } else if(result.user.first_login_tayder && result.user.isTayder && result.use.confirmed) {
           this.props.navigation.navigate('Welcome');
-        } else if(!response.user.first_login_tayder && response.user.isTayder) {
+        } else if(!result.user.first_login_tayder && result.user.isTayder) {
           this.props.navigation.navigate('HomeTayder');
         }
       }

@@ -35,6 +35,8 @@ import AgendaCheckoutScreen from '../screens/agenda/CheckoutConf';
 import AgendaSuccessScreen from '../screens/agenda/Success';
 
 import DomicilioIndexScreen from '../screens/domicilios/Index';
+import DomicilioInfoScreen from '../screens/domicilios/Information';
+import DomicilioLocationScreen from '../screens/domicilios/Location';
 
 import MetodoPagoIndexScreen from '../screens/metodosPagos/Index';
 import MetodoPagoAddCardScreen from '../screens/metodosPagos/AddCard';
@@ -117,7 +119,25 @@ const DomicilioStack = createStackNavigator(
         ),
         headerTransparent: false
       })
-    }
+    },
+    DomicilioLocation: {
+      screen: DomicilioLocationScreen,
+      navigationOptions: ({ navigation }) => ({
+        header: (
+          <Header back title="Domicilio" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
+        ),
+        headerTransparent: false
+      })
+    },
+    DomicilioInfo: {
+      screen: DomicilioInfoScreen,
+      navigationOptions: ({ navigation }) => ({
+        header: (
+          <Header back title="Domicilio" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
+        ),
+        headerTransparent: false
+      })
+    },
   },
   {
     cardStyle: { backgroundColor: '#FFFFFF' },

@@ -1,16 +1,17 @@
 import React from 'react';
-import { StyleSheet, StatusBar, Dimensions, Platform, ScrollView, View, AsyncStorage } from 'react-native';
+import { StyleSheet, StatusBar, Dimensions, Platform, ScrollView, View } from 'react-native';
 import { Block, Button, Text, theme, Toast } from 'galio-framework';
-import { HeaderHeight } from '../constants/utils';
-import Actions from '../lib/actions';
-import { nowTheme } from '../constants/';
-import PropertyCounter from '../components/PropertyCounter';
-import PropertyType from '../components/PropertyTypes';
-import PropertyService from '../services/property';
+import { HeaderHeight } from '../../constants/utils';
+import Actions from '../../lib/actions';
+
+import { nowTheme } from '../../constants/';
+import PropertyCounter from '../../components/PropertyCounter';
+import PropertyType from '../../components/PropertyTypes';
+import PropertyService from '../../services/property';
 
 const { height, width } = Dimensions.get('screen');
 
-export default class PropertyInfoScreen extends React.Component {
+export default class DomicilioInfoScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -86,16 +87,12 @@ export default class PropertyInfoScreen extends React.Component {
                 is_predetermined    : true,
                 property_type_id    : this.state.propertyTypeValue,
                 distribution        : this.state.propertyData,
-                first_login         : true,
             };
     
             await PropertyService.store(params)
-                .then(async(response) => {
-                    await AsyncStorage.removeItem('user');
-                    await AsyncStorage.setItem('user', JSON.stringify(response.user));
-
+                .then(response => {
                     this.setState({ isLoading: false, propertyTypeValue: null, propertyItems: [], propertyData: [] });
-                    this.props.navigation.navigate('Home')
+                    this.props.navigation.navigate('DomicilioIndex', {refresh: true})
                 })
                 .catch(error => {
                     this.setState({ isLoading: false });
