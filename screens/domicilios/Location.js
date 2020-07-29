@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
   bottomContainer: {
     zIndex: 2,
     backgroundColor: nowTheme.COLORS.WHITE,
-    borderRadius: 50,
+    borderRadius: 30,
     width: width * 0.88,
     paddingHorizontal: 20,
     shadowColor: nowTheme.COLORS.BLACK,

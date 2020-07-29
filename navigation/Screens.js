@@ -292,9 +292,11 @@ const AppStack = createDrawerNavigator(
     },
     Home: {
       screen: Home,
-      navigationOptions: {
-        drawerLabel: () => { }
-      }
+      navigationOptions: navOpt => ({
+        drawerLabel: ({ focused }) => (
+          <DrawerItem focused={focused} screen="Home" title="Inicio" />
+        )
+      })
     },
     History: {
       screen: History,

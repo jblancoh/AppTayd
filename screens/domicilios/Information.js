@@ -84,7 +84,7 @@ export default class DomicilioInfoScreen extends React.Component {
                 name                : this.state.address,
                 latitude            : this.state.location.latitude.toString(),
                 altitude            : this.state.location.longitude.toString(),
-                is_predetermined    : true,
+                is_predetermined    : false,
                 property_type_id    : this.state.propertyTypeValue,
                 distribution        : this.state.propertyData,
             };
@@ -92,7 +92,7 @@ export default class DomicilioInfoScreen extends React.Component {
             await PropertyService.store(params)
                 .then(response => {
                     this.setState({ isLoading: false, propertyTypeValue: null, propertyItems: [], propertyData: [] });
-                    this.props.navigation.navigate('DomicilioIndex', {refresh: true})
+                    this.props.navigation.navigate('DomicilioIndex')
                 })
                 .catch(error => {
                     this.setState({ isLoading: false });
@@ -107,7 +107,6 @@ export default class DomicilioInfoScreen extends React.Component {
         let {propertyTypeValue, propertyItems, isLoading} = this.state;
         return (
             <Block flex style={styles.container}>
-                <StatusBar barStyle="dark-content" />
                 <Block flex>
                         <Block space="between" style={styles.padded}>
                             <Block>
@@ -125,7 +124,7 @@ export default class DomicilioInfoScreen extends React.Component {
                                     </Text>
                                 </Block>
 
-                                <View style={{height: height * 0.45}}>
+                                <View style={{height: height * 0.4}}>
                                     <ScrollView>
                                     {
                                         propertyItems.map((value) => {
@@ -135,7 +134,7 @@ export default class DomicilioInfoScreen extends React.Component {
                                     </ScrollView>
                                 </View>
 
-                                <Block middle style={{ width: width - theme.SIZES.BASE * 4 }}>
+                                <Block middle style={{ width: width - theme.SIZES.BASE * 3.8 }}>
                                     <Button
                                         round
                                         color={nowTheme.COLORS.BASE}
@@ -158,12 +157,14 @@ export default class DomicilioInfoScreen extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: Platform.OS === 'android' ? - HeaderHeight : 0,
+        //marginTop: Platform.OS === 'android' ? - HeaderHeight : 0,
+        //marginTop: Platform.OS === 'android' ? HeaderHeight + 70 : 0,
+        top: 32,
     },
     padded: {
         paddingHorizontal: theme.SIZES.BASE * 2,
-        zIndex: 3,
-        position: 'absolute',
+        //zIndex: 3,
+        //position: 'absolute',
         bottom: Platform.OS === 'android' ? theme.SIZES.BASE * 2 : theme.SIZES.BASE * 3,
     },
 

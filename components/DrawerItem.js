@@ -11,6 +11,10 @@ class DrawerItem extends React.Component {
     const { title, focused } = this.props;
 
     switch (title) {
+      case 'Inicio':
+        return (
+          <Image source={Images.Icons.Casa} style={{width: 30, height: 30}} />
+        );
       case 'Perfil':
         return (
           <Image source={Images.Icons.Perfil} style={{width: 30, height: 30}} />
@@ -61,8 +65,8 @@ class DrawerItem extends React.Component {
 
         <Block row center flex={0.9}>
           <Text
-            style={{ fontFamily: 'trueno-semibold', fontWeight: '700' }}
-            size={14}
+            style={{ fontFamily: 'trueno', }}
+            size={18}
             color={nowTheme.COLORS.SECONDARY}
           >
             {title}
