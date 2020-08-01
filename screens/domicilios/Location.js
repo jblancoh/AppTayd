@@ -13,7 +13,6 @@ const { width, height } = Dimensions.get('screen');
 const DismissKeyboard = ({ children }) => (
   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
     <View style={{flex : 1}}>
-      <StatusBar barStyle={'dark-content'} />
       {children}
     </View>
   </TouchableWithoutFeedback>

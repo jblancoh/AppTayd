@@ -2,11 +2,13 @@ import React from "react";
 import {
     Image,
     StyleSheet,
-    StatusBar,
+    ScrollView,
     Dimensions,
-    Text, View
+    Text, View, TouchableOpacity
 } from "react-native";
 import { Block, Button, theme } from "galio-framework";
+import Actions from '../../lib/actions';
+import PaymentMethodService from '../../services/paymentMethod';
 
 const { height, width } = Dimensions.get("screen");
 
@@ -14,30 +16,98 @@ import nowTheme from "../../constants/Theme";
 import Images from "../../constants/Images";
 
 class MetodoPagoIndexScreen extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            userData    : null,
+            sources     : [],
+        }
+    }
+
+    async componentDidMount() {
+        const { navigation } = this.props;
+
+       await  Actions.extractUserData().then((result) => {
+            if(result != null) {
+                this.setState({userData : result.user});
+                this._getSources();
+            }
+        });
+
+        this.focusListener = await navigation.addListener('didFocus', () => {
+            this._getSources();
+        });
+    }
+
+    componentWillUnmount() {
+        this.focusListener.remove();
+    }
+
+    async _getSources() {
+        await PaymentMethodService.list(this.state.userData.id)
+            .then(response => {
+                this.setState({sources : response})
+            })
+            .catch(error => {
+                console.error(error);
+                Alert.alert("No se encontraron tarjetas bancarias vinculadas a este usuario.");
+            })
+    }
+
+    async setPredetermined(itemSource) {
+        if(!itemSource.is_predetermined) {
+            await PaymentMethodService.setPredeterminedSource(itemSource.id)
+                .then(response => {
+                    this._getSources();
+                })
+                .catch(error => {
+                    console.error(error);
+                    Alert.alert("No se logró predeterminar esta tarjeta bancaria.");
+                })
+        }
+    }
+
     render() {
         const { navigation } = this.props;
 
         return (
             <Block flex style={styles.container}>
-                <StatusBar barStyle="light-content" />
                 <Block flex space="between" style={styles.padded}>
-                    <Block middle style={styles.cardContainer}>
-                        <View style={{ width: width - theme.SIZES.BASE * 4, flexDirection: 'row', justifyContent: 'flex-end', paddingTop: 10, paddingRight: 10 }}>
-                            <Image source={require('../../assets/icons/success.png')} style={{ width: 25, height: 25 }} />
-                        </View>
+                    <View style={{height: height * 0.68}}>
+                        <ScrollView>
+                            {
+                                this.state.sources.map((item) => {
+                                    return (
+                                        <Block middle style={styles.cardContainer} key={item.id}>
+                                            <TouchableOpacity onPress={() => this.setPredetermined(item)}>
+                                                <View style={{ width: width - theme.SIZES.BASE * 4, flexDirection: 'row', justifyContent: 'flex-end', paddingTop: 10, paddingRight: 10 }}>
+                                                    {item.is_predetermined == true && (<Image source={require('../../assets/icons/success.png')} style={{ width: 25, height: 25 }} />)}
+                                                </View>
 
-                        <Block row style={{ width: width - theme.SIZES.BASE * 4, paddingBottom: 10, paddingHorizontal: 15, alignItems: 'center' }}>
-                            <View style={{ paddingHorizontal: 25 }}>
-                                <Image source={require('../../assets/icons/T-TarjetaBancaria.png')} style={{ width: 60, height: 35 }} />
-                            </View>
+                                                <Block row style={{ width: width - theme.SIZES.BASE * 4, paddingBottom: 10, paddingHorizontal: 15, alignItems: 'center' }}>
+                                                    <View style={{ paddingHorizontal: 25 }}>
+                                                        <Image source={Images.Icons.TarjetaBancaria} style={{ width: 60, height: 35 }} />
+                                                    </View>
 
-                            <View style={{ width: 170, marginTop: -15 }}>
-                                <Text style={[styles.subtitle]} color={nowTheme.COLORS.SECONDARY}>
-                                    Visa 111 222 333 444 Christopher del ángel
-                                </Text>
-                            </View>
-                        </Block>
-                    </Block>
+                                                    <View style={{ marginTop: 0, paddingRight: 20 }}>
+                                                        <Text style={[styles.subtitle]} color={nowTheme.COLORS.SECONDARY}>
+                                                            {`${item.brand}`}
+                                                        </Text>
+                                                        <Text style={[styles.subtitleRegular]} color={nowTheme.COLORS.SECONDARY}>
+                                                            {`${item.number}`}
+                                                        </Text>
+                                                        <Text style={[styles.subtitle]} color={nowTheme.COLORS.SECONDARY}>
+                                                            {`${item.name}`}
+                                                        </Text>
+                                                    </View>
+                                                </Block>
+                                            </TouchableOpacity>
+                                        </Block>
+                                    )
+                                })
+                            }
+                        </ScrollView>
+                    </View>
 
                     <Block middle flex style={{ justifyContent: 'flex-end' }}>
                         <Button
@@ -64,7 +134,7 @@ const styles = StyleSheet.create({
     },
     cardContainer: {
         backgroundColor: nowTheme.COLORS.WHITE,
-        paddingBottom: 15,
+        height: 90,
         borderRadius: 25,
         shadowColor: nowTheme.COLORS.BLACK,
         shadowOffset: {
@@ -73,8 +143,10 @@ const styles = StyleSheet.create({
         },
         shadowRadius: 8,
         shadowOpacity: 0.1,
-        elevation: 4,
+        elevation: 1,
         overflow: 'hidden',
+
+        marginBottom: 20,
     },
     padded: {
         paddingHorizontal: theme.SIZES.BASE * 2,
@@ -88,9 +160,17 @@ const styles = StyleSheet.create({
     },
     subtitle: {
         fontFamily: 'trueno-light',
+        fontSize: 13,
+        color: nowTheme.COLORS.SECONDARY,
+        textAlign: 'left',
+        lineHeight: 14
+    },
+    subtitleRegular: {
+        fontFamily: 'trueno',
         fontSize: 16,
         color: nowTheme.COLORS.SECONDARY,
         textAlign: 'left',
+        lineHeight: 17
     },
     button: {
         width: width * 0.5,
