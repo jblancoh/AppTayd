@@ -12,7 +12,10 @@ export default class AgendaInsumosScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isSelected: false,
+            isSelected      : false,
+            userData        : this.props.navigation.state.params.userData,
+            propertyInfo    : this.props.navigation.state.params.propertyInfo,
+            datetime        : this.props.navigation.state.params.datetime,
         };
     }
 
@@ -21,7 +24,12 @@ export default class AgendaInsumosScreen extends React.Component {
     }
 
     _handleNextAction() {
-        this.props.navigation.navigate("AgendaCheckout");
+        this.props.navigation.navigate("AgendaCheckout", {
+            userData        : this.state.userData,
+            propertyInfo    : this.state.propertyInfo,
+            datetime        : this.state.datetime,
+            hasSupplies     : this.state.isSelected
+        });
     }
 
     render() {

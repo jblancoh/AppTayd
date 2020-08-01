@@ -1,8 +1,9 @@
 import React from 'react';
 import { Image, StyleSheet, StatusBar, Dimensions, Platform, View, DatePickerAndroid, DatePickerIOS, TimePickerAndroid } from 'react-native';
 import { Block, Button, Text, theme, Toast } from 'galio-framework';
-import { Icon } from '../../components';
 import { HeaderHeight } from '../../constants/utils';
+import PropertyService from "../../services/property";
+import Actions from "../../lib/actions";
 
 const { height, width } = Dimensions.get('screen');
 import { Images, nowTheme } from '../../constants/';
@@ -16,13 +17,54 @@ export default class AgendaFechaScreen extends React.Component {
             isIphone        : Platform.OS === 'ios',
             date            : new Date(),
             time            : new Date(),
+            userData        : null,
+            propertyInfo    : null,
             weekDay         : ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
             months          : ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
         };
     }
 
+    async componentDidMount() {
+        const { navigation } = this.props;
+
+        await  Actions.extractUserData().then((result) => {
+             if(result != null) {
+                 this.setState({userData : result.user});
+                 this._getPropertyInfo();
+             }
+        });
+
+        this.focusListener = await navigation.addListener('didFocus', () => {
+            this._getPropertyInfo();
+        });
+    }
+
+    componentWillUnmount() {
+        this.focusListener.remove();
+    }
+
+    _getPropertyInfo() {
+        PropertyService.getPredeterminedProperty(this.state.userData.id)
+            .then(response => {
+                this.setState({propertyInfo: response});
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
     _handleNextAction() {
-        this.props.navigation.navigate("AgendaInsumos");
+        this.props.navigation.navigate("AgendaInsumos", {
+            userData        : this.state.userData,
+            propertyInfo    : this.state.propertyInfo,
+            datetime        : {
+                day     : this.state.date.getDay(),
+                month   : this.state.date.getMonth(),
+                year    : this.state.date.getFullYear(),
+                hour    : this.state.time.getHours(),
+                minutes : this.state.time.getMinutes()
+            }
+        });
     }
 
     _openDatePicker = async() => {
@@ -49,11 +91,11 @@ export default class AgendaFechaScreen extends React.Component {
     _timeFormat() {
         let time    = this.state.time;
         let type    = "a.m.";
-        let minutes = time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes();
+        let minutes = time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes();
         let hour    = time.getHours();
 
-        if(hour > 12) {
-            hour    -= 12;
+        if(hour >= 12) {
+            if(hour > 12) hour    -= 12;
             type    = "p.m.";
         }
 
@@ -75,8 +117,16 @@ export default class AgendaFechaScreen extends React.Component {
         }
     }
 
+    propertyTypeImage(id) {
+        switch(id) {
+            case 1: return (<Image source={Images.Icons.Casa} style={{ width: 50, height: 50 }} />)
+            case 2: return (<Image source={Images.Icons.Departamento} style={{ width: 50, height: 50 }} />)
+            case 3: return (<Image source={Images.Icons.Oficina} style={{ width: 50, height: 50 }} />)
+        }
+    }
+
     render() {
-        const { showDateTime, isIphone } = this.state;
+        const { showDateTime, isIphone, propertyInfo } = this.state;
         return (
             <Block flex style={styles.container}>
                 <StatusBar barStyle="light-content" />
@@ -107,11 +157,11 @@ export default class AgendaFechaScreen extends React.Component {
                             <Text style={[styles.title, { paddingTop: 20 }]}> Domicilio </Text>
                             <Text style={[styles.subtitle, { paddingTop: 10 }]}>Confirma el domicilio a limpiar</Text>
 
-                            <Block row style={{ width: width - theme.SIZES.BASE * 4, paddingVertical: 15, paddingHorizontal: 25, justifyContent: 'center', alignContent: 'center' }}>
-                                <Image source={require('../../assets/icons/T-casa.png')} style={{ width: 50, height: 50 }} />
+                            <Block row style={{ width: width - theme.SIZES.BASE * 4, paddingVertical: 15, paddingHorizontal: 25, justifyContent: 'center', alignItems: 'center' }}>
+                                { propertyInfo != null && this.propertyTypeImage(propertyInfo.property_type_id) }
 
-                                <Text style={[styles.subtitle]} color={nowTheme.COLORS.SECONDARY}>
-                                    Av. Paseo Tabasco 1234567 C.P. 20990 Esq. Av. Ruiz Cortines
+                                <Text style={[styles.subtitle, {paddingHorizontal: 15}]} color={nowTheme.COLORS.SECONDARY}>
+                                    {propertyInfo != null && propertyInfo.name}
                                 </Text>
                             </Block>
 

@@ -29,6 +29,13 @@ function getUserPaymentMethods(id) {
     });
 }
 
+function getPredeterminedSource(id) {
+    return request({
+        url: `payment-methods/user-predetermined/${id}`,
+        method: 'GET'
+    })
+}
+
 function setPredeterminedSource(id) {
     return request({
         url: `payment-methods/predetermined/${id}`,
@@ -37,7 +44,7 @@ function setPredeterminedSource(id) {
 }
 
 const PaymentMethodService = {
-    get, list, store, getUserPaymentMethods, setPredeterminedSource
+    get, list, store, getUserPaymentMethods, setPredeterminedSource, getPredeterminedSource
 }
 
 export default PaymentMethodService;

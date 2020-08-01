@@ -29,8 +29,15 @@ function setPredeterminedProperty(id) {
     })
 }
 
+function getPredeterminedProperty(id) {
+    return request({
+        url: `properties/user-predetermined/${id}`,
+        method: 'GET'
+    });
+}
+
 const PropertyService = {
-    get, store, getUserProperties, setPredeterminedProperty
+    get, store, getUserProperties, setPredeterminedProperty, getPredeterminedProperty
 }
 
 export default PropertyService;

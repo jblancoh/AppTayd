@@ -13,6 +13,7 @@ import { Block, Button, theme } from "galio-framework";
 import { Icon } from '../../components';
 import nowTheme from "../../constants/Theme";
 import Images from "../../constants/Images";
+import PaymentMethodService from "../../services/paymentMethod";
 
 const { height, width } = Dimensions.get("screen");
 
@@ -20,13 +21,52 @@ class AgendaCheckoutScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            hasError    : false,
-            errorTitle  : '',
-            errorMessage: '',
+            hasError        : false,
+            errorTitle      : '',
+            errorMessage    : '',
+            userData        : this.props.navigation.state.params.userData,
+            propertyInfo    : this.props.navigation.state.params.propertyInfo,
+            datetime        : this.props.navigation.state.params.datetime,
+            hasSupplies     : this.props.navigation.state.params.hasSupplies,
+            sourceInfo      : null,
+            weekDay         : ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+            months          : ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
         }
     }
+
+    componentDidMount() {
+
+    }
+
+    _getSourceInfo() {
+        PaymentMethodService.getPredeterminedSource(this.state.userData.id)
+            .then(response => {
+                this.setState({sourceInfo: response});
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    _datetimeFormat() {
+        const {day, month, year, hour, minutes} = this.state.datetime;
+        let _week    = this.state.weekDay[day];
+        let _month   = this.state.months[month];
+
+        let type    = "a.m.";
+        let _minutes = minutes < 10 ? `0${minutes}` : minutes;
+
+        if(hour >= 12) {
+            if(hour > 12) hour -= 12;
+            type    = "p.m.";
+        }
+
+        return `${_week}, ${day} de ${_month} de ${year}, ${hour}:${_minutes} ${type}`;
+    }
+
     render() {
-        const { navigation } = this.props;
+        const { navigation }    = this.props;
+        const { propertyInfo, sourceInfo }  = this.state;
 
         return (
             <Block flex style={styles.container}>
@@ -44,7 +84,9 @@ class AgendaCheckoutScreen extends React.Component {
 
                         <View style={[styles.sectionBorder, styles.section]}>
                             <Image source={Images.Icons.TarjetaBancaria} style={[styles.sectionItem, { width: 50, height: 34 }]} />
-                            <Text style={[styles.sectionItem, styles.textNormal, {width: 190}]}>Visa 111 222 333 444 Christopher del ángel</Text>
+                            <Text style={[styles.sectionItem, styles.textNormal, {width: 190}]}>
+                                {sourceInfo != null && `${sourceInfo.brand}\n${sourceInfo.number}\n${sourceInfo.name}`}
+                            </Text>
                             <Icon
                                 size={22}
                                 color={nowTheme.COLORS.BASE}
@@ -68,7 +110,7 @@ class AgendaCheckoutScreen extends React.Component {
 
                         <View style={[styles.sectionBorder, styles.section]}>
                             <Text style={[styles.sectionItem, styles.textBold]}>Dirección</Text>
-                            <Text style={[styles.sectionItem, styles.textNormal, { width: 190 }]}>Av. Paseo Tabasco 1234567 C.P. 20990 esq. Av. Ruiz cortines</Text>
+                            <Text style={[styles.sectionItem, styles.textNormal, { width: 190 }]}>{ propertyInfo.name}</Text>
                             <Icon
                                 size={22}
                                 color={nowTheme.COLORS.BASE}
@@ -80,7 +122,7 @@ class AgendaCheckoutScreen extends React.Component {
 
                         <View style={[styles.sectionBorder, styles.section]}>
                             <Text style={[styles.sectionItem, styles.textBold]}>Día y Hora</Text>
-                            <Text style={[styles.sectionItem, styles.textNormal, { width: 190 }]}>Domingo, 15 de marzo de 2020, 2:00 p.m.</Text>
+                            <Text style={[styles.sectionItem, styles.textNormal, { width: 190 }]}>{ this._datetimeFormat() }</Text>
                             <Icon
                                 size={22}
                                 color={nowTheme.COLORS.BASE}
