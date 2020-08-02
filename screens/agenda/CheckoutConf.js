@@ -7,13 +7,16 @@ import {
     Text,
     View,
     Image,
-    Modal
+    Modal,
+    ScrollView,
+    TouchableOpacity
 } from "react-native";
 import { Block, Button, theme } from "galio-framework";
 import { Icon } from '../../components';
 import nowTheme from "../../constants/Theme";
 import Images from "../../constants/Images";
 import PaymentMethodService from "../../services/paymentMethod";
+import GeneralSettingService from "../../services/generalSetting";
 
 const { height, width } = Dimensions.get("screen");
 
@@ -26,16 +29,44 @@ class AgendaCheckoutScreen extends React.Component {
             errorMessage    : '',
             userData        : this.props.navigation.state.params.userData,
             propertyInfo    : this.props.navigation.state.params.propertyInfo,
+            propertyDist    : "",
             datetime        : this.props.navigation.state.params.datetime,
             hasSupplies     : this.props.navigation.state.params.hasSupplies,
             sourceInfo      : null,
             weekDay         : ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
             months          : ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
+            subtotal        : 0,
+            discount        : 0,
+            total           : 0,
+            generalSettings : [],
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        await PaymentMethodService.getPredeterminedSource(this.state.userData.id)
+                .then(response => {
+                    this.setState({sourceInfo: response});
+                })
+                .catch(error => {
+                    console.error(error);
+                });
 
+
+        await GeneralSettingService.getAll()
+                .then(response => {
+                    this.setState({generalSettings: response});
+                })
+                .catch(e => console.error(e));
+
+        this._getPropertyDistribution();
+    }
+
+    _getGeneralSettings() {
+        GeneralSettingService.getAll()
+            .then(response => {
+                this.setState({generalSettings: response});
+            })
+            .catch(e => console.error(e));
     }
 
     _getSourceInfo() {
@@ -49,24 +80,96 @@ class AgendaCheckoutScreen extends React.Component {
     }
 
     _datetimeFormat() {
-        const {day, month, year, hour, minutes} = this.state.datetime;
-        let _week    = this.state.weekDay[day];
-        let _month   = this.state.months[month];
+        const {weekDay, day, month, year, hour, minutes} = this.state.datetime;
+        let _week   = this.state.weekDay[weekDay];
+        let _month  = this.state.months[month];
+        let _hour   = hour;
 
         let type    = "a.m.";
         let _minutes = minutes < 10 ? `0${minutes}` : minutes;
 
-        if(hour >= 12) {
-            if(hour > 12) hour -= 12;
+        if(_hour >= 12) {
+            if(_hour > 12) _hour -= 12;
             type    = "p.m.";
         }
 
-        return `${_week}, ${day} de ${_month} de ${year}, ${hour}:${_minutes} ${type}`;
+        return `${_week}, ${day} de ${_month} de ${year}, ${_hour}:${_minutes} ${type}`;
+    }
+
+    _calculateService() {
+        let {generalSettings, subtotal, propertyInfo, hasSupplies} = this.state;
+        let generalSettingServiceKey = "",
+            bedroomDiscount     = 0,
+            bathroomDiscount    = 0,
+            serviceTotal        = 0,
+            taydCommission      = 0,
+            stripeCommission    = 0,
+            taxStripe           = 0,
+            taxService          = 0,
+            newSubtotal         = 0;
+
+        switch(propertyInfo.property_type_id) {
+            case 1: generalSettingServiceKey = "SERVICIO_CASA";          break;
+            case 2: generalSettingServiceKey = "SERVICIO_DEPARTAMENTO";  break;
+            case 3: generalSettingServiceKey = "SERVICIO_OFICINA";       break;
+        }
+
+        let serviceSetting                  = generalSettings.filter(item => item.key == generalSettingServiceKey);
+        let taydSuppliesSetting             = generalSettings.filter(item => item.key == "SERVICIO_INSUMOS_EXTRA");
+        let taydCommissionSetting           = generalSettings.filter(item => item.key == "TAYD_COMISION");
+        let stripeCommissionPercentSetting  = generalSettings.filter(item => item.key == "STRIPE_COMISION_PORCENTAJE");
+        let stripeCommissionExtraSetting    = generalSettings.filter(item => item.key == "STRIPE_COMISION_EXTRA");
+        let taxPercentSetting               = generalSettings.filter(item => item.key == "IVA_PORCENTAJE");
+        let bedroom                         = propertyInfo.distribution.filter(item => item.key == "RECAMARA");
+        let bathroom                        = propertyInfo.distribution.filter(item => item.key == "BANO");
+
+        /**
+         * EL SERVICIO BASE DE DEPARTAMENTO O CASA INCLUYE LIMPIEZA DE UNA HABITACIÓN Y UN BAÑO,
+         * POR LO QUE HAY QUE DESCONTARLOS DEL ARRAY DE DISTRIBUCIÓN PARA QUE NO SUME EN EL SUBTOTAL.
+         */
+        if(bedroom.length >= 1 && bedroom[0].quantity >= 1)
+            bedroomDiscount = parseFloat(bedroom[0].price);
+
+        if(bathroom.length >= 1 && bathroom[0].quantity >= 1)
+            bathroomDiscount = parseFloat(bathroom[0].price);
+
+        // pre-subtotal del servicio (SERVICIO_BASE + SUBTOTAL) - (DESCUENTO_RECAMARA + DESCUENTO BAÑO)
+        serviceTotal    = (parseFloat(serviceSetting[0].value) + subtotal + (hasSupplies ? parseFloat(taydSuppliesSetting[0].value) : 0)) - (bedroomDiscount + bathroomDiscount);
+
+        // Impuesto aplicado al pre-subtotal
+        taxService      = serviceTotal * (parseFloat(taxPercentSetting[0].value) / 100);
+
+        // Comisión obtenida por Tayd
+        taydCommission  = (serviceTotal + taxService) * (parseFloat(taydCommissionSetting[0].value) / 100);
+
+        // Comisión obtenida por Stripe
+        stripeCommission = ((serviceTotal + taxService + taydCommission) * (parseFloat(stripeCommissionPercentSetting[0].value) / 100)) + parseFloat(stripeCommissionExtraSetting[0].value);
+
+        // Impuesto aplicado a la comisión de Stripe
+        taxStripe       = stripeCommission * (parseFloat(taxPercentSetting[0].value) / 100);
+
+        // Total del proceso
+        newSubtotal     = serviceTotal + taxService + taydCommission + stripeCommission + taxStripe;
+
+        this.setState({subtotal: newSubtotal});
+    }
+
+    _getPropertyDistribution() {
+        let total           = 0;
+        let strDistribution = "";
+
+        this.state.propertyInfo.distribution.map(item => {
+            strDistribution += `${item.quantity} ${item.name} \n`;
+            total           += parseFloat(item.price) * item.quantity;
+        });
+
+        this.setState({subtotal : total, propertyDist: strDistribution});
+        this._calculateService();
     }
 
     render() {
         const { navigation }    = this.props;
-        const { propertyInfo, sourceInfo }  = this.state;
+        const { propertyInfo, sourceInfo, propertyDist, subtotal, discount } = this.state;
 
         return (
             <Block flex style={styles.container}>
@@ -77,99 +180,101 @@ class AgendaCheckoutScreen extends React.Component {
 
                 <Block flex space="between" style={styles.padded}>
                     <Block style={styles.cardContainer}>
-                        <View style={[styles.sectionBorder, styles.section]}>
-                            <Image source={Images.TaydLogoLarge} style={{width: 120, height: 25}} />
-                            <Text style={styles.textCancel}>Cancelar</Text>
-                        </View>
+                        <View style={{height: height * 0.62}}>
+                            <ScrollView>
+                                <View style={[styles.sectionBorder, styles.section]}>
+                                    <Image source={Images.TaydLogoLarge} style={{width: 120, height: 25}} />
+                                    <TouchableOpacity onPress={() => navigation.navigate('Schedule')}>
+                                        <Text style={styles.textCancel}>Cancelar</Text>
+                                    </TouchableOpacity>
+                                </View>
 
-                        <View style={[styles.sectionBorder, styles.section]}>
-                            <Image source={Images.Icons.TarjetaBancaria} style={[styles.sectionItem, { width: 50, height: 34 }]} />
-                            <Text style={[styles.sectionItem, styles.textNormal, {width: 190}]}>
-                                {sourceInfo != null && `${sourceInfo.brand}\n${sourceInfo.number}\n${sourceInfo.name}`}
-                            </Text>
-                            <Icon
-                                size={22}
-                                color={nowTheme.COLORS.BASE}
-                                name="chevron-right"
-                                family="FontAwesome"
-                                onPress={() => {}}
-                            />
-                        </View>
+                                <View style={[styles.sectionBorder, styles.section]}>
+                                    <Image source={Images.Icons.TarjetaBancaria} style={[styles.sectionItem, { width: 50, height: 34 }]} />
+                                    <Text style={[styles.sectionItem, styles.textNormal, {width: 190}]}>
+                                        {sourceInfo != null && `${sourceInfo.brand}\n${sourceInfo.number}\n${sourceInfo.name}`}
+                                    </Text>
+                                    <Icon
+                                        size={22}
+                                        color={nowTheme.COLORS.BASE}
+                                        name="chevron-right"
+                                        family="FontAwesome"
+                                        onPress={() => {}}
+                                    />
+                                </View>
 
-                        <View style={[styles.sectionBorder, styles.section]}>
-                            <Text style={[styles.sectionItem, styles.textBold]}>Contacto</Text>
-                            <Text style={[styles.sectionItem, styles.textNormal, { width: 190 }]}>Ejemplo@hotmail.com (044) 99 32 12 34 56</Text>
-                            <Icon
-                                size={22}
-                                color={nowTheme.COLORS.BASE}
-                                name="chevron-right"
-                                family="FontAwesome"
-                                onPress={() => { }}
-                            />
-                        </View>
+                                <View style={[styles.sectionBorder, styles.section]}>
+                                    <Text style={[styles.sectionItem, styles.textBold]}>Contacto</Text>
+                                    <Text style={[styles.sectionItem, styles.textNormal, { width: 190 }]}>{this.state.userData != null && `${this.state.userData.email}\n${this.state.userData.info.phone}`}</Text>
+                                    <Icon
+                                        size={22}
+                                        color={nowTheme.COLORS.BASE}
+                                        name="chevron-right"
+                                        family="FontAwesome"
+                                        onPress={() => { }}
+                                    />
+                                </View>
 
-                        <View style={[styles.sectionBorder, styles.section]}>
-                            <Text style={[styles.sectionItem, styles.textBold]}>Dirección</Text>
-                            <Text style={[styles.sectionItem, styles.textNormal, { width: 190 }]}>{ propertyInfo.name}</Text>
-                            <Icon
-                                size={22}
-                                color={nowTheme.COLORS.BASE}
-                                name="chevron-right"
-                                family="FontAwesome"
-                                onPress={() => { }}
-                            />
-                        </View>
+                                <View style={[styles.sectionBorder, styles.section]}>
+                                    <Text style={[styles.sectionItem, styles.textBold]}>Dirección</Text>
+                                    <Text style={[styles.sectionItem, styles.textNormal, { width: 190 }]}>{ propertyInfo.name}</Text>
+                                    <Icon
+                                        size={22}
+                                        color={nowTheme.COLORS.BASE}
+                                        name="chevron-right"
+                                        family="FontAwesome"
+                                        onPress={() => { }}
+                                    />
+                                </View>
 
-                        <View style={[styles.sectionBorder, styles.section]}>
-                            <Text style={[styles.sectionItem, styles.textBold]}>Día y Hora</Text>
-                            <Text style={[styles.sectionItem, styles.textNormal, { width: 190 }]}>{ this._datetimeFormat() }</Text>
-                            <Icon
-                                size={22}
-                                color={nowTheme.COLORS.BASE}
-                                name="chevron-right"
-                                family="FontAwesome"
-                                onPress={() => { }}
-                            />
-                        </View>
+                                <View style={[styles.sectionBorder, styles.section]}>
+                                    <Text style={[styles.sectionItem, styles.textBold]}>Día y Hora</Text>
+                                    <Text style={[styles.sectionItem, styles.textNormal, { width: 190 }]}>{ this._datetimeFormat() }</Text>
+                                    <Icon
+                                        size={22}
+                                        color={nowTheme.COLORS.BASE}
+                                        name="chevron-right"
+                                        family="FontAwesome"
+                                        onPress={() => { }}
+                                    />
+                                </View>
 
-                        <View style={[styles.sectionBorder, styles.section]}>
-                            <Text style={[styles.sectionItem, styles.textBold]}>Inmuebles</Text>
-                            <Text style={[styles.sectionItem, styles.textNormal, { width: 190 }]}>
-                                2 Habitaciones{"\n"}
-                                2 Baños{"\n"}
-                                1 Sala{"\n"}
-                                1 Cocina{"\n"}
-                                1 Comedor
-                            </Text>
-                        </View>
+                                <View style={[styles.sectionBorder, styles.section]}>
+                                    <Text style={[styles.sectionItem, styles.textBold]}>Inmuebles</Text>
+                                    <Text style={[styles.sectionItem, styles.textNormal, { width: 190 }]}>
+                                        { propertyDist }
+                                    </Text>
+                                </View>
 
-                        <View style={[styles.section, {paddingTop: 15}]}>
-                            <Text style={[styles.sectionItem, styles.textBold]}> </Text>
-                            <Text style={[styles.sectionItem, styles.textNormal]}>Subtotal</Text>
-                            <Text style={[styles.sectionItem, styles.textNormal,]}>$250.00</Text>
-                        </View>
-                        <View style={[styles.section]}>
-                            <Text style={[styles.sectionItem, styles.textBold]}> </Text>
-                            <Text style={[styles.sectionItem, styles.textNormal]}>Cupón</Text>
-                            <Text style={[styles.sectionItem, styles.textNormal,]}>$0.00</Text>
-                        </View>
-                        <View style={[styles.section]}>
-                            <Text style={[styles.sectionItem, styles.textBold]}> </Text>
-                            <Text style={[styles.sectionItem, styles.textBold]}>Total</Text>
-                            <Text style={[styles.sectionItem, styles.textBold,]}>$250.00</Text>
-                        </View>
+                                <View style={[styles.section, {paddingTop: 15}]}>
+                                    <Text style={[styles.sectionItem, styles.textBold]}> </Text>
+                                    <Text style={[styles.sectionItem, styles.textNormal]}>Subtotal</Text>
+                                    <Text style={[styles.sectionItem, styles.textNormal,]}>{`$${subtotal.toFixed(2)}`}</Text>
+                                </View>
+                                <View style={[styles.section]}>
+                                    <Text style={[styles.sectionItem, styles.textBold]}> </Text>
+                                    <Text style={[styles.sectionItem, styles.textNormal]}>Cupón</Text>
+                                    <Text style={[styles.sectionItem, styles.textNormal,]}>{`$${discount.toFixed(2)}`}</Text>
+                                </View>
+                                <View style={[styles.section]}>
+                                    <Text style={[styles.sectionItem, styles.textBold]}> </Text>
+                                    <Text style={[styles.sectionItem, styles.textBold]}>Total</Text>
+                                    <Text style={[styles.sectionItem, styles.textBold,]}>{`$${(subtotal - discount).toFixed(2)}`}</Text>
+                                </View>
 
-                        <Block middle style={{paddingTop: 25}}>
-                            <Button
-                                round
-                                color={nowTheme.COLORS.BASE}
-                                style={styles.button}
-                                onPress={() => this.setState({hasError: true, errorTitle: 'Método de pago rechazado', errorMessage: 'Intenta con otra tarjeta'})}>
-                                <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
-                                    AGENDAR
-                                </Text>
-                            </Button>
-                        </Block>
+                                <Block middle style={{paddingTop: 25}}>
+                                    <Button
+                                        round
+                                        color={nowTheme.COLORS.BASE}
+                                        style={styles.button}
+                                        onPress={() => this.setState({hasError: true, errorTitle: 'Método de pago rechazado', errorMessage: 'Intenta con otra tarjeta'})}>
+                                        <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
+                                            AGENDAR
+                                        </Text>
+                                    </Button>
+                                </Block>
+                            </ScrollView>
+                        </View>
                     </Block>
                 </Block>
 

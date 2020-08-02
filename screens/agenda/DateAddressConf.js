@@ -29,6 +29,7 @@ export default class AgendaFechaScreen extends React.Component {
 
         await  Actions.extractUserData().then((result) => {
              if(result != null) {
+                 console.log(result)
                  this.setState({userData : result.user});
                  this._getPropertyInfo();
              }
@@ -58,11 +59,12 @@ export default class AgendaFechaScreen extends React.Component {
             userData        : this.state.userData,
             propertyInfo    : this.state.propertyInfo,
             datetime        : {
-                day     : this.state.date.getDay(),
-                month   : this.state.date.getMonth(),
-                year    : this.state.date.getFullYear(),
-                hour    : this.state.time.getHours(),
-                minutes : this.state.time.getMinutes()
+                weekDay     : this.state.date.getDay(),
+                day         : this.state.date.getDate(),
+                month       : this.state.date.getMonth(),
+                year        : this.state.date.getFullYear(),
+                hour        : this.state.time.getHours(),
+                minutes     : this.state.time.getMinutes()
             }
         });
     }
