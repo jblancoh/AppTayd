@@ -1,6 +1,6 @@
 import React from 'react';
 import { Block } from "galio-framework";
-import { Easing, Animated } from 'react-native';
+import { Easing, Animated, Dimensions } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
@@ -47,12 +47,14 @@ import SoporteIndexScreen from '../screens/soporte/Index';
 import SoporteCitaScreen from '../screens/soporte/Cita';
 
 // drawer
-import Menu from './Menu';
+import Drawer from './Drawer';
 import DrawerItem from '../components/DrawerItem';
 
 // header for screens
 import Header from '../components/Header';
 import { nowTheme } from '../constants';
+
+const { width } = Dimensions.get('screen');
 
 const transitionConfig = (transitionProps, prevTransitionProps) => ({
   transitionSpec: {
@@ -393,7 +395,34 @@ const AppStack = createDrawerNavigator(
       }
     },
   },
-  Menu
+  {
+    contentComponent: Drawer,
+    drawerBackgroundColor: '#F7F7F7',
+    drawerWidth: width * 0.95,
+    contentOptions: {
+      activeTintColor: nowTheme.COLORS.SECONDARY,
+      inactiveTintColor: nowTheme.COLORS.SECONDARY,
+      activeBackgroundColor: 'transparent',
+      itemStyle: {
+        width: width * 1,
+        backgroundColor: 'transparent'
+      },
+      labelStyle: {
+        fontSize: 18,
+        marginLeft: 20,
+        fontWeight: 'normal'
+      },
+      itemsContainerStyle: {
+        paddingVertical: 16,
+        paddingHorizonal: 12,
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center',
+        overflow: 'hidden',
+      }
+    }
+  }
+  //Menu
 );
 
 const AppContainer = createAppContainer(AppStack);

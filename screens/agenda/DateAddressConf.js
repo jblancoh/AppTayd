@@ -29,7 +29,6 @@ export default class AgendaFechaScreen extends React.Component {
 
         await  Actions.extractUserData().then((result) => {
              if(result != null) {
-                 console.log(result)
                  this.setState({userData : result.user});
                  this._getPropertyInfo();
              }

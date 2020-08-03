@@ -4,11 +4,29 @@ import { Block, theme, Text } from "galio-framework";
 
 import { CardFullImage, TabBar } from "../components";
 import { Images, nowTheme } from '../constants/';
+import Actions from '../lib/actions';
 
 const { width } = Dimensions.get("screen");
 
 class Home extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      userData  : null,
+    };
+  }
+
+  async componentDidMount() {
+    await Actions.extractUserData().then((result) => {
+      if(result != null) {
+        this.setState({userData: result.user});
+      }
+    });
+  }
+
   renderBlocks = () => {
+    let {userData} = this.state;
+
     return (
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
         <Block flex>
@@ -16,7 +34,7 @@ class Home extends React.Component {
           <Block flex row style={{paddingTop: 30}}>
             <Image source={Images.ProfilePicture} style={{borderRadius: 50, height: 60, width: 60, marginRight: 25}} />
             <Block flex>
-              <Text style={styles.nameTitle}>Bienvenido Chris</Text>
+              <Text style={styles.nameTitle}>Bienvenido {userData != null ? 'userData.info.name' : ''}</Text>
               <Text>¿En qué podemos ayudarte?</Text>
             </Block>
           </Block>

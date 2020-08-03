@@ -20,47 +20,49 @@ _logout = props => {
   });
 }
 
-const Drawer = props => (
-  <Block style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
-    <Block row style={styles.header}>
-      <Image source={Images.ProfilePicture} style={{ borderRadius: 50, height: 60, width: 60, marginRight: 25 }} />
+const Drawer = props => {
+  return (
+    <Block style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
+      <Block row style={styles.header}>
+        <Image source={Images.ProfilePicture} style={{ borderRadius: 50, height: 60, width: 60, marginRight: 25 }} />
+        <Block flex>
+          <Text style={styles.nameTitle}>{userData != null ? userData.info.name : ''}</Text>
+          <Text style={{fontFamily: 'trueno', fontSize: 14, lineHeight: 15}}>{userData != null ? userData.email : ''}</Text>
+        </Block>
+      </Block>
+  
       <Block flex>
-        <Text style={styles.nameTitle}>Christopher</Text>
-        <Text style={{fontFamily: 'trueno', fontSize: 14, lineHeight: 15}}>ejemplo@hotmail.com</Text>
+        <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
+          <Text style={styles.sectionTitle}>Cuenta</Text>
+  
+          <DrawerNavigatorItems {...props} />
+  
+          <Text style={styles.sectionTitle}>Extra</Text>
+  
+          <TouchableOpacity onPress={() => props.navigation.navigate('GeneraIngresoIndex')} style={{fontFamily: 'trueno', fontSize: 18, paddingTop: 20 }}>
+            <DrawerItem {...props} title="Cupones" />
+          </TouchableOpacity>
+  
+          <TouchableOpacity onPress={() => props.navigation.navigate('Onboarding')} style={{ fontFamily: 'trueno', fontSize: 18, }}>
+            <DrawerItem {...props} title="Comparte y gana" />
+          </TouchableOpacity>
+  
+          <TouchableOpacity onPress={() => props.navigation.navigate('GeneraIngreso')} style={{ fontFamily: 'trueno', fontSize: 18, }}>
+            <DrawerItem {...props} title="Genera ingresos extras" />
+          </TouchableOpacity>
+  
+          <TouchableOpacity onPress={() => _logout(props)} style={{ fontFamily: 'trueno', fontSize: 18, }}>
+            <DrawerItem {...props} title="Cerrar sesión" />
+          </TouchableOpacity>
+        </ScrollView>
+      </Block>
+  
+      <Block style={{justifyContent: 'center', alignSelf: 'center', paddingBottom: 30}}>
+        <Image source={Images.TaydLogoGris} style={{height: 30, width: 140, marginTop: 20}} />
       </Block>
     </Block>
-
-    <Block flex>
-      <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
-        <Text style={styles.sectionTitle}>Cuenta</Text>
-
-        <DrawerNavigatorItems {...props} />
-
-        <Text style={styles.sectionTitle}>Extra</Text>
-
-        <TouchableOpacity onPress={() => props.navigation.navigate('GeneraIngresoIndex')} style={{fontFamily: 'trueno', fontSize: 18, paddingTop: 20 }}>
-          <DrawerItem {...props} title="Cupones" />
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => props.navigation.navigate('Onboarding')} style={{ fontFamily: 'trueno', fontSize: 18, }}>
-          <DrawerItem {...props} title="Comparte y gana" />
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => props.navigation.navigate('GeneraIngreso')} style={{ fontFamily: 'trueno', fontSize: 18, }}>
-          <DrawerItem {...props} title="Genera ingresos extras" />
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => _logout(props)} style={{ fontFamily: 'trueno', fontSize: 18, }}>
-          <DrawerItem {...props} title="Cerrar sesión" />
-        </TouchableOpacity>
-      </ScrollView>
-    </Block>
-
-    <Block style={{justifyContent: 'center', alignSelf: 'center', paddingBottom: 30}}>
-      <Image source={Images.TaydLogoGris} style={{height: 30, width: 140, marginTop: 20}} />
-    </Block>
-  </Block>
-);
+  );
+} 
 
 const Menu = {
   contentComponent: props => <Drawer {...props} />,

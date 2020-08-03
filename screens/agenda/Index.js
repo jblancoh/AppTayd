@@ -4,14 +4,14 @@ import {
     StyleSheet,
     StatusBar,
     Dimensions,
-    Text, View
+    Text
 } from "react-native";
 import { Block, Button, theme } from "galio-framework";
 
-const { height, width } = Dimensions.get("screen");
-
 import nowTheme from "../../constants/Theme";
 import Images from "../../constants/Images";
+
+const { height, width } = Dimensions.get("screen");
 
 class AgendaIndexScreen extends React.Component {
     render() {

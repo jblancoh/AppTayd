@@ -22,7 +22,7 @@ class AgendaCheckoutScreen extends React.Component {
         this.state = {
             hasError    : false,
             successTitle: 'Agendado con éxito',
-            successMessage: 'Nos vemos el Domingo 15 de marzo de 2020, a las 2:00 p.m.',
+            successMessage: 'Nos vemos el ' + this.props.navigation.state.params.schedule,
         }
     }
     render() {

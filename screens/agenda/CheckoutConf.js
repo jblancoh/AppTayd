@@ -17,6 +17,7 @@ import nowTheme from "../../constants/Theme";
 import Images from "../../constants/Images";
 import PaymentMethodService from "../../services/paymentMethod";
 import GeneralSettingService from "../../services/generalSetting";
+import ServicesService from "../../services/service";
 
 const { height, width } = Dimensions.get("screen");
 
@@ -35,6 +36,7 @@ class AgendaCheckoutScreen extends React.Component {
             sourceInfo      : null,
             weekDay         : ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
             months          : ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
+            serviceCost     : 0,
             subtotal        : 0,
             discount        : 0,
             total           : 0,
@@ -151,7 +153,7 @@ class AgendaCheckoutScreen extends React.Component {
         // Total del proceso
         newSubtotal     = serviceTotal + taxService + taydCommission + stripeCommission + taxStripe;
 
-        this.setState({subtotal: newSubtotal});
+        this.setState({subtotal: newSubtotal, serviceCost: serviceTotal});
     }
 
     _getPropertyDistribution() {
@@ -165,6 +167,35 @@ class AgendaCheckoutScreen extends React.Component {
 
         this.setState({subtotal : total, propertyDist: strDistribution});
         this._calculateService();
+    }
+
+    storeService() {
+        const {day, month, year, hour, minutes} = this.state.datetime;
+        let _month      = month <= 8 ? `0${month + 1}`: month + 1;
+        let _day        = day <= 9 ? `0${day}`: day;
+        let _minutes    = minutes <= 9 ? `0${minutes}`: minutes;
+        let _hours      = hour <= 9 ? `0${hour}`: hour
+
+        let params = {
+            user_id             : this.state.userData.id,
+            user_property_id    : this.state.propertyInfo.id,
+            stripe_customer_source_id : this.state.sourceInfo.id,
+            date                : `${year}-${_month}-${_day}`,
+            time                : `${_hours}:${_minutes}:00`,
+            has_consumables     : this.state.hasSupplies,
+            service_cost         : this.state.serviceCost,
+            discount            : 0,
+        };
+
+        ServicesService.store(params)
+            .then(response => {
+                this.props.navigation.navigate("AgendaSuccess", {
+                    schedule: this._datetimeFormat()
+                });
+            })
+            .catch(e => {
+                this.setState({hasError: true, errorTitle: 'Servicio', errorMessage: e.data.error});
+            });
     }
 
     render() {
@@ -184,7 +215,10 @@ class AgendaCheckoutScreen extends React.Component {
                             <ScrollView>
                                 <View style={[styles.sectionBorder, styles.section]}>
                                     <Image source={Images.TaydLogoLarge} style={{width: 120, height: 25}} />
-                                    <TouchableOpacity onPress={() => navigation.navigate('Schedule')}>
+                                    <TouchableOpacity onPress={() => {
+                                        console.log("Entra")
+                                        //navigation.navigate('Schedule')
+                                    }}>
                                         <Text style={styles.textCancel}>Cancelar</Text>
                                     </TouchableOpacity>
                                 </View>
@@ -205,7 +239,7 @@ class AgendaCheckoutScreen extends React.Component {
 
                                 <View style={[styles.sectionBorder, styles.section]}>
                                     <Text style={[styles.sectionItem, styles.textBold]}>Contacto</Text>
-                                    <Text style={[styles.sectionItem, styles.textNormal, { width: 190 }]}>{this.state.userData != null && `${this.state.userData.email}\n${this.state.userData.info.phone}`}</Text>
+                                    <Text style={[styles.sectionItem, styles.textNormal, { width: 190 }]}>{this.state.userData != null && ''/* `${this.state.userData.email}\n${this.state.userData.info.phone}` */}</Text>
                                     <Icon
                                         size={22}
                                         color={nowTheme.COLORS.BASE}
@@ -267,7 +301,7 @@ class AgendaCheckoutScreen extends React.Component {
                                         round
                                         color={nowTheme.COLORS.BASE}
                                         style={styles.button}
-                                        onPress={() => this.setState({hasError: true, errorTitle: 'Método de pago rechazado', errorMessage: 'Intenta con otra tarjeta'})}>
+                                        onPress={() => this.storeService()}>
                                         <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
                                             AGENDAR
                                         </Text>
@@ -286,7 +320,7 @@ class AgendaCheckoutScreen extends React.Component {
                     <View style={{ flex: 1, height: height, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end', flexDirection: 'column', }}>
                         <View style={{ backgroundColor: 'white', padding: 25, paddingBottom: 30, }}>
                             <View style={{justifyContent: 'center', alignItems: 'center', paddingBottom: 25}}>
-                                <Image source={require('../../assets/icons/warning.png')} style={{height: 70, width: 70}} />
+                                <Image source={require('../../assets/icons/warning.png')} style={{height: 70, width: 79}} />
                                 <Text style={styles.errorTitle}>{this.state.errorTitle}</Text>
                                 <Text style={styles.textNormal}>{this.state.errorMessage}</Text>
                             </View>
@@ -295,10 +329,7 @@ class AgendaCheckoutScreen extends React.Component {
                                     round
                                     color={nowTheme.COLORS.BASE}
                                     style={styles.button}
-                                    onPress={() => {
-                                        this.setState({hasError: false});
-                                        this.props.navigation.navigate("AgendaSuccess");
-                                    }}>
+                                    onPress={() => this.setState({hasError: false, errorTitle: '', errorMessage: ''})}>
                                     <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
                                         ENTENDIDO
                                     </Text>

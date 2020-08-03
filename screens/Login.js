@@ -47,9 +47,9 @@ class LoginScreen extends React.Component {
             await AsyncStorage.setItem('user', JSON.stringify(response.user));
 
             this.setState({ isLoading: false });
-            if(!response.user.first_login && !response.user.isTayder) {
+            if(response.user.first_login && !response.user.isTayder) {
               this.props.navigation.navigate('PropertyLocation');
-            } else if(response.user.first_login && !response.user.isTayder) {
+            } else if(!response.user.first_login && !response.user.isTayder) {
               this.props.navigation.navigate('Home');
             } else if(response.user.first_login_tayder && response.user.isTayder && !response.user.confirmed) {
               this.props.navigation.navigate('DocumentosIndex');

@@ -1,10 +1,12 @@
 import React from "react";
-import { StyleSheet, Dimensions, ScrollView, Image, StatusBar, View } from "react-native";
+import { StyleSheet, Dimensions, ScrollView, Image, View } from "react-native";
 import { Block, theme, Text, Button } from "galio-framework";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 import { CardFullImage, TabBar } from "../components";
 import { Images, nowTheme } from '../constants/';
-import { TouchableOpacity } from "react-native-gesture-handler";
+import Actions from "../lib/actions";
+import ServicesService from "../services/service";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -12,15 +14,69 @@ class Schedule extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showMore    : false,
-            showInfo    : false,
+            showMore        : false,
+            showInfo        : false,
+            userData        : null,
+            weekDay         : ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+            months          : ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
+            services        : [],
         }
     }
+
+    async componentDidMount() {
+        const { navigation } = this.props;
+
+        await  Actions.extractUserData().then((result) => {
+             if(result != null) {
+                 this.setState({userData : result.user});
+                 this._getServices();
+             }
+        });
+
+        this.focusListener = await navigation.addListener('didFocus', () => {
+            this._getServices();
+        });
+    }
+
+    componentWillUnmount() {
+        this.focusListener.remove();
+    }
+
+    async _getServices() {
+        await ServicesService.listScheduled(this.state.userData.id)
+            .then(response => {
+                this.setState({services : response, showMore: true})
+            })
+            .catch(error => {
+                console.error(error);
+                Alert.alert("No se encontraron servicios vinculados a este usuario.");
+            })
+    }
+
+    formatDateTime = (item) => {
+        let arrItem = item.dt_request.split(" ");
+        let arrDate = arrItem[0].split("-");
+        let arrTime = arrItem[1].split(":");
+
+        let datetime    = new Date(Number(arrDate[0]), Number(arrDate[1]) - 1, Number(arrDate[2]), Number(arrTime[0]), Number(arrTime[1]));
+        let week        = this.state.weekDay[datetime.getDay()];
+        let month       = this.state.months[datetime.getMonth()];
+        let type        = "a.m.";
+        let minutes     = datetime.getMinutes() < 10 ? `0${datetime.getMinutes()}` : datetime.getMinutes();
+        let hour        = datetime.getHours();
+
+        if(hour >= 12) {
+            if(hour > 12) hour    -= 12;
+            type    = "p.m.";
+        }
+
+        return `${week}, ${datetime.getDate()} de ${month} de ${datetime.getFullYear()}, ${hour}:${minutes} ${type}`;
+    }
+
     renderBlocks = () => {
         return (
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
                 <Block flex>
-                    <StatusBar barStyle="light-content" />
                     <Block flex row style={{ paddingTop: 30 }}>
                         <Image source={Images.ProfilePicture} style={{ borderRadius: 50, height: 60, width: 60, marginRight: 25 }} />
                         <Block flex>
@@ -32,7 +88,7 @@ class Schedule extends React.Component {
                     {
                         !this.state.showMore ? (
                             <Block>
-                                <TouchableOpacity onPress={() => this.setState({showMore : true})}>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('AgendaFecha')}>
                                     <CardFullImage image={Images.Agendar} imageStyle={{ height: height * 0.62, width: '100%' }} />
                                 </TouchableOpacity>
 
@@ -41,60 +97,68 @@ class Schedule extends React.Component {
                                 </Block>
                             </Block>
                         ) : (
-                            <Block flex style={{marginTop: 20}}>
-                                <Block middle style={styles.cardContainer}>
-                                    <Block row style={{ width: width - theme.SIZES.BASE * 3, paddingVertical: 20, paddingHorizontal: 10 }}>
-                                        <Block style={{ justifyContent: 'flex-start', alignContent: 'center' }}>
-                                            <Image source={Images.Icons.Calendario} style={{ width: 65, height: 65 }} />
-                                        </Block>
+                            <View style={{height: height * 0.68}}>
+                                <ScrollView>
+                                    {
+                                        this.state.services.map((item) => {
+                                            return (
+                                                <Block key={item.id} flex style={{marginTop: 20}}>
+                                                    <Block middle style={styles.cardContainer}>
+                                                        <Block row style={{ width: width - theme.SIZES.BASE * 3, paddingVertical: 20, paddingHorizontal: 10 }}>
+                                                            <Block style={{ justifyContent: 'flex-start', alignContent: 'center' }}>
+                                                                <Image source={Images.Icons.Calendario} style={{ width: 65, height: 65 }} />
+                                                            </Block>
 
-                                        <View style={{ width: 250, paddingHorizontal: 15 }}>
-                                            <Text style={[styles.scheduleTitle]}>
-                                                Próxima cita...
-                                            </Text>
-                                            <Block middle style={[styles.section, this.state.showInfo && styles.divider]}>
-                                                <Text style={[styles.scheduleSubtitle]} color={nowTheme.COLORS.SECONDARY}>
-                                                    Domingo, 15 de marzo de 2020, 2:00 p.m.
-                                                </Text>
+                                                            <View style={{ width: 250, paddingHorizontal: 15 }}>
+                                                                <Text style={[styles.scheduleTitle]}>
+                                                                    Próxima cita...
+                                                                </Text>
+                                                                <Block middle style={[styles.section, this.state.showInfo && styles.divider]}>
+                                                                    <Text style={[styles.scheduleSubtitle]} color={nowTheme.COLORS.SECONDARY}>{ this.formatDateTime(item) }</Text>
 
-                                                {
-                                                    !this.state.showInfo && (
-                                                        <TouchableOpacity onPress={() => this.setState({ showInfo: true })}>
-                                                            <Image source={Images.Icons.FlechaAbajo} style={{ width: 25, height: 25 }} />
-                                                        </TouchableOpacity>
-                                                    )
-                                                }
-                                            </Block>
+                                                                    {
+                                                                        !this.state.showInfo && (
+                                                                            <TouchableOpacity onPress={() => this.setState({ showInfo: true })}>
+                                                                                <Image source={Images.Icons.FlechaAbajo} style={{ width: 25, height: 25 }} />
+                                                                            </TouchableOpacity>
+                                                                        )
+                                                                    }
+                                                                </Block>
 
-                                            {
-                                                this.state.showInfo && (
-                                                    <View>
-                                                        <Block style={styles.divider}>
-                                                            <Text style={[styles.scheduleSubtitleBold]} color={nowTheme.COLORS.SECONDARY}>
-                                                                Recuerda  estar al pendiente de la llegada de nuestro TAYDER a tu domicilio
-                                                                y no olvides revisar y calificar al final de las actividades de limpieza de nuestro servicio
+                                                                {
+                                                                    this.state.showInfo && (
+                                                                        <View>
+                                                                            <Block style={styles.divider}>
+                                                                                <Text style={[styles.scheduleSubtitleBold]} color={nowTheme.COLORS.SECONDARY}>
+                                                                                    Recuerda  estar al pendiente de la llegada de nuestro TAYDER a tu domicilio
+                                                                                    y no olvides revisar y calificar al final de las actividades de limpieza de nuestro servicio
 
-                                                                Recuerda que solicitaste nuestros insumos, así que no te preocupes en absoluto y solo disfruta
-                                                                cómodamente de TAYD.
-                                                            </Text>
+                                                                                    Recuerda que solicitaste nuestros insumos, así que no te preocupes en absoluto y solo disfruta
+                                                                                    cómodamente de TAYD.
+                                                                                </Text>
+                                                                            </Block>
+
+                                                                            <Text style={styles.scheduleSubtitleBold}>Estatus:</Text>
+
+                                                                            <Block middle style={[styles.section, { alignItems: 'flex-end' }]}>
+                                                                                <Text style={styles.scheduleSubtitleBoldRed}>PENDIENTE</Text>
+
+                                                                                <TouchableOpacity style={{marginLeft: 20}} onPress={() => this.setState({ showInfo: false })}>
+                                                                                    <Image source={Images.Icons.FlechaArriba} style={{ width: 25, height: 25 }} />
+                                                                                </TouchableOpacity>
+                                                                            </Block>
+                                                                        </View>
+                                                                    )
+                                                                }
+                                                            </View>
                                                         </Block>
-
-                                                        <Text style={styles.scheduleSubtitleBold}>Estatus:</Text>
-
-                                                        <Block middle style={[styles.section, { alignItems: 'flex-end' }]}>
-                                                            <Text style={styles.scheduleSubtitleBoldRed}>PENDIENTE</Text>
-
-                                                            <TouchableOpacity style={{marginLeft: 20}} onPress={() => this.setState({ showInfo: false })}>
-                                                                <Image source={Images.Icons.FlechaArriba} style={{ width: 25, height: 25 }} />
-                                                            </TouchableOpacity>
-                                                        </Block>
-                                                    </View>
-                                                )
-                                            }
-                                        </View>
-                                    </Block>
-                                </Block>
-                            </Block>
+                                                    </Block>
+                                                </Block>
+                                            )
+                                        })
+                                    }
+                                </ScrollView>
+                            </View>
                         )
                     }
                 </Block>
