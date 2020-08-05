@@ -4,7 +4,10 @@
     "slug": "tayd",
     "privacy": "public",
     "sdkVersion": "35.0.0",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -19,16 +22,23 @@
     "android": {
       "package": "com.tayd.taydApp",
       "config": {
-        "googleMaps": { "apiKey": "AIzaSyA8qjUbL-Zbv1pWZS9TBRD1QbdTM5_GsII" }   
-     }
+        "googleMaps": {
+          "apiKey": "AIzaSyA8qjUbL-Zbv1pWZS9TBRD1QbdTM5_GsII"
+        }
+      }
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.tayd.taydApp"
     },
     "packagerOpts": {
-      "assetExts": ["ttf"]
-    }
+      "assetExts": [
+        "ttf"
+      ]
+    },
+    "description": "App de solicitud de servicios de limpieza."
   }
 }

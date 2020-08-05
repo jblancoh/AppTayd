@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, StatusBar, Dimensions, Platform, ScrollView, View, AsyncStorage } from 'react-native';
+import { StyleSheet, Dimensions, Platform, ScrollView, View, AsyncStorage } from 'react-native';
 import { Block, Button, Text, theme, Toast } from 'galio-framework';
 import { HeaderHeight } from '../constants/utils';
 import Actions from '../lib/actions';
@@ -110,49 +110,41 @@ export default class PropertyInfoScreen extends React.Component {
         let {propertyTypeValue, propertyItems, isLoading} = this.state;
         return (
             <Block flex style={styles.container}>
-                <StatusBar barStyle="dark-content" />
-                <Block flex>
-                        <Block space="between" style={styles.padded}>
-                            <Block>
-                                <Text style={[styles.title, {paddingVertical: 10}]}> Tipo de domicilio </Text>
+                <Block space="between" style={styles.padded}>
+                    <Text style={[styles.title, {paddingVertical: 10}]}> Tipo de domicilio </Text>
 
-                                <View style={[{ justifyContent: 'center', alignContent: 'center', paddingTop: 5, paddingBottom: 15 }, styles.titleBorder]}>
-                                    <PropertyType value={propertyTypeValue} updateValue={this.updatePropertyType} />
-                                </View>
+                    <View style={[{ justifyContent: 'center', alignContent: 'center', paddingTop: 5, paddingBottom: 15 }, styles.titleBorder]}>
+                        <PropertyType value={propertyTypeValue} updateValue={this.updatePropertyType} />
+                    </View>
 
-                                <Block middle style={{ width: width - theme.SIZES.BASE * 4, paddingTop: 15}}>
-                                    <Text style={[styles.title]}> Inmueble </Text>
+                    <Block middle style={{ width: width - theme.SIZES.BASE * 4, paddingTop: 15}}>
+                        <Text style={[styles.title]}>Inmueble</Text>
+                        <Text style={styles.subtitle} color={nowTheme.COLORS.SECONDARY}>Selecciona las áreas idóneas a limpiar</Text>
+                    </Block>
 
-                                    <Text style={styles.subtitle} color={nowTheme.COLORS.SECONDARY}>
-                                        Selecciona las áreas idóneas a limpiar
-                                    </Text>
-                                </Block>
+                    <View style={{height: height * 0.45}}>
+                        <ScrollView>
+                        {
+                            propertyItems.map((value) => {
+                                return <PropertyCounter key={value.id} id={value.id} label={value.name} price={value.price} value={value.key} getValues={(quantity, data) => this.updatePropertyInfo(quantity, data)} />
+                            })
+                        }
+                        </ScrollView>
+                    </View>
 
-                                <View style={{height: height * 0.45}}>
-                                    <ScrollView>
-                                    {
-                                        propertyItems.map((value) => {
-                                            return <PropertyCounter key={value.id} id={value.id} label={value.name} price={value.price} value={value.key} getValues={(quantity, data) => this.updatePropertyInfo(quantity, data)} />
-                                        })
-                                    }
-                                    </ScrollView>
-                                </View>
-
-                                <Block middle style={{ width: width - theme.SIZES.BASE * 4 }}>
-                                    <Button
-                                        round
-                                        color={nowTheme.COLORS.BASE}
-                                        style={styles.createButton}
-                                        loading={isLoading}
-                                        disabled={isLoading}
-                                        onPress={() => this._handleUploadProperty()}>
-                                        <Text style={{ fontFamily: 'montserrat-bold' }} size={14} color={nowTheme.COLORS.WHITE}>
-                                            SIGUIENTE
-                                        </Text>
-                                    </Button>
-                                </Block>
-                            </Block>
-                        </Block>
+                    <Block middle style={{ width: width - theme.SIZES.BASE * 4 }}>
+                        <Button
+                            round
+                            color={nowTheme.COLORS.BASE}
+                            style={styles.createButton}
+                            loading={isLoading}
+                            disabled={isLoading}
+                            onPress={() => this._handleUploadProperty()}>
+                            <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.WHITE}>
+                                SIGUIENTE
+                            </Text>
+                        </Button>
+                    </Block>
                 </Block>
             </Block>
         );
@@ -161,26 +153,20 @@ export default class PropertyInfoScreen extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: Platform.OS === 'android' ? - HeaderHeight : 0,
+        marginTop: HeaderHeight,
     },
     padded: {
         paddingHorizontal: theme.SIZES.BASE * 2,
-        zIndex: 3,
-        position: 'absolute',
-        bottom: Platform.OS === 'android' ? theme.SIZES.BASE * 2 : theme.SIZES.BASE * 3,
+        bottom: Platform.OS === 'android' ? theme.SIZES.BASE * 3 : theme.SIZES.BASE * 3,
     },
 
-    image: {
-        width: 480,
-        height: 280,
-        bottom: 10
-    },
     title: {
         fontFamily: 'trueno-extrabold',
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
         fontSize: 30,
         fontWeight: '700',
         textAlign: 'center',
+        lineHeight: 38
     },
     titleBorder: {
         borderBottomWidth: 1,

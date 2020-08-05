@@ -9,6 +9,8 @@ import Actions from '../lib/actions';
 const { width } = Dimensions.get("screen");
 
 class Home extends React.Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -17,11 +19,17 @@ class Home extends React.Component {
   }
 
   async componentDidMount() {
+    this._isMounted = true;
+
     await Actions.extractUserData().then((result) => {
-      if(result != null) {
+      if(result != null && this._isMounted) {
         this.setState({userData: result.user});
       }
     });
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   renderBlocks = () => {
@@ -30,23 +38,21 @@ class Home extends React.Component {
     return (
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
         <Block flex>
-          <StatusBar barStyle="light-content" />
-          <Block flex row style={{paddingTop: 30}}>
+          <Block flex row style={{paddingTop: 10}}>
             <Image source={Images.ProfilePicture} style={{borderRadius: 50, height: 60, width: 60, marginRight: 25}} />
             <Block flex>
-              <Text style={styles.nameTitle}>Bienvenido {userData != null ? 'userData.info.name' : ''}</Text>
+              <Text style={styles.nameTitle}>Bienvenido {userData != null && 'info' in userData ? userData.info.name : ''}</Text>
               <Text>¿En qué podemos ayudarte?</Text>
             </Block>
           </Block>
 
-          <CardFullImage image={Images.Inicio001} imageStyle={{ height: 300, width: '100%' }} />
-          {/* <Card full image={Images.Inicio001} title="La innovación de la limpieza" subtitle="Conoce los servicios que TAYD tiene para tí." /> */}
+          <CardFullImage position={1} image={Images.Inicio001} imageStyle={{ height: 300, width: '100%' }} />
 
           <Block flex row>
-            <CardFullImage image={Images.Inicio002} imageStyle={{height : 320, width: '100%'}} style={{marginRight : theme.SIZES.BASE}} />
+            <CardFullImage position={2} image={Images.Inicio002} imageStyle={{height : 320, width: '100%'}} style={{marginRight : theme.SIZES.BASE}} />
             <Block flex>
-              <CardFullImage full image={Images.Inicio003} imageStyle={{ height: 155, width: '100%' }} />
-              <CardFullImage full image={Images.Inicio004} imageStyle={{ height: 155, width: '100%' }} />
+              <CardFullImage position={3} full image={Images.Inicio003} imageStyle={{ height: 155, width: '100%' }} />
+              <CardFullImage position={4} full image={Images.Inicio004} imageStyle={{ height: 155, width: '100%' }} />
             </Block>
           </Block>
         </Block>

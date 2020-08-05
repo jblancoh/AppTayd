@@ -1,12 +1,20 @@
 import React from 'react';
 import { withNavigation } from 'react-navigation';
 import PropTypes from 'prop-types';
-import { StyleSheet, Image, TouchableWithoutFeedback, View } from 'react-native';
-import { Block, Text, theme } from 'galio-framework';
-
-import { nowTheme } from '../constants';
+import { StyleSheet, Image, TouchableWithoutFeedback, Alert } from 'react-native';
+import { Block, theme } from 'galio-framework';
 
 class CardFullImage extends React.Component {
+
+  _navigate = (value, navigation) => {
+    switch(value) {
+      case 1: navigation.navigate('Agenda');        break;
+      case 2: Alert.alert("Tayd V1.0");             break;
+      case 3: navigation.navigate('GeneraIngreso'); break;
+      case 4: Alert.alert("Próximamente");          break;
+    }
+  }
+
   render() {
     const {
       navigation,
@@ -15,6 +23,7 @@ class CardFullImage extends React.Component {
       style,
       image,
       imageStyle,
+      position
     } = this.props;
 
     const imageStyles = [full ? styles.fullImage : styles.horizontalImage, imageStyle];
@@ -23,7 +32,7 @@ class CardFullImage extends React.Component {
 
     return (
       <Block row={horizontal} card flex style={cardContainer}>
-        <TouchableWithoutFeedback onPress={() => { }} style={{zIndex : -1}}>
+        <TouchableWithoutFeedback onPress={() => this._navigate(position, navigation)} style={{zIndex : -1}}>
           <Block>
             <Block flex style={imgContainer}>
               <Image resizeMode="cover" source={image} style={imageStyles} />

@@ -1,13 +1,14 @@
 import React from 'react';
-import { Image, StyleSheet, StatusBar, Dimensions, Platform, View, DatePickerAndroid, DatePickerIOS, TimePickerAndroid } from 'react-native';
+import { Image, StyleSheet, StatusBar, Dimensions, Platform, View, DatePickerAndroid, DatePickerIOS, TimePickerAndroid, ScrollView } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Block, Button, Text, theme, Toast } from 'galio-framework';
+import { Images, nowTheme } from '../../constants/';
 import { HeaderHeight } from '../../constants/utils';
 import PropertyService from "../../services/property";
 import Actions from "../../lib/actions";
 
 const { height, width } = Dimensions.get('screen');
-import { Images, nowTheme } from '../../constants/';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+const smallScreen = height < 812 ? true : false;
 
 export default class AgendaFechaScreen extends React.Component {
     constructor(props) {
@@ -130,15 +131,14 @@ export default class AgendaFechaScreen extends React.Component {
         const { showDateTime, isIphone, propertyInfo } = this.state;
         return (
             <Block flex style={styles.container}>
-                <StatusBar barStyle="light-content" />
-                <Block flex>
-                    <Image source={Images.AgendaFecha} style={styles.image} />
-                </Block>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <Block flex>
+                        <Image source={Images.AgendaFecha} style={styles.image} />
+                    </Block>
 
-                <Block flex style={{ backgroundColor: 'white' }}>
-                    <Block space="between" style={styles.padded}>
-                        <Block>
-                            <Text style={[styles.title, {paddingTop: 30}]}> Programa tu cita </Text>
+                    <Block flex style={{ backgroundColor: 'white' }}>
+                        <Block space="between" style={styles.padded}>
+                            <Text style={[styles.title, {paddingTop: smallScreen ? 50 : 30}]}> Programa tu cita </Text>
                             <Text style={[styles.subtitle, {paddingVertical: 10}]}> Selecciona el día y hora del servicio </Text>
 
                             <View style={[styles.titleBorder, { flexDirection: 'row', justifyContent: 'space-between'}]}>
@@ -172,14 +172,14 @@ export default class AgendaFechaScreen extends React.Component {
                                     color={nowTheme.COLORS.BASE}
                                     style={styles.createButton}
                                     onPress={() => this._handleNextAction()}>
-                                    <Text style={{ fontFamily: 'montserrat-bold' }} size={14} color={nowTheme.COLORS.WHITE}>
+                                    <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.WHITE}>
                                         SIGUIENTE
                                     </Text>
                                 </Button>
                             </Block>
                         </Block>
                     </Block>
-                </Block>
+                </ScrollView>
             </Block>
         );
     }
@@ -187,7 +187,7 @@ export default class AgendaFechaScreen extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: Platform.OS === 'android' ? - HeaderHeight : 0,
+        marginTop: Platform.OS === 'android' ? - HeaderHeight : - HeaderHeight,
     },
     padded: {
         paddingHorizontal: theme.SIZES.BASE * 2,
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     image: {
         width       : width,
         height      : 350,
-        marginTop   : 70
+        marginTop   : smallScreen ? 30 : 70,
     },
     title: {
         fontFamily: 'trueno-extrabold',

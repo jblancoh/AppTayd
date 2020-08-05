@@ -58,7 +58,7 @@ class Header extends React.Component {
     }
 
     switch (routeName) {
-      case 'Home':
+      case 'Home1':
         return [
           <BellButton key="chat-home" navigation={navigation} isWhite={white} />,
         ];
@@ -226,7 +226,7 @@ class Header extends React.Component {
           titleStyle={[styles.title, {color: nowTheme.COLORS[white ? 'WHITE' : 'HEADER']}, titleColor && { color: titleColor }]}
           {...props}
         />
-        {this.renderHeader()}
+        {/* {this.renderHeader()} */}
       </Block>
     );
   }
@@ -239,15 +239,18 @@ const styles = StyleSheet.create({
   },
   title: {
     width: '100%',
-    fontSize: 32,
+    fontSize: 30,
     fontFamily: 'trueno-extrabold',
     textAlign: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
   },
   navbar: {
+    width: '100%',
     paddingVertical: 0,
     paddingBottom: theme.SIZES.BASE * 1.5,
     paddingTop: iPhoneX ? theme.SIZES.BASE * 4 : 0,
-    zIndex: 5
+    zIndex: 5,
   },
   shadow: {
     backgroundColor: theme.COLORS.WHITE,

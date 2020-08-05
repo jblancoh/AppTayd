@@ -2,7 +2,7 @@ import React from 'react';
 import { Block } from "galio-framework";
 import { Easing, Animated, Dimensions } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
-import { createAppContainer } from 'react-navigation';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 // screens
 import Home from '../screens/Home';
@@ -117,7 +117,7 @@ const DomicilioStack = createStackNavigator(
       screen: DomicilioIndexScreen,
       navigationOptions: ({ navigation }) => ({
         header: (
-          <Header back title="Domicilio" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
+          <Header title="Domicilio" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
         ),
         headerTransparent: false
       })
@@ -153,7 +153,7 @@ const MetodoPagoStack = createStackNavigator(
       screen: MetodoPagoIndexScreen,
       navigationOptions: ({ navigation }) => ({
         header: (
-          <Header back title="Método de pago" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
+          <Header title="Método de pago" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
         ),
         headerTransparent: false
       })
@@ -180,7 +180,7 @@ const GeneraIngresoStack = createStackNavigator(
       screen: GeneraIngresoIndexScreen,
       navigationOptions: ({ navigation }) => ({
         header: (
-          <Header back title="Genera Ingresos" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
+          <Header title="Genera Ingresos" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
         ),
         headerTransparent: false
       })
@@ -192,68 +192,8 @@ const GeneraIngresoStack = createStackNavigator(
   }
 );
 
-const AppStack = createDrawerNavigator(
+const DrawerTayder = createDrawerNavigator(
   {
-    Onboarding: {
-      screen: Onboarding,
-      navigationOptions: {
-        drawerLabel: () => { }
-      }
-    },
-    Register: {
-      screen: RegisterScreen,
-      navigationOptions: {
-        drawerLabel: () => { }
-      }
-    },
-    RegisterTayder: {
-      screen: RegisterTayderScreen,
-      navigationOptions: {
-        drawerLabel: () => { }
-      }
-    },
-    DocumentosIndex: {
-      screen: DocumentosIndexScreen,
-      navigationOptions: {
-        drawerLabel: () => {}
-      }
-    },
-    DocumentosStep1: {
-      screen: DocumentosStep1Screen,
-      navigationOptions: {
-        drawerLabel: () => { }
-      }
-    },
-    DocumentosStep2: {
-      screen: DocumentosStep2Screen,
-      navigationOptions: {
-        drawerLabel: () => { }
-      }
-    },
-    DocumentosStep3: {
-      screen: DocumentosStep3Screen,
-      navigationOptions: {
-        drawerLabel: () => { }
-      }
-    },
-    DocumentosStep4: {
-      screen: DocumentosStep4Screen,
-      navigationOptions: {
-        drawerLabel: () => { }
-      }
-    },
-    DocumentosSuccess: {
-      screen: DocumentosSuccessScreen,
-      navigationOptions: {
-        drawerLabel: () => { }
-      }
-    },
-    Welcome: {
-      screen: WelcomeScreen,
-      navigationOptions: {
-        drawerLabel: () => { }
-      }
-    },
     HomeTayder: {
       screen: HomeTayder,
       navigationOptions: {
@@ -272,26 +212,11 @@ const AppStack = createDrawerNavigator(
         drawerLabel: () => { }
       }
     },
+  }
+)
 
-
-    PropertyLocation: {
-      screen: PropertyLocationScreen,
-      navigationOptions: {
-        drawerLabel: () => { }
-      }
-    },
-    PropertyInfo: {
-      screen: PropertyInfoScreen,
-      navigationOptions: {
-        drawerLabel: () => { }
-      }
-    },
-    Login: {
-      screen: LoginScreen,
-      navigationOptions: {
-        drawerLabel: () => { }
-      }
-    },
+const DrawerClient = createDrawerNavigator(
+  {
     Home: {
       screen: Home,
       navigationOptions: navOpt => ({
@@ -306,12 +231,7 @@ const AppStack = createDrawerNavigator(
         drawerLabel: () => { }
       }
     },
-    Schedule: {
-      screen: Schedule,
-      navigationOptions: {
-        drawerLabel: () => { }
-      }
-    },
+
     Soporte: {
       screen: SoporteIndexScreen,
       navigationOptions: {
@@ -320,6 +240,19 @@ const AppStack = createDrawerNavigator(
     },
     SoporteCita: {
       screen: SoporteCitaScreen,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+    BolsaTrabajo: {
+      screen: SoporteCitaScreen,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+
+    Schedule: {
+      screen: Schedule,
       navigationOptions: {
         drawerLabel: () => { }
       }
@@ -354,6 +287,7 @@ const AppStack = createDrawerNavigator(
         drawerLabel: () => { }
       }
     },
+
     Perfil: {
       screen: ProfileStack,
       navigationOptions: navOpt => ({
@@ -378,7 +312,6 @@ const AppStack = createDrawerNavigator(
         )
       })
     },
-    
     MetodoPago: {
       screen: MetodoPagoStack,
       navigationOptions: navOpt => ({
@@ -387,7 +320,6 @@ const AppStack = createDrawerNavigator(
         )
       })
     },
-
     GeneraIngreso: {
       screen: GeneraIngresoStack,
       navigationOptions: {
@@ -420,9 +352,123 @@ const AppStack = createDrawerNavigator(
         alignItems: 'center',
         overflow: 'hidden',
       }
-    }
+    },
+    initialRouteName: 'Home',
   }
-  //Menu
+);
+
+// Main App Navigation
+export const AppStack = createSwitchNavigator({
+  Onboarding: {
+    screen: Onboarding,
+    navigationOptions: {
+      header: null,
+      gesturesEnabled: false
+    }
+  },
+  Login: {
+    screen: LoginScreen,
+    navigationOptions: {
+      header: null,
+      gesturesEnabled: true
+    }
+  },
+  Register: {
+    screen: RegisterScreen,
+    navigationOptions: {
+      header: null,
+      gesturesEnabled: true
+    }
+  },
+  RegisterTayder: {
+    screen: RegisterTayderScreen,
+    navigationOptions: {
+      header: null,
+      gesturesEnabled: true
+    }
+  },
+  DocumentosIndex: {
+    screen: DocumentosIndexScreen,
+    navigationOptions: {
+      header: null,
+      gesturesEnabled: false
+    }
+  },
+  DocumentosStep1: {
+    screen: DocumentosStep1Screen,
+    navigationOptions: {
+      header: null,
+      gesturesEnabled: false
+    }
+  },
+  DocumentosStep2: {
+    screen: DocumentosStep2Screen,
+    navigationOptions: {
+      header: null,
+      gesturesEnabled: false
+    }
+  },
+  DocumentosStep3: {
+    screen: DocumentosStep3Screen,
+    navigationOptions: {
+      header: null,
+      gesturesEnabled: false
+    }
+  },
+  DocumentosStep4: {
+    screen: DocumentosStep4Screen,
+    navigationOptions: {
+      header: null,
+      gesturesEnabled: false
+    }
+  },
+  DocumentosSuccess: {
+    screen: DocumentosSuccessScreen,
+    navigationOptions: {
+      header: null,
+      gesturesEnabled: false
+    }
+  },
+  Welcome: {
+    screen: WelcomeScreen,
+    navigationOptions: {
+      header: null,
+      gesturesEnabled: false
+    }
+  },
+  PropertyLocation: {
+    screen: PropertyLocationScreen,
+    navigationOptions: {
+      header: null,
+      gesturesEnabled: false
+    }
+  },
+  PropertyInfo: {
+    screen: PropertyInfoScreen,
+    navigationOptions: {
+      header: null,
+      gesturesEnabled: true
+    }
+  },
+  DrawerClient: {
+      screen: DrawerClient,
+      navigationOptions: {
+          header: null,
+          gesturesEnabled: false
+      }
+  },
+  DrawerTayder: {
+    screen: DrawerTayder,
+      navigationOptions: {
+          header: null,
+          gesturesEnabled: false
+      }
+  }
+},
+{
+  headerMode: 'none',
+  initialRouteName : "Onboarding",
+}
 );
 
 const AppContainer = createAppContainer(AppStack);

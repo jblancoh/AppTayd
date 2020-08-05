@@ -45,7 +45,7 @@ class Schedule extends React.Component {
     async _getServices() {
         await ServicesService.listScheduled(this.state.userData.id)
             .then(response => {
-                this.setState({services : response, showMore: true})
+                this.setState({services : response, showMore: response.length > 0 ? true : false})
             })
             .catch(error => {
                 console.error(error);
@@ -74,13 +74,15 @@ class Schedule extends React.Component {
     }
 
     renderBlocks = () => {
+        let {userData} = this.state;
+
         return (
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
                 <Block flex>
                     <Block flex row style={{ paddingTop: 30 }}>
                         <Image source={Images.ProfilePicture} style={{ borderRadius: 50, height: 60, width: 60, marginRight: 25 }} />
                         <Block flex>
-                            <Text style={styles.nameTitle}>Agenda de Chris</Text>
+                            <Text style={styles.nameTitle}>Agenda de {userData != null && userData.info ? userData.info.name : ''}</Text>
                             <Text style={styles.subtitle}>Revisa tus citas programadas</Text>
                         </Block>
                     </Block>
@@ -141,7 +143,7 @@ class Schedule extends React.Component {
                                                                             <Text style={styles.scheduleSubtitleBold}>Estatus:</Text>
 
                                                                             <Block middle style={[styles.section, { alignItems: 'flex-end' }]}>
-                                                                                <Text style={styles.scheduleSubtitleBoldRed}>PENDIENTE</Text>
+                                                                                <Text style={styles.scheduleSubtitleBoldRed}>{item.service_status_name.toUpperCase()}</Text>
 
                                                                                 <TouchableOpacity style={{marginLeft: 20}} onPress={() => this.setState({ showInfo: false })}>
                                                                                     <Image source={Images.Icons.FlechaArriba} style={{ width: 25, height: 25 }} />

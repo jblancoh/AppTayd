@@ -5,11 +5,13 @@ import {
     Text,
     TouchableOpacity,
     Image,
-    Dimensions
+    Dimensions,
+    Platform
 } from 'react-native';
 import { Images, nowTheme } from '../constants';
 
-const { width } = Dimensions.get("screen");
+const { width, height } = Dimensions.get("screen");
+const isIphone = Platform.OS == 'ios' ? true : false;
 
 export default class TabBar extends React.Component {
     constructor(props) {
@@ -53,7 +55,8 @@ const styles = StyleSheet.create({
         borderTopWidth: 0.5,
         borderColor: '#EEEEEE',
         flexDirection: 'row',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        marginBottom: isIphone && height >= 812 ? 20 : 0,
     },
     tabBarLight: {
         backgroundColor: '#EFEFEF',

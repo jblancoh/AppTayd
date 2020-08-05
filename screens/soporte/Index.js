@@ -66,7 +66,7 @@ class SoporteIndexScreen extends React.Component {
                                     />
                                 </TouchableOpacity>
 
-                                <TouchableOpacity style={styles.section}>
+                                <TouchableOpacity style={styles.section} onPress={() => this.props.navigation.navigate('BolsaTrabajo')}>
                                     <Text style={styles.itemTitle}>Bolsa de trabajo</Text>
                                     <Icon
                                         size={22}

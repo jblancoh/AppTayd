@@ -53,7 +53,7 @@ export default class Drawer extends React.Component {
     }
 
     async componentDidMount() {
-        Actions.extractUserData().then((result) => {
+        await Actions.extractUserData().then((result) => {
             if(result != null) {
               this.setState({userData: result.user})
             }
@@ -78,7 +78,7 @@ export default class Drawer extends React.Component {
                 <Block row style={styles.header}>
                     <Image source={Images.ProfilePicture} style={{ borderRadius: 50, height: 60, width: 60, marginRight: 25 }} />
                     <Block flex>
-                    <Text style={styles.nameTitle}>{userData != null ? 'userData.info.name' : ''}</Text>
+                    <Text style={styles.nameTitle}>{userData != null && userData.info ? userData.info.name : ''}</Text>
                     <Text style={{fontFamily: 'trueno', fontSize: 14, lineHeight: 15}}>{userData != null ? userData.email : ''}</Text>
                     </Block>
                 </Block>

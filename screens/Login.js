@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, StyleSheet, StatusBar, Dimensions, TouchableHighlight, View , TouchableWithoutFeedback, Keyboard, Alert, AsyncStorage } from 'react-native';
+import { Image, StyleSheet, StatusBar, Dimensions, TouchableHighlight, View , TouchableWithoutFeedback, Keyboard, Alert, AsyncStorage, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { Block, Button, Text, theme } from 'galio-framework';
 import {  Input } from '../components';
 
@@ -10,7 +10,9 @@ import { withNavigation } from 'react-navigation';
 const { height, width } = Dimensions.get('screen');
 
 const DismissKeyboard = ({ children }) => (
-  <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
+  <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={{flex: 1, backgroundColor: nowTheme.COLORS.BASE}}>
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
+  </KeyboardAvoidingView>
 );
 
 class LoginScreen extends React.Component {
@@ -78,98 +80,90 @@ class LoginScreen extends React.Component {
   render() {
     return (
       <DismissKeyboard>
-        <Block flex middle style={styles.containerRed}>
+        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.containerRed}>
           <StatusBar barStyle="light-content" />
-          <Block flex middle>
-            <Block style={styles.registerContainer}>
-              <Block flex space="evenly">
-                <Block middle>
-                  <Image source={Images.Logo} style={styles.logoTayder} />
-                </Block>
+          <Block flex space="evenly">
+            <Image source={Images.Logo} style={styles.logoTayder} />
 
-                <Block middle>
-                  <Text style={{ fontFamily: 'montserrat-regular', textAlign: 'center', fontWeight: '700' }} color={nowTheme.COLORS.WHITE} size={40}>
-                    Iniciar sesión
-                  </Text>
-                </Block>
+            <Block middle>
+              <Text style={{ fontFamily: 'trueno-extrabold', textAlign: 'center', fontWeight: '700' }} color={nowTheme.COLORS.WHITE} size={40}>
+                Iniciar sesión
+              </Text>
+            </Block>
 
-                <Block flex={1} middle space="between">
-                  <Block center flex={0.9}>
-                    <Block flex space="between">
-                      <Block>
-                        <Block width={width * 0.8}>
-                          <Input
-                            placeholder="Correo electrónico"
-                            placeholderTextColor={nowTheme.COLORS.WHITE}
-                            color={nowTheme.COLORS.WHITE}
-                            type="email-address"
-                            onChangeText={(text) => this.setState({ email: text })}
-                            style={styles.inputs}
-                            iconContent={
-                              <Image style={styles.inputIcons} source={Images.Icons.Usuario_L} />
-                            }
-                          />
-                        </Block>
-                        <Block width={width * 0.8}>
-                          <Input
-                            placeholder="Contraseña"
-                            placeholderTextColor={nowTheme.COLORS.WHITE}
-                            color={nowTheme.COLORS.WHITE}
-                            password
-                            onChangeText={(text) => this.setState({ password: text })}
-                            style={styles.inputs}
-                            iconContent={
-                              <Image style={styles.inputIcons} source={Images.Icons.Password_L} />
-                            }
-                            iconColor={'#FFF'}
-                          />
-                        </Block>
-                      </Block>
+            <Block flex={1} middle space="between">
+              <Block center flex={0.9}>
+                <Block flex space="between">
+                  <Block width={width * 0.8}>
+                    <Input
+                      placeholder="Correo electrónico"
+                      placeholderTextColor={nowTheme.COLORS.WHITE}
+                      color={nowTheme.COLORS.WHITE}
+                      type="email-address"
+                      onChangeText={(text) => this.setState({ email: text })}
+                      style={styles.inputs}
+                      iconContent={
+                        <Image style={styles.inputIcons} source={Images.Icons.Usuario_L} />
+                      }
+                    />
+                  </Block>
+                  <Block width={width * 0.8}>
+                    <Input
+                      placeholder="Contraseña"
+                      placeholderTextColor={nowTheme.COLORS.WHITE}
+                      color={nowTheme.COLORS.WHITE}
+                      password
+                      onChangeText={(text) => this.setState({ password: text })}
+                      style={styles.inputs}
+                      iconContent={
+                        <Image style={styles.inputIcons} source={Images.Icons.Password_L} />
+                      }
+                      iconColor={'#FFF'}
+                    />
+                  </Block>
 
-                      <Block width={width * 0.8} style={{ marginTop: theme.SIZES.BASE * 0.8, marginBottom: 10 }}>
-                        <View style={{ flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>
-                          <Text style={{ fontFamily: 'trueno', fontSize: 12 }} color={nowTheme.COLORS.WHITE}>¿Aún no tienes una cuenta? </Text>
-                          <TouchableHighlight onPress={() => this.props.navigation.navigate('Onboarding')}>
-                            <View>
-                              <Text style={{ fontFamily: 'trueno-semibold', fontSize: 12, fontWeight: '700' }} color={nowTheme.COLORS.WHITE}> Regístrate</Text>
-                            </View>
-                          </TouchableHighlight>
+                  <Block width={width * 0.8} style={{ marginTop: theme.SIZES.BASE * 0.8, marginBottom: 10 }}>
+                    <View style={{ flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>
+                      <Text style={{ fontFamily: 'trueno', fontSize: 12 }} color={nowTheme.COLORS.WHITE}>¿Aún no tienes una cuenta? </Text>
+                      <TouchableHighlight onPress={() => this.props.navigation.navigate('Onboarding')}>
+                        <View>
+                          <Text style={{ fontFamily: 'trueno-semibold', fontSize: 12, fontWeight: '700' }} color={nowTheme.COLORS.WHITE}> Regístrate</Text>
                         </View>
-                      </Block>
+                      </TouchableHighlight>
+                    </View>
+                  </Block>
 
-                      <Block width={width * 0.8} style={{marginBottom: theme.SIZES.BASE * 2 }}>
-                        <View style={{alignSelf: 'center', justifyContent: 'center' }}>
-                          <TouchableHighlight onPress={() => { }}>
-                            <View>
-                              <Text style={{ fontFamily: 'trueno-semibold', fontSize: 12, fontWeight: '700' }} color={nowTheme.COLORS.WHITE}>
-                                ¿No puedes acceder a tu cuenta?
-                              </Text>
-                            </View>
-                          </TouchableHighlight>
-                        </View>
-                      </Block>
-
-                      <Block center>
-                        <Button
-                          round
-                          color={nowTheme.COLORS.WHITE}
-                          style={styles.createButton}
-                          loading={this.state.isLoading}
-                          loadingColor={nowTheme.COLORS.BASE}
-                          disabled={this.state.isLoading}
-                          onPress={() => this._handleLogin()}>
-                          <Text style={{ fontFamily: 'montserrat-bold' }} size={14} color={nowTheme.COLORS.BASE}>
-                            INGRESAR
+                  <Block width={width * 0.8} style={{marginBottom: theme.SIZES.BASE * 2 }}>
+                    <View style={{alignSelf: 'center', justifyContent: 'center' }}>
+                      <TouchableHighlight onPress={() => { }}>
+                        <View>
+                          <Text style={{ fontFamily: 'trueno-semibold', fontSize: 12, fontWeight: '700' }} color={nowTheme.COLORS.WHITE}>
+                            ¿No puedes acceder a tu cuenta?
                           </Text>
-                        </Button>
-                      </Block>
-                    </Block>
+                        </View>
+                      </TouchableHighlight>
+                    </View>
+                  </Block>
+
+                  <Block center>
+                    <Button
+                      round
+                      color={nowTheme.COLORS.WHITE}
+                      style={styles.createButton}
+                      loading={this.state.isLoading}
+                      loadingColor={nowTheme.COLORS.BASE}
+                      disabled={this.state.isLoading}
+                      onPress={() => this._handleLogin()}>
+                      <Text style={{ fontFamily: 'montserrat-bold' }} size={14} color={nowTheme.COLORS.BASE}>
+                        INGRESAR
+                      </Text>
+                    </Button>
                   </Block>
                 </Block>
               </Block>
             </Block>
-           </Block> 
-        </Block>
+          </Block>
+        </ScrollView>
       </DismissKeyboard>
     );
   }
@@ -181,16 +175,10 @@ const styles = StyleSheet.create({
   containerRed: {
     backgroundColor: nowTheme.COLORS.BASE,
   },
-  registerContainer: {
-    width: width * 0.9,
-    height: height < 812 ? height * 0.9 : height * 0.9,
-    marginTop: 0,
-    marginBottom: 20,
-  },
 
   logoTayder: {
-    width: 450,
-    height: 450,
+    width: 400,
+    height: 400,
   },
 
   inputs: {

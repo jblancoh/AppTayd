@@ -12,13 +12,7 @@ import { Images, options, nowTheme } from './constants';
 const assetImages = [
   Images.Onboarding,
   Images.Logo,
-  Images.Pro,
-  Images.NowLogo,
-  Images.iOSLogo,
-  Images.androidLogo,
   Images.ProfilePicture,
-  Images.CreativeTimLogo,
-  Images.InvisionLogo,
   Images.RegisterBackground,
   Images.ProfileBackground
 ];

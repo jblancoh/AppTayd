@@ -9,6 +9,7 @@ import { Images, nowTheme } from '../constants/';
 import { HeaderHeight } from '../constants/utils';
 import Actions from '../lib/actions';
 
+const smallScreen = height < 812 ? true : false;
 const slides = [
   {
     key: 'first',
@@ -128,23 +129,22 @@ export default class Onboarding extends React.Component {
                 </Block>
   
                 <Block middle style={{width: width - theme.SIZES.BASE * 4, backgroundColor : 'green'}}>
-                    <Text style={[styles.sloganText, this.state.isTayder ? {bottom : 25} : {bottom : 25}]} color="white" size={18}>
+                    <Text style={[styles.sloganText, {bottom : 25}]} color="white">
                       {this.state.isTayder ? 'Forma parte de nuestro equipo y genera ganancias' : 'Bienvenido a la nueva red de limpieza doméstica'}
                     </Text>
                 </Block>
   
                 <Block middle style={{width: width - theme.SIZES.BASE * 4}}>
-                  <Image source={Images.TaydLogo} style={{ width: 320, height: 70, bottom: 10 }} />
+                  <Image source={Images.TaydLogo} style={styles.logoTaydHorizontal} />
                 </Block>
   
                 <Block middle style={{marginBottom : 8, width: width - theme.SIZES.BASE * 4}}>
-                  <Text style={{fontFamily: 'trueno-semibold', fontWeight: '600'}} size={18} color={nowTheme.COLORS.WHITE}>¿Eres Tayder?</Text>
+                  <Text style={{fontFamily: 'trueno-semibold', fontWeight: '600', fontSize: smallScreen ? 16 : 18}} color={nowTheme.COLORS.WHITE}>¿Eres Tayder?</Text>
                 </Block>
   
                 <Block middle style={{marginBottom : theme.SIZES.BASE,  width: width - theme.SIZES.BASE * 4}}>
                   <Switch
                     value={this.state.isTayder}
-                    style={{ transform: [{ scaleX: 1.6 }, { scaleY: 1.6 }] }}
                     onValueChange={(value) => this.setState({isTayder : !this.state.isTayder})}
                   />
                 </Block>
@@ -218,23 +218,29 @@ const styles = StyleSheet.create({
   },
 
   logoTayd : {
-    width   : 480,
-    height  : 480,
-    bottom  : 25
+    width   : smallScreen ? 400 : 480,
+    height  : smallScreen ? 400 : 480,
+    bottom  : smallScreen ? 0 : 25
   },
   logoTayder : {
-    width   : 300,
-    height  : 300,
-    bottom  : 125
+    width   : smallScreen ? 250 : 300,
+    height  : smallScreen ? 250 : 300,
+    bottom  : smallScreen ? 110 : 125
+  },
+  logoTaydHorizontal: {
+    width: smallScreen ? 250 : 320,
+    height: smallScreen ? 50 : 70,
+    bottom: 10
   },
 
   sloganText : {
     fontFamily  : 'trueno-semibold',
     position    : 'absolute',
     letterSpacing: 2,
-    paddingHorizontal: 20,
+    paddingHorizontal: smallScreen ? 12 : 20,
     fontWeight: '600',
     textAlign   : 'center',
+    fontSize: smallScreen ? 16 : 18,
   },
   padded: {
     paddingHorizontal: theme.SIZES.BASE * 2,
