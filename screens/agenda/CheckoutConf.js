@@ -20,6 +20,7 @@ import GeneralSettingService from "../../services/generalSetting";
 import ServicesService from "../../services/service";
 
 const { height, width } = Dimensions.get("screen");
+const smallScreen = height < 812 ? true : false;
 
 class AgendaCheckoutScreen extends React.Component {
     constructor(props) {
@@ -211,7 +212,7 @@ class AgendaCheckoutScreen extends React.Component {
 
                 <Block flex space="between" style={styles.padded}>
                     <Block style={styles.cardContainer}>
-                        <View style={{height: height * 0.62}}>
+                        <View style={{height: smallScreen ? height * 0.7 : height * 0.62}}>
                             <ScrollView>
                                 <View style={[styles.sectionBorder, styles.section]}>
                                     <Image source={Images.TaydLogoLarge} style={{width: 120, height: 25}} />
@@ -351,7 +352,7 @@ const styles = StyleSheet.create({
         height: height < 812 ? height * 0.7 : height * 0.7,
     },
     padded: {
-        top: 285,
+        top: smallScreen ? 150 : 285,
         justifyContent: 'center',
         alignSelf: 'center',
         paddingHorizontal: theme.SIZES.BASE * 1.3,

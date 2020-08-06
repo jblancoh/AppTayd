@@ -1,15 +1,21 @@
 import React from 'react';
-import { Image, StyleSheet, KeyboardAvoidingView, Dimensions, Platform, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
-import { Block, Button, Text, theme, Toast } from 'galio-framework';
+import { Image, StyleSheet, KeyboardAvoidingView, Dimensions, Platform, TouchableWithoutFeedback, Keyboard, Alert, ScrollView, View } from 'react-native';
+import { Block, Button, Text, theme } from 'galio-framework';
 import { Input } from '../../components';
 import Env from '../../lib/enviroment';
 import Actions from '../../lib/actions';
 import PaymentMethodService from '../../services/paymentMethod';
-
+import { Images, nowTheme } from '../../constants/';
 
 const { height, width } = Dimensions.get('screen');
-import { Images, nowTheme } from '../../constants/';
+const smallScreen = height < 812 ? true : false;
 const stripe = require('stripe-client')(Env.STRIPE_PUBLIC_KEY);
+
+const DismissKeyboard = ({ children }) => (
+    <KeyboardAvoidingView behavior={ Platform.OS == "ios" ? "position" : "height"} style={{flex: 1}}>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
+  );
 
 export default class MetodoPagoAddCardScreen extends React.Component {
     constructor(props) {
@@ -126,133 +132,117 @@ export default class MetodoPagoAddCardScreen extends React.Component {
     render() {
         const {isIphone, name, lastName, cardCVV, cardDate, cardNumber, isLoading } = this.state;
         return (
-            <KeyboardAvoidingView behavior={isIphone ? "padding" : null} style={{ flex: 1 }}>
-                <Block flex style={styles.container}>
-                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                        <Block flex>
-                            <Block style={{height: 220}}>
-                                <Image source={Images.MetodoPagoAddCard} style={styles.image} />
+            <DismissKeyboard>
+                <ScrollView>
+                    <Block style={{height: smallScreen ? height * 0.35 : height * 0.38}}>
+                        <Image source={Images.MetodoPagoAddCard} style={styles.image} />
+                    </Block>
+
+                    <Block space="between" style={styles.padded}>
+                        <View style={{height: height * 0.6}}>
+                            <Block width={width * 0.8} style={{paddingTop: 15}}>
+                                <Text style={[styles.subtitle]}>Propietario de la tarjeta</Text>
+                                <Input
+                                    placeholder="Nombre"
+                                    placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
+                                    color={nowTheme.COLORS.BASE}
+                                    style={[styles.inputs, name != '' ? styles.inputEnabled : styles.inputDisabled]}
+                                    iconContent={null}
+                                    onChangeText={(text) => this.setState({ name: text })}
+                                />
                             </Block>
 
-                            <Block flex style={{ backgroundColor: 'white' }}>
-                                <Block space="between" style={styles.padded}>
-                                    <Block>
-                                        <Block width={width * 0.8} style={{paddingTop: 15}}>
-                                            <Text style={[styles.subtitle]}>Propietario de la tarjeta</Text>
-                                            <Input
-                                                placeholder="Nombre"
-                                                placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
-                                                color={nowTheme.COLORS.BASE}
-                                                style={[styles.inputs, name != '' ? styles.inputEnabled : styles.inputDisabled]}
-                                                iconContent={null}
-                                                onChangeText={(text) => this.setState({ name: text })}
-                                            />
-                                        </Block>
+                            <Block width={width * 0.8}>
+                                <Input
+                                    placeholder="Apellidos"
+                                    placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
+                                    color={nowTheme.COLORS.BASE}
+                                    style={[styles.inputs, lastName != '' ? styles.inputEnabled : styles.inputDisabled]}
+                                    iconContent={null}
+                                    onChangeText={(text) => this.setState({ lastName: text })}
+                                />
+                            </Block>
 
-                                        <Block width={width * 0.8}>
-                                            <Input
-                                                placeholder="Apellidos"
-                                                placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
-                                                color={nowTheme.COLORS.BASE}
-                                                style={[styles.inputs, lastName != '' ? styles.inputEnabled : styles.inputDisabled]}
-                                                iconContent={null}
-                                                onChangeText={(text) => this.setState({ lastName: text })}
-                                            />
-                                        </Block>
+                            <Block width={width * 0.8} style={{ paddingTop: 15 }}>
+                                <Text style={[styles.subtitle]}>Número de tarjeta</Text>
+                                <Input
+                                    placeholder="1111 2222 3333 4444"
+                                    placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
+                                    color={nowTheme.COLORS.BASE}
+                                    type="number-pad"
+                                    style={[styles.inputs, cardNumber != '' ? styles.inputEnabled : styles.inputDisabled]}
+                                    iconContent={
+                                        <Image style={{marginRight: 25, width: 35, height: 22}} source={this.state.cardNumber != '' ? Images.Icons.TarjetaBancaria : Images.Icons.TarjetaBancariaGris} />
+                                    }
+                                    onChangeText={(text) => this.setState({cardNumber: text})}
+                                />
+                            </Block>
 
-                                        <Block width={width * 0.8} style={{ paddingTop: 15 }}>
-                                            <Text style={[styles.subtitle]}>Número de tarjeta</Text>
-                                            <Input
-                                                placeholder="1111 2222 3333 4444"
-                                                placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
-                                                color={nowTheme.COLORS.BASE}
-                                                type="number-pad"
-                                                style={[styles.inputs, cardNumber != '' ? styles.inputEnabled : styles.inputDisabled]}
-                                                iconContent={
-                                                    <Image style={{marginRight: 25, width: 35, height: 22}} source={this.state.cardNumber != '' ? Images.Icons.TarjetaBancaria : Images.Icons.TarjetaBancariaGris} />
-                                                }
-                                                onChangeText={(text) => this.setState({cardNumber: text})}
-                                            />
-                                        </Block>
+                            <Block width={width * 0.8} style={{ paddingTop: 15, flexDirection: 'row' }}>
+                                <Block width={width * 0.4} style={{paddingRight: 15}}>
+                                    <Text style={[styles.subtitle]}>Fecha de vto.</Text>
+                                    <Input
+                                        value={this.state.cardDate}
+                                        placeholder="11/22"
+                                        placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
+                                        color={nowTheme.COLORS.BASE}
+                                        type="number-pad"
+                                        style={[styles.inputs, cardDate != '' ? styles.inputEnabled : styles.inputDisabled]}
+                                        iconContent={
+                                            <Image style={{ marginRight: 25, width: 35, height: 22 }} source={this.state.cardDate != '' ? Images.Icons.TarjetaBancariaFecha : Images.Icons.TarjetaBancariaFechaGris} />
+                                        }
+                                        onChangeText={(text) => this.formatDateExpiration(text)}
+                                    />
+                                </Block>
 
-                                        <Block width={width * 0.8} style={{ paddingTop: 15, flexDirection: 'row' }}>
-                                            <Block width={width * 0.4} style={{paddingRight: 15}}>
-                                                <Text style={[styles.subtitle]}>Fecha de vto.</Text>
-                                                <Input
-                                                    value={this.state.cardDate}
-                                                    placeholder="11/22"
-                                                    placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
-                                                    color={nowTheme.COLORS.BASE}
-                                                    type="number-pad"
-                                                    style={[styles.inputs, cardDate != '' ? styles.inputEnabled : styles.inputDisabled]}
-                                                    iconContent={
-                                                        <Image style={{ marginRight: 25, width: 35, height: 22 }} source={this.state.cardDate != '' ? Images.Icons.TarjetaBancariaFecha : Images.Icons.TarjetaBancariaFechaGris} />
-                                                    }
-                                                    onChangeText={(text) => this.formatDateExpiration(text)}
-                                                />
-                                            </Block>
-
-                                            <Block width={width * 0.4} style={{paddingLeft: 15}}>
-                                                <Text style={[styles.subtitle]}>CVV</Text>
-                                                <Input
-                                                    placeholder="000"
-                                                    placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
-                                                    color={nowTheme.COLORS.BASE}
-                                                    type="number-pad"
-                                                    style={[styles.inputs, cardCVV != '' ? styles.inputEnabled : styles.inputDisabled]}
-                                                    iconContent={
-                                                        <Image style={{ marginRight: 25, width: 35, height: 22 }} source={this.state.cardCVV != '' ? Images.Icons.TarjetaBancariaCCV : Images.Icons.TarjetaBancariaCCVGris} />
-                                                    }
-                                                    onChangeText={(text) => this.setState({ cardCVV: text })}
-                                                />
-                                            </Block>
-                                        </Block>
-                                    </Block>
-                                    
-                                    <Block middle style={{width: width - theme.SIZES.BASE * 4, justifyContent: 'flex-end'}}>
-                                        <Button
-                                            round
-                                            loading={isLoading}
-                                            disabled={isLoading}
-                                            color={this._validateForm() ? nowTheme.COLORS.BASE : nowTheme.COLORS.WHITE}
-                                            style={[styles.createButton, this._validateForm() ? styles.ButtonEnabled : styles.ButtonDisabled]}
-                                            onPress={() => this._handleNextAction()}>
-                                            <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={this._validateForm() ? nowTheme.COLORS.WHITE : nowTheme.COLORS.SECONDARY}>
-                                                GUARDAR
-                                            </Text>
-                                        </Button>
-                                    </Block>
+                                <Block width={width * 0.4} style={{paddingLeft: 15}}>
+                                    <Text style={[styles.subtitle]}>CVV</Text>
+                                    <Input
+                                        placeholder="000"
+                                        placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
+                                        color={nowTheme.COLORS.BASE}
+                                        type="number-pad"
+                                        style={[styles.inputs, cardCVV != '' ? styles.inputEnabled : styles.inputDisabled]}
+                                        iconContent={
+                                            <Image style={{ marginRight: 25, width: 35, height: 22 }} source={this.state.cardCVV != '' ? Images.Icons.TarjetaBancariaCCV : Images.Icons.TarjetaBancariaCCVGris} />
+                                        }
+                                        onChangeText={(text) => this.setState({ cardCVV: text })}
+                                    />
                                 </Block>
                             </Block>
-                        </Block>
-                    </TouchableWithoutFeedback>
-                </Block>
-            </KeyboardAvoidingView>
+
+                            <Block middle style={{width: width - theme.SIZES.BASE * 4, justifyContent: 'flex-end'}}>
+                                <Button
+                                    round
+                                    loading={isLoading}
+                                    disabled={isLoading}
+                                    color={this._validateForm() ? nowTheme.COLORS.BASE : nowTheme.COLORS.WHITE}
+                                    style={[styles.createButton, this._validateForm() ? styles.ButtonEnabled : styles.ButtonDisabled]}
+                                    onPress={() => this._handleNextAction()}>
+                                    <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={this._validateForm() ? nowTheme.COLORS.WHITE : nowTheme.COLORS.SECONDARY}>
+                                        GUARDAR
+                                    </Text>
+                                </Button>
+                            </Block>
+                        </View>
+                    </Block>
+                </ScrollView>
+            </DismissKeyboard>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        marginTop: Platform.OS === 'android' ? - 0 : 0,
-        flex: 1,
-    },
     padded: {
         paddingHorizontal: theme.SIZES.BASE * 2,
-        paddingTop: 30,
+        paddingTop: 15,
         bottom: Platform.OS === 'android' ? theme.SIZES.BASE * 2 : theme.SIZES.BASE * 3,
+        backgroundColor: 'white'
     },
 
     image: {
         width: width,
-        height: 670,
-    },
-    title: {
-        fontFamily: 'trueno-extrabold',
-        paddingHorizontal: 20,
-        fontSize: 30,
-        fontWeight: '700',
-        textAlign: 'center',
+        height: smallScreen ? 500 : 670,
     },
     subtitle: {
         fontFamily: 'trueno',

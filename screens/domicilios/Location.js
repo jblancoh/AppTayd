@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Image, Dimensions, StatusBar, TouchableWithoutFeedback, Keyboard, View, Alert} from 'react-native';
+import {StyleSheet, Image, Dimensions, TouchableWithoutFeedback, Keyboard, View, Alert, KeyboardAvoidingView} from 'react-native';
 import { Block, Text, Button } from 'galio-framework';
 import MapView from 'react-native-maps';
 import * as Location from 'expo-location';
@@ -11,11 +11,13 @@ import { Images, nowTheme } from '../../constants';
 const { width, height } = Dimensions.get('screen');
 
 const DismissKeyboard = ({ children }) => (
-  <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-    <View style={{flex : 1}}>
-      {children}
-    </View>
-  </TouchableWithoutFeedback>
+  <KeyboardAvoidingView behavior={"height"} style={{flex : 1}}>
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={{flex : 1}}>
+        {children}
+      </View>
+    </TouchableWithoutFeedback>
+  </KeyboardAvoidingView>
 );
 
 class DomicilioLocationScreen extends React.Component {
@@ -81,7 +83,7 @@ class DomicilioLocationScreen extends React.Component {
                   <MapView.Marker
                     key={0}
                     draggable={true}
-                    onDragEnd={(e) => alert(JSON.stringify(e.nativeEvent.coordinate))}
+                    onDragEnd={(e) => this.setState({location: e.nativeEvent.coordinate})}
                     coordinate={{
                       latitude: location.coords.latitude,
                       longitude: location.coords.longitude,
@@ -93,14 +95,14 @@ class DomicilioLocationScreen extends React.Component {
                 
                 <View style={[styles.bottomContainer, { height: 160 }]}>
                   <View style={[{ justifyContent: 'center', alignContent: 'center', paddingTop: 15 }]}>
-                    <Text style={{fontFamily: 'montserrat-regular', textAlign: 'center', fontWeight: '700', paddingBottom: 10}} color={nowTheme.COLORS.SECONDARY} size={25}>
+                    <Text style={{fontFamily: 'trueno-extrabold', textAlign: 'center', paddingBottom: 10}} color={nowTheme.COLORS.SECONDARY} size={24}>
                       Dirección
                     </Text>
                   </View>
 
                   <View>
                     <View style={{justifyContent: 'center', alignContent: 'center', paddingTop: 5}}>
-                      <Text style={{fontFamily: 'montserrat-regular', textAlign: 'center', fontWeight: '500'}} color={nowTheme.COLORS.SECONDARY} size={12}>
+                      <Text style={{fontFamily: 'trueno', textAlign: 'center'}} color={nowTheme.COLORS.SECONDARY} size={12}>
                         Usa el PIN para verificar tu domicilio en el mapa.
                       </Text>
                     </View>
@@ -120,12 +122,14 @@ class DomicilioLocationScreen extends React.Component {
 
                 <Block center style={{zIndex : 2}}>
                   <Button color={nowTheme.COLORS.BASE} round style={styles.createButton} onPress={() => this.handleBottomButton()}>
-                    <Text style={{ fontFamily: 'montserrat-bold' }} size={14} color={nowTheme.COLORS.WHITE}> SIGUIENTE </Text>
+                    <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.WHITE}> SIGUIENTE </Text>
                   </Button>
                 </Block>
               </View>
             ) : (
-              <Text>Cargando...</Text>
+              <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                <Text style={{fontFamily: 'trueno-semibold', color: nowTheme.COLORS.SECONDARY, fontSize: 24}}>Cargando...</Text>
+              </View>
             )
           }
         </DismissKeyboard>
@@ -162,7 +166,10 @@ const styles = StyleSheet.create({
   inputs: {
     borderWidth: 1,
     borderColor: '#E3E3E3',
-    borderRadius: 21.5
+    borderRadius: 21.5,
+    fontFamily: 'trueno',
+    fontSize: 17,
+    letterSpacing: 20
   },
 
   bottomContainer: {

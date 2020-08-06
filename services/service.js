@@ -14,6 +14,13 @@ function listScheduled(id) {
     });
 }
 
+function listHistory(id) {
+    return request({
+        url: `services/list-history/${id}`,
+        method: 'GET'
+    });
+}
+
 function store(objService) {
     return request({
         url: 'services',
@@ -30,7 +37,7 @@ function getUserPaymentMethods(id) {
 }
 
 const ServicesService = {
-    get, listScheduled, store, getUserPaymentMethods,
+    get, listScheduled, listHistory, store, getUserPaymentMethods,
 }
 
 export default ServicesService;

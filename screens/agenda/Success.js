@@ -7,14 +7,13 @@ import {
     Text,
     View,
     Image,
-    Modal
 } from "react-native";
 import { Block, Button, theme } from "galio-framework";
-import { Icon } from '../../components';
 import nowTheme from "../../constants/Theme";
 import Images from "../../constants/Images";
 
 const { height, width } = Dimensions.get("screen");
+const smallScreen = height < 812 ? true : false;
 
 class AgendaCheckoutScreen extends React.Component {
     constructor(props) {
@@ -58,7 +57,7 @@ class AgendaCheckoutScreen extends React.Component {
                                 round
                                 color={nowTheme.COLORS.BASE}
                                 style={styles.button}
-                                onPress={() => navigation.navigate("Home")}>
+                                onPress={() => navigation.navigate("Schedule")}>
                                 <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
                                     TERMINAR
                                 </Text>
@@ -81,7 +80,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     padded: {
-        top: 285,
+        top: smallScreen ? 200 : 285,
         justifyContent: 'center',
         alignSelf: 'center',
         paddingHorizontal: theme.SIZES.BASE * 1.3,

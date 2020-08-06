@@ -7,8 +7,15 @@ function getAll() {
     });
 }
 
+function getByKey(key) {
+    return request({
+        url: `general-settings/key/${key}`,
+        method: 'GET'
+    });
+}
+
 const GeneralSettingService = {
-    getAll,
+    getAll, getByKey
 }
 
 export default GeneralSettingService;

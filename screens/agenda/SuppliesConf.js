@@ -1,12 +1,13 @@
 import React from 'react';
-import { Image, StyleSheet, StatusBar, Dimensions, Platform, View, DatePickerAndroid, DatePickerIOS, TimePickerAndroid } from 'react-native';
-import { Block, Button, Text, theme, Toast } from 'galio-framework';
-import { Icon } from '../../components';
+import { Image, StyleSheet, ScrollView, Dimensions, Platform, View } from 'react-native';
+import { Block, Button, Text, theme } from 'galio-framework';
 import { HeaderHeight } from '../../constants/utils';
 
-const { height, width } = Dimensions.get('screen');
 import { Images, nowTheme } from '../../constants/';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import GeneralSettingService from "../../services/generalSetting";
+
+const { height, width } = Dimensions.get('screen');
+const smallScreen = height < 812 ? true : false;
 
 export default class AgendaInsumosScreen extends React.Component {
     constructor(props) {
@@ -16,11 +17,20 @@ export default class AgendaInsumosScreen extends React.Component {
             userData        : this.props.navigation.state.params.userData,
             propertyInfo    : this.props.navigation.state.params.propertyInfo,
             datetime        : this.props.navigation.state.params.datetime,
+            setting         : null,
         };
     }
 
+    componentDidMount() {
+        GeneralSettingService.getByKey('SERVICIO_INSUMOS_EXTRA')
+            .then(response => {
+                this.setState({setting: response});
+            })
+            .catch(error => console.error(error));
+    }
+
     _handleSelection() {
-        this.setState({isSelected : true});
+        this.setState({isSelected : !this.state.isSelected});
     }
 
     _handleNextAction() {
@@ -33,61 +43,65 @@ export default class AgendaInsumosScreen extends React.Component {
     }
 
     render() {
-        const { isSelected } = this.state;
+        const { isSelected, setting } = this.state;
         return (
             <Block flex style={styles.container}>
-                <StatusBar barStyle="light-content" />
-                <Block>
-                    <Image source={Images.AgendaInsumos} style={styles.image} />
-                </Block>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <Block>
+                        <Image source={Images.AgendaInsumos} style={styles.image} />
+                    </Block>
 
-                <Block flex style={{backgroundColor: 'white'}}>
-                    <Block space="between" style={styles.padded}>
-                        <Block>
-                            <Text style={[styles.title, { paddingTop: 50 }]}>¿Cuentas con los insumos necesarios?</Text>
-                            <Text style={[styles.subtitle, { paddingVertical: 10 }]}>En TAYD ofrecemos los materiales básicos para limpiar tu domicilio de manera profunda con un costo extra de $50.00</Text>
+                    <Block flex style={{backgroundColor: 'white'}}>
+                        <Block space="between" style={styles.padded}>
+                            <Block>
+                                <Text style={[styles.title, { paddingTop: 50 }]}>¿Cuentas con los insumos necesarios?</Text>
+                                <Text style={[styles.subtitle, { paddingVertical: 10, height: 100 }]}>
+                                    En TAYD ofrecemos los materiales básicos para limpiar tu domicilio de manera profunda con un costo extra de ${setting != null ? parseFloat(setting.value).toFixed(2) : '0.00' }
+                                </Text>
 
-                            <Block middle style={{ width: width - theme.SIZES.BASE * 4 }}>
-                                {
-                                    isSelected ? (
-                                        <Button
-                                            round
-                                            color={'#F4F4F4'}
-                                            style={styles.addedButton}>
-                                            <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={'#DDDDDD'}>
-                                                INSUMOS AGREGADOS
-                                            </Text>
-                                        </Button>
-                                    ) : (
-                                        <Button
-                                            round
-                                            color={nowTheme.COLORS.WHITE}
-                                            style={styles.addButton}
-                                            onPress={() => this._handleSelection()}>
-                                            <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.BASE}>
-                                                AGREGAR INSUMOS +
-                                            </Text>
-                                        </Button>
-                                    )
-                                }
-                            </Block>
+                                <Block middle style={{ width: width - theme.SIZES.BASE * 4 }}>
+                                    {
+                                        isSelected ? (
+                                            <Button
+                                                round
+                                                color={'#F4F4F4'}
+                                                style={styles.addedButton}
+                                                onPress={() => this._handleSelection()}>
+                                                <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={'#DDDDDD'}>
+                                                    INSUMOS AGREGADOS
+                                                </Text>
+                                            </Button>
+                                        ) : (
+                                            <Button
+                                                round
+                                                color={nowTheme.COLORS.WHITE}
+                                                style={styles.addButton}
+                                                onPress={() => this._handleSelection()}>
+                                                <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.BASE}>
+                                                    AGREGAR INSUMOS +
+                                                </Text>
+                                            </Button>
+                                        )
+                                    }
+                                </Block>
 
-                            <Text style={[styles.subtitle2, { paddingVertical: 10 }]}>Los insumos solo se llevan para realizar la limpieza.</Text>
+                                <Text style={[styles.subtitle2, { paddingVertical: 10 }]}>Los insumos solo se llevan para realizar la limpieza.</Text>
 
-                            <Block middle style={{ width: width - theme.SIZES.BASE * 4 }}>
-                                <Button
-                                    round
-                                    color={nowTheme.COLORS.BASE}
-                                    style={styles.createButton}
-                                    onPress={() => this._handleNextAction()}>
-                                    <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.WHITE}>
-                                        {isSelected ? 'SIGUIENTE' : 'OMITIR'}
-                                    </Text>
-                                </Button>
+                                <Block middle style={{ width: width - theme.SIZES.BASE * 4 }}>
+                                    <Button
+                                        round
+                                        color={nowTheme.COLORS.BASE}
+                                        style={styles.createButton}
+                                        onPress={() => this._handleNextAction()}>
+                                        <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.WHITE}>
+                                            {isSelected ? 'SIGUIENTE' : 'OMITIR'}
+                                        </Text>
+                                    </Button>
+                                </Block>
                             </Block>
                         </Block>
                     </Block>
-                </Block>
+                </ScrollView>
             </Block>
         );
     }
@@ -104,21 +118,20 @@ const styles = StyleSheet.create({
 
     image: {
         width: width,
-        height: 450,
-        marginTop: 50
+        height: smallScreen ? 435 : 450,
+        marginTop: smallScreen ? 0 : 50,
     },
     title: {
         fontFamily: 'trueno-extrabold',
-        paddingHorizontal: 20,
-        fontSize: 30,
-        fontWeight: '700',
+        paddingHorizontal: 10,
+        fontSize: smallScreen ? 26 : 28,
         textAlign: 'center',
     },
     subtitle: {
         fontFamily: 'trueno',
         textAlign: 'center',
         fontSize: 16,
-        paddingBottom: 15,
+        paddingBottom: 7,
     },
     subtitle2: {
         fontFamily: 'trueno',

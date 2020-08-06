@@ -1,7 +1,7 @@
 import React from 'react';
-import { Image, StyleSheet, StatusBar, Dimensions, Platform, View, DatePickerAndroid, DatePickerIOS, TimePickerAndroid, ScrollView } from 'react-native';
+import { Image, StyleSheet, Dimensions, Platform, View, DatePickerAndroid, DatePickerIOS, TimePickerAndroid, ScrollView, Modal } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Block, Button, Text, theme, Toast } from 'galio-framework';
+import { Block, Button, Text, theme } from 'galio-framework';
 import { Images, nowTheme } from '../../constants/';
 import { HeaderHeight } from '../../constants/utils';
 import PropertyService from "../../services/property";
@@ -70,15 +70,19 @@ export default class AgendaFechaScreen extends React.Component {
     }
 
     _openDatePicker = async() => {
-        try {
-            const { action, year, month, day } = await DatePickerAndroid.open({
-                date: this.state.date,
-            });
-            if (action !== DatePickerAndroid.dismissedAction) {
-                this.setState({date : new Date(year, month, day)});
+        if(this.state.isIphone) {
+            this.setState({showDateTime: true});
+        } else {
+            try {
+                const { action, year, month, day } = await DatePickerAndroid.open({
+                    date: this.state.date,
+                });
+                if (action !== DatePickerAndroid.dismissedAction) {
+                    this.setState({date : new Date(year, month, day)});
+                }
+            } catch ({ code, message }) {
+                console.warn('Cannot open date picker', message);
             }
-        } catch ({ code, message }) {
-            console.warn('Cannot open date picker', message);
         }
     }
 
@@ -105,17 +109,21 @@ export default class AgendaFechaScreen extends React.Component {
     }
 
     _openTimePicker = async () => {
-        try {
-            const { action, hour, minute } = await TimePickerAndroid.open({
-                hour    : this.state.time.getHours(),
-                minute  : this.state.time.getMinutes(),
-                is24Hour: false
-            });
-            if (action !== DatePickerAndroid.dismissedAction) {
-                this.setState({ time: new Date(2020, 4, 4, hour, minute) });
+        if(this.state.isIphone) {
+            this.setState({showDateTime: true});
+        } else {
+            try {
+                const { action, hour, minute } = await TimePickerAndroid.open({
+                    hour    : this.state.time.getHours(),
+                    minute  : this.state.time.getMinutes(),
+                    is24Hour: false
+                });
+                if (action !== DatePickerAndroid.dismissedAction) {
+                    this.setState({ time: new Date(2020, 4, 4, hour, minute) });
+                }
+            } catch ({ code, message }) {
+                console.warn('Cannot open date picker', message);
             }
-        } catch ({ code, message }) {
-            console.warn('Cannot open date picker', message);
         }
     }
 
@@ -125,6 +133,10 @@ export default class AgendaFechaScreen extends React.Component {
             case 2: return (<Image source={Images.Icons.Departamento} style={{ width: 50, height: 50 }} />)
             case 3: return (<Image source={Images.Icons.Oficina} style={{ width: 50, height: 50 }} />)
         }
+    }
+
+    setDateTime = (newDate) => {
+        this.setState({ date: newDate, time: newDate });
     }
 
     render() {
@@ -180,6 +192,34 @@ export default class AgendaFechaScreen extends React.Component {
                         </Block>
                     </Block>
                 </ScrollView>
+
+                <Modal
+                    animationType="slide"
+                    transparent
+                    visible={showDateTime && isIphone}
+                    presentationStyle="overFullScreen">
+                    <View style={{ flex: 1, height: height, backgroundColor: 'rgba(0,0,0,.2)', justifyContent: 'flex-end', flexDirection: 'column',}}>
+                        <View style={{ backgroundColor: 'white', padding: 15, paddingBottom: 30,}}>
+                            <View>
+                                <DatePickerIOS date={this.state.date} onDateChange={this.setDateTime} />
+                            </View>
+                            <Block middle style={{alignItems: 'center' }}>
+                                <Button
+                                    round
+                                    color={nowTheme.COLORS.BASE}
+                                    style={styles.createButton}
+                                    onPress={() => this.setState({ showDateTime: false })}>
+                                    <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.WHITE}>ENTENDIDO</Text>
+                                </Button>
+                            </Block>
+                            {/* <View style={{ alignItems: 'center'}}>
+                                <TouchableOpacity style={styles.buttonModalConfirmStyle} onPress={() => this.setState({ showDateTime: false })}>
+                                    <Text style={styles.buttonTextStyle}>Ok</Text>
+                                </TouchableOpacity>
+                            </View> */}
+                        </View>
+                    </View>
+                </Modal>
             </Block>
         );
     }
@@ -241,6 +281,22 @@ const styles = StyleSheet.create({
         marginRight: 20,
     },
 
+    buttonModalConfirmStyle: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+        width: width * 0.5,
+        marginHorizontal: 30,
+        height: 41
+    },
+    buttonTextStyle: {
+        backgroundColor: nowTheme.COLORS.BASE,
+        fontFamily: 'trueno-semibold',
+        fontStyle: 'normal',
+        fontSize: 12,
+        lineHeight: 15,
+        color: '#FFF',
+    },
     createButton: {
         width: width * 0.5,
         marginTop: 10,

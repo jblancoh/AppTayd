@@ -9,6 +9,7 @@ import Actions from "../lib/actions";
 import ServicesService from "../services/service";
 
 const { width, height } = Dimensions.get("screen");
+const smallScreen = height < 812 ? true : false;
 
 class Schedule extends React.Component {
     constructor(props) {
@@ -79,7 +80,7 @@ class Schedule extends React.Component {
         return (
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
                 <Block flex>
-                    <Block flex row style={{ paddingTop: 30 }}>
+                    <Block flex row style={{ paddingTop: 10 }}>
                         <Image source={Images.ProfilePicture} style={{ borderRadius: 50, height: 60, width: 60, marginRight: 25 }} />
                         <Block flex>
                             <Text style={styles.nameTitle}>Agenda de {userData != null && userData.info ? userData.info.name : ''}</Text>
@@ -91,7 +92,7 @@ class Schedule extends React.Component {
                         !this.state.showMore ? (
                             <Block>
                                 <TouchableOpacity onPress={() => this.props.navigation.navigate('AgendaFecha')}>
-                                    <CardFullImage image={Images.Agendar} imageStyle={{ height: height * 0.62, width: '100%' }} />
+                                    <CardFullImage image={Images.Agendar} imageStyle={{ height: smallScreen ? height * 0.7 : height * 0.62, width: '100%' }} />
                                 </TouchableOpacity>
 
                                 <Block flex style={{paddingVertical: 20, paddingHorizontal: 45}}>
