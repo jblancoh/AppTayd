@@ -212,11 +212,6 @@ export default class AgendaFechaScreen extends React.Component {
                                     <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.WHITE}>ENTENDIDO</Text>
                                 </Button>
                             </Block>
-                            {/* <View style={{ alignItems: 'center'}}>
-                                <TouchableOpacity style={styles.buttonModalConfirmStyle} onPress={() => this.setState({ showDateTime: false })}>
-                                    <Text style={styles.buttonTextStyle}>Ok</Text>
-                                </TouchableOpacity>
-                            </View> */}
                         </View>
                     </View>
                 </Modal>

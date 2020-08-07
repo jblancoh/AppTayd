@@ -41,6 +41,8 @@ import DomicilioLocationScreen from '../screens/domicilios/Location';
 import MetodoPagoIndexScreen from '../screens/metodosPagos/Index';
 import MetodoPagoAddCardScreen from '../screens/metodosPagos/AddCard';
 
+import CuponesIndexScreen from '../screens/cupones/Index';
+
 import GeneraIngresoIndexScreen from '../screens/generarIngresos/Index';
 
 import SoporteIndexScreen from '../screens/soporte/Index';
@@ -192,6 +194,24 @@ const GeneraIngresoStack = createStackNavigator(
   }
 );
 
+const CuponesStack = createStackNavigator(
+  {
+    CuponesIndex: {
+      screen: CuponesIndexScreen,
+      navigationOptions: ({ navigation }) => ({
+        header: (
+          <Header title="Cupones" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
+        ),
+        headerTransparent: false
+      })
+    }
+  },
+  {
+    cardStyle: { backgroundColor: '#FFFFFF' },
+    transitionConfig
+  }
+);
+
 const DrawerTayder = createDrawerNavigator(
   {
     HomeTayder: {
@@ -326,6 +346,12 @@ const DrawerClient = createDrawerNavigator(
         drawerLabel: () => { }
       }
     },
+    Cupones: {
+      screen: CuponesStack,
+      navigationOptions: {
+        drawerLabel: () => {}
+      }
+    }
   },
   {
     contentComponent: Drawer,

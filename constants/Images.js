@@ -80,6 +80,7 @@ const Icons = {
   Compartir   : require('../assets/icons/T-Compartir.png'),
   Ingreso     : require('../assets/icons/T-Ingresos.png'),
   Cupon       : require('../assets/icons/T-Cupon.png'),
+  Cupones     : require('../assets/icons/T-Cupones.png'),
   Salir       : require('../assets/icons/T-Salir.png'),
   Contrasena  : require('../assets/icons/T-contrasena.png'),
   Nombre      : require('../assets/icons/T-Nombre.png'),

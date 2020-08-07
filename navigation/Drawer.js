@@ -91,11 +91,11 @@ export default class Drawer extends React.Component {
             
                     <Text style={styles.sectionTitle}>Extra</Text>
             
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('GeneraIngresoIndex')} style={{fontFamily: 'trueno', fontSize: 18, paddingTop: 20 }}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('CuponesIndex')} style={{fontFamily: 'trueno', fontSize: 18, paddingTop: 20 }}>
                         <DrawerItem {...this.props} title="Cupones" />
                     </TouchableOpacity>
             
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Onboarding')} style={{ fontFamily: 'trueno', fontSize: 18, }}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('CuponesIndex')} style={{ fontFamily: 'trueno', fontSize: 18, }}>
                         <DrawerItem {...this.props} title="Comparte y gana" />
                     </TouchableOpacity>
             
