@@ -6,7 +6,7 @@ import { Asset } from 'expo-asset';
 import { Block, GalioProvider } from 'galio-framework';
 
 import Screens from './navigation/Screens';
-import { Images, options, nowTheme } from './constants';
+import { Images, nowTheme } from './constants';
 
 // cache app images
 const assetImages = [
@@ -16,9 +16,6 @@ const assetImages = [
   Images.RegisterBackground,
   Images.ProfileBackground
 ];
-
-// cache product images
-options.map(option => assetImages.push(option.image));
 
 function cacheImages(images) {
   return images.map(image => {

@@ -74,6 +74,15 @@ class Schedule extends React.Component {
         return `${week}, ${datetime.getDate()} de ${month} de ${datetime.getFullYear()}, ${hour}:${minutes} ${type}`;
     }
 
+    _showService = (item) => {
+        if(item.service_status_id == 3) {
+            this.props.navigation.navigate("AgendaProgreso", {
+                tayder: item.provider_user_name ,
+                status: item.service_status_name
+            });
+        }
+    }
+
     renderBlocks = () => {
         let {userData} = this.state;
 
@@ -144,7 +153,9 @@ class Schedule extends React.Component {
                                                                             <Text style={styles.scheduleSubtitleBold}>Estatus:</Text>
 
                                                                             <Block middle style={[styles.section, { alignItems: 'flex-end' }]}>
-                                                                                <Text style={styles.scheduleSubtitleBoldRed}>{item.service_status_name.toUpperCase()}</Text>
+                                                                                <TouchableOpacity onPress={() => this._showService(item)}>
+                                                                                    <Text style={styles.scheduleSubtitleBoldRed}>{item.service_status_name.toUpperCase()}</Text>
+                                                                                </TouchableOpacity>
 
                                                                                 <TouchableOpacity style={{marginLeft: 20}} onPress={() => this.setState({ showInfo: false })}>
                                                                                     <Image source={Images.Icons.FlechaArriba} style={{ width: 25, height: 25 }} />

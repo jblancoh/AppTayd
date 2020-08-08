@@ -97,7 +97,7 @@ class DocumentationScreen extends React.Component {
           : (
             <Block flex middle>
               <ImageBackground
-                source={Images.RegisterBackground}
+                source={Images.LightsBackground}
                 style={styles.imageBackgroundContainer}
                 imageStyle={styles.imageBackground}
               >

@@ -33,6 +33,7 @@ import AgendaFechaScreen from '../screens/agenda/DateAddressConf';
 import AgendaInsumosScreen from '../screens/agenda/SuppliesConf';
 import AgendaCheckoutScreen from '../screens/agenda/CheckoutConf';
 import AgendaSuccessScreen from '../screens/agenda/Success';
+import AgendaProgressScreen from '../screens/agenda/Progress';
 
 import DomicilioIndexScreen from '../screens/domicilios/Index';
 import DomicilioInfoScreen from '../screens/domicilios/Information';
@@ -303,6 +304,12 @@ const DrawerClient = createDrawerNavigator(
     },
     AgendaSuccess: {
       screen: AgendaSuccessScreen,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+    AgendaProgreso: {
+      screen: AgendaProgressScreen,
       navigationOptions: {
         drawerLabel: () => { }
       }

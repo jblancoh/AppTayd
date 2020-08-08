@@ -35,6 +35,7 @@ const COLORS = {
   BORDER: '#CAD1D7',
   WHITE: '#FFFFFF',
   BLACK: '#000000',
+  GREY5: '#5F5F60',
   TWITTER: '#55acee',
   FACEBOOK: '#3b5998',
   DRIBBBLE: '#ea4c89',
