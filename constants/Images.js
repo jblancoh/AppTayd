@@ -8,12 +8,12 @@ const TaydLogoGris        = require('../assets/imgs/tayd-logo-gris.png');
 const TaydRegistro        = require('../assets/imgs/tayd-registro.png');
 const TaydAyuda           = require('../assets/imgs/tayd-ayuda.jpg');
 const TaydAyudaCita       = require('../assets/imgs/tayd-ayuda-cita.jpg');
-const ProfileBackground   = require('../assets/imgs/bg5.png');
-const RegisterBackground  = require('../assets/imgs/register-bg.png');
+const ProfileBackground   = require('../assets/imgs/tayd-lights.jpg');
 const ProfilePicture      = require('../assets/imgs/profile-img.jpg');
 const LightsBackground    = require('../assets/imgs/tayd-lights.jpg');
 const BlackLightsBackground = require('../assets/imgs/tayd-black-lights.png');
 const RegisterTayderBackground  = require('../assets/imgs/fondo-tyd-01.jpg');
+const TayderInfoBackground  = require('../assets/imgs/fondo-tarjeta-tayder.jpg');
 
 const Agendar             = require('../assets/imgs/tayd-agendar.jpg');
 const AgendaInicio        = require('../assets/imgs/tayd-agenda-inicio.jpg');
@@ -136,11 +136,11 @@ export default {
   LogoTayder,
   ProfileBackground,
   ProfilePicture,
-  RegisterBackground,
   Icons,
   LightsBackground,
   BlackLightsBackground,
   RegisterTayderBackground,
+  TayderInfoBackground,
   
   Agendar,
   AgendaInicio,
