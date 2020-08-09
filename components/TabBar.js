@@ -6,19 +6,41 @@ import {
     TouchableOpacity,
     Image,
     Dimensions,
-    Platform
+    Platform,
+    Modal
 } from 'react-native';
 import { Images, nowTheme } from '../constants';
+import Pusher from 'pusher-js/react-native';
+import env from '../lib/enviroment';
 
 const { width, height } = Dimensions.get("screen");
 const isIphone = Platform.OS == 'ios' ? true : false;
+
+Pusher.logToConsole = true;
 
 export default class TabBar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            screen: this.props.activeScreen
+            screen: this.props.activeScreen,
+            showAlert: false,
+            alertMessage: "Tienes 1 cita en curso",
         }
+    }
+
+    componentDidMount() {
+        var pusher = new Pusher(env.PUSHER_KEY, {
+            cluster: env.PUSHER_CLUSTER
+        });
+          
+        var channel = pusher.subscribe('notifications');
+        channel.bind('service-onprogress', (data) => {
+            this.setState({showAlert: true, alertMessage: data.message})
+        });
+    }
+
+    _closeAlert = () => {
+        this.setState({showAlert: false, alertMessage: ""})
     }
 
     render() {
@@ -43,6 +65,21 @@ export default class TabBar extends React.Component {
                     <Image source={this.state.screen == 'soporte' ? Images.Icons.Ayuda : Images.Icons.Ayuda_G} style={{ width: 22, height: 22 }} />
                     <Text style={[styles.tabTitle, this.state.screen == 'soporte' ? styles.titleActive : styles.titleInactive]}>Ayuda</Text>
                 </TouchableOpacity>
+
+                <Modal
+                    animationType="fade"
+                    transparent
+                    visible={this.state.showAlert}
+                    presentationStyle="overFullScreen">
+                    <View style={{ flex: 1, height: height, backgroundColor: 'rgba(0,0,0,.3)', justifyContent: 'flex-start', alignItems: 'center' }}>
+                        <View style={styles.alertContainer}>
+                            <Text style={styles.alertMessage}>{this.state.alertMessage}</Text>
+                            <TouchableOpacity onPress={() => this._closeAlert()} style={{marginTop: -1}}>
+                                <Image source={Images.Icons.Close01} />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
             </View>
         );
     }
@@ -73,5 +110,26 @@ const styles = StyleSheet.create({
     },
     titleActive: {
         color: nowTheme.COLORS.BASE,
+    },
+
+    alertContainer: {
+        width: width * 0.85,
+        backgroundColor: '#FFF',
+        borderRadius: 25,
+        marginTop: 80,
+        paddingVertical: 6,
+        paddingHorizontal: 10,
+
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignContent: 'center'
+    },
+    alertMessage: {
+        fontFamily: 'trueno',
+        fontSize: 16,
+        width: width * 0.7,
+        color: nowTheme.COLORS.BASE,
+        paddingHorizontal: 10,
+        textAlign: 'center'
     },
 });
