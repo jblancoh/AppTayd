@@ -1,32 +1,24 @@
 import React from 'react';
-import { TouchableOpacity, ImageBackground, Image, StyleSheet, StatusBar, Dimensions, Platform, TouchableHighlight, View, TouchableWithoutFeedback, Keyboard, Alert, AsyncStorage } from 'react-native';
-import { Block, Button, Text, theme, Checkbox } from 'galio-framework';
+import { TouchableOpacity, Image, StyleSheet, StatusBar, Dimensions, ScrollView, View, Alert } from 'react-native';
+import { Block, Button, Text, theme } from 'galio-framework';
 import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
-import { Icon, Input } from '../../components';
 
 import { Images, nowTheme } from '../../constants';
 import { withNavigation } from 'react-navigation';
 
 const { height, width } = Dimensions.get('screen');
-
-const DismissKeyboard = ({ children }) => (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
-);
+const smallScreen = height < 812 ? true : false;
 
 class DocumentosStep2Screen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: '',
-            password: '',
-            isTayder: true,
-            isLoading: false,
+            hasPermissionCamera : null,
+            cameraType          : Camera.Constants.Type.back,
+            openCamera          : false,
 
-            hasPermissionCamera: null,
-            cameraType: Camera.Constants.Type.back,
-            openCamera: false,
-            files: []
+            file1               : this.props.navigation.state.params.fileINE
         };
     }
 
@@ -35,26 +27,25 @@ class DocumentosStep2Screen extends React.Component {
         this.setState({ hasPermissionCamera: status === 'granted' });
     }
 
-    async askPermissions() {
-        const { status } = await Permissions.askAsync(Permissions.CAMERA);
-        this.setState({ hasPermissionCamera: status === 'granted' });
-
-        if (this.state.hasPermissionCamera) {
-            this.setState({ openCamera: true });
-        } else {
-            Alert.alert('Permiso denegado', 'No se concedieron permisos para acceder a la cámara.');
-        }
-    }
-
     handleCameraPhoto = async () => {
-        if (this.camera) {
+        if(this.camera) {
             let photo = await this.camera.takePictureAsync({ quality: 1, base64: false });
-            let arrFiles = this.state.files;
 
-            arrFiles.push(photo);
-
-            this.setState({ openCamera: false, files: arrFiles });
-            this.props.navigation.navigate("DocumentosStep3");
+            Alert.alert("RFC", "¿Desea volver a tomar otra fotografía o continuar?", [
+                {
+                    text: 'Volver a tomar',
+                    onPress: () => this.setState({openCamera: false}),
+                    style: 'cancel'
+                },
+                {
+                    text: 'Continuar', onPress: () => {
+                        this.props.navigation.navigate("DocumentosStep3", {
+                            fileINE : this.state.file1,
+                            fileRFC : photo
+                        })
+                    }
+                }
+            ])
         }
     }
 
@@ -72,11 +63,11 @@ class DocumentosStep2Screen extends React.Component {
                             style={{ flex: 1, justifyContent: 'space-between' }}
                             type={this.state.cameraType}>
                             <View style={{ justifyContent: "center", alignItems: 'center' }}>
-                                <View style={{ height: 600, marginTop: 50 }}>
-                                    <Image source={Images.Icons.CamaraMarco} style={{ height: 550, width: 250 }} />
+                                <View style={{ marginTop: 30 }}>
+                                    <Image source={Images.Icons.CamaraMarco} style={{width: smallScreen ? 240 : 250, height: smallScreen ? 525 : 550}} />
                                 </View>
 
-                                <Text style={[{ fontFamily: 'trueno', color: nowTheme.COLORS.WHITE, fontSize: 8 }]}>Asegúrate de que el documento sea legible.</Text>
+                                <Text style={[{ fontFamily: 'trueno', color: nowTheme.COLORS.WHITE, fontSize: 8, paddingTop: 5 }]}>Asegúrate de que el documento sea legible.</Text>
 
                                 <TouchableOpacity
                                     style={{ backgroundColor: 'transparent', marginTop: 10 }}
@@ -88,9 +79,9 @@ class DocumentosStep2Screen extends React.Component {
                         </Camera>
                     )
                     : (
-                        <Block flex={1} middle space="between" style={styles.padded}>
-                            <Block center flex={1}>
-                                <Block middle>
+                        <View style={{height}}>
+                            <ScrollView>
+                                <Block flex={1} middle space="between" style={styles.padded}>
                                     <Image source={Images.Icons.RFC} style={[styles.itemGroup, { marginTop: 10 }]} />
 
                                     <Image source={Images.Icons.Grupo2} style={[styles.imageGroup, styles.itemGroup, { marginTop: 20}]} />
@@ -98,11 +89,11 @@ class DocumentosStep2Screen extends React.Component {
                                     <Text style={[styles.title]}>R.F.C.</Text>
 
                                     <Text style={[styles.subtitle, {paddingBottom: 40}]}>
-                                            Realiza tu inscripción o actualización de RFC en el SAT.
+                                        Realiza tu inscripción o actualización de RFC en el SAT.
                                     </Text>
 
                                     <Text style={[styles.subtitle, styles.itemGroup]}>
-                                            Toma una fotografía de tu R.F.C., te aconsejamos se encuentre VIGENTE.
+                                        Toma una fotografía de tu R.F.C., te aconsejamos se encuentre VIGENTE.
                                     </Text>
                                     <Text style={[styles.subtitle, styles.itemGroup]}>
                                         La imagen debe verse claramente y sin
@@ -114,23 +105,23 @@ class DocumentosStep2Screen extends React.Component {
                                         este pueda sobreexponer la claridad y
                                         legibilidad de los datos.
                                     </Text>
-                                </Block>
 
-                                <Block center>
-                                    <Button
-                                        round
-                                        color={nowTheme.COLORS.BASE}
-                                        style={styles.button}
-                                        loading={this.state.isLoading}
-                                        disabled={this.state.isLoading}
-                                        onPress={() => this.setState({openCamera : true})}>
-                                        <Text style={{ fontFamily: 'montserrat-bold' }} size={14} color={nowTheme.COLORS.WHITE}>
-                                            TOMAR FOTO
-                                        </Text>
-                                    </Button>
+                                    <Block center style={{marginBottom: 30}}>
+                                        <Button
+                                            round
+                                            color={nowTheme.COLORS.BASE}
+                                            style={styles.button}
+                                            loading={this.state.isLoading}
+                                            disabled={this.state.isLoading}
+                                            onPress={() => this.setState({openCamera : true})}>
+                                            <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.WHITE}>
+                                                TOMAR FOTO
+                                            </Text>
+                                        </Button>
+                                    </Block>
                                 </Block>
-                            </Block>
-                        </Block>
+                            </ScrollView>
+                        </View>
                     )
                 }
             </Block>
@@ -147,7 +138,6 @@ const styles = StyleSheet.create({
     padded: {
         paddingHorizontal: theme.SIZES.BASE * 2,
         paddingTop: 40,
-        position: 'absolute'
     },
     title: {
         fontFamily: 'trueno-extrabold',

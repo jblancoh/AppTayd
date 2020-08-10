@@ -30,7 +30,7 @@ class DocumentosSuccessScreen extends React.Component {
             <Block flex style={styles.container}>
                 <StatusBar barStyle="light-content" />
                 <Block flex center>
-                    <ImageBackground source={Images.LightsBackground} style={{ height, width, zIndex: 1 }} />
+                    <ImageBackground source={Images.BlackLightsBackground} style={{ height, width, zIndex: 1 }} />
                 </Block>
 
                 <Block flex space="between" style={styles.padded}>
@@ -55,7 +55,7 @@ class DocumentosSuccessScreen extends React.Component {
                                 round
                                 color={nowTheme.COLORS.BASE}
                                 style={styles.button}
-                                onPress={() => navigation.navigate("Home")}>
+                                onPress={() => navigation.navigate("HomeTayder")}>
                                 <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
                                     FINALIZAR
                                 </Text>

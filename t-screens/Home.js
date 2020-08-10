@@ -52,14 +52,14 @@ export default class HomeTayder extends React.Component {
       <View style={styles.blocksContainer}>
         <Block flex>
           <Block row style={{paddingTop: 10}}>
-            <Image source={Images.ProfilePicture} style={{borderRadius: 50, height: 60, width: 60, marginHorizontal: 25}} />
+            <Image source={Images.ProfilePicture} style={{borderRadius: 60, height: 60, width: 60, marginHorizontal: 25}} />
             <Block flex>
               <Text style={styles.nameTitle}>Christopher</Text>
-              <Block row style={{paddingTop: 10}}>
+              <Block row style={{paddingTop: 10, justifyContent: "space-between"}}>
                 <Text style={[styles.statusText, this.state.isOnline ? styles.statusOnline : styles.statusOffline]}>{this.state.statusText}</Text>
                 <Switch
                   value={this.state.isOnline}
-                  style={{ transform: [{ scaleX: 1.6 }, { scaleY: 1.6 }], paddingLeft: 80, marginTop: -10}}
+                  style={{marginRight: 20, marginTop: -10}}
                   onValueChange={this._changeStatus}
                 />
               </Block>

@@ -51,6 +51,7 @@ import SoporteCitaScreen from '../screens/soporte/Cita';
 
 // drawer
 import Drawer from './Drawer';
+import DrawerTayder from './DrawerTayder';
 import DrawerItem from '../components/DrawerItem';
 
 // header for screens
@@ -213,26 +214,44 @@ const CuponesStack = createStackNavigator(
   }
 );
 
-const DrawerTayder = createDrawerNavigator(
+const Drawer2 = createDrawerNavigator(
   {
     HomeTayder: {
       screen: HomeTayder,
-      navigationOptions: {
-        drawerLabel: () => { }
+      navigationOptions: navOpt => ({
+        drawerLabel: ({ focused }) => (
+          <DrawerItem focused={focused} screen="HomeTayder" title="Inicio" />
+        )
+      })
+    },
+  },
+  {
+    contentComponent: DrawerTayder,
+    drawerBackgroundColor: '#F7F7F7',
+    drawerWidth: width * 0.95,
+    contentOptions: {
+      activeTintColor: nowTheme.COLORS.SECONDARY,
+      inactiveTintColor: nowTheme.COLORS.SECONDARY,
+      activeBackgroundColor: 'transparent',
+      itemStyle: {
+        width: width * 1,
+        backgroundColor: 'transparent'
+      },
+      labelStyle: {
+        fontSize: 18,
+        marginLeft: 20,
+        fontWeight: 'normal'
+      },
+      itemsContainerStyle: {
+        paddingVertical: 16,
+        paddingHorizonal: 12,
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center',
+        overflow: 'hidden',
       }
     },
-    EarningsTayder: {
-      screen: EarningsTayder,
-      navigationOptions: {
-        drawerLabel: () => { }
-      }
-    },
-    HistoryTayder: {
-      screen: HistoryTayder,
-      navigationOptions: {
-        drawerLabel: () => { }
-      }
-    },
+    initialRouteName: 'HomeTayder',
   }
 )
 
@@ -491,7 +510,7 @@ export const AppStack = createSwitchNavigator({
       }
   },
   DrawerTayder: {
-    screen: DrawerTayder,
+    screen: Drawer2,
       navigationOptions: {
           header: null,
           gesturesEnabled: false

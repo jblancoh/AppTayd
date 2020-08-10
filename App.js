@@ -1,12 +1,13 @@
 import React from 'react';
-import { Image } from 'react-native';
-import { AppLoading } from 'expo';
+import { Image, AsyncStorage } from 'react-native';
+import { AppLoading, Notifications } from 'expo';
 import * as Font from 'expo-font';
 import { Asset } from 'expo-asset';
 import { Block, GalioProvider } from 'galio-framework';
 
 import Screens from './navigation/Screens';
 import { Images, nowTheme } from './constants';
+import * as Permissions from 'expo-permissions';
 
 // cache app images
 const assetImages = [
@@ -27,11 +28,30 @@ function cacheImages(images) {
   });
 }
 
+async function getToken() {
+  const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+
+  if(status !== 'granted') {
+    alert("Necesitas habilitar los permisos para las notificaciones");
+    return;
+  }
+
+  const token = await Notifications.getExpoPushTokenAsync();
+  await AsyncStorage.setItem('movil_token', token);
+  console.log('Our token', token);
+}
+
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
     fontLoaded: false
   };
+
+  handleNotification = ({origin, data}) => {
+    console.log(
+      `Push notification ${origin} with data: ${JSON.stringify(data)}`,
+    );
+  }
 
   async componentDidMount() {
     Font.loadAsync({
@@ -42,6 +62,9 @@ export default class App extends React.Component {
       'trueno'            : require('./assets/font/TruenoRg.ttf'),
       'trueno-light'      : require('./assets/font/TruenoLt.ttf'),
     });
+
+    getToken();
+    this.listener = Notifications.addListener(this.handleNotification);
 
     this.setState({ fontLoaded: true });
   }
