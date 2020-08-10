@@ -1,5 +1,5 @@
 import React from 'react';
-import { ImageBackground, Image, StyleSheet, StatusBar, ScrollView, Dimensions, Platform, View , TouchableWithoutFeedback, Keyboard, Alert, AsyncStorage, KeyboardAvoidingView } from 'react-native';
+import { ImageBackground, Image, StyleSheet, StatusBar, ScrollView, Dimensions, Platform, View , TouchableWithoutFeedback, Keyboard, Alert, KeyboardAvoidingView } from 'react-native';
 import { Block, Button, Text, theme, Checkbox } from 'galio-framework';
 import { Input } from '../components';
 
@@ -30,7 +30,6 @@ class RegisterTayderScreen extends React.Component {
   }
 
   _onRegister = () => {
-    //this.props.navigation.navigate('DocumentosIndex')
     if(this.state.email != '' && this.state.password != '' && this.state.phone != '' && this.state.name != '' && this.state.lastname != '') {
       this._handleRequest();
     } else {
@@ -52,10 +51,7 @@ class RegisterTayderScreen extends React.Component {
     await AuthenticationService.signup(params)
       .then(async (response) => {
         try {
-          await AsyncStorage.setItem('access_token', response.access_token);
-          await AsyncStorage.setItem('expires_at', response.expires_at);
-          await AsyncStorage.setItem('user', JSON.stringify(response.user));
-
+          Alert.alert("Registro", "Se ha creado tu cuenta exitosamente, procede a iniciar sesión para subir tus documentos.")
           this.setState({ 
             isLoading:  false,
             email     : '',
@@ -65,7 +61,7 @@ class RegisterTayderScreen extends React.Component {
             phone     : '',
           });
 
-          this.props.navigation.navigate('DocumentosIndex')
+          this.props.navigation.navigate('Login');
 
         } catch (error) {
           console.error(error);
