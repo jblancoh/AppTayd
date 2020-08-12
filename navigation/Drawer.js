@@ -68,7 +68,7 @@ export default class Drawer extends React.Component {
             }, 500);
           }
         });
-      }
+    }
 
     render() {
         let {userData} = this.state;

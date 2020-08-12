@@ -29,7 +29,7 @@ class DocumentosStep2Screen extends React.Component {
 
     handleCameraPhoto = async () => {
         if(this.camera) {
-            let photo = await this.camera.takePictureAsync({ quality: 1, base64: false });
+            let photo = await this.camera.takePictureAsync({ quality: 1, base64: true });
 
             Alert.alert("RFC", "¿Desea volver a tomar otra fotografía o continuar?", [
                 {
