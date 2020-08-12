@@ -10,7 +10,8 @@ import {
     Modal
 } from "react-native";
 import { Block, Button, theme } from "galio-framework";
-import { Icon } from '../../components';
+
+import Actions from '../../lib/actions';
 import nowTheme from "../../constants/Theme";
 import Images from "../../constants/Images";
 
@@ -23,9 +24,16 @@ class DocumentosSuccessScreen extends React.Component {
             hasError    : false,
         }
     }
-    render() {
-        const { navigation } = this.props;
 
+    _logout() {
+        Actions.removeUserData().then((response) => {
+          if(response) {
+              this.props.navigation.navigate('Onboarding')
+          }
+        });
+    }
+
+    render() {
         return (
             <Block flex style={styles.container}>
                 <StatusBar barStyle="light-content" />
@@ -55,7 +63,7 @@ class DocumentosSuccessScreen extends React.Component {
                                 round
                                 color={nowTheme.COLORS.BASE}
                                 style={styles.button}
-                                onPress={() => navigation.navigate("HomeTayder")}>
+                                onPress={() => this._logout()}>
                                 <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
                                     FINALIZAR
                                 </Text>

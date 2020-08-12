@@ -3,9 +3,12 @@ import { TouchableOpacity, Image, StyleSheet, StatusBar, Dimensions, View, Alert
 import { Block, Button, Text, theme } from 'galio-framework';
 import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
+import { withNavigation } from 'react-navigation';
+import FormData from 'form-data';
 
 import { Images, nowTheme } from '../../constants';
-import { withNavigation } from 'react-navigation';
+import Actions from '../../lib/actions';
+import UserService from '../../services/user';
 
 const { height, width } = Dimensions.get('screen');
 const smallScreen = height < 812 ? true : false;
@@ -14,7 +17,9 @@ class DocumentosStep4Screen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoading: false,
+            isLoading   : false,
+            errorUploading: false,
+            userData    : null,
 
             hasPermissionCamera: null,
             cameraType: Camera.Constants.Type.back,
@@ -27,13 +32,19 @@ class DocumentosStep4Screen extends React.Component {
     }
 
     async componentDidMount() {
+        await Actions.extractUserData().then((result) => {
+            if (result != null) {
+              this.setState({userData : result.user});
+            }
+        });
+
         const { status } = await Permissions.askAsync(Permissions.CAMERA);
         this.setState({ hasPermissionCamera: status === 'granted' });
     }
 
     handleCameraPhoto = async () => {
         if(this.camera) {
-            let photo = await this.camera.takePictureAsync({ quality: 1, base64: false });
+            let photo = await this.camera.takePictureAsync({ quality: 1, base64: true });
 
             Alert.alert("Foto de perfil", "¿Desea volver a tomar otra fotografía o continuar?", [
                 {
@@ -42,13 +53,79 @@ class DocumentosStep4Screen extends React.Component {
                     style: 'cancel'
                 },
                 {
-                    text: 'Continuar', onPress: () => {
-                        this.props.navigation.navigate("DocumentosSuccess", {
-                            fileINE     : this.state.file1,
-                            fileRFC     : this.state.file2,
-                            fileCLABE   : this.state.file3,
-                            fileProfile : photo,
-                        })
+                    text: 'Continuar', onPress: async() => {
+                        this.setState({isLoading: true, openCamera: false});
+
+                        // INE UPLOAD
+                        let file1 = {
+                            user_id     : this.state.userData.id,
+                            name        : "INE",
+                            document    : `data:image/jpg;base64,${this.state.file1.base64}`,
+                            isBase64    : true
+                        } 
+
+                        await UserService.storeDocuments(file1)
+                            .then(response => console.log(response.message))
+                            .catch(e => {
+                                console.error(e)
+                                Alert.alert("INE", "Hubo un problema al subir tu documento, vuelve a intentarlo.")
+                                this.setState({isLoading: false, errorUploading: true});
+                            });
+
+                        // ADDRESS UPLOAD
+                        let file2 = {
+                            user_id     : this.state.userData.id,
+                            name        : "COMPROBANTE_DOMICILIO",
+                            document    : `data:image/jpg;base64,${this.state.file2.base64}`,
+                            isBase64    : true
+                        } 
+
+                        await UserService.storeDocuments(file2)
+                            .then(response => console.log(response.message))
+                            .catch(e => {
+                                console.error(e)
+                                Alert.alert("RFC", "Hubo un problema al subir tu documento, vuelve a intentarlo.")
+                                this.setState({isLoading: false, errorUploading: true});
+                            });
+
+                        // CLABE UPLOAD
+                        let file3 = {
+                            user_id     : this.state.userData.id,
+                            name        : "CLABE",
+                            document    : `data:image/jpg;base64,${this.state.file3.base64}`,
+                            isBase64    : true
+                        } 
+
+                        await UserService.storeDocuments(file3)
+                            .then(response => console.log(response.message))
+                            .catch(e => {
+                                console.error(e)
+                                Alert.alert("CLABE", "Hubo un problema al subir tu documento, vuelve a intentarlo.")
+                                this.setState({isLoading: false, errorUploading: true});
+                            });
+
+                        // PROFILE PHOTO UPLOAD
+                        let file4 = {
+                            user_id     : this.state.userData.id,
+                            name        : "FOTO_PERFIL",
+                            document    : `data:image/jpg;base64,${photo.base64}`,
+                            isBase64    : true
+                        } 
+
+                        await UserService.storeDocuments(file4)
+                            .then(response => console.log(response.message))
+                            .catch(e => {
+                                console.error(e)
+                                Alert.alert("Foto de perfil", "Hubo un problema al subir tu documento, vuelve a intentarlo.")
+                                this.setState({isLoading: false, errorUploading: true});
+                            });
+
+                        // REDIRECT
+                        if(!this.state.errorUploading) {
+                            this.props.navigation.navigate("DocumentosSuccess");
+                        } else {
+                            this.props.navigation.navigate("DocumentosStep1");
+                        }
                     }
                 }
             ])

@@ -27,7 +27,7 @@ class DocumentosStep1Screen extends React.Component {
 
     handleCameraPhoto = async () => {
         if(this.camera) {
-            let photo = await this.camera.takePictureAsync({ quality: 1, base64: false });
+            let photo = await this.camera.takePictureAsync({ quality: 1, base64: true });
 
             Alert.alert("INE", "¿Desea volver a tomar otra fotografía o continuar?", [
                 {
