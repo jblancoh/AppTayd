@@ -4,7 +4,6 @@ import { Block, Button, Text, theme } from 'galio-framework';
 import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
 import { withNavigation } from 'react-navigation';
-import FormData from 'form-data';
 
 import { Images, nowTheme } from '../../constants';
 import Actions from '../../lib/actions';
@@ -55,6 +54,7 @@ class DocumentosStep4Screen extends React.Component {
                 {
                     text: 'Continuar', onPress: async() => {
                         this.setState({isLoading: true, openCamera: false});
+                        let hasError = false;
 
                         // INE UPLOAD
                         let file1 = {
@@ -67,9 +67,8 @@ class DocumentosStep4Screen extends React.Component {
                         await UserService.storeDocuments(file1)
                             .then(response => console.log(response.message))
                             .catch(e => {
-                                console.error(e)
                                 Alert.alert("INE", "Hubo un problema al subir tu documento, vuelve a intentarlo.")
-                                this.setState({isLoading: false, errorUploading: true});
+                                hasError = true;
                             });
 
                         // ADDRESS UPLOAD
@@ -83,9 +82,8 @@ class DocumentosStep4Screen extends React.Component {
                         await UserService.storeDocuments(file2)
                             .then(response => console.log(response.message))
                             .catch(e => {
-                                console.error(e)
                                 Alert.alert("RFC", "Hubo un problema al subir tu documento, vuelve a intentarlo.")
-                                this.setState({isLoading: false, errorUploading: true});
+                                hasError = true;
                             });
 
                         // CLABE UPLOAD
@@ -99,9 +97,8 @@ class DocumentosStep4Screen extends React.Component {
                         await UserService.storeDocuments(file3)
                             .then(response => console.log(response.message))
                             .catch(e => {
-                                console.error(e)
                                 Alert.alert("CLABE", "Hubo un problema al subir tu documento, vuelve a intentarlo.")
-                                this.setState({isLoading: false, errorUploading: true});
+                                hasError = true;
                             });
 
                         // PROFILE PHOTO UPLOAD
@@ -115,15 +112,16 @@ class DocumentosStep4Screen extends React.Component {
                         await UserService.storeDocuments(file4)
                             .then(response => console.log(response.message))
                             .catch(e => {
-                                console.error(e)
                                 Alert.alert("Foto de perfil", "Hubo un problema al subir tu documento, vuelve a intentarlo.")
-                                this.setState({isLoading: false, errorUploading: true});
+                                hasError = true;
                             });
 
                         // REDIRECT
-                        if(!this.state.errorUploading) {
+                        if(!hasError) {
+                            this.setState({isLoading: false});
                             this.props.navigation.navigate("DocumentosSuccess");
                         } else {
+                            this.setState({isLoading: false, errorUploading: true});
                             this.props.navigation.navigate("DocumentosStep1");
                         }
                     }

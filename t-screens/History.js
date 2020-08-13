@@ -1,21 +1,33 @@
 import React from "react";
 import { StyleSheet, Dimensions, ScrollView, Image, StatusBar, View } from "react-native";
-import { Block, theme, Text, Button } from "galio-framework";
-
-import { TabBarTayder, Switch } from "../components";
-import { Images, nowTheme } from '../constants/';
+import { Block, theme, Text } from "galio-framework";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-const { width } = Dimensions.get("screen");
+import Actions from '../lib/actions';
+import { TabBarTayder, Switch } from "../components";
+import { Images, nowTheme } from '../constants/';
+
+const { height, width } = Dimensions.get("screen");
+const smallScreen = height < 812 ? true : false;
 
 class HistoryTayder extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            userData: null,
+            tayderName: '',
             showInfo: false,
             isOnline: true,
             statusText: 'En Línea',
         };
+    }
+
+    async componentDidMount() {
+        await Actions.extractUserData().then((result) => {
+          if (result != null) {
+            this.setState({userData: result.user, tayderName: result.user.info.name});
+          }
+        });
     }
 
     _changeStatus = (switchValue) => {
@@ -29,14 +41,14 @@ class HistoryTayder extends React.Component {
                 <Block flex>
                     <StatusBar barStyle="light-content" />
                     <Block row style={{ paddingTop: 10 }}>
-                        <Image source={Images.ProfilePicture} style={{ borderRadius: 50, height: 60, width: 60, marginHorizontal: 25 }} />
+                        <Image source={Images.ProfilePicture} style={{ borderRadius: 25, height: 60, width: 60, marginHorizontal: 25 }} />
                         <Block flex>
-                            <Text style={styles.nameTitle}>Christopher</Text>
-                            <Block row style={{ paddingTop: 10 }}>
+                            <Text style={styles.nameTitle}>{this.state.tayderName}</Text>
+                            <Block row style={{paddingTop: 10, justifyContent: "space-between"}}>
                                 <Text style={[styles.statusText, this.state.isOnline ? styles.statusOnline : styles.statusOffline]}>{this.state.statusText}</Text>
                                 <Switch
                                     value={this.state.isOnline}
-                                    style={{ transform: [{ scaleX: 1.6 }, { scaleY: 1.6 }], paddingLeft: 80, marginTop: -10 }}
+                                    style={{marginRight: 20, marginTop: -10}}
                                     onValueChange={this._changeStatus}
                                 />
                             </Block>
@@ -169,7 +181,7 @@ const styles = StyleSheet.create({
     historyTitle: {
         fontFamily: 'trueno-extrabold',
         color: nowTheme.COLORS.SECONDARY,
-        fontSize: 24,
+        fontSize: smallScreen ? 21 : 24,
         textAlign: 'left',
     },
     historySubtitle: {

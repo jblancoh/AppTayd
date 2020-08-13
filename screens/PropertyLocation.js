@@ -81,7 +81,14 @@ class PropertyLocationScreen extends React.Component {
                   <MapView.Marker
                     key={0}
                     draggable={true}
-                    onDragEnd={(e) => this.setState({location: e.nativeEvent.coordinate})}
+                    onDragEnd={(e) => this.setState({
+                      location: {
+                        coords: {
+                          latitude: e.nativeEvent.coordinate.latitude,
+                          longitude: e.nativeEvent.coordinate.longitude,
+                        }
+                      } 
+                    })}
                     coordinate={{
                       latitude: location.coords.latitude,
                       longitude: location.coords.longitude,

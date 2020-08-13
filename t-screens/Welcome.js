@@ -13,6 +13,7 @@ import nowTheme from "../constants/Theme";
 import Images from "../constants/Images";
 
 const { height, width } = Dimensions.get("screen");
+const smallScreen = height < 812 ? true : false;
 
 class WelcomeScreen extends React.Component {
     constructor(props) {
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     padded: {
-        top: 360,
+        top: smallScreen ? 250 : 360,
         justifyContent: 'center',
         alignSelf: 'center',
         paddingHorizontal: theme.SIZES.BASE * 0.8,
@@ -89,7 +90,7 @@ const styles = StyleSheet.create({
     successTitle: {
         fontFamily: 'trueno-extrabold',
         color: nowTheme.COLORS.WHITE,
-        fontSize: 45,
+        fontSize: smallScreen ? 38 : 45,
         textAlign: 'center',
     },
 

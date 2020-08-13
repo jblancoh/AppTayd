@@ -1,21 +1,29 @@
 import React from "react";
-import { StyleSheet, Dimensions, ImageBackground, Image, StatusBar, View } from "react-native";
+import { StyleSheet, Dimensions, AsyncStorage, Image, StatusBar, View } from "react-native";
 import { Block, theme, Text, Button } from "galio-framework";
 import Carousel from 'react-native-snap-carousel';
 
 import { TabBarTayder, Switch } from "../components";
 import { Images, nowTheme } from '../constants/';
+import Actions from '../lib/actions';
+import UserService from '../services/user';
 
-const { width } = Dimensions.get("screen");
+const { height, width } = Dimensions.get("screen");
+const smallScreen = height < 812 ? true : false;
 
 export default class HomeTayder extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      userData: null,
+      tayderName: '',
+      isFirstLogin: true,
       isOnline: true,
-      hasAcceptButton: true,
+      isLoading: false,
       statusText: 'En Línea',
+
       activeIndex: 0,
+      hasAcceptButton: true,
       carouselIntroItems: [
         { image: Images.CarouselIndicador01 },
         { image: Images.CarouselIndicador02 },
@@ -27,6 +35,26 @@ export default class HomeTayder extends React.Component {
         { image: Images.CarouselIndicador08 },
       ]
     };
+  }
+
+  async componentDidMount() {
+    await Actions.extractUserData().then((result) => {
+      if (result != null) {
+        this.setState({userData: result.user, isFirstLogin: result.user.first_login_tayder, tayderName: result.user.info.name});
+      }
+    });
+  }
+
+  async _updateFirstLogin() {
+    this.setState({hasAcceptButton : false, isLoading: true});
+
+    await UserService.firstLoginTayder(this.state.userData.id)
+      .then(async (response) => {
+        await Actions.removeUserData().then(() => {});
+        await AsyncStorage.setItem('user', JSON.stringify(response));
+        this.setState({isLoading: false, userData: response, isFirstLogin: response.first_login_tayder, tayderName: response.info.name});
+      })
+      .catch(e => console.error(e));
   }
 
   _changeStatus = (switchValue) => {
@@ -52,9 +80,9 @@ export default class HomeTayder extends React.Component {
       <View style={styles.blocksContainer}>
         <Block flex>
           <Block row style={{paddingTop: 10}}>
-            <Image source={Images.ProfilePicture} style={{borderRadius: 60, height: 60, width: 60, marginHorizontal: 25}} />
+            <Image source={Images.ProfilePicture} style={{borderRadius: 25, height: 60, width: 60, marginHorizontal: 25}} />
             <Block flex>
-              <Text style={styles.nameTitle}>Christopher</Text>
+              <Text style={styles.nameTitle}>{this.state.tayderName}</Text>
               <Block row style={{paddingTop: 10, justifyContent: "space-between"}}>
                 <Text style={[styles.statusText, this.state.isOnline ? styles.statusOnline : styles.statusOffline]}>{this.state.statusText}</Text>
                 <Switch
@@ -68,7 +96,7 @@ export default class HomeTayder extends React.Component {
 
           <Block middle style={{paddingVertical: 25}}>
             {
-              this.state.hasAcceptButton ? (
+              this.state.hasAcceptButton && this.state.isFirstLogin ? (
                 <Carousel
                   layout={"default"}
                   data={this.state.carouselIntroItems}
@@ -100,15 +128,17 @@ export default class HomeTayder extends React.Component {
         {this.renderBlocks()}
 
         {
-          this.state.hasAcceptButton ? (
+          this.state.hasAcceptButton && this.state.isFirstLogin ? (
             <Block style={{width: '100%', justifyContent: 'center', alignItems: 'center', paddingBottom: 20 }}>
               {
                 this.state.activeIndex == 7 && (
                   <Button
                     round
+                    loading={this.state.isLoading}
+                    disabled={this.state.isLoading}
                     color={nowTheme.COLORS.BASE}
                     style={styles.button}
-                    onPress={() => this.setState({hasAcceptButton : false})}>
+                    onPress={() => this._updateFirstLogin()}>
                     <Text style={{fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
                       EMPEZAR
                     </Text>
@@ -169,17 +199,17 @@ const styles = StyleSheet.create({
     backgroundColor: nowTheme.COLORS.WHITE,
     borderRadius: 25,
     width: '90%',
-    height: 600,
+    height: smallScreen ? 480 : 600,
   },
   title: {
-    fontFamily: 'trueno-semibold',
+    fontFamily: 'trueno',
     fontSize: 35,
     lineHeight: 33,
     textAlign: 'center',
     color: nowTheme.COLORS.BASE
   },
   subtitle: {
-    fontFamily: 'trueno',
+    fontFamily: 'trueno-light',
     fontSize: 14,
     lineHeight: 16,
     textAlign: 'center',

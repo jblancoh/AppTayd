@@ -8,6 +8,7 @@ const TaydLogoGris        = require('../assets/imgs/tayd-logo-gris.png');
 const TaydRegistro        = require('../assets/imgs/tayd-registro.png');
 const TaydAyuda           = require('../assets/imgs/tayd-ayuda.jpg');
 const TaydAyudaCita       = require('../assets/imgs/tayd-ayuda-cita.jpg');
+const TaydAyudaPasos      = require('../assets/imgs/tayd-pasos.png');
 const ProfileBackground   = require('../assets/imgs/tayd-lights.jpg');
 const ProfilePicture      = require('../assets/imgs/profile-img.jpg');
 const LightsBackground    = require('../assets/imgs/tayd-lights.jpg');
@@ -133,6 +134,7 @@ export default {
   TaydRegistro,
   TaydAyuda,
   TaydAyudaCita,
+  TaydAyudaPasos,
   LogoTayder,
   ProfileBackground,
   ProfilePicture,

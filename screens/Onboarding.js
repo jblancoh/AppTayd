@@ -57,7 +57,7 @@ export default class Onboarding extends React.Component {
           this.props.navigation.navigate('DocumentosIndex');
         } else if(result.user.first_login_tayder && result.user.isTayder && !result.user.confirmed && result.user.on_review) {
           console.log("Documentos en revisión....")
-        } else if(result.user.first_login_tayder && result.user.isTayder && result.use.confirmed) {
+        } else if(result.user.first_login_tayder && result.user.isTayder && result.user.confirmed) {
           this.props.navigation.navigate('Welcome');
         } else if(!result.user.first_login_tayder && result.user.isTayder) {
           this.props.navigation.navigate('HomeTayder');
