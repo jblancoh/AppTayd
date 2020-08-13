@@ -49,6 +49,9 @@ import GeneraIngresoIndexScreen from '../screens/generarIngresos/Index';
 import SoporteIndexScreen from '../screens/soporte/Index';
 import SoporteCitaScreen from '../screens/soporte/Cita';
 
+import SoporteTayderIndexScreen from '../t-screens/soporte/Index';
+import SoporteTayderGuiaBasicaScreen from '../t-screens/soporte/GuiaBasica';
+
 // drawer
 import Drawer from './Drawer';
 import DrawerTayder from './DrawerTayder';
@@ -223,6 +226,30 @@ const Drawer2 = createDrawerNavigator(
           <DrawerItem focused={focused} screen="HomeTayder" title="Inicio" />
         )
       })
+    },
+    HistoryTayder: {
+      screen: HistoryTayder,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+    EarningsTayder: {
+      screen: EarningsTayder,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+    SoporteTayder: {
+      screen: SoporteTayderIndexScreen,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+    SoporteTayderGuiaBasica: {
+      screen: SoporteTayderGuiaBasicaScreen,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
     },
   },
   {

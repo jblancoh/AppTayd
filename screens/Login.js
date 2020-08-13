@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, StyleSheet, StatusBar, Dimensions, TouchableHighlight, View , TouchableWithoutFeedback, Keyboard, Alert, AsyncStorage, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { Block, Button, Text, theme } from 'galio-framework';
-import {  Input } from '../components';
+import { Input } from '../components';
 
 import { Images, nowTheme } from '../constants/';
 import AuthenticationService from '../services/authentication';
@@ -57,7 +57,7 @@ class LoginScreen extends React.Component {
               this.props.navigation.navigate('DocumentosIndex');
             } else if(response.user.first_login_tayder && response.user.isTayder && !response.user.confirmed && response.user.on_review) {
               Alert.alert('Inicio de sesión', 'Tu cuenta se encuentra en verificación, el equipo tayder te contactará cuando tu cuenta se encuentra validada.');
-            } else if(response.user.first_login_tayder && response.user.isTayder && response.use.confirmed) {
+            } else if(response.user.first_login_tayder && response.user.isTayder && response.user.confirmed) {
               this.props.navigation.navigate('Welcome');
             } else if(!response.user.first_login_tayder && response.user.isTayder) {
               this.props.navigation.navigate('HomeTayder');

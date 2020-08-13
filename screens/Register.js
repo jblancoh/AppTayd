@@ -53,7 +53,8 @@ class RegisterScreen extends React.Component {
     await AuthenticationService.signup(params)
       .then(async (response) => {
         this.setState({ isLoading: false, email: '', password: '', name: '', last_name: '', phone: '' });
-        this.props.navigation.navigate('Onboarding', {hasMessage: true, message: 'Registro exitoso!'});
+        Alert.alert("Registro", "Se ha registrado tu cuenta exitosamente, inicia sesión para acceder a Tayd.")
+        this.props.navigation.navigate('Login', {hasMessage: true, message: 'Registro exitoso!'});
       })
       .catch(error => {
         this.setState({ isLoading: false });

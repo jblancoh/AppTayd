@@ -1,20 +1,32 @@
 import React from "react";
-import { StyleSheet, Dimensions, ImageBackground, Image, StatusBar, View } from "react-native";
-import { Block, theme, Text, Button } from "galio-framework";
-import Carousel from 'react-native-snap-carousel';
+import { StyleSheet, Dimensions, Image, StatusBar, View } from "react-native";
+import { Block, theme, Text } from "galio-framework";
 
 import { TabBarTayder, Switch } from "../components";
 import { Images, nowTheme } from '../constants/';
+import Actions from '../lib/actions';
+import { ScrollView } from "react-native-gesture-handler";
 
-const { width } = Dimensions.get("screen");
+const { height, width } = Dimensions.get("screen");
+const smallScreen = height < 812 ? true : false;
 
 export default class EarningsTayder extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            userData: null,
+            tayderName: '',
             isOnline: true,
             statusText: 'En Línea',
         };
+    }
+
+    async componentDidMount() {
+        await Actions.extractUserData().then((result) => {
+          if (result != null) {
+            this.setState({userData: result.user, tayderName: result.user.info.name});
+          }
+        });
     }
 
     _changeStatus = (switchValue) => {
@@ -27,39 +39,40 @@ export default class EarningsTayder extends React.Component {
             <View style={styles.blocksContainer}>
                 <Block flex>
                     <Block row style={{ paddingTop: 10 }}>
-                        <Image source={Images.ProfilePicture} style={{ borderRadius: 50, height: 60, width: 60, marginHorizontal: 25 }} />
+                        <Image source={Images.ProfilePicture} style={{ borderRadius: 25, height: 60, width: 60, marginHorizontal: 25 }} />
                         <Block flex>
-                            <Text style={styles.nameTitle}>Christopher</Text>
-                            <Block row style={{ paddingTop: 10 }}>
+                            <Text style={styles.nameTitle}>{this.state.tayderName}</Text>
+                            <Block row style={{paddingTop: 10, justifyContent: "space-between"}}>
                                 <Text style={[styles.statusText, this.state.isOnline ? styles.statusOnline : styles.statusOffline]}>{this.state.statusText}</Text>
                                 <Switch
                                     value={this.state.isOnline}
-                                    style={{ transform: [{ scaleX: 1.6 }, { scaleY: 1.6 }], paddingLeft: 80, marginTop: -10 }}
+                                    style={{marginRight: 20, marginTop: -10}}
                                     onValueChange={this._changeStatus}
                                 />
                             </Block>
                         </Block>
                     </Block>
 
-                    <Block style={{paddingTop: 25, paddingHorizontal: 20}}>
-                        <Text style={[styles.title2, { color: nowTheme.COLORS.WHITE }]}>Haz</Text>
-                        <Text style={[styles.title2, { color: nowTheme.COLORS.WHITE }]}>realizado</Text>
-                        <Text style={[styles.title2, { color: nowTheme.COLORS.BASE }]}>13 servicios</Text>
-                        <Text style={[styles.title2, { color: nowTheme.COLORS.WHITE }]}>hasta hoy</Text>
-                    </Block>
-
-                    <Block middle style={{ paddingVertical: 25 }}>
-                        <Block style={styles.cardContainer}>
-                            <Text style={styles.title}>$895.90</Text>
-                            <Text style={styles.subtitle}>Ingreso acumulado</Text>
+                    <ScrollView>
+                        <Block style={{paddingTop: 25, paddingHorizontal: 20}}>
+                            <Text style={[styles.title2, { color: nowTheme.COLORS.WHITE }]}>Haz</Text>
+                            <Text style={[styles.title2, { color: nowTheme.COLORS.WHITE }]}>realizado</Text>
+                            <Text style={[styles.title2, { color: nowTheme.COLORS.BASE }]}>13 servicios</Text>
+                            <Text style={[styles.title2, { color: nowTheme.COLORS.WHITE }]}>hasta hoy</Text>
                         </Block>
-                    </Block>
 
-                    <Block style={{ paddingTop: 25, paddingHorizontal: 20 }}>
-                        <Text style={styles.subtitle2}>Revisa tu historial de servicios para más detalles</Text>
-                        <Text style={styles.subtitle3}>Los cortes se realizan cada lunes</Text>
-                    </Block>
+                        <Block middle style={{ paddingVertical: 25 }}>
+                            <Block style={styles.cardContainer}>
+                                <Text style={styles.title}>$895.90</Text>
+                                <Text style={styles.subtitle}>Ingreso acumulado</Text>
+                            </Block>
+                        </Block>
 
+                        <Block style={{ paddingTop: 25, paddingHorizontal: 20 }}>
+                            <Text style={styles.subtitle2}>Revisa tu historial de servicios para más detalles</Text>
+                            <Text style={styles.subtitle3}>Los cortes se realizan cada lunes</Text>
+                        </Block>
+                    </ScrollView>
                 </Block>
             </View>
         );
@@ -117,7 +130,7 @@ const styles = StyleSheet.create({
     cardContainer: {
         justifyContent: 'center',
         alignItems: 'center',
-        paddingHorizontal: 10,
+        padding: 10,
 
         backgroundColor: nowTheme.COLORS.WHITE,
         borderRadius: 25,
@@ -125,7 +138,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontFamily: 'trueno-extrabold',
-        fontSize: 60,
+        fontSize: smallScreen ? 50 : 60,
         textAlign: 'center',
         color: nowTheme.COLORS.BASE
     },
@@ -139,21 +152,20 @@ const styles = StyleSheet.create({
 
     title2: {
         fontFamily: 'trueno-extrabold',
-        fontSize: 50,
-        lineHeight: 49,
+        fontSize: smallScreen ? 45 : 50,
+        lineHeight: smallScreen ? 44 : 49,
     },
     subtitle2: {
         fontFamily: 'trueno-light',
-        fontSize: 34,
+        fontSize: smallScreen ? 32 : 34,
         lineHeight: 35,
         marginBottom: 20,
         color: nowTheme.COLORS.WHITE,
     },
     subtitle3: {
         fontFamily: 'trueno-light',
-        fontSize: 19,
+        fontSize: smallScreen ? 16 : 19,
         lineHeight: 33,
-        textAlign: 'center',
         color: nowTheme.COLORS.WHITE,
     },
 });

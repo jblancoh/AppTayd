@@ -8,8 +8,15 @@ function storeDocuments(objDocument) {
     });
 }
 
+function firstLoginTayder(userId) {
+    return request({
+        url: `users/first-login-tayder/${userId}`,
+        method: 'GET'
+    })
+}
+
 const UserService = {
-    storeDocuments,
+    storeDocuments, firstLoginTayder
 }
 
 export default UserService;
