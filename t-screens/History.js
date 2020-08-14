@@ -6,6 +6,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import Actions from '../lib/actions';
 import { TabBarTayder, Switch } from "../components";
 import { Images, nowTheme } from '../constants/';
+import ServicesService from "../services/service";
 
 const { height, width } = Dimensions.get("screen");
 const smallScreen = height < 812 ? true : false;
@@ -19,15 +20,61 @@ class HistoryTayder extends React.Component {
             showInfo: false,
             isOnline: true,
             statusText: 'En Línea',
+
+            weekDay         : ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+            months          : ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
+            services        : [],
         };
     }
 
     async componentDidMount() {
+        const { navigation } = this.props;
+
         await Actions.extractUserData().then((result) => {
           if (result != null) {
             this.setState({userData: result.user, tayderName: result.user.info.name});
+            this._getServices();
           }
         });
+
+        this.focusListener = await navigation.addListener('didFocus', () => {
+            this._getServices();
+        });
+    }
+
+    componentWillUnmount() {
+        this.focusListener.remove();
+    }
+
+    async _getServices() {
+        await ServicesService.listTayderHistory(this.state.userData.id)
+            .then(response => {
+                this.setState({services : response})
+            })
+            .catch(error => {
+                console.error(error);
+                Alert.alert("No se encontraron servicios vinculados a este usuario.");
+            })
+    }
+
+    formatDateTime = (item) => {
+        let arrItem = item.dt_request.split(" ");
+        let arrDate = arrItem[0].split("-");
+        let arrTime = arrItem[1].split(":");
+
+        let datetime    = new Date(Number(arrDate[0]), Number(arrDate[1]) - 1, Number(arrDate[2]), Number(arrTime[0]), Number(arrTime[1]));
+        let week        = this.state.weekDay[datetime.getDay()];
+        let month       = this.state.months[datetime.getMonth()];
+        let type        = "a.m.";
+        let minutes     = datetime.getMinutes() < 10 ? `0${datetime.getMinutes()}` : datetime.getMinutes();
+        let hour        = datetime.getHours();
+
+        if(hour >= 12) {
+            if(hour > 12) hour    -= 12;
+            type    = "p.m.";
+        }
+
+        return `${week}, ${datetime.getDate()} de ${month} de ${datetime.getFullYear()}, ${hour}:${minutes} ${type}`;
     }
 
     _changeStatus = (switchValue) => {
@@ -55,64 +102,79 @@ class HistoryTayder extends React.Component {
                         </Block>
                     </Block>
 
-                    <Block flex style={styles.emptyContainer}>
-                        <Text style={styles.redText}>Aún no cuentas con historial</Text>
-                    </Block>
-
-                    <Block flex>
-                        <Block middle style={styles.cardContainer}>
-                            <Block row style={{ width: width - theme.SIZES.BASE * 3, paddingVertical: 20, paddingHorizontal: 10 }}>
-                                <Block style={{ justifyContent: 'flex-start', alignContent: 'center' }}>
-                                    <Image source={require('../assets/icons/T-Calendar.png')} style={{ width: 65, height: 65 }} />
-                                </Block>
-
-                                <View style={{ width: 250, paddingHorizontal: 15 }}>
-                                    <Text style={[styles.historyTitle]}>Servicio concluido</Text>
-                                    <Text style={[styles.historySubtitle]} color={nowTheme.COLORS.SECONDARY}>
-                                        Domingo, 15 de marzo de 2020, 2:00 p.m.
-                                    </Text>
-                                    <Block middle style={[styles.section, this.state.showInfo && styles.divider]}>
-                                        <Text style={[styles.historySubtitleBold]} color={nowTheme.COLORS.BASE}>
-                                            $105.90 Ganancia
-                                        </Text>
-
-                                        {
-                                            !this.state.showInfo && (
-                                                <TouchableOpacity onPress={() => this.setState({ showInfo: true })}>
-                                                    <Image source={Images.Icons.FlechaAbajo} style={{ width: 25, height: 25 }} />
-                                                </TouchableOpacity>
-                                            )
-                                        }
-                                    </Block>
-
-                                    {
-                                        this.state.showInfo && (
-                                            <View>
-                                                <Block style={styles.divider}>
-                                                    <Text style={styles.historySubtitleBold}>Comentarios:</Text>
-                                                    <Text style={styles.historySubtitle}>Muy buen servicio, pero algo lento, ojalá pudieran organizar los horarios de servicio, saludos.</Text>
-                                                </Block>
-                                                <Text style={[styles.historySubtitle, styles.divider]} color={nowTheme.COLORS.BASE}>
-                                                    Se llevaron insumos.
-                                                </Text>
-
-
-                                                <Block middle style={[styles.section, { alignItems: 'flex-end' }]}>
-                                                    <View>
-                                                        <Text style={styles.historySubtitleBold}>Tiempo de limpieza:</Text>
-                                                        <Text style={styles.historySubtitle}>1 hora con 30 minutos.</Text>
-                                                    </View>
-                                                    <TouchableOpacity style={{ marginLeft: 20, marginBottom: 10 }} onPress={() => this.setState({ showInfo: false })}>
-                                                        <Image source={Images.Icons.FlechaArriba} style={{ width: 25, height: 25 }} />
-                                                    </TouchableOpacity>
-                                                </Block>
-                                            </View>
-                                        )
-                                    }
-                                </View>
+                    {
+                        this.state.services.length == 0 && (
+                            <Block flex style={styles.emptyContainer}>
+                                <Text style={styles.redText}>Aún no cuentas con historial</Text>
                             </Block>
-                        </Block>
-                    </Block>
+                        )
+                    }
+
+                    <View style={{height: height * 0.72}}>
+                        <ScrollView>
+                        {
+                            this.state.services.map((item) => {
+                                return (
+                                    <Block flex key={item.id} style={{marginTop: 20}}>
+                                        <Block middle style={styles.cardContainer}>
+                                            <Block row style={{ width: width - theme.SIZES.BASE * 3, paddingVertical: 20, paddingHorizontal: 10 }}>
+                                                <Block style={{ justifyContent: 'flex-start', alignContent: 'center' }}>
+                                                    <Image source={require('../assets/icons/T-Calendar.png')} style={{ width: 65, height: 65 }} />
+                                                </Block>
+
+                                                <View style={{ width: 250, paddingHorizontal: 15 }}>
+                                                    <Text style={[styles.historyTitle]}>Servicio concluido</Text>
+                                                    <Text style={[styles.historySubtitleLight]} color={nowTheme.COLORS.SECONDARY}>
+                                                        { this.formatDateTime(item) }
+                                                    </Text>
+                                                    <Block middle style={[styles.section, this.state.showInfo && styles.divider, {marginTop: 15}]}>
+                                                        <Text style={[styles.historySubtitleRedBold]}>
+                                                            ${parseFloat(item.service_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} <Text style={[styles.historySubtitleRedBold, {fontSize: 16}]}>Ganancia</Text>
+                                                        </Text>
+
+                                                        {
+                                                            !this.state.showInfo && (
+                                                                <TouchableOpacity onPress={() => this.setState({ showInfo: true })}>
+                                                                    <Image source={Images.Icons.FlechaAbajo} style={{ width: 25, height: 25 }} />
+                                                                </TouchableOpacity>
+                                                            )
+                                                        }
+                                                    </Block>
+
+                                                    {
+                                                        this.state.showInfo && (
+                                                            <View>
+                                                                <Block style={styles.divider}>
+                                                                    <Text style={styles.historySubtitleBold}>Comentarios:</Text>
+                                                                    <Text style={styles.historySubtitle}>Muy buen servicio, pero algo lento, ojalá pudieran organizar los horarios de servicio, saludos.</Text>
+                                                                </Block>
+
+                                                                <Text style={[styles.historyConsumables, styles.divider]}>
+                                                                    {item.has_consumables ? 'Se llevaron insumos.' : 'No se llevaron insumos.'}
+                                                                </Text>
+
+                                                                <Block middle style={[styles.section, { alignItems: 'flex-end' }]}>
+                                                                    <View>
+                                                                        <Text style={styles.historySubtitleBold}>Tiempo de limpieza:</Text>
+                                                                        <Text style={styles.historySubtitle}>1 hora con 30 minutos.</Text>
+                                                                    </View>
+                                                                    <TouchableOpacity style={{ marginLeft: 20, marginBottom: 10 }} onPress={() => this.setState({ showInfo: false })}>
+                                                                        <Image source={Images.Icons.FlechaArriba} style={{ width: 25, height: 25 }} />
+                                                                    </TouchableOpacity>
+                                                                </Block>
+                                                            </View>
+                                                        )
+                                                    }
+                                                </View>
+                                            </Block>
+                                        </Block>
+                                    </Block>
+                                )
+                            })
+                        }
+                        </ScrollView>
+                    </View>
+
                 </Block>
             </ScrollView>
         );
@@ -186,14 +248,36 @@ const styles = StyleSheet.create({
     },
     historySubtitle: {
         fontFamily: 'trueno',
-        fontSize: 14,
+        fontSize: 16,
+        lineHeight: 19,
         color: nowTheme.COLORS.SECONDARY,
         textAlign: 'left',
     },
-    historySubtitleBold: {
-        fontFamily: 'trueno-extrabold',
+    historySubtitleLight: {
+        fontFamily: 'trueno-light',
+        fontSize: 16,
+        lineHeight: 17,
         color: nowTheme.COLORS.SECONDARY,
-        fontSize: 14,
+        textAlign: 'left',
+    },
+    historyConsumables: {
+        fontFamily: 'trueno-semibold',
+        fontSize: 18,
+        color: nowTheme.COLORS.BASE,
+        textAlign: 'left',
+    },
+    historySubtitleBold: {
+        fontFamily: 'trueno-semibold',
+        color: nowTheme.COLORS.SECONDARY,
+        fontSize: 18,
+        lineHeight: 22,
+        textAlign: 'left',
+    },
+    historySubtitleRedBold: {
+        fontFamily: 'trueno-extrabold',
+        color: nowTheme.COLORS.BASE,
+        fontSize: 22,
+        lineHeight: 22,
         textAlign: 'left',
     },
     section: {

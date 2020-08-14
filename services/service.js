@@ -21,6 +21,20 @@ function listHistory(id) {
     });
 }
 
+function listTayderHistory(id) {
+    return request({
+        url: `services/list-tayder-history/${id}`,
+        method: 'GET'
+    });
+}
+
+function getUserEarnings(id) {
+    return request({
+        url: `services/earnings/${id}`,
+        method: 'GET'
+    });
+}
+
 function store(objService) {
     return request({
         url: 'services',
@@ -37,7 +51,7 @@ function getUserPaymentMethods(id) {
 }
 
 const ServicesService = {
-    get, listScheduled, listHistory, store, getUserPaymentMethods,
+    get, listScheduled, listHistory, store, getUserPaymentMethods, listTayderHistory, getUserEarnings
 }
 
 export default ServicesService;
