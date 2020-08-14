@@ -1,11 +1,12 @@
 import React from "react";
 import { StyleSheet, Dimensions, Image, StatusBar, View } from "react-native";
 import { Block, theme, Text } from "galio-framework";
+import { ScrollView } from "react-native-gesture-handler";
 
 import { TabBarTayder, Switch } from "../components";
 import { Images, nowTheme } from '../constants/';
 import Actions from '../lib/actions';
-import { ScrollView } from "react-native-gesture-handler";
+import ServicesService from '../services/service';
 
 const { height, width } = Dimensions.get("screen");
 const smallScreen = height < 812 ? true : false;
@@ -18,15 +19,35 @@ export default class EarningsTayder extends React.Component {
             tayderName: '',
             isOnline: true,
             statusText: 'En Línea',
+            countServices: 0,
+            totalServices: 0
         };
     }
 
     async componentDidMount() {
+        const { navigation } = this.props;
+
         await Actions.extractUserData().then((result) => {
           if (result != null) {
             this.setState({userData: result.user, tayderName: result.user.info.name});
           }
         });
+
+        await this._getEarnings()
+
+        this.focusListener = await navigation.addListener('didFocus', () => {
+            this._getEarnings();
+        });
+    }
+
+    componentWillUnmount() {
+        this.focusListener.remove();
+    }
+
+    async _getEarnings() {
+        await ServicesService.getUserEarnings(this.state.userData.id)
+            .then(response => this.setState({countServices: response.count, totalServices: parseFloat(response.subtotal)}))
+            .catch(error => console.error(error));
     }
 
     _changeStatus = (switchValue) => {
@@ -35,6 +56,7 @@ export default class EarningsTayder extends React.Component {
     }
 
     renderBlocks() {
+        let {countServices, totalServices} = this.state;
         return (
             <View style={styles.blocksContainer}>
                 <Block flex>
@@ -57,13 +79,13 @@ export default class EarningsTayder extends React.Component {
                         <Block style={{paddingTop: 25, paddingHorizontal: 20}}>
                             <Text style={[styles.title2, { color: nowTheme.COLORS.WHITE }]}>Haz</Text>
                             <Text style={[styles.title2, { color: nowTheme.COLORS.WHITE }]}>realizado</Text>
-                            <Text style={[styles.title2, { color: nowTheme.COLORS.BASE }]}>13 servicios</Text>
+                            <Text style={[styles.title2, { color: nowTheme.COLORS.BASE }]}>{countServices} servicios</Text>
                             <Text style={[styles.title2, { color: nowTheme.COLORS.WHITE }]}>hasta hoy</Text>
                         </Block>
 
                         <Block middle style={{ paddingVertical: 25 }}>
                             <Block style={styles.cardContainer}>
-                                <Text style={styles.title}>$895.90</Text>
+                                <Text style={styles.title}>${totalServices.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</Text>
                                 <Text style={styles.subtitle}>Ingreso acumulado</Text>
                             </Block>
                         </Block>
@@ -138,7 +160,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontFamily: 'trueno-extrabold',
-        fontSize: smallScreen ? 50 : 60,
+        fontSize: smallScreen ? 50 : 55,
         textAlign: 'center',
         color: nowTheme.COLORS.BASE
     },
