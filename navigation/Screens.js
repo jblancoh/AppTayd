@@ -27,6 +27,7 @@ import WelcomeScreen from '../t-screens/Welcome';
 import HomeTayder from '../t-screens/Home';
 import EarningsTayder from '../t-screens/Earnings';
 import HistoryTayder from '../t-screens/History';
+import ServiceInfoTayder from '../t-screens/ServiceInfo';
 
 import AgendaIndexScreen from '../screens/agenda/Index';
 import AgendaFechaScreen from '../screens/agenda/DateAddressConf';
@@ -229,6 +230,12 @@ const Drawer2 = createDrawerNavigator(
     },
     HistoryTayder: {
       screen: HistoryTayder,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+    ServiceInfoTayder: {
+      screen: ServiceInfoTayder,
       navigationOptions: {
         drawerLabel: () => { }
       }

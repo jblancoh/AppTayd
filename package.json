@@ -22,6 +22,7 @@
     "expo-permissions": "~7.0.0",
     "form-data": "^3.0.0",
     "galio-framework": "^0.6.3",
+    "moment": "^2.27.0",
     "prop-types": "^15.7.2",
     "pusher-js": "^7.0.0",
     "react": "16.8.3",

@@ -75,6 +75,7 @@ const Icons = {
   MujerPerfil : require('../assets/icons/mujer_perfil.png'),
 
   Ubicacion   : require('../assets/icons/T-Ubicacion.png'),
+  Ubicacion2  : require('../assets/icons/T-Ubicacion2.png'),
   Perfil      : require('../assets/icons/T-perfil.png'),
   Pagos       : require('../assets/icons/T-Pagos.png'),
   Idioma      : require('../assets/icons/T-Idioma.png'),

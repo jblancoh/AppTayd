@@ -1,10 +1,9 @@
 import React from "react";
 import { StyleSheet, Dimensions, ScrollView, Image, StatusBar, View } from "react-native";
 import { Block, theme, Text } from "galio-framework";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 import Actions from '../lib/actions';
-import { TabBarTayder, Switch } from "../components";
+import { TabBarTayder, Switch, ServiceCardHistoryTayder } from "../components";
 import { Images, nowTheme } from '../constants/';
 import ServicesService from "../services/service";
 
@@ -57,26 +56,6 @@ class HistoryTayder extends React.Component {
             })
     }
 
-    formatDateTime = (item) => {
-        let arrItem = item.dt_request.split(" ");
-        let arrDate = arrItem[0].split("-");
-        let arrTime = arrItem[1].split(":");
-
-        let datetime    = new Date(Number(arrDate[0]), Number(arrDate[1]) - 1, Number(arrDate[2]), Number(arrTime[0]), Number(arrTime[1]));
-        let week        = this.state.weekDay[datetime.getDay()];
-        let month       = this.state.months[datetime.getMonth()];
-        let type        = "a.m.";
-        let minutes     = datetime.getMinutes() < 10 ? `0${datetime.getMinutes()}` : datetime.getMinutes();
-        let hour        = datetime.getHours();
-
-        if(hour >= 12) {
-            if(hour > 12) hour    -= 12;
-            type    = "p.m.";
-        }
-
-        return `${week}, ${datetime.getDate()} de ${month} de ${datetime.getFullYear()}, ${hour}:${minutes} ${type}`;
-    }
-
     _changeStatus = (switchValue) => {
         let message = switchValue ? 'En Línea' : 'Desconectado';
         this.setState({ isOnline: !this.state.isOnline, statusText: message });
@@ -115,60 +94,7 @@ class HistoryTayder extends React.Component {
                         {
                             this.state.services.map((item) => {
                                 return (
-                                    <Block flex key={item.id} style={{marginTop: 20}}>
-                                        <Block middle style={styles.cardContainer}>
-                                            <Block row style={{ width: width - theme.SIZES.BASE * 3, paddingVertical: 20, paddingHorizontal: 10 }}>
-                                                <Block style={{ justifyContent: 'flex-start', alignContent: 'center' }}>
-                                                    <Image source={require('../assets/icons/T-Calendar.png')} style={{ width: 65, height: 65 }} />
-                                                </Block>
-
-                                                <View style={{ width: 250, paddingHorizontal: 15 }}>
-                                                    <Text style={[styles.historyTitle]}>Servicio concluido</Text>
-                                                    <Text style={[styles.historySubtitleLight]} color={nowTheme.COLORS.SECONDARY}>
-                                                        { this.formatDateTime(item) }
-                                                    </Text>
-                                                    <Block middle style={[styles.section, this.state.showInfo && styles.divider, {marginTop: 15}]}>
-                                                        <Text style={[styles.historySubtitleRedBold]}>
-                                                            ${parseFloat(item.service_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} <Text style={[styles.historySubtitleRedBold, {fontSize: 16}]}>Ganancia</Text>
-                                                        </Text>
-
-                                                        {
-                                                            !this.state.showInfo && (
-                                                                <TouchableOpacity onPress={() => this.setState({ showInfo: true })}>
-                                                                    <Image source={Images.Icons.FlechaAbajo} style={{ width: 25, height: 25 }} />
-                                                                </TouchableOpacity>
-                                                            )
-                                                        }
-                                                    </Block>
-
-                                                    {
-                                                        this.state.showInfo && (
-                                                            <View>
-                                                                <Block style={styles.divider}>
-                                                                    <Text style={styles.historySubtitleBold}>Comentarios:</Text>
-                                                                    <Text style={styles.historySubtitle}>Muy buen servicio, pero algo lento, ojalá pudieran organizar los horarios de servicio, saludos.</Text>
-                                                                </Block>
-
-                                                                <Text style={[styles.historyConsumables, styles.divider]}>
-                                                                    {item.has_consumables ? 'Se llevaron insumos.' : 'No se llevaron insumos.'}
-                                                                </Text>
-
-                                                                <Block middle style={[styles.section, { alignItems: 'flex-end' }]}>
-                                                                    <View>
-                                                                        <Text style={styles.historySubtitleBold}>Tiempo de limpieza:</Text>
-                                                                        <Text style={styles.historySubtitle}>1 hora con 30 minutos.</Text>
-                                                                    </View>
-                                                                    <TouchableOpacity style={{ marginLeft: 20, marginBottom: 10 }} onPress={() => this.setState({ showInfo: false })}>
-                                                                        <Image source={Images.Icons.FlechaArriba} style={{ width: 25, height: 25 }} />
-                                                                    </TouchableOpacity>
-                                                                </Block>
-                                                            </View>
-                                                        )
-                                                    }
-                                                </View>
-                                            </Block>
-                                        </Block>
-                                    </Block>
+                                    <ServiceCardHistoryTayder key={item.id} item={item} />
                                 )
                             })
                         }
@@ -215,74 +141,10 @@ const styles = StyleSheet.create({
         color: '#C4C4C4',
     },
 
-    subtitle: {
-        fontFamily: 'trueno',
-        fontSize: 14,
-        lineHeight: 15,
-        color: nowTheme.COLORS.SECONDARY,
-    },
     blocksContainer: {
         width: width - theme.SIZES.BASE * 2,
         paddingVertical: theme.SIZES.BASE,
         paddingHorizontal: 2,
-    },
-
-    cardContainer: {
-        backgroundColor: nowTheme.COLORS.WHITE,
-        borderRadius: 25,
-        shadowColor: nowTheme.COLORS.BLACK,
-        shadowOffset: {
-            width: 0,
-            height: 4
-        },
-        shadowRadius: 8,
-        shadowOpacity: 0.1,
-        elevation: 1,
-        overflow: 'hidden',
-    },
-    historyTitle: {
-        fontFamily: 'trueno-extrabold',
-        color: nowTheme.COLORS.SECONDARY,
-        fontSize: smallScreen ? 21 : 24,
-        textAlign: 'left',
-    },
-    historySubtitle: {
-        fontFamily: 'trueno',
-        fontSize: 16,
-        lineHeight: 19,
-        color: nowTheme.COLORS.SECONDARY,
-        textAlign: 'left',
-    },
-    historySubtitleLight: {
-        fontFamily: 'trueno-light',
-        fontSize: 16,
-        lineHeight: 17,
-        color: nowTheme.COLORS.SECONDARY,
-        textAlign: 'left',
-    },
-    historyConsumables: {
-        fontFamily: 'trueno-semibold',
-        fontSize: 18,
-        color: nowTheme.COLORS.BASE,
-        textAlign: 'left',
-    },
-    historySubtitleBold: {
-        fontFamily: 'trueno-semibold',
-        color: nowTheme.COLORS.SECONDARY,
-        fontSize: 18,
-        lineHeight: 22,
-        textAlign: 'left',
-    },
-    historySubtitleRedBold: {
-        fontFamily: 'trueno-extrabold',
-        color: nowTheme.COLORS.BASE,
-        fontSize: 22,
-        lineHeight: 22,
-        textAlign: 'left',
-    },
-    section: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
     },
 
     emptyContainer: {
@@ -310,19 +172,6 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         textAlign: 'center',
     },
-
-    divider: {
-        borderBottomColor: nowTheme.COLORS.SECONDARY,
-        borderBottomWidth: 1,
-        paddingBottom: 15,
-        marginBottom: 15,
-    },
-    button: {
-        width: width * 0.5,
-        height: theme.SIZES.BASE * 2,
-        marginTop: 10,
-        marginBottom: 10,
-    }
 });
 
 export default HistoryTayder;

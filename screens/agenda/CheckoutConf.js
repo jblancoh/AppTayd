@@ -240,7 +240,7 @@ class AgendaCheckoutScreen extends React.Component {
 
                                 <View style={[styles.sectionBorder, styles.section]}>
                                     <Text style={[styles.sectionItem, styles.textBold]}>Contacto</Text>
-                                    <Text style={[styles.sectionItem, styles.textNormal, { width: 190 }]}>{this.state.userData != null && ''/* `${this.state.userData.email}\n${this.state.userData.info.phone}` */}</Text>
+                                    <Text style={[styles.sectionItem, styles.textNormal, { width: 190 }]}>{this.state.userData != null ? '' : `${this.state.userData.email}\n${this.state.userData.info.phone}`}</Text>
                                     <Icon
                                         size={22}
                                         color={nowTheme.COLORS.BASE}
