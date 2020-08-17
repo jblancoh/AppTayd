@@ -50,8 +50,16 @@ function getUserPaymentMethods(id) {
     });
 }
 
+function acceptService(objService) {
+    return request({
+        url: 'services/accept',
+        method: 'POST',
+        data: objService
+    });
+}
+
 const ServicesService = {
-    get, listScheduled, listHistory, store, getUserPaymentMethods, listTayderHistory, getUserEarnings
+    get, listScheduled, listHistory, store, getUserPaymentMethods, listTayderHistory, getUserEarnings, acceptService
 }
 
 export default ServicesService;

@@ -56,7 +56,7 @@ class LoginScreen extends React.Component {
             } else if(response.user.first_login_tayder && response.user.isTayder && !response.user.confirmed && !response.user.on_review) {
               this.props.navigation.navigate('DocumentosIndex');
             } else if(response.user.first_login_tayder && response.user.isTayder && !response.user.confirmed && response.user.on_review) {
-              Alert.alert('Inicio de sesión', 'Tu cuenta se encuentra en verificación, el equipo tayder te contactará cuando tu cuenta se encuentra validada.');
+              Alert.alert('Inicio de sesión', 'Tu cuenta se encuentra en verificación, el equipo tayder te contactará cuando tu cuenta se encuentre validada.');
             } else if(response.user.first_login_tayder && response.user.isTayder && response.user.confirmed) {
               this.props.navigation.navigate('Welcome');
             } else if(!response.user.first_login_tayder && response.user.isTayder) {

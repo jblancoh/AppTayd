@@ -23,7 +23,6 @@ class PropertyLocationScreen extends React.Component {
         super(props);
         this.state = {
             isLoading       : true,
-            markers         : [],
             location        : null,
             errorMessage    : null,
 
