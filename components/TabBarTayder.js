@@ -8,7 +8,8 @@ import {
     Modal,
     Platform,
     ImageBackground,
-    Alert
+    Alert,
+    AsyncStorage
 } from 'react-native';
 import { Block, Text, theme, Button } from "galio-framework";
 import Pusher from 'pusher-js/react-native';
@@ -28,6 +29,7 @@ export default class TabBarTayder extends React.Component {
         super(props);
         this.state = {
             screen      : this.props.activeScreen,
+            token       : AsyncStorage.getItem('access_token'),
             showAlert   : false,
             userData    : null,
             data        : null
@@ -36,10 +38,17 @@ export default class TabBarTayder extends React.Component {
 
     componentDidMount() {
         var pusher = new Pusher(env.PUSHER_KEY, {
+            authEndpoint: `${env.serverAPI}channels/auth`,
+            /* auth: {
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + this.state.token
+                }
+            }, */
             cluster: env.PUSHER_CLUSTER
         });
           
-        var channel = pusher.subscribe('notifications');
+        var channel = pusher.subscribe('private-notifications');
         channel.bind('service-accepted', (data) => {
             this.setState({showAlert: true, data: data})
         });
