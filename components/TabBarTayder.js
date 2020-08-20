@@ -23,7 +23,7 @@ const { width, height } = Dimensions.get("screen");
 const smallScreen = height < 812 ? true : false;
 const isIphone = Platform.OS == 'ios' ? true : false;
 
-Pusher.logToConsole = true;
+Pusher.logToConsole = false;
 
 export default class TabBarTayder extends React.Component {
     constructor(props) {

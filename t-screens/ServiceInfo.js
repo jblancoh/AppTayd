@@ -23,13 +23,28 @@ class ServiceInfoTayder extends React.Component {
         this.state = {
             service         : this.props.navigation.state.params.service,
             propertyDist    : "",
+            mapRefresh      : false,
             weekDay         : ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
             months          : ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
         }
     }
 
     async componentDidMount() {
+        const { navigation } = this.props;
+
         this._getPropertyDistribution();
+
+        this.focusListener = await navigation.addListener('didFocus', () => {
+            this.setState((state) => {
+                return {service: this.props.navigation.state.params.service, mapRefresh: false}
+            });
+
+            this._getPropertyDistribution();
+        });
+    }
+
+    componentWillUnmount() {
+        this.focusListener.remove();
     }
 
     formatDateTime = (item) => {
@@ -62,14 +77,19 @@ class ServiceInfoTayder extends React.Component {
         this.setState({propertyDist: strDistribution});
     }
 
+    _handleActionButton() {
+        this.setState({mapRefresh: true});
+        this.props.navigation.navigate("HomeTayder");
+    }
+
     render() {
-        const { propertyDist, service } = this.state;
+        const { propertyDist, service, mapRefresh } = this.state;
 
         return (
             <Block flex style={styles.container}>
                 <StatusBar barStyle="dark-content" />
                 {
-                    service != null ? (
+                    service != null && !mapRefresh ? (
                         <MapView
                             style={styles.mapStyle}
                             pitchEnabled={true}
@@ -135,7 +155,7 @@ class ServiceInfoTayder extends React.Component {
                                 <View style={[styles.section, {marginTop: 20}]}>
                                     <Block style={{width: 60}} />
                                     <Block style={[styles.sectionItem, {width: 300}]}>
-                                        <Text style={[styles.textBold]}>Se solicitaron insumos.</Text>
+                                        <Text style={[styles.textBold]}>{service.has_consumables ? 'Se solicitaron insumos.' : ''}</Text>
                                     </Block>
                                 </View>
 
@@ -144,7 +164,7 @@ class ServiceInfoTayder extends React.Component {
                                         round
                                         color={nowTheme.COLORS.BASE}
                                         style={styles.button}
-                                        onPress={() => this.props.navigation.navigate("HomeTayder")}>
+                                        onPress={() => this._handleActionButton()}>
                                         <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
                                             ENTENDIDO
                                         </Text>

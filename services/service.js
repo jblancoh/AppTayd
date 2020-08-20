@@ -65,10 +65,19 @@ function acceptService(objService) {
     });
 }
 
+function startService(objService) {
+    return request({
+        url: 'services/start',
+        method: 'POST',
+        data: objService
+    });
+}
+
 const ServicesService = {
     get,
     store,
     acceptService,
+    startService,
     getUserPaymentMethods,
     getUserEarnings,
     listTayderHistory,

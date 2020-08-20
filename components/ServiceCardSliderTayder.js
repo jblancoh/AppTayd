@@ -1,11 +1,11 @@
 import React from 'react';
-import { StyleSheet, Dimensions, Image, View } from "react-native";
+import { StyleSheet, Dimensions, Image, View, Alert } from "react-native";
 import { Block, Text, theme, Button } from 'galio-framework';
 import { TouchableOpacity, ScrollView } from "react-native-gesture-handler";
 import moment from 'moment';
 
 import { Images, nowTheme } from '../constants/';
-import Actions from '../lib/actions';
+import ServicesService from '../services/service';
 
 const { height, width } = Dimensions.get("screen");
 const smallScreen = height < 812 ? true : false;
@@ -26,8 +26,6 @@ export default class ServiceCardSliderTayder extends React.Component {
             this.setState({items: items})
         }
     }
-
-    
 
     formatDateTime = (item) => {
         let arrItem = item.dt_request.split(" ");
@@ -58,6 +56,46 @@ export default class ServiceCardSliderTayder extends React.Component {
         }
     }
 
+    _handleDetailsNavigation = (item) => {
+        if(item.service_status_id == 2) {
+            this.props.navigation.navigate("ServiceInfoTayder", {
+                service : item
+            });
+        } else if(item.service_status_id == 3) {
+            this.props.navigation.navigate("ServiceProgressTayder", {
+                service: item
+            });
+        }
+    }
+
+    startService = (item) => {
+        let objService = {
+            service_id : item.id
+        };
+
+        Alert.alert("Servicio", "¿Deseas iniciar este servicio?", [
+            {
+                text: 'Cancelar',
+                onPress: () => this.setState({openCamera: false}),
+                style: 'cancel'
+            },
+            {
+                text: 'Iniciar', onPress: () => {
+                    ServicesService.startService(objService)
+                        .then(response => {
+                            this.props.navigation.navigate("ServiceProgressTayder", {
+                                service : item
+                            });
+                        })
+                        .catch(error => {
+                            //console.error(error);
+                            Alert.alert("Servicio", error.data.error);
+                        })
+                }
+            }
+        ])
+    }
+
     render() {
         let {items} = this.state;
         return (
@@ -67,7 +105,7 @@ export default class ServiceCardSliderTayder extends React.Component {
                         items.length > 0 ?
                             items.map(item => {
                                 return (
-                                    <Block style={styles.cardContainer}>
+                                    <Block key={item.id} style={styles.cardContainer}>
                                         <Block style={{paddingHorizontal: 30}}>
                                             <Image source={Images.Icons.Agenda} style={styles.image} />
                 
@@ -81,21 +119,25 @@ export default class ServiceCardSliderTayder extends React.Component {
                                                 round
                                                 color={nowTheme.COLORS.PLACEHOLDER}
                                                 style={styles.button}
-                                                onPress={() => this.setState({showAlert: false})}>
+                                                onPress={() => this._handleDetailsNavigation(item)}>
                                                 <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
                                                     DETALLES
                                                 </Text>
                                             </Button>
 
-                                            <Button
-                                                round
-                                                color={nowTheme.COLORS.BASE}
-                                                style={[styles.button, {marginVertical: 15}]}
-                                                onPress={() => {}}>
-                                                <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
-                                                    EMPEZAR
-                                                </Text>
-                                            </Button>
+                                            {
+                                                item.service_status_id == 2 && (
+                                                    <Button
+                                                        round
+                                                        color={nowTheme.COLORS.BASE}
+                                                        style={[styles.button, {marginVertical: 15}]}
+                                                        onPress={() => this.startService(item)}>
+                                                        <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
+                                                            EMPEZAR
+                                                        </Text>
+                                                    </Button>
+                                                )
+                                            }
                                         </Block>
                                     </Block>
                                 )

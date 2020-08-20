@@ -41,6 +41,8 @@ export default class HomeTayder extends React.Component {
   }
 
   async componentDidMount() {
+    const { navigation } = this.props;
+
     await Actions.extractUserData().then((result) => {
       if(result != null) {
         this.setState({userData: result.user, isFirstLogin: result.user.first_login_tayder, tayderName: result.user.info.name});
@@ -48,7 +50,15 @@ export default class HomeTayder extends React.Component {
     });
 
     await this._getScheduledServices();
+
+    this.focusListener = await navigation.addListener('didFocus', () => {
+      this._getScheduledServices();
+    });
   }
+
+  componentWillUnmount() {
+    this.focusListener.remove();
+}
 
   async _updateFirstLogin() {
     this.setState({hasAcceptButton : false, isLoading: true});
@@ -122,7 +132,7 @@ export default class HomeTayder extends React.Component {
                   onSnapToItem={this.onSnapToItem}
                 />
               ) : (
-                <ServiceCardSliderTayder items={this.state.services} />
+                <ServiceCardSliderTayder items={this.state.services} {...this.props} />
               )
             }
           </Block>
