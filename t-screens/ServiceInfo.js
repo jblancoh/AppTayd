@@ -29,7 +29,6 @@ class ServiceInfoTayder extends React.Component {
     }
 
     async componentDidMount() {
-        console.log("SERVICIO", this.state.service);
         this._getPropertyDistribution();
     }
 
@@ -68,7 +67,7 @@ class ServiceInfoTayder extends React.Component {
 
         return (
             <Block flex style={styles.container}>
-                <StatusBar barStyle="light-content" />
+                <StatusBar barStyle="dark-content" />
                 {
                     service != null ? (
                         <MapView
@@ -104,7 +103,7 @@ class ServiceInfoTayder extends React.Component {
 
                 <Block flex space="between" style={styles.padded}>
                     <Block style={styles.cardContainer}>
-                        <View style={{height: smallScreen ? height * 0.7 : height * 0.62}}>
+                        <View style={{height: smallScreen ? height * 0.6 : height * 0.62}}>
                             <ScrollView>
                                 <View style={[styles.section]}>
                                     <Image source={Images.Icons.Calendario} style={[{ width: 60, height: 60, marginTop: 20 }]} />
@@ -140,12 +139,12 @@ class ServiceInfoTayder extends React.Component {
                                     </Block>
                                 </View>
 
-                                <Block middle style={{paddingTop: 25}}>
+                                <Block middle style={{paddingTop: 25, marginBottom: 25}}>
                                     <Button
                                         round
                                         color={nowTheme.COLORS.BASE}
                                         style={styles.button}
-                                        onPress={() => {}}>
+                                        onPress={() => this.props.navigation.navigate("HomeTayder")}>
                                         <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
                                             ENTENDIDO
                                         </Text>
@@ -175,7 +174,7 @@ const styles = StyleSheet.create({
         bottom: height * 0.6,
     },
     padded: {
-        top: smallScreen ? 150 : 390,
+        top: smallScreen ? 350 : 390,
         justifyContent: 'center',
         alignSelf: 'center',
         paddingHorizontal: theme.SIZES.BASE * 1.3,
