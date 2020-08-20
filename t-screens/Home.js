@@ -3,10 +3,11 @@ import { StyleSheet, Dimensions, AsyncStorage, Image, StatusBar, View } from "re
 import { Block, theme, Text, Button } from "galio-framework";
 import Carousel from 'react-native-snap-carousel';
 
-import { TabBarTayder, Switch } from "../components";
+import { TabBarTayder, Switch, ServiceCardSliderTayder } from "../components";
 import { Images, nowTheme } from '../constants/';
 import Actions from '../lib/actions';
 import UserService from '../services/user';
+import ServicesService from '../services/service';
 
 const { height, width } = Dimensions.get("screen");
 const smallScreen = height < 812 ? true : false;
@@ -33,17 +34,31 @@ export default class HomeTayder extends React.Component {
         { image: Images.CarouselIndicador06 },
         { image: Images.CarouselIndicador07 },
         { image: Images.CarouselIndicador08 },
-      ]
+      ],
+
+      services: [],
     };
   }
 
   async componentDidMount() {
+    const { navigation } = this.props;
+
     await Actions.extractUserData().then((result) => {
-      if (result != null) {
+      if(result != null) {
         this.setState({userData: result.user, isFirstLogin: result.user.first_login_tayder, tayderName: result.user.info.name});
       }
     });
+
+    await this._getScheduledServices();
+
+    this.focusListener = await navigation.addListener('didFocus', () => {
+      this._getScheduledServices();
+    });
   }
+
+  componentWillUnmount() {
+    this.focusListener.remove();
+}
 
   async _updateFirstLogin() {
     this.setState({hasAcceptButton : false, isLoading: true});
@@ -55,6 +70,16 @@ export default class HomeTayder extends React.Component {
         this.setState({isLoading: false, userData: response, isFirstLogin: response.first_login_tayder, tayderName: response.info.name});
       })
       .catch(e => console.error(e));
+  }
+
+  async _getScheduledServices() {
+    await ServicesService.listTayderScheduled(this.state.userData.id)
+      .then(response => {
+        this.setState((state) => {
+          return {services: response}
+        });
+      })
+      .catch(error => console.error(error));
   }
 
   _changeStatus = (switchValue) => {
@@ -104,14 +129,10 @@ export default class HomeTayder extends React.Component {
                   itemWidth={300}
                   renderItem={this._renderItem}
                   enableSnap
-                  onSnapToItem={this.onSnapToItem} />
+                  onSnapToItem={this.onSnapToItem}
+                />
               ) : (
-                <Block style={styles.cardContainer}>
-                  <Image source={Images.Icons.Agenda} style={{paddingTop: 60, marginBottom: 40, width: 140, height: 140}} />
-
-                  <Text style={styles.title}>Aún no cuentas con citas agendadas</Text>
-                  <Text style={styles.subtitle}>No olvides estar en línea para poder recibir solicitudes</Text>
-                </Block>
+                <ServiceCardSliderTayder items={this.state.services} {...this.props} />
               )
             }
           </Block>

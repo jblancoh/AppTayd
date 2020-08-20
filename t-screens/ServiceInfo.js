@@ -23,14 +23,28 @@ class ServiceInfoTayder extends React.Component {
         this.state = {
             service         : this.props.navigation.state.params.service,
             propertyDist    : "",
+            mapRefresh      : false,
             weekDay         : ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
             months          : ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
         }
     }
 
     async componentDidMount() {
-        console.log("SERVICIO", this.state.service);
+        const { navigation } = this.props;
+
         this._getPropertyDistribution();
+
+        this.focusListener = await navigation.addListener('didFocus', () => {
+            this.setState((state) => {
+                return {service: this.props.navigation.state.params.service, mapRefresh: false}
+            });
+
+            this._getPropertyDistribution();
+        });
+    }
+
+    componentWillUnmount() {
+        this.focusListener.remove();
     }
 
     formatDateTime = (item) => {
@@ -63,14 +77,19 @@ class ServiceInfoTayder extends React.Component {
         this.setState({propertyDist: strDistribution});
     }
 
+    _handleActionButton() {
+        this.setState({mapRefresh: true});
+        this.props.navigation.navigate("HomeTayder");
+    }
+
     render() {
-        const { propertyDist, service } = this.state;
+        const { propertyDist, service, mapRefresh } = this.state;
 
         return (
             <Block flex style={styles.container}>
-                <StatusBar barStyle="light-content" />
+                <StatusBar barStyle="dark-content" />
                 {
-                    service != null ? (
+                    service != null && !mapRefresh ? (
                         <MapView
                             style={styles.mapStyle}
                             pitchEnabled={true}
@@ -104,7 +123,7 @@ class ServiceInfoTayder extends React.Component {
 
                 <Block flex space="between" style={styles.padded}>
                     <Block style={styles.cardContainer}>
-                        <View style={{height: smallScreen ? height * 0.7 : height * 0.62}}>
+                        <View style={{height: smallScreen ? height * 0.6 : height * 0.62}}>
                             <ScrollView>
                                 <View style={[styles.section]}>
                                     <Image source={Images.Icons.Calendario} style={[{ width: 60, height: 60, marginTop: 20 }]} />
@@ -136,16 +155,16 @@ class ServiceInfoTayder extends React.Component {
                                 <View style={[styles.section, {marginTop: 20}]}>
                                     <Block style={{width: 60}} />
                                     <Block style={[styles.sectionItem, {width: 300}]}>
-                                        <Text style={[styles.textBold]}>Se solicitaron insumos.</Text>
+                                        <Text style={[styles.textBold]}>{service.has_consumables ? 'Se solicitaron insumos.' : ''}</Text>
                                     </Block>
                                 </View>
 
-                                <Block middle style={{paddingTop: 25}}>
+                                <Block middle style={{paddingTop: 25, marginBottom: 25}}>
                                     <Button
                                         round
                                         color={nowTheme.COLORS.BASE}
                                         style={styles.button}
-                                        onPress={() => {}}>
+                                        onPress={() => this._handleActionButton()}>
                                         <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
                                             ENTENDIDO
                                         </Text>
@@ -175,7 +194,7 @@ const styles = StyleSheet.create({
         bottom: height * 0.6,
     },
     padded: {
-        top: smallScreen ? 150 : 390,
+        top: smallScreen ? 350 : 390,
         justifyContent: 'center',
         alignSelf: 'center',
         paddingHorizontal: theme.SIZES.BASE * 1.3,

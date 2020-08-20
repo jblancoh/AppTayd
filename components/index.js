@@ -10,5 +10,6 @@ import Select from './Select';
 import TabBar from './TabBar';
 import TabBarTayder from './TabBarTayder';
 import ServiceCardHistoryTayder from './ServiceCardHistoryTayder';
+import ServiceCardSliderTayder from './ServiceCardSliderTayder';
 
-export { Button, Card, CardFullImage, DrawerItem, Icon, Input, Header, Switch, Select, TabBar, TabBarTayder, ServiceCardHistoryTayder };
+export { Button, Card, CardFullImage, DrawerItem, Icon, Input, Header, Switch, Select, TabBar, TabBarTayder, ServiceCardHistoryTayder, ServiceCardSliderTayder };

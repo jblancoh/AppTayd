@@ -28,6 +28,8 @@ import HomeTayder from '../t-screens/Home';
 import EarningsTayder from '../t-screens/Earnings';
 import HistoryTayder from '../t-screens/History';
 import ServiceInfoTayder from '../t-screens/ServiceInfo';
+import ServiceProgressTayder from '../t-screens/ServiceProgress';
+import ServiceFinishTayder from '../t-screens/ServiceFinish';
 
 import AgendaIndexScreen from '../screens/agenda/Index';
 import AgendaFechaScreen from '../screens/agenda/DateAddressConf';
@@ -236,6 +238,18 @@ const Drawer2 = createDrawerNavigator(
     },
     ServiceInfoTayder: {
       screen: ServiceInfoTayder,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+    ServiceProgressTayder: {
+      screen: ServiceProgressTayder,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+    ServiceFinishTayder: {
+      screen: ServiceFinishTayder,
       navigationOptions: {
         drawerLabel: () => { }
       }

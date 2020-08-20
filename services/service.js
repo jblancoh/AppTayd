@@ -14,6 +14,13 @@ function listScheduled(id) {
     });
 }
 
+function listTayderScheduled(id) {
+    return request({
+        url: `services/list-tayder-scheduled/${id}`,
+        method: 'GET'
+    });
+}
+
 function listHistory(id) {
     return request({
         url: `services/list-history/${id}`,
@@ -58,8 +65,25 @@ function acceptService(objService) {
     });
 }
 
+function startService(objService) {
+    return request({
+        url: 'services/start',
+        method: 'POST',
+        data: objService
+    });
+}
+
 const ServicesService = {
-    get, listScheduled, listHistory, store, getUserPaymentMethods, listTayderHistory, getUserEarnings, acceptService
+    get,
+    store,
+    acceptService,
+    startService,
+    getUserPaymentMethods,
+    getUserEarnings,
+    listTayderHistory,
+    listTayderScheduled,
+    listScheduled,
+    listHistory,
 }
 
 export default ServicesService;
