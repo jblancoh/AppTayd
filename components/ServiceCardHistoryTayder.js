@@ -22,10 +22,14 @@ export default class ServiceCardHistoryTayder extends React.Component {
     }
 
     _getServiceTime(item) {
-        let start   = item.dt_start.replace(/-/g, '/');
-        let finish  = item.dt_finish.replace(/-/g, '/');
-
-        return Actions.timeDiffCalc(new Date(finish), new Date(start));
+        if(item.service_status_id == 5) {
+            return '0 horas con 0 minutos';
+        } else {
+            let start   = item.dt_start.replace(/-/g, '/');
+            let finish  = item.dt_finish.replace(/-/g, '/');
+    
+            return Actions.timeDiffCalc(new Date(finish), new Date(start));
+        }
     }
 
     formatDateTime = (item) => {

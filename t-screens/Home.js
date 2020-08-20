@@ -62,10 +62,12 @@ export default class HomeTayder extends React.Component {
       .catch(e => console.error(e));
   }
 
- async _getScheduledServices() {
+  async _getScheduledServices() {
     await ServicesService.listTayderScheduled(this.state.userData.id)
       .then(response => {
-        this.setState({services: response})
+        this.setState((state) => {
+          return {services: response}
+        });
       })
       .catch(error => console.error(error));
   }
@@ -120,7 +122,7 @@ export default class HomeTayder extends React.Component {
                   onSnapToItem={this.onSnapToItem}
                 />
               ) : (
-                <ServiceCardSliderTayder services={this.state.services} />
+                <ServiceCardSliderTayder items={this.state.services} />
               )
             }
           </Block>
