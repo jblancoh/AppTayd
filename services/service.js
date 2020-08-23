@@ -73,11 +73,29 @@ function startService(objService) {
     });
 }
 
+function finishService(objService) {
+    return request({
+        url: 'services/finish',
+        method: 'POST',
+        data: objService
+    });
+}
+
+function rateService(objRate) {
+    return request({
+        url: 'services/rate-service',
+        method: 'POST',
+        data: objRate
+    })
+}
+
 const ServicesService = {
     get,
     store,
     acceptService,
     startService,
+    finishService,
+    rateService,
     getUserPaymentMethods,
     getUserEarnings,
     listTayderHistory,

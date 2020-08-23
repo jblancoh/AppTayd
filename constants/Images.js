@@ -55,9 +55,11 @@ const Icons = {
   Historial_G : require('../assets/icons/T-Historial-gris.png'),
   Ingreso     : require('../assets/icons/T-Ingreso.png'),
   Ingreso_G   : require('../assets/icons/T-Ingreso-gris.png'),
-  Ayuda: require('../assets/icons/T-Ayuda.png'),
-  Ayuda_G: require('../assets/icons/T-Ayuda-gris.png'),
+  Ayuda       : require('../assets/icons/T-Ayuda.png'),
+  Ayuda_G     : require('../assets/icons/T-Ayuda-gris.png'),
   Camara      : require('../assets/icons/camara.png'),
+  Rating      : require('../assets/icons/Estrella-Borde.png'),
+  RatingFill  : require('../assets/icons/Estrella.png'),
 
   Grupo1      : require('../assets/icons/grupo-1.png'),
   Grupo2      : require('../assets/icons/grupo-2.png'),

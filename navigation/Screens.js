@@ -38,6 +38,8 @@ import AgendaCheckoutScreen from '../screens/agenda/CheckoutConf';
 import AgendaSuccessScreen from '../screens/agenda/Success';
 import AgendaProgressScreen from '../screens/agenda/Progress';
 
+import RateServiceScreen from '../screens/RateService';
+
 import DomicilioIndexScreen from '../screens/domicilios/Index';
 import DomicilioInfoScreen from '../screens/domicilios/Information';
 import DomicilioLocationScreen from '../screens/domicilios/Location';
@@ -315,6 +317,12 @@ const DrawerClient = createDrawerNavigator(
     },
     History: {
       screen: History,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+    RateService: {
+      screen: RateServiceScreen,
       navigationOptions: {
         drawerLabel: () => { }
       }
