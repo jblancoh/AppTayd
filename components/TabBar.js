@@ -12,11 +12,12 @@ import {
 import { Images, nowTheme } from '../constants';
 import Pusher from 'pusher-js/react-native';
 import env from '../lib/enviroment';
+import Actions from '../lib/actions';
 
 const { width, height } = Dimensions.get("screen");
 const isIphone = Platform.OS == 'ios' ? true : false;
 
-Pusher.logToConsole = true;
+Pusher.logToConsole = false;
 
 export default class TabBar extends React.Component {
     constructor(props) {
@@ -25,16 +26,23 @@ export default class TabBar extends React.Component {
             screen: this.props.activeScreen,
             showAlert: false,
             alertMessage: "Tienes 1 cita en curso",
+            userData: null,
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        await Actions.extractUserData().then((result) => {
+            if(result != null) {
+              this.setState({userData: result.user});
+            }
+        });
+
         var pusher = new Pusher(env.PUSHER_KEY, {
             cluster: env.PUSHER_CLUSTER
         });
           
-        var channel = pusher.subscribe('notifications');
-        channel.bind('service-onprogress', (data) => {
+        var channel = await pusher.subscribe('notifications' + this.state.userData.id);
+        channel.bind('service-status', (data) => {
             this.setState({showAlert: true, alertMessage: data.message})
         });
     }

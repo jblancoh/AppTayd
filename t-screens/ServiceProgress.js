@@ -64,17 +64,18 @@ class ServiceProgressTayder extends React.Component {
             },
             {
                 text: 'Finalizar', onPress: () => {
-                    this.props.navigation.navigate("ServiceFinishTayder");
-                    /* ServicesService.startService(objService)
+                    let objService = {
+                        service_id : this.state.service.id
+                    };
+
+                    ServicesService.finishService(objService)
                         .then(response => {
-                            this.props.navigation.navigate("ServiceProgressTayder", {
-                                service : item
-                            });
+                            this.props.navigation.navigate("ServiceFinishTayder");
                         })
                         .catch(error => {
                             //console.error(error);
                             Alert.alert("Servicio", error.data.error);
-                        }) */
+                        })
                 }
             }
         ])

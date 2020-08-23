@@ -4,6 +4,7 @@ import { Block, Text, theme } from 'galio-framework';
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import { Images, nowTheme } from '../constants/';
+import Rating from './Rating';
 import Actions from '../lib/actions';
 
 const { height, width } = Dimensions.get("screen");
@@ -62,8 +63,17 @@ export default class ServiceCardHistoryTayder extends React.Component {
                             <Image source={require('../assets/icons/T-Calendar.png')} style={{ width: 65, height: 65 }} />
                         </Block>
 
-                        <View style={{ width: 250, paddingHorizontal: 15 }}>
-                            <Text style={[styles.historyTitle]}>Servicio concluido</Text>
+                        <View style={{ width: 270, paddingHorizontal: 15 }}>
+                            <Block style={{alignSelf: 'flex-start'}}>
+                                <Rating
+                                    count={5}
+                                    showRating={false}
+                                    size={20}
+                                    isDisabled={true}
+                                    defaultRating={item.rating}
+                                />
+                            </Block>
+                            <Text style={[styles.historyTitle]}>Servicio {item.service_status_id == 5 ? 'cancelado' : 'concluido'}</Text>
                             <Text style={[styles.historySubtitleLight]} color={nowTheme.COLORS.SECONDARY}>
                                 { this.formatDateTime(item) }
                             </Text>
@@ -86,7 +96,7 @@ export default class ServiceCardHistoryTayder extends React.Component {
                                     <View>
                                         <Block style={styles.divider}>
                                             <Text style={styles.historySubtitleBold}>Comentarios:</Text>
-                                            <Text style={styles.historySubtitle}>Muy buen servicio, pero algo lento, ojalá pudieran organizar los horarios de servicio, saludos.</Text>
+                                            <Text style={styles.historySubtitle}>{item.comments != null ? item.comments : ''}</Text>
                                         </Block>
 
                                         <Text style={[styles.historyConsumables, styles.divider]}>

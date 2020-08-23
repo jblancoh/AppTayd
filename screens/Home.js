@@ -39,7 +39,7 @@ class Home extends React.Component {
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
         <Block flex>
           <Block flex row style={{paddingTop: 10}}>
-            <Image source={Images.ProfilePicture} style={{borderRadius: 50, height: 60, width: 60, marginRight: 25}} />
+            <Image source={Images.ProfilePicture} style={{borderRadius: 25, height: 60, width: 60, marginRight: 25}} />
             <Block flex>
               <Text style={styles.nameTitle}>Bienvenido {userData != null && 'info' in userData ? userData.info.name : ''}</Text>
               <Text>¿En qué podemos ayudarte?</Text>
