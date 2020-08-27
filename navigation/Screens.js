@@ -37,6 +37,7 @@ import AgendaInsumosScreen from '../screens/agenda/SuppliesConf';
 import AgendaCheckoutScreen from '../screens/agenda/CheckoutConf';
 import AgendaSuccessScreen from '../screens/agenda/Success';
 import AgendaProgressScreen from '../screens/agenda/Progress';
+import AgendaChatScreen from '../screens/agenda/Chat';
 
 import RateServiceScreen from '../screens/RateService';
 
@@ -114,6 +115,24 @@ const ProfileStack = createStackNavigator(
           <Header white transparent title="Profile" iconColor={'#CFCFCF'} navigation={navigation} />
         ),
         headerTransparent: true
+      })
+    }
+  },
+  {
+    cardStyle: { backgroundColor: '#FFFFFF' },
+    transitionConfig
+  }
+);
+
+const ChatStack = createStackNavigator(
+  {
+    Chat: {
+      screen: AgendaChatScreen,
+      navigationOptions: ({ navigation }) => ({
+        header: (
+          <Header back goToSchedule title="Chat" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
+        ),
+        headerTransparent: false
       })
     }
   },
@@ -385,6 +404,12 @@ const DrawerClient = createDrawerNavigator(
     },
     AgendaProgreso: {
       screen: AgendaProgressScreen,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+    AgendaChat: {
+      screen: ChatStack,
       navigationOptions: {
         drawerLabel: () => { }
       }

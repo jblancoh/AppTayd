@@ -47,6 +47,7 @@ const Icons = {
   Usuario_L   : require('../assets/icons/L-Usuario.png'),
   Password_L  : require('../assets/icons/L-Password.png'),
 
+  Home        : require('../assets/icons/T-Home.png'),
   Inicio      : require('../assets/icons/T-Inicio.png'),
   Inicio_G    : require('../assets/icons/T-Inicio-gris.png'),
   Agenda      : require('../assets/icons/T-Agenda.png'),
