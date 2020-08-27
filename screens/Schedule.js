@@ -152,10 +152,14 @@ class Schedule extends React.Component {
 
                                                                             <Text style={styles.scheduleSubtitleBold}>Estatus:</Text>
 
-                                                                            <Block middle style={[styles.section, { alignItems: 'flex-end' }]}>
-                                                                                <TouchableOpacity onPress={() => this._showService(item)}>
-                                                                                    <Text style={styles.scheduleSubtitleBoldRed}>{item.service_status_name.toUpperCase()}</Text>
-                                                                                </TouchableOpacity>
+                                                                            <TouchableOpacity onPress={() => this._showService(item)}>
+                                                                                <Text style={styles.scheduleSubtitleBoldRed}>{item.service_status_name.toUpperCase()}</Text>
+                                                                            </TouchableOpacity>
+
+                                                                            <Block middle style={[styles.section, { alignItems: 'flex-end', marginTop: 15 }]}>
+                                                                                <Button color={nowTheme.COLORS.BASE} round style={styles.buttonContact} onPress={() => this.props.navigation.navigate("Chat", {service_id : item.id})}>
+                                                                                    <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.WHITE}>CONTACTAR</Text>
+                                                                                </Button>
 
                                                                                 <TouchableOpacity style={{marginLeft: 20}} onPress={() => this.setState({ showInfo: false })}>
                                                                                     <Image source={Images.Icons.FlechaArriba} style={{ width: 25, height: 25 }} />
@@ -295,6 +299,13 @@ const styles = StyleSheet.create({
 
         borderColor: nowTheme.COLORS.BASE,
         borderWidth: 1,
+    },
+    buttonContact: {
+        width: width * 0.4,
+        height: theme.SIZES.BASE * 2,
+
+        shadowRadius: 0,
+        shadowOpacity: 0,
     },
 });
 

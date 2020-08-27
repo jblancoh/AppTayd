@@ -42,7 +42,12 @@ const BasketButton = ({ isWhite, style, navigation }) => (
 
 class Header extends React.Component {
   handleLeftPress = () => {
-    const { back, navigation } = this.props;
+    const { back, navigation, goToSchedule } = this.props;
+
+    if(back && goToSchedule) {
+      return navigation.navigate("Schedule");
+    }
+
     return back ? navigation.goBack() : navigation.openDrawer();
   };
 

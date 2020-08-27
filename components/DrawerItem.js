@@ -13,7 +13,7 @@ class DrawerItem extends React.Component {
     switch (title) {
       case 'Inicio':
         return (
-          <Image source={Images.Icons.Casa} style={{width: 30, height: 30}} />
+          <Image source={Images.Icons.Home} style={{width: 30, height: 30}} />
         );
       case 'Perfil':
         return (
