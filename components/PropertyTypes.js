@@ -3,6 +3,8 @@ import { View, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import PropTypes from 'prop-types';
 import { Text } from 'galio-framework'
 import PropertyTypeService from '../services/propertyType';
+import Icon from './Icon';
+import { nowTheme } from "../constants";
 
 const icons = [
     require('../assets/icons/T-casa.png'),
@@ -59,8 +61,18 @@ export default class PropertyType extends React.Component {
                                             <Image source={iconsDisabled[value.id - 1]} style={{ width: 50, height: 50 }}/>
                                         )
                                     }
-                                    <View style={{ marginLeft: 5, paddingTop: 15 }}>
+                                    <View style={{ marginLeft: 5, paddingTop: 10, flexDirection: 'row' }}>
                                         <Text style={styles.label}>{ value.name }</Text>
+                                        {
+                                            newValue == value.id && (
+                                                <Icon
+                                                    size={22}
+                                                    color={nowTheme.COLORS.BASE}
+                                                    name="chevron-right"
+                                                    family="FontAwesome"
+                                                />
+                                             )
+                                        }
                                     </View>
                                 </View>
                             </TouchableOpacity>

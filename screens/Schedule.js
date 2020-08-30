@@ -3,7 +3,7 @@ import { StyleSheet, Dimensions, ScrollView, Image, View } from "react-native";
 import { Block, theme, Text, Button } from "galio-framework";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-import { CardFullImage, TabBar } from "../components";
+import { CardFullImage, TabBar, ServiceComponent } from "../components";
 import { Images, nowTheme } from '../constants/';
 import Actions from "../lib/actions";
 import ServicesService from "../services/service";
@@ -54,35 +54,6 @@ class Schedule extends React.Component {
             })
     }
 
-    formatDateTime = (item) => {
-        let arrItem = item.dt_request.split(" ");
-        let arrDate = arrItem[0].split("-");
-        let arrTime = arrItem[1].split(":");
-
-        let datetime    = new Date(Number(arrDate[0]), Number(arrDate[1]) - 1, Number(arrDate[2]), Number(arrTime[0]), Number(arrTime[1]));
-        let week        = this.state.weekDay[datetime.getDay()];
-        let month       = this.state.months[datetime.getMonth()];
-        let type        = "a.m.";
-        let minutes     = datetime.getMinutes() < 10 ? `0${datetime.getMinutes()}` : datetime.getMinutes();
-        let hour        = datetime.getHours();
-
-        if(hour >= 12) {
-            if(hour > 12) hour    -= 12;
-            type    = "p.m.";
-        }
-
-        return `${week}, ${datetime.getDate()} de ${month} de ${datetime.getFullYear()}, ${hour}:${minutes} ${type}`;
-    }
-
-    _showService = (item) => {
-        if(item.service_status_id == 3) {
-            this.props.navigation.navigate("AgendaProgreso", {
-                tayder: item.provider_user_name ,
-                status: item.service_status_name
-            });
-        }
-    }
-
     renderBlocks = () => {
         let {userData} = this.state;
 
@@ -111,70 +82,7 @@ class Schedule extends React.Component {
                         ) : (
                             <View style={{height: height * 0.68}}>
                                 <ScrollView>
-                                    {
-                                        this.state.services.map((item) => {
-                                            return (
-                                                <Block key={item.id} flex style={{marginTop: 20}}>
-                                                    <Block middle style={styles.cardContainer}>
-                                                        <Block row style={{ width: width - theme.SIZES.BASE * 3, paddingVertical: 20, paddingHorizontal: 10 }}>
-                                                            <Block style={{ justifyContent: 'flex-start', alignContent: 'center' }}>
-                                                                <Image source={Images.Icons.Calendario} style={{ width: 65, height: 65 }} />
-                                                            </Block>
-
-                                                            <View style={{ width: 250, paddingHorizontal: 15 }}>
-                                                                <Text style={[styles.scheduleTitle]}>
-                                                                    Próxima cita...
-                                                                </Text>
-                                                                <Block middle style={[styles.section, this.state.showInfo && styles.divider]}>
-                                                                    <Text style={[styles.scheduleSubtitle]} color={nowTheme.COLORS.SECONDARY}>{ this.formatDateTime(item) }</Text>
-
-                                                                    {
-                                                                        !this.state.showInfo && (
-                                                                            <TouchableOpacity onPress={() => this.setState({ showInfo: true })}>
-                                                                                <Image source={Images.Icons.FlechaAbajo} style={{ width: 25, height: 25 }} />
-                                                                            </TouchableOpacity>
-                                                                        )
-                                                                    }
-                                                                </Block>
-
-                                                                {
-                                                                    this.state.showInfo && (
-                                                                        <View>
-                                                                            <Block style={styles.divider}>
-                                                                                <Text style={[styles.scheduleSubtitleBold]} color={nowTheme.COLORS.SECONDARY}>
-                                                                                    Recuerda  estar al pendiente de la llegada de nuestro TAYDER a tu domicilio
-                                                                                    y no olvides revisar y calificar al final de las actividades de limpieza de nuestro servicio
-
-                                                                                    Recuerda que solicitaste nuestros insumos, así que no te preocupes en absoluto y solo disfruta
-                                                                                    cómodamente de TAYD.
-                                                                                </Text>
-                                                                            </Block>
-
-                                                                            <Text style={styles.scheduleSubtitleBold}>Estatus:</Text>
-
-                                                                            <TouchableOpacity onPress={() => this._showService(item)}>
-                                                                                <Text style={styles.scheduleSubtitleBoldRed}>{item.service_status_name.toUpperCase()}</Text>
-                                                                            </TouchableOpacity>
-
-                                                                            <Block middle style={[styles.section, { alignItems: 'flex-end', marginTop: 15 }]}>
-                                                                                <Button color={nowTheme.COLORS.BASE} round style={styles.buttonContact} onPress={() => this.props.navigation.navigate("Chat", {service_id : item.id})}>
-                                                                                    <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.WHITE}>CONTACTAR</Text>
-                                                                                </Button>
-
-                                                                                <TouchableOpacity style={{marginLeft: 20}} onPress={() => this.setState({ showInfo: false })}>
-                                                                                    <Image source={Images.Icons.FlechaArriba} style={{ width: 25, height: 25 }} />
-                                                                                </TouchableOpacity>
-                                                                            </Block>
-                                                                        </View>
-                                                                    )
-                                                                }
-                                                            </View>
-                                                        </Block>
-                                                    </Block>
-                                                </Block>
-                                            )
-                                        })
-                                    }
+                                    { this.state.services.map((item) => <ServiceComponent item={item} onClose={() => this._getServices()} {...this.props} /> )}
                                 </ScrollView>
                             </View>
                         )
@@ -239,55 +147,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 2,
     },
 
-    cardContainer: {
-        backgroundColor: nowTheme.COLORS.WHITE,
-        borderRadius: 25,
-        shadowColor: nowTheme.COLORS.BLACK,
-        shadowOffset: {
-            width: 0,
-            height: 4
-        },
-        shadowRadius: 8,
-        shadowOpacity: 0.1,
-        elevation: 1,
-        overflow: 'hidden',
-    },
-    scheduleTitle: {
-        fontFamily: 'trueno-extrabold',
-        color: nowTheme.COLORS.SECONDARY,
-        fontSize: 24,
-        textAlign: 'left',
-    },
-    scheduleSubtitle: {
-        fontFamily: 'trueno',
-        fontSize: 14,
-        color: nowTheme.COLORS.SECONDARY,
-        textAlign: 'left',
-    },
-    scheduleSubtitleBold: {
-        fontFamily: 'trueno-extrabold',
-        color: nowTheme.COLORS.SECONDARY,
-        fontSize: 14,
-        textAlign: 'left',
-    },
-    scheduleSubtitleBoldRed: {
-        fontFamily: 'trueno-extrabold',
-        color: nowTheme.COLORS.BASE,
-        fontSize: 18,
-        textAlign: 'left',
-        width: width * 0.5,
-    },
-
-    section: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    divider: {
-        borderBottomColor: nowTheme.COLORS.SECONDARY,
-        borderBottomWidth: 1,
-        paddingBottom: 15,
-        marginBottom: 15,
-    },
     button: {
         width: width * 0.7,
         height: theme.SIZES.BASE * 2.5,
@@ -299,13 +158,6 @@ const styles = StyleSheet.create({
 
         borderColor: nowTheme.COLORS.BASE,
         borderWidth: 1,
-    },
-    buttonContact: {
-        width: width * 0.4,
-        height: theme.SIZES.BASE * 2,
-
-        shadowRadius: 0,
-        shadowOpacity: 0,
     },
 });
 

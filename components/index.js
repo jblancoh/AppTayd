@@ -10,6 +10,7 @@ import Select from './Select';
 import Rating from './Rating';
 import TabBar from './TabBar';
 import TabBarTayder from './TabBarTayder';
+import ServiceComponent from './ServiceSchedule';
 import ServiceCardHistoryTayder from './ServiceCardHistoryTayder';
 import ServiceCardSliderTayder from './ServiceCardSliderTayder';
 import ServiceHistoryComponent from './ServiceHistory';
@@ -29,5 +30,6 @@ export {
     TabBarTayder,
     ServiceCardHistoryTayder,
     ServiceCardSliderTayder,
-    ServiceHistoryComponent
+    ServiceHistoryComponent,
+    ServiceComponent,
 };

@@ -8,7 +8,7 @@ import { createDrawerNavigator } from 'react-navigation-drawer';
 import Home from '../screens/Home';
 import History from '../screens/History';
 import Schedule from '../screens/Schedule';
-import Profile from '../screens/Profile';
+import ProfileScreen from '../screens/perfil/index';
 import RegisterScreen from '../screens/Register';
 import RegisterTayderScreen from '../screens/RegisterTayder';
 import LoginScreen from '../screens/Login';
@@ -30,6 +30,7 @@ import HistoryTayder from '../t-screens/History';
 import ServiceInfoTayder from '../t-screens/ServiceInfo';
 import ServiceProgressTayder from '../t-screens/ServiceProgress';
 import ServiceFinishTayder from '../t-screens/ServiceFinish';
+import ChatTayderScreen from '../t-screens/Chat';
 
 import AgendaIndexScreen from '../screens/agenda/Index';
 import AgendaFechaScreen from '../screens/agenda/DateAddressConf';
@@ -109,10 +110,10 @@ const transitionConfig = (transitionProps, prevTransitionProps) => ({
 const ProfileStack = createStackNavigator(
   {
     Profile: {
-      screen: Profile,
+      screen: ProfileScreen,
       navigationOptions: ({ navigation }) => ({
         header: (
-          <Header white transparent title="Profile" iconColor={'#CFCFCF'} navigation={navigation} />
+          <Header title="Perfil" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
         ),
         headerTransparent: true
       })
@@ -131,6 +132,24 @@ const ChatStack = createStackNavigator(
       navigationOptions: ({ navigation }) => ({
         header: (
           <Header back goToSchedule title="Chat" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
+        ),
+        headerTransparent: false
+      })
+    }
+  },
+  {
+    cardStyle: { backgroundColor: '#FFFFFF' },
+    transitionConfig
+  }
+);
+
+const ChatTayderStack = createStackNavigator(
+  {
+    ChatTayder: {
+      screen: ChatTayderScreen,
+      navigationOptions: ({ navigation }) => ({
+        header: (
+          <Header back goToScheduleTayder title="Chat" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
         ),
         headerTransparent: false
       })
@@ -277,6 +296,12 @@ const Drawer2 = createDrawerNavigator(
     },
     EarningsTayder: {
       screen: EarningsTayder,
+      navigationOptions: {
+        drawerLabel: () => { }
+      }
+    },
+    ChatServiceTayder: {
+      screen: ChatTayderStack,
       navigationOptions: {
         drawerLabel: () => { }
       }

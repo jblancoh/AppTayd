@@ -1,5 +1,6 @@
 const COLORS = {
   BASE: '#E5133A',
+  BASE_OPACITY: 'rgb(227, 126, 135)',
   BACKGROUND: '#F7F7F7',
   DEFAULT: '#888888',
   PRIMARY: '#f96332',
