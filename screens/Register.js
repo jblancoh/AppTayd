@@ -70,7 +70,7 @@ class RegisterScreen extends React.Component {
               <Block flex space="evenly">
                 <Block middle style={styles.titleContainer}>
                   <Block middle>
-                    <Text style={{fontFamily: 'trueno-extrabold', textAlign: 'center', fontWeight: '600'}} color={nowTheme.COLORS.BASE} size={32}>
+                    <Text style={{fontFamily: 'trueno-extrabold', textAlign: 'center'}} color={nowTheme.COLORS.BASE} size={32}>
                       Registro
                     </Text>
                   </Block>

@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Dimensions, ScrollView, Image, StatusBar } from "react-native";
 import { Block, theme, Text } from "galio-framework";
 
-import { CardFullImage, TabBar } from "../components";
+import { CardFullImage, TabBar, Icon } from "../components";
 import { Images, nowTheme } from '../constants/';
 import Actions from '../lib/actions';
 
@@ -39,7 +39,14 @@ class Home extends React.Component {
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
         <Block flex>
           <Block flex row style={{paddingTop: 10}}>
-            <Image source={Images.ProfilePicture} style={{borderRadius: 25, height: 60, width: 60, marginRight: 25}} />
+            <Icon
+              name={'align-left-22x'}
+              family="NowExtra"
+              size={16}
+              onPress={() => this.props.navigation.openDrawer()}
+              color={nowTheme.COLORS.ICON}
+              style={{fontWeight: '700', marginRight: 15, paddingTop: 5}}
+            />
             <Block flex>
               <Text style={styles.nameTitle}>Bienvenido {userData != null && 'info' in userData ? userData.info.name : ''}</Text>
               <Text>¿En qué podemos ayudarte?</Text>

@@ -81,6 +81,14 @@ function finishService(objService) {
     });
 }
 
+function cancelService(objCancel) {
+    return request({
+        url: 'services/cancel',
+        method: 'POST',
+        data: objCancel
+    });
+}
+
 function rateService(objRate) {
     return request({
         url: 'services/rate-service',
@@ -95,6 +103,7 @@ const ServicesService = {
     acceptService,
     startService,
     finishService,
+    cancelService,
     rateService,
     getUserPaymentMethods,
     getUserEarnings,
