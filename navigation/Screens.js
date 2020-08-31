@@ -22,6 +22,7 @@ import DocumentosStep2Screen from '../screens/documentos/Step2';
 import DocumentosStep3Screen from '../screens/documentos/Step3';
 import DocumentosStep4Screen from '../screens/documentos/Step4';
 import DocumentosSuccessScreen from '../screens/documentos/Success';
+import DocumentosValidationScreen from '../screens/documentos/Validation';
 
 import WelcomeScreen from '../t-screens/Welcome';
 import HomeTayder from '../t-screens/Home';
@@ -582,6 +583,13 @@ export const AppStack = createSwitchNavigator({
   },
   DocumentosSuccess: {
     screen: DocumentosSuccessScreen,
+    navigationOptions: {
+      header: null,
+      gesturesEnabled: false
+    }
+  },
+  DocumentosValidacion: {
+    screen: DocumentosValidationScreen,
     navigationOptions: {
       header: null,
       gesturesEnabled: false

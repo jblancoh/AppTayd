@@ -61,6 +61,7 @@ const Icons = {
   Camara      : require('../assets/icons/camara.png'),
   Rating      : require('../assets/icons/Estrella-Borde.png'),
   RatingFill  : require('../assets/icons/Estrella.png'),
+  Validacion  : require('../assets/icons/T-Documentos-Validacion.png'),
 
   Grupo1      : require('../assets/icons/grupo-1.png'),
   Grupo2      : require('../assets/icons/grupo-2.png'),

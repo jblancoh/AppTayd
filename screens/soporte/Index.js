@@ -1,6 +1,6 @@
 import React from "react";
-import { StyleSheet, Dimensions, ScrollView, Image, StatusBar, View } from "react-native";
-import { Block, theme, Text, Button } from "galio-framework";
+import { StyleSheet, Dimensions, ScrollView, StatusBar } from "react-native";
+import { Block, theme, Text } from "galio-framework";
 
 import { CardFullImage, TabBar, Icon } from "../../components";
 import { Images, nowTheme } from '../../constants/';
@@ -19,8 +19,15 @@ class SoporteIndexScreen extends React.Component {
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
                 <Block flex>
                     <StatusBar barStyle="light-content" />
-                    <Block flex row style={{ paddingTop: 30 }}>
-                        <Image source={Images.ProfilePicture} style={{ borderRadius: 50, height: 60, width: 60, marginRight: 25 }} />
+                    <Block flex row style={{ paddingTop: 10 }}>
+                        <Icon
+                            name={'align-left-22x'}
+                            family="NowExtra"
+                            size={16}
+                            onPress={() => this.props.navigation.openDrawer()}
+                            color={nowTheme.COLORS.ICON}
+                            style={{fontWeight: '700', marginRight: 15, paddingTop: 5}}
+                        />
                         <Block flex>
                             <Text style={styles.nameTitle}>¿Necesitas ayuda?</Text>
                             <Text style={styles.subtitle}>Esperamos solucionar tus dudas</Text>

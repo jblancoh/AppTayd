@@ -14,6 +14,7 @@ import {
 import { Block, Button, theme } from "galio-framework";
 import nowTheme from "../constants/Theme";
 import Images from "../constants/Images";
+import ServicesService from '../services/service';
 
 const { height, width } = Dimensions.get("screen");
 const smallScreen = height < 812 ? true : false;
@@ -23,6 +24,7 @@ class ServiceProgressTayder extends React.Component {
         super(props);
         this.state = {
             service         : this.props.navigation.state.params.service,
+            isLoading       : false,
             propertyDist    : "",
         }
     }
@@ -68,8 +70,11 @@ class ServiceProgressTayder extends React.Component {
                         service_id : this.state.service.id
                     };
 
+                    this.setState({isLoading: true});
+
                     ServicesService.finishService(objService)
                         .then(response => {
+                            this.setState({isLoading: false});
                             this.props.navigation.navigate("ServiceFinishTayder");
                         })
                         .catch(error => {
@@ -82,7 +87,7 @@ class ServiceProgressTayder extends React.Component {
     }
 
     render() {
-        const { propertyDist, service } = this.state;
+        const { propertyDist, service, isLoading } = this.state;
 
         return (
             <Block flex style={styles.container}>
@@ -135,6 +140,8 @@ class ServiceProgressTayder extends React.Component {
                                             round
                                             color={nowTheme.COLORS.BASE}
                                             style={styles.button}
+                                            disabled={isLoading}
+                                            loading={isLoading}
                                             onPress={() => this._handleActionButton()}>
                                             <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
                                                 HE TERMINADO

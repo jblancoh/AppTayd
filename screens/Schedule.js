@@ -3,7 +3,7 @@ import { StyleSheet, Dimensions, ScrollView, Image, View } from "react-native";
 import { Block, theme, Text, Button } from "galio-framework";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-import { CardFullImage, TabBar, ServiceComponent } from "../components";
+import { CardFullImage, TabBar, ServiceComponent, Icon } from "../components";
 import { Images, nowTheme } from '../constants/';
 import Actions from "../lib/actions";
 import ServicesService from "../services/service";
@@ -61,9 +61,16 @@ class Schedule extends React.Component {
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
                 <Block flex>
                     <Block flex row style={{ paddingTop: 10 }}>
-                        <Image source={Images.ProfilePicture} style={{ borderRadius: 50, height: 60, width: 60, marginRight: 25 }} />
+                        <Icon
+                            name={'align-left-22x'}
+                            family="NowExtra"
+                            size={16}
+                            onPress={() => this.props.navigation.openDrawer()}
+                            color={nowTheme.COLORS.ICON}
+                            style={{fontWeight: '700', marginRight: 15, paddingTop: 5}}
+                        />
                         <Block flex>
-                            <Text style={styles.nameTitle}>Agenda de {userData != null && userData.info ? userData.info.name : ''}</Text>
+                            <Text style={styles.nameTitle}>Agenda</Text>
                             <Text style={styles.subtitle}>Revisa tus citas programadas</Text>
                         </Block>
                     </Block>

@@ -7,12 +7,14 @@ import {
     View,
     Image,
     ScrollView,
-    TouchableOpacity
+    TouchableOpacity,
+    Modal
 } from "react-native";
 import { Block, Button, theme } from "galio-framework";
+import MapView from 'react-native-maps';
 import nowTheme from "../constants/Theme";
 import Images from "../constants/Images";
-import MapView from 'react-native-maps';
+import ServicesService from "../services/service";
 
 const { height, width } = Dimensions.get("screen");
 const smallScreen = height < 812 ? true : false;
@@ -24,6 +26,9 @@ class ServiceInfoTayder extends React.Component {
             service         : this.props.navigation.state.params.service,
             propertyDist    : "",
             mapRefresh      : false,
+            showModal       : false,
+            isLoading       : false,
+            isCanceled      : false,
             weekDay         : ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
             months          : ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
         }
@@ -82,8 +87,29 @@ class ServiceInfoTayder extends React.Component {
         this.props.navigation.navigate("HomeTayder");
     }
 
+    cancelService = (item) => {
+        if(item.service_status_id != 5) {
+            this.setState({isLoading: true});
+
+            let objCancel = {
+                service_id      : item.id,
+                service_status  : item.service_status_id,
+                from_tayder      : true,
+            };
+
+            ServicesService.cancelService(objCancel)
+                .then(response => this.setState({isCanceled: true, isLoading: false}))
+                .catch(error => Alert.alert("Servicio", error.data.error));
+        }
+    }
+
+    _closeModal = () => {
+        this.setState({ showModal: false, isCanceled: false });
+        this.props.navigation.navigate("HomeTayder");
+    }
+
     render() {
-        const { propertyDist, service, mapRefresh } = this.state;
+        const { propertyDist, service, mapRefresh, showModal, isLoading, isCanceled } = this.state;
 
         return (
             <Block flex style={styles.container}>
@@ -152,20 +178,40 @@ class ServiceInfoTayder extends React.Component {
                                     </Block>
                                 </View>
 
-                                <View style={[styles.section, {marginTop: 20}]}>
+                                <View style={[styles.section, {marginVertical: 20}]}>
                                     <Block style={{width: 60}} />
                                     <Block style={[styles.sectionItem, {width: 300}]}>
-                                        <Text style={[styles.textBold]}>{service.has_consumables ? 'Se solicitaron insumos.' : ''}</Text>
+                                        <Text style={[styles.textBold]}>{service.has_consumables ? 'Se solicitaron insumos.' : 'No se solicitaron insumos.'}</Text>
                                     </Block>
                                 </View>
 
-                                <Block middle style={{paddingTop: 25, marginBottom: 25}}>
+                                <Block middle style={{marginBottom: 25}}>
+                                    <Block row style={{marginBottom: 15}}>
+                                        <Button
+                                            color={nowTheme.COLORS.BLACK}
+                                            style={styles.buttonCancel}
+                                            onPress={() => this.setState({showModal: true})}>
+                                            <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.BASE, lineHeight: 16, textAlign: 'center'}} size={14}>
+                                                CANCELAR SERVICIO
+                                            </Text>
+                                        </Button>
+
+                                        <Button
+                                            color={nowTheme.COLORS.WHITE}
+                                            style={styles.buttonContact}
+                                            onPress={() => this.props.navigation.navigate("ChatTayder", {service_id : service.id})}>
+                                            <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.BASE, lineHeight: 16, textAlign: 'center'}} size={14}>
+                                                CONTACTAR CLIENTE
+                                            </Text>
+                                        </Button>
+                                    </Block>
+
                                     <Button
                                         round
                                         color={nowTheme.COLORS.BASE}
                                         style={styles.button}
                                         onPress={() => this._handleActionButton()}>
-                                        <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
+                                        <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, lineHeight: 16}} size={14}>
                                             ENTENDIDO
                                         </Text>
                                     </Button>
@@ -174,6 +220,60 @@ class ServiceInfoTayder extends React.Component {
                         </View>
                     </Block>
                 </Block>
+
+                <Modal
+                    animationType="slide"
+                    transparent
+                    visible={showModal}
+                    presentationStyle="overFullScreen">
+                    <View style={{flex: 1}}>
+                        <View style={styles.modalContainer}>
+                            {
+                                !isCanceled ? (
+                                    <View style={{ backgroundColor: 'white', padding: 15, paddingBottom: 30,}}>
+                                        <View style={{justifyContent: 'center', alignItems: 'center', paddingBottom: 25}}>
+                                            <TouchableOpacity onPress={() => this.setState({showModal: false})} style={{alignSelf: 'flex-end'}}>
+                                                <Image source={Images.Icons.Close01} />
+                                            </TouchableOpacity>
+                                            <Image source={Images.TaydLogoLarge} style={{height: 25, width: 120}} />
+                                            <Text style={styles.modalTitle}>¿Deseas cancelar el servicio</Text>
+                                            <Text style={styles.modalDescription}>Recuerda que cada vez que cancelas tu puntuación disminuye.</Text>
+                                        </View>
+                                        <Block middle style={{alignItems: 'center' }}>
+                                            <Button
+                                                round
+                                                color={nowTheme.COLORS.BASE}
+                                                style={styles.modalButton}
+                                                loading={isLoading}
+                                                loadingColor={nowTheme.COLORS.WHITE}
+                                                disabled={isLoading}
+                                                onPress={() => this.cancelService(service)}>
+                                                <Text style={{ fontFamily: 'trueno-semibold', color: '#FFF' }} size={14} color={nowTheme.COLORS.WHITE}>CANCELAR CITA</Text>
+                                            </Button>
+                                        </Block>
+                                    </View>
+                                ) : (
+                                    <View style={{ backgroundColor: 'white', padding: 15, paddingBottom: 30,}}>
+                                        <View style={{justifyContent: 'center', alignItems: 'center', paddingBottom: 25}}>
+                                            <Image source={require('../assets/icons/success.png')} style={{height: 79, width: 79}} />
+                                            <Text style={[styles.modalTitle, {marginBottom: 15}]}>Cita cancelada</Text>
+                                            <Text style={styles.modalDescription}>Nos vemos en futuras citas</Text>
+                                        </View>
+                                        <Block middle style={{alignItems: 'center' }}>
+                                            <Button
+                                                round
+                                                color={nowTheme.COLORS.BASE}
+                                                style={styles.modalButton}
+                                                onPress={() => this._closeModal()}>
+                                                <Text style={{ fontFamily: 'trueno-semibold', color: '#FFF' }} size={14} color={nowTheme.COLORS.WHITE}>LISTO</Text>
+                                            </Button>
+                                        </Block>
+                                    </View>
+                                )
+                            }
+                        </View>
+                    </View>
+                </Modal>
             </Block>
         );
     }
@@ -242,7 +342,54 @@ const styles = StyleSheet.create({
         borderBottomColor: '#B5B5B5',
         paddingVertical: 20,
     },
+
     button: {
+        width: width * 0.8,
+        height: theme.SIZES.BASE * 2.5,
+        shadowRadius: 0,
+        shadowOpacity: 0
+    },
+    buttonCancel: {
+        width: width * 0.3,
+        height: theme.SIZES.BASE * 3.5,
+        shadowRadius: 0,
+        shadowOpacity: 0,
+        paddingVertical: 10,
+
+        borderColor: nowTheme.COLORS.BASE,
+        borderWidth: 1,
+        borderRadius: 20,
+    },
+    buttonContact: {
+        width: width * 0.45,
+        height: theme.SIZES.BASE * 3.5,
+        shadowRadius: 0,
+        shadowOpacity: 0,
+        marginLeft: 10,
+        paddingHorizontal: 25,
+        paddingVertical: 10,
+        borderRadius: 20,
+    },
+
+    modalContainer: {
+        flex: 1,
+        height: height,
+        backgroundColor: 'rgba(0,0,0,.2)',
+        justifyContent: 'flex-end',
+        flexDirection: 'column'
+    },
+    modalTitle: {
+        fontFamily: 'trueno-extrabold',
+        fontSize: 30,
+        color: nowTheme.COLORS.SECONDARY,
+        textAlign: 'center',
+    },
+    modalDescription: {
+        fontFamily: 'trueno',
+        fontSize: 16,
+        color: nowTheme.COLORS.SECONDARY,
+    },
+    modalButton: {
         width: width * 0.4,
         height: theme.SIZES.BASE * 2.5,
         shadowRadius: 0,
