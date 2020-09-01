@@ -46,6 +46,9 @@ class AgendaCheckoutScreen extends React.Component {
     }
 
     async componentDidMount() {
+        const { navigation } = this.props;
+        console.log("Entro componentDidMount");
+
         await PaymentMethodService.getPredeterminedSource(this.state.userData.id)
                 .then(response => {
                     this.setState({sourceInfo: response});
@@ -62,6 +65,43 @@ class AgendaCheckoutScreen extends React.Component {
                 .catch(e => console.error(e));
 
         this._getPropertyDistribution();
+
+        this.focusListener = await navigation.addListener('didFocus', async () => {
+            console.log("Entro Didfocus");
+            this.setState({
+                hasError        : false,
+                errorTitle      : '',
+                errorMessage    : '',
+                userData        : this.props.navigation.state.params.userData,
+                propertyInfo    : this.props.navigation.state.params.propertyInfo,
+                propertyDist    : "",
+                datetime        : this.props.navigation.state.params.datetime,
+                hasSupplies     : this.props.navigation.state.params.hasSupplies,
+                sourceInfo      : null,
+                serviceCost     : 0,
+                subtotal        : 0,
+                discount        : 0,
+                total           : 0,
+                generalSettings : [],
+            })
+
+            await PaymentMethodService.getPredeterminedSource(this.state.userData.id)
+                .then(response => {
+                    this.setState({sourceInfo: response});
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+
+
+            await GeneralSettingService.getAll()
+                    .then(response => {
+                        this.setState({generalSettings: response});
+                    })
+                    .catch(e => console.error(e));
+
+            this._getPropertyDistribution();
+        });
     }
 
     _getGeneralSettings() {
