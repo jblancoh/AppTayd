@@ -22,6 +22,7 @@ class ChatTayderScreen extends React.Component {
         super(props);
         this.state = {
             userData    : null,
+            userName    : '',
             service_id  : this.props.navigation.state.params.service_id,
             messages    : [],
             message     : '',
@@ -35,12 +36,13 @@ class ChatTayderScreen extends React.Component {
 
         await Actions.extractUserData().then((result) => {
             if(result != null) {
-                this.setState({userData : result.user});
+                this.setState({userData : result.user, userName: `${result.user.info.name}`});
                 this._getMessages();
             }
         });
 
         this.focusListener = await navigation.addListener('didFocus', () => {
+            this.setState({service_id  : this.props.navigation.state.params.service_id});
             this._getMessages();
         });
 
@@ -113,7 +115,7 @@ class ChatTayderScreen extends React.Component {
     }
 
     render() {
-        let {messages, isLoading} = this.state;
+        let {messages, isLoading, userName} = this.state;
         return (
             <Block flex style={styles.container}>
                 <Block flex space="between" style={styles.padded}>
@@ -122,9 +124,10 @@ class ChatTayderScreen extends React.Component {
                             {
                                 messages.length > 0 ?
                                     messages.map(item => {
-                                        return !item.fromTayder ? (
+                                        return item.fromTayder ? (
                                             <Block key={item.id} style={{alignSelf: 'flex-end'}}>
                                                 <Block style={[styles.cardContainer]}>
+                                                    <Text style={[styles.subtitleRed, {textAlign: 'right'}]}>{ userName }</Text>
                                                     <Text style={[styles.subtitle, {textAlign: 'right'}]}>{ item.message }</Text>
                                                 </Block>
 
@@ -133,6 +136,7 @@ class ChatTayderScreen extends React.Component {
                                         ) : (
                                             <Block key={item.id} style={{alignSelf: 'flex-start'}}>
                                                 <Block style={[styles.cardContainer]}>
+                                                    <Text style={[styles.subtitleRed, {textAlign: 'left'}]}>{ item.user_name }</Text>
                                                     <Text style={[styles.subtitle, {textAlign: 'left'}]}>{ item.message }</Text>
                                                 </Block>
 
@@ -214,11 +218,18 @@ const styles = StyleSheet.create({
         color: nowTheme.COLORS.SECONDARY,
         textAlign: 'left',
     },
+    subtitleRed: {
+        fontFamily: 'trueno-semibold',
+        fontSize: 12,
+        color: nowTheme.COLORS.BASE,
+        textAlign: 'left',
+        lineHeight: 18,
+    },
     dateTimeInfo: {
         fontFamily: 'trueno-semibold',
         fontSize: 9,
         lineHeight: 18,
-        color: nowTheme.COLORS.SECONDARY,
+        color: nowTheme.COLORS.WHITE,
 
         marginBottom: 20,
     },

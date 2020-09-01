@@ -24,6 +24,23 @@ class AgendaCheckoutScreen extends React.Component {
             successMessage: 'Nos vemos el ' + this.props.navigation.state.params.schedule,
         }
     }
+
+    async componentDidMount() {
+        const { navigation } = this.props;
+
+        this.focusListener = await navigation.addListener('didFocus', () => {
+            this.setState({
+                hasError        : false,
+                successTitle    : 'Agendado con éxito',
+                successMessage  : 'Nos vemos el ' + this.props.navigation.state.params.schedule,
+            })
+        });
+    }
+
+    componentWillUnmount() {
+        this.focusListener.remove();
+    }
+
     render() {
         const { navigation } = this.props;
 

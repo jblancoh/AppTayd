@@ -21,12 +21,27 @@ export default class AgendaInsumosScreen extends React.Component {
         };
     }
 
-    componentDidMount() {
-        GeneralSettingService.getByKey('SERVICIO_INSUMOS_EXTRA')
+    async componentDidMount() {
+        const { navigation } = this.props;
+
+        await GeneralSettingService.getByKey('SERVICIO_INSUMOS_EXTRA')
             .then(response => {
                 this.setState({setting: response});
             })
             .catch(error => console.error(error));
+
+        this.focusListener = await navigation.addListener('didFocus', () => {
+            this.setState({
+                isSelected      : false,
+                userData        : this.props.navigation.state.params.userData,
+                propertyInfo    : this.props.navigation.state.params.propertyInfo,
+                datetime        : this.props.navigation.state.params.datetime,
+            })
+        });
+    }
+
+    componentWillUnmount() {
+        this.focusListener.remove();
     }
 
     _handleSelection() {
