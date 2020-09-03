@@ -128,6 +128,14 @@ const Icons = {
   Casa        : require('../assets/icons/T-casa.png'),
   Departamento: require('../assets/icons/T-Depa.png'),
   Oficina     : require('../assets/icons/T-Ofi.png'),
+
+  Casa_G      : require('../assets/icons/T-casa-gris.png'),
+  Departamento_G : require('../assets/icons/T-Depa-gris.png'),
+  Oficina_G   : require('../assets/icons/T-Ofi-gris.png'),
+
+  Casa_B      : require('../assets/icons/T-Casa-blanco.png'),
+  Departamento_B : require('../assets/icons/T-Depa-blanco.png'),
+  Oficina_B   : require('../assets/icons/T-Ofi-blanco.png'),
 };
 
 export default {

@@ -89,7 +89,7 @@ class Schedule extends React.Component {
                         ) : (
                             <View style={{height: height * 0.68}}>
                                 <ScrollView>
-                                    { this.state.services.map((item) => <ServiceComponent item={item} onClose={() => this._getServices()} {...this.props} /> )}
+                                    { this.state.services.map((item) => <ServiceComponent key={item.id} item={item} onClose={() => this._getServices()} {...this.props} /> )}
                                 </ScrollView>
                             </View>
                         )

@@ -47,7 +47,8 @@ class AgendaCheckoutScreen extends React.Component {
 
     async componentDidMount() {
         const { navigation } = this.props;
-        console.log("Entro componentDidMount");
+
+        console.log("UserData", this.state.userData);
 
         await PaymentMethodService.getPredeterminedSource(this.state.userData.id)
                 .then(response => {
@@ -67,7 +68,6 @@ class AgendaCheckoutScreen extends React.Component {
         this._getPropertyDistribution();
 
         this.focusListener = await navigation.addListener('didFocus', async () => {
-            console.log("Entro Didfocus");
             this.setState({
                 hasError        : false,
                 errorTitle      : '',
@@ -240,8 +240,8 @@ class AgendaCheckoutScreen extends React.Component {
     }
 
     render() {
-        const { navigation }    = this.props;
-        const { propertyInfo, sourceInfo, propertyDist, subtotal, discount } = this.state;
+        const { navigation } = this.props;
+        const { propertyInfo, sourceInfo, propertyDist, subtotal, discount, userData } = this.state;
 
         return (
             <Block flex style={styles.container}>
@@ -266,7 +266,7 @@ class AgendaCheckoutScreen extends React.Component {
 
                                 <View style={[styles.sectionBorder, styles.section]}>
                                     <Image source={Images.Icons.TarjetaBancaria} style={[styles.sectionItem, { width: 50, height: 34 }]} />
-                                    <Text style={[styles.sectionItem, styles.textNormal, {width: 190}]}>
+                                    <Text style={[styles.sectionItem, styles.textNormal, {width: 190, paddingLeft: 30}]}>
                                         {sourceInfo != null && `${sourceInfo.brand}\n${sourceInfo.number}\n${sourceInfo.name}`}
                                     </Text>
                                     <Icon
@@ -280,43 +280,22 @@ class AgendaCheckoutScreen extends React.Component {
 
                                 <View style={[styles.sectionBorder, styles.section]}>
                                     <Text style={[styles.sectionItem, styles.textBold]}>Contacto</Text>
-                                    <Text style={[styles.sectionItem, styles.textNormal, { width: 190 }]}>{this.state.userData != null ? '' : `${this.state.userData.email}\n${this.state.userData.info.phone}`}</Text>
-                                    <Icon
-                                        size={22}
-                                        color={nowTheme.COLORS.BASE}
-                                        name="chevron-right"
-                                        family="FontAwesome"
-                                        onPress={() => { }}
-                                    />
+                                    <Text style={[styles.sectionItem, styles.textNormal, { width: 230 }]}>{`${userData.email}\n${userData.info.phone}`}</Text>
                                 </View>
 
                                 <View style={[styles.sectionBorder, styles.section]}>
                                     <Text style={[styles.sectionItem, styles.textBold]}>Dirección</Text>
-                                    <Text style={[styles.sectionItem, styles.textNormal, { width: 190 }]}>{ propertyInfo.name}</Text>
-                                    <Icon
-                                        size={22}
-                                        color={nowTheme.COLORS.BASE}
-                                        name="chevron-right"
-                                        family="FontAwesome"
-                                        onPress={() => { }}
-                                    />
+                                    <Text style={[styles.sectionItem, styles.textNormal, { width: 230 }]}>{ propertyInfo.name}</Text>
                                 </View>
 
                                 <View style={[styles.sectionBorder, styles.section]}>
                                     <Text style={[styles.sectionItem, styles.textBold]}>Día y Hora</Text>
-                                    <Text style={[styles.sectionItem, styles.textNormal, { width: 190 }]}>{ this._datetimeFormat() }</Text>
-                                    <Icon
-                                        size={22}
-                                        color={nowTheme.COLORS.BASE}
-                                        name="chevron-right"
-                                        family="FontAwesome"
-                                        onPress={() => { }}
-                                    />
+                                    <Text style={[styles.sectionItem, styles.textNormal, { width: 230 }]}>{ this._datetimeFormat() }</Text>
                                 </View>
 
                                 <View style={[styles.sectionBorder, styles.section]}>
                                     <Text style={[styles.sectionItem, styles.textBold]}>Inmuebles</Text>
-                                    <Text style={[styles.sectionItem, styles.textNormal, { width: 190 }]}>
+                                    <Text style={[styles.sectionItem, styles.textNormal, { width: 230 }]}>
                                         { propertyDist }
                                     </Text>
                                 </View>

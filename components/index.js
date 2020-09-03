@@ -8,6 +8,7 @@ import Input from './Input';
 import Switch from './Switch';
 import Select from './Select';
 import Rating from './Rating';
+import PropertyModalComponent from './PropertyModal';
 import TabBar from './TabBar';
 import TabBarTayder from './TabBarTayder';
 import ServiceComponent from './ServiceSchedule';
@@ -26,6 +27,7 @@ export {
     Switch,
     Select,
     Rating,
+    PropertyModalComponent,
     TabBar,
     TabBarTayder,
     ServiceCardHistoryTayder,
