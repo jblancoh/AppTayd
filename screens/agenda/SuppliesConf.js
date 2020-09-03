@@ -181,11 +181,15 @@ const styles = StyleSheet.create({
     addedButton: {
         width: width * 0.5,
         marginTop: 10,
-        marginBottom: 10
+        marginBottom: 10,
+        shadowRadius: 0,
+        shadowOpacity: 0,
     },
 
     createButton: {
         width: width * 0.5,
+        shadowRadius: 0,
+        shadowOpacity: 0,
         marginTop: 10,
         marginBottom: 10
     },

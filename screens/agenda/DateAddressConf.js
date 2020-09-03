@@ -1,7 +1,9 @@
 import React from 'react';
-import { Image, StyleSheet, Dimensions, Platform, View, DatePickerAndroid, DatePickerIOS, TimePickerAndroid, ScrollView, Modal } from 'react-native';
+import { Image, StyleSheet, Dimensions, Platform, View, DatePickerAndroid, DatePickerIOS, TimePickerAndroid, ScrollView, Modal, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Block, Button, Text, theme } from 'galio-framework';
+
+import { PropertyModalComponent } from '../../components'
 import { Images, nowTheme } from '../../constants/';
 import { HeaderHeight } from '../../constants/utils';
 import PropertyService from "../../services/property";
@@ -15,13 +17,14 @@ export default class AgendaFechaScreen extends React.Component {
         super(props);
         this.state = {
             showDateTime    : false,
+            showPropertyModal : false,
             isIphone        : Platform.OS === 'ios',
             date            : new Date(),
             time            : new Date(),
             userData        : null,
             propertyInfo    : null,
-            weekDay         : ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
-            months          : ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
+            weekDay         : ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
+            months          : ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
         };
     }
 
@@ -139,6 +142,28 @@ export default class AgendaFechaScreen extends React.Component {
         this.setState({ date: newDate, time: newDate });
     }
 
+    _propertyModalResponse = (newValue) => {
+        PropertyService.get(newValue)
+            .then(response => this.setState({propertyInfo: response}))
+            .catch(error => Alert.alert("Domicilio", error.data.error));
+
+        this.setState({showPropertyModal : false});
+    }
+
+    propertyModal = () => {
+        let { userData, propertyInfo, showPropertyModal } = this.state;
+        if(userData != null && propertyInfo != null) {
+            return (
+                <PropertyModalComponent
+                    userId={userData.id}
+                    showPropertyModal={showPropertyModal}
+                    defaultValue={propertyInfo.id}
+                    onClose={this._propertyModalResponse}
+                />
+            )
+        }
+    }
+
     render() {
         const { showDateTime, isIphone, propertyInfo } = this.state;
         return (
@@ -170,13 +195,15 @@ export default class AgendaFechaScreen extends React.Component {
                             <Text style={[styles.title, { paddingTop: 20 }]}> Domicilio </Text>
                             <Text style={[styles.subtitle, { paddingTop: 10 }]}>Confirma el domicilio a limpiar</Text>
 
-                            <Block row style={{ width: width - theme.SIZES.BASE * 4, paddingVertical: 15, paddingHorizontal: 25, justifyContent: 'center', alignItems: 'center' }}>
-                                { propertyInfo != null && this.propertyTypeImage(propertyInfo.property_type_id) }
+                            <TouchableOpacity onPress={() => this.setState({showPropertyModal: true})}>
+                                <Block row style={{ width: width - theme.SIZES.BASE * 4, paddingVertical: 15, paddingHorizontal: 25, justifyContent: 'center', alignItems: 'center' }}>
+                                    { propertyInfo != null && this.propertyTypeImage(propertyInfo.property_type_id) }
 
-                                <Text style={[styles.subtitle, {paddingHorizontal: 15}]} color={nowTheme.COLORS.SECONDARY}>
-                                    {propertyInfo != null && propertyInfo.name}
-                                </Text>
-                            </Block>
+                                    <Text style={[styles.subtitle, {paddingHorizontal: 15}]} color={nowTheme.COLORS.SECONDARY}>
+                                        {propertyInfo != null && propertyInfo.name}
+                                    </Text>
+                                </Block>
+                            </TouchableOpacity>
 
                             <Block middle style={{ width: width - theme.SIZES.BASE * 4 }}>
                                 <Button
@@ -192,6 +219,8 @@ export default class AgendaFechaScreen extends React.Component {
                         </Block>
                     </Block>
                 </ScrollView>
+
+                { this.propertyModal() }
 
                 <Modal
                     animationType="slide"
@@ -276,25 +305,12 @@ const styles = StyleSheet.create({
         marginRight: 20,
     },
 
-    buttonModalConfirmStyle: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 10,
-        width: width * 0.5,
-        marginHorizontal: 30,
-        height: 41
-    },
-    buttonTextStyle: {
-        backgroundColor: nowTheme.COLORS.BASE,
-        fontFamily: 'trueno-semibold',
-        fontStyle: 'normal',
-        fontSize: 12,
-        lineHeight: 15,
-        color: '#FFF',
-    },
     createButton: {
         width: width * 0.5,
         marginTop: 10,
-        marginBottom: 10
+        marginBottom: 10,
+
+        shadowRadius: 0,
+        shadowOpacity: 0,
     },
 });
