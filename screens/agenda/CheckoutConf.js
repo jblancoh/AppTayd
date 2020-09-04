@@ -12,7 +12,7 @@ import {
     TouchableOpacity
 } from "react-native";
 import { Block, Button, theme } from "galio-framework";
-import { Icon } from '../../components';
+import { Icon, PaymentMethodModalComponent } from '../../components';
 import nowTheme from "../../constants/Theme";
 import Images from "../../constants/Images";
 import PaymentMethodService from "../../services/paymentMethod";
@@ -26,6 +26,7 @@ class AgendaCheckoutScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            showPaymentMethodModal : false,
             hasError        : false,
             errorTitle      : '',
             errorMessage    : '',
@@ -69,6 +70,7 @@ class AgendaCheckoutScreen extends React.Component {
 
         this.focusListener = await navigation.addListener('didFocus', async () => {
             this.setState({
+                showPaymentMethodModal : false,
                 hasError        : false,
                 errorTitle      : '',
                 errorMessage    : '',
@@ -239,6 +241,28 @@ class AgendaCheckoutScreen extends React.Component {
             });
     }
 
+    paymentMethodModal = () => {
+        let { userData, sourceInfo, showPaymentMethodModal } = this.state;
+        if(userData != null && sourceInfo != null) {
+            return (
+                <PaymentMethodModalComponent
+                    userId={userData.id}
+                    showPaymentMethodModal={showPaymentMethodModal}
+                    defaultValue={sourceInfo.id}
+                    onClose={this._paymentMethodModalResponse}
+                />
+            )
+        }
+    }
+
+    _paymentMethodModalResponse = (newValue) => {
+        PaymentMethodService.get(newValue)
+            .then(response => this.setState({sourceInfo: response}))
+            .catch(error => Alert.alert("Método de Pago", error.data.error));
+
+        this.setState({showPaymentMethodModal : false});
+    }
+
     render() {
         const { navigation } = this.props;
         const { propertyInfo, sourceInfo, propertyDist, subtotal, discount, userData } = this.state;
@@ -256,10 +280,7 @@ class AgendaCheckoutScreen extends React.Component {
                             <ScrollView>
                                 <View style={[styles.sectionBorder, styles.section]}>
                                     <Image source={Images.TaydLogoLarge} style={{width: 120, height: 25}} />
-                                    <TouchableOpacity onPress={() => {
-                                        console.log("Entra")
-                                        //navigation.navigate('Schedule')
-                                    }}>
+                                    <TouchableOpacity onPress={() => navigation.navigate('Schedule')}>
                                         <Text style={styles.textCancel}>Cancelar</Text>
                                     </TouchableOpacity>
                                 </View>
@@ -274,7 +295,7 @@ class AgendaCheckoutScreen extends React.Component {
                                         color={nowTheme.COLORS.BASE}
                                         name="chevron-right"
                                         family="FontAwesome"
-                                        onPress={() => {}}
+                                        onPress={() => this.setState({showPaymentMethodModal: true})}
                                     />
                                 </View>
 
@@ -331,6 +352,8 @@ class AgendaCheckoutScreen extends React.Component {
                         </View>
                     </Block>
                 </Block>
+
+                { this.paymentMethodModal() }
 
                 <Modal
                     animationType="fade"

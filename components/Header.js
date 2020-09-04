@@ -250,6 +250,7 @@ const styles = StyleSheet.create({
     width: '100%',
     fontSize: 30,
     fontFamily: 'trueno-extrabold',
+    color: nowTheme.COLORS.GREY5,
     textAlign: 'center',
     justifyContent: 'center',
     alignSelf: 'center',

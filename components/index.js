@@ -9,6 +9,7 @@ import Switch from './Switch';
 import Select from './Select';
 import Rating from './Rating';
 import PropertyModalComponent from './PropertyModal';
+import PaymentMethodModalComponent from './PaymentMethodModal'
 import TabBar from './TabBar';
 import TabBarTayder from './TabBarTayder';
 import ServiceComponent from './ServiceSchedule';
@@ -28,6 +29,7 @@ export {
     Select,
     Rating,
     PropertyModalComponent,
+    PaymentMethodModalComponent,
     TabBar,
     TabBarTayder,
     ServiceCardHistoryTayder,

@@ -2,7 +2,7 @@ import request from '../lib/request';
 
 function get(id) {
     return request({
-        url: `properties/${id}`,
+        url: `payment-methods/${id}`,
         method: 'GET'
     });
 }
@@ -22,13 +22,6 @@ function store(objPaymentMethod) {
     });
 }
 
-function getUserPaymentMethods(id) {
-    return request({
-        url: `properties/user/${id}`,
-        method: 'GET'
-    });
-}
-
 function getPredeterminedSource(id) {
     return request({
         url: `payment-methods/user-predetermined/${id}`,
@@ -44,7 +37,7 @@ function setPredeterminedSource(id) {
 }
 
 const PaymentMethodService = {
-    get, list, store, getUserPaymentMethods, setPredeterminedSource, getPredeterminedSource
+    get, list, store, setPredeterminedSource, getPredeterminedSource
 }
 
 export default PaymentMethodService;

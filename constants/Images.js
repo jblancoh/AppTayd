@@ -15,6 +15,7 @@ const LightsBackground    = require('../assets/imgs/tayd-lights.jpg');
 const BlackLightsBackground = require('../assets/imgs/tayd-black-lights.png');
 const RegisterTayderBackground  = require('../assets/imgs/fondo-tyd-01.jpg');
 const TayderInfoBackground  = require('../assets/imgs/fondo-tarjeta-tayder.jpg');
+const TayderHombreLimpieza  = require('../assets/imgs/tayd-hombre-limpieza.png');
 
 const Agendar             = require('../assets/imgs/tayd-agendar.jpg');
 const AgendaInicio        = require('../assets/imgs/tayd-agenda-inicio.jpg');
@@ -101,6 +102,10 @@ const Icons = {
   TarjetaBancariaCCVGris  : require('../assets/icons/T-TarjetaBancaria-CVV-gris.png'),
   TarjetaBancariaFecha    : require('../assets/icons/T-TarjetaBancaria-FechaVencimiento.png'),
   TarjetaBancariaFechaGris: require('../assets/icons/T-TarjetaBancaria-FechaVencimiento-gris.png'),
+
+  Tarjeta_Bancaria_G      : require('../assets/icons/T-Tarjeta-gris.png'),
+  Tarjeta_Bancaria_B      : require('../assets/icons/T-Tarjeta-blanco.png'),
+
   FlechaArriba            : require('../assets/icons/T-Subir.png'),
   FlechaAbajo             : require('../assets/icons/T-Bajar.png'),
 
@@ -156,7 +161,8 @@ export default {
   BlackLightsBackground,
   RegisterTayderBackground,
   TayderInfoBackground,
-  
+  TayderHombreLimpieza,
+
   Agendar,
   AgendaInicio,
   AgendaFecha,
