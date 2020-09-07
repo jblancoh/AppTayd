@@ -108,24 +108,25 @@ export default class MetodoPagoAddCardScreen extends React.Component {
 
             var card = await stripe.createToken(information);
 
-            console.log("***************** START CARD ****************");
-            console.log(card);
-            console.log("***************** END CARD ****************");
-
-            let objPaymentMethod = {
-                user_id : this.state.userData.id,
-                token   : card.id
-            };
-    
-            await PaymentMethodService.store(objPaymentMethod)
-                .then(response => {
-                    this.setState({isLoading : false});
-                    this.props.navigation.navigate("MetodoPagoIndex");
-                })
-                .catch(e => {
-                    Alert.alert("Método de pago", e.data.error);
-                    this.setState({isLoading : false});
-                });
+            if(card != null && !card.error) {
+                let objPaymentMethod = {
+                    user_id : this.state.userData.id,
+                    token   : card.id
+                };
+        
+                await PaymentMethodService.store(objPaymentMethod)
+                    .then(response => {
+                        this.setState({isLoading : false});
+                        this.props.navigation.navigate("MetodoPagoIndex");
+                    })
+                    .catch(e => {
+                        Alert.alert("Método de pago", e.data.error);
+                        this.setState({isLoading : false});
+                    });
+            } else {
+                this.setState({isLoading : false});
+                Alert.alert("Método de pago", card.error.message);
+            }
         } else {
             this.setState({isLoading : false});
             Alert.alert("Método de pago", "Los campos no cumplen con la información requerida.")
