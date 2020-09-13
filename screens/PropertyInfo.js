@@ -1,9 +1,9 @@
 import React from 'react';
-import { StyleSheet, Dimensions, Platform, ScrollView, View, AsyncStorage } from 'react-native';
-import { Block, Button, Text, theme, Toast } from 'galio-framework';
+import { StyleSheet, Dimensions, Platform, ScrollView, View, AsyncStorage, Image, Alert } from 'react-native';
+import { Block, Button, Text, theme } from 'galio-framework';
 import { HeaderHeight } from '../constants/utils';
 import Actions from '../lib/actions';
-import { nowTheme } from '../constants/';
+import { nowTheme, Images } from '../constants/';
 import PropertyCounter from '../components/PropertyCounter';
 import PropertyType from '../components/PropertyTypes';
 import PropertyService from '../services/property';
@@ -122,29 +122,41 @@ export default class PropertyInfoScreen extends React.Component {
                         <Text style={styles.subtitle} color={nowTheme.COLORS.SECONDARY}>Selecciona las áreas idóneas a limpiar</Text>
                     </Block>
 
-                    <View style={{height: height * 0.45}}>
-                        <ScrollView>
-                        {
-                            propertyItems.map((value) => {
-                                return <PropertyCounter key={value.id} id={value.id} label={value.name} price={value.price} value={value.key} getValues={(quantity, data) => this.updatePropertyInfo(quantity, data)} />
-                            })
-                        }
-                        </ScrollView>
-                    </View>
+                    {
+                        propertyItems.length > 0 ? (
+                            <View style={{height: height * 0.45}}>
+                                <ScrollView>
+                                {
+                                    propertyItems.map((value) => {
+                                        return <PropertyCounter key={value.id} id={value.id} label={value.name} price={value.price} value={value.key} getValues={(quantity, data) => this.updatePropertyInfo(quantity, data)} />
+                                    })
+                                }
+                                </ScrollView>
+                            </View>
+                        ) : (
+                            <Block center>
+                                <Image source={Images.TayderHombreLimpieza} style={{width: width, height: height * 0.45}} />
+                            </Block>
+                        )
+                    }
 
-                    <Block middle style={{ width: width - theme.SIZES.BASE * 4 }}>
-                        <Button
-                            round
-                            color={nowTheme.COLORS.BASE}
-                            style={styles.createButton}
-                            loading={isLoading}
-                            disabled={isLoading}
-                            onPress={() => this._handleUploadProperty()}>
-                            <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.WHITE}>
-                                SIGUIENTE
-                            </Text>
-                        </Button>
-                    </Block>
+                    {
+                        propertyItems.length > 0 && (
+                            <Block middle style={{ width: width - theme.SIZES.BASE * 4 }}>
+                                <Button
+                                    round
+                                    color={nowTheme.COLORS.BASE}
+                                    style={styles.createButton}
+                                    loading={isLoading}
+                                    disabled={isLoading}
+                                    onPress={() => this._handleUploadProperty()}>
+                                    <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.WHITE}>
+                                        SIGUIENTE
+                                    </Text>
+                                </Button>
+                            </Block>
+                        )
+                    }
                 </Block>
             </Block>
         );
@@ -162,9 +174,9 @@ const styles = StyleSheet.create({
 
     title: {
         fontFamily: 'trueno-extrabold',
+        color: nowTheme.COLORS.GREY5,
         paddingHorizontal: 10,
         fontSize: 30,
-        fontWeight: '700',
         textAlign: 'center',
         lineHeight: 38
     },
@@ -174,26 +186,10 @@ const styles = StyleSheet.create({
     },
     subtitle: {
         fontFamily: 'trueno',
+        color: nowTheme.COLORS.GREY5,
         textAlign: 'center',
         fontSize: 16,
         paddingBottom: 15,
-    },
-    itemContainer: {
-        flexDirection: 'row',
-        alignContent: 'center',
-        justifyContent: 'center',
-        alignItems: 'baseline'
-    },
-    icons: {
-        marginRight: 20,
-        width: 25,
-        height: 25,
-    },
-    labels: {
-        fontFamily: 'trueno-semibold',
-        fontSize: 16,
-        width: 150,
-        marginRight: 20,
     },
 
     createButton: {

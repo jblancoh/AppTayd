@@ -152,7 +152,8 @@ const styles = StyleSheet.create({
     },
     propertyName: {
         fontFamily: 'trueno',
-        fontSize: 14,
+        fontSize: 16,
+        lineHeight: 18,
         textAlign: 'left',
     },
     propertyNameActive: {

@@ -108,23 +108,28 @@ export default class MetodoPagoAddCardScreen extends React.Component {
 
             var card = await stripe.createToken(information);
 
-            let objPaymentMethod = {
-                user_id : this.state.userData.id,
-                token   : card.id
-            };
-    
-            await PaymentMethodService.store(objPaymentMethod)
-                .then(response => {
-                    this.setState({isLoading : false});
-                    this.props.navigation.navigate("MetodoPagoIndex");
-                })
-                .catch(e => {
-                    console.error(e)
-                    this.setState({isLoading : false});
-                });
+            if(card != null && !card.error) {
+                let objPaymentMethod = {
+                    user_id : this.state.userData.id,
+                    token   : card.id
+                };
+        
+                await PaymentMethodService.store(objPaymentMethod)
+                    .then(response => {
+                        this.setState({isLoading : false});
+                        this.props.navigation.navigate("MetodoPagoIndex");
+                    })
+                    .catch(e => {
+                        Alert.alert("Método de pago", e.data.error);
+                        this.setState({isLoading : false});
+                    });
+            } else {
+                this.setState({isLoading : false});
+                Alert.alert("Método de pago", card.error.message);
+            }
         } else {
             this.setState({isLoading : false});
-            Alert.alert("Los campos no cumplen con la información requerida.")
+            Alert.alert("Método de pago", "Los campos no cumplen con la información requerida.")
         }
         
     }
@@ -271,7 +276,9 @@ const styles = StyleSheet.create({
     createButton: {
         width: width * 0.5,
         marginTop: 30,
-        marginBottom: 10
+        marginBottom: 10,
+        shadowRadius: 0,
+        shadowOpacity: 0
     },
 
     ButtonEnabled: {

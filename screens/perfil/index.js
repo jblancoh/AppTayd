@@ -4,6 +4,7 @@ import { Block, Text, } from 'galio-framework';
 
 import { Input } from '../../components';
 import { Images, nowTheme } from '../../constants';
+import { iPhoneX } from "../../constants/utils";
 import Actions from "../../lib/actions";
 
 const { width, height } = Dimensions.get('screen');
@@ -44,6 +45,7 @@ class ProfileScreen extends React.Component {
                 </Text>
 
                 <Block width={width * 0.8}>
+                    <Text style={styles.labelText}>Nombre</Text>
                     <Input
                         editable={false}
                         value={name}
@@ -57,6 +59,7 @@ class ProfileScreen extends React.Component {
                     />
                 </Block>
                 <Block width={width * 0.8}>
+                <Text style={styles.labelText}>Apellidos</Text>
                     <Input
                         editable={false}
                         value={lastname}
@@ -70,6 +73,7 @@ class ProfileScreen extends React.Component {
                     />
                 </Block>
                 <Block width={width * 0.8}>
+                <Text style={styles.labelText}>Teléfono</Text>
                     <Input
                         editable={false}
                         value={phone}
@@ -83,6 +87,7 @@ class ProfileScreen extends React.Component {
                     />
                 </Block>
                 <Block width={width * 0.8}>
+                <Text style={styles.labelText}>Email</Text>
                     <Input
                         editable={false}
                         value={email}
@@ -112,8 +117,8 @@ const styles = StyleSheet.create({
     },
     cardContainer: {
         width: width * 0.9,
-        height: height * 0.45,
-        top: 50,
+        height: height * 0.5,
+        top: iPhoneX ? 150 : 50,
         marginBottom: 45,
         backgroundColor: nowTheme.COLORS.WHITE,
         borderRadius: 25,
@@ -139,6 +144,14 @@ const styles = StyleSheet.create({
         marginVertical: 20
     },
 
+    labelText: {
+        fontFamily: 'trueno-semibold',
+        fontSize: 16,
+        fontStyle: 'normal',
+        color: nowTheme.COLORS.PLACEHOLDER,
+        marginTop: 10,
+        alignSelf: 'center'
+    },
     inputIcons: {
         marginRight: 25,
         width: 25,

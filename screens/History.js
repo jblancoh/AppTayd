@@ -4,6 +4,7 @@ import { Block, theme, Text, } from "galio-framework";
 
 import { TabBar, ServiceHistoryComponent, Icon } from "../components";
 import { nowTheme } from '../constants/';
+import { iPhoneX } from "../constants/utils";
 
 import Actions from "../lib/actions";
 import ServicesService from "../services/service";
@@ -58,7 +59,7 @@ class History extends React.Component {
             <Block flex center style={styles.home}>
                 <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
                     <Block flex>
-                        <Block flex row style={{ paddingTop: 10 }}>
+                        <Block flex row style={{paddingTop: iPhoneX() ? 30 : 10}}>
                             <Icon
                                 name={'align-left-22x'}
                                 family="NowExtra"

@@ -127,7 +127,7 @@ class LoginScreen extends React.Component {
                   <Block width={width * 0.8} style={{ marginTop: theme.SIZES.BASE * 0.8, marginBottom: 10 }}>
                     <View style={{ flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>
                       <Text style={{ fontFamily: 'trueno', fontSize: 12 }} color={nowTheme.COLORS.WHITE}>¿Aún no tienes una cuenta? </Text>
-                      <TouchableHighlight onPress={() => this.props.navigation.navigate('Onboarding')}>
+                      <TouchableHighlight onPress={() => this.props.navigation.navigate('Register')}>
                         <View>
                           <Text style={{ fontFamily: 'trueno-semibold', fontSize: 12, fontWeight: '700' }} color={nowTheme.COLORS.WHITE}> Regístrate</Text>
                         </View>
@@ -197,9 +197,9 @@ const styles = StyleSheet.create({
 
   createButton: {
     width: width * 0.5,
+    marginBottom: 40,
     shadowRadius: 0,
     shadowOpacity: 0,
-    marginBottom: 40,
   },
 
 });

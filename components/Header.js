@@ -9,8 +9,7 @@ import Tabs from './Tabs';
 import nowTheme from '../constants/Theme';
 
 const { height, width } = Dimensions.get('window');
-const iPhoneX = () =>
-  Platform.OS === 'ios' && (height === 812 || width === 812 || height === 896 || width === 896);
+const iPhoneX = () => Platform.OS === 'ios' && (height >= 812 && width >= 375);
 
 const BellButton = ({ isWhite, style, navigation }) => (
   <TouchableOpacity
@@ -110,6 +109,7 @@ class Header extends React.Component {
         break;
     }
   };
+
   renderSearch = () => {
     const { navigation } = this.props;
     return (
@@ -126,6 +126,7 @@ class Header extends React.Component {
       />
     );
   };
+
   renderOptions = () => {
     const { navigation, optionLeft, optionRight } = this.props;
 
@@ -181,6 +182,7 @@ class Header extends React.Component {
       />
     );
   };
+
   renderHeader = () => {
     const { search, options, tabs } = this.props;
     if (search || tabs || options) {
@@ -250,6 +252,7 @@ const styles = StyleSheet.create({
     width: '100%',
     fontSize: 30,
     fontFamily: 'trueno-extrabold',
+    color: nowTheme.COLORS.GREY5,
     textAlign: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
@@ -257,8 +260,8 @@ const styles = StyleSheet.create({
   navbar: {
     width: '100%',
     paddingVertical: 0,
-    paddingBottom: theme.SIZES.BASE * 1.5,
-    paddingTop: iPhoneX ? theme.SIZES.BASE * 4 : 0,
+    paddingBottom: iPhoneX() ? theme.SIZES.BASE * 1.5 : 0,
+    paddingTop: iPhoneX() ? theme.SIZES.BASE * 4 : 0,
     zIndex: 5,
   },
   shadow: {

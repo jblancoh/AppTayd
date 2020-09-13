@@ -1,10 +1,11 @@
 import React from "react";
-import { StyleSheet, Dimensions, ScrollView, Image, StatusBar } from "react-native";
+import { StyleSheet, Dimensions, ScrollView, } from "react-native";
 import { Block, theme, Text } from "galio-framework";
 
 import { CardFullImage, TabBar, Icon } from "../components";
 import { Images, nowTheme } from '../constants/';
 import Actions from '../lib/actions';
+import { iPhoneX } from "../constants/utils";
 
 const { width } = Dimensions.get("screen");
 
@@ -20,6 +21,8 @@ class Home extends React.Component {
 
   async componentDidMount() {
     this._isMounted = true;
+
+    console.log("Boolean", iPhoneX());
 
     await Actions.extractUserData().then((result) => {
       if(result != null && this._isMounted) {
@@ -38,7 +41,7 @@ class Home extends React.Component {
     return (
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
         <Block flex>
-          <Block flex row style={{paddingTop: 10}}>
+          <Block flex row style={{paddingTop: iPhoneX() ? 30 : 10}}>
             <Icon
               name={'align-left-22x'}
               family="NowExtra"

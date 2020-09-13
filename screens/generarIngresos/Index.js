@@ -60,7 +60,8 @@ class GeneraIngresoIndexScreen extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: theme.COLORS.BLACK
+        backgroundColor: theme.COLORS.BLACK,
+        flex: 1,
     },
     padded: {
         paddingHorizontal: theme.SIZES.BASE * 2,

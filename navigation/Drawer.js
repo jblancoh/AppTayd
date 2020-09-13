@@ -3,6 +3,7 @@ import { DrawerNavigatorItems } from 'react-navigation-drawer';
 import { ScrollView, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
 import Images from '../constants/Images';
+import { iPhoneX } from "../constants/utils";
 import { DrawerItem } from '../components/index';
 import Actions from '../lib/actions';
 
@@ -76,10 +77,10 @@ export default class Drawer extends React.Component {
         return (
             <Block style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
                 <Block row style={styles.header}>
-                    <Image source={Images.ProfilePicture} style={{ borderRadius: 50, height: 60, width: 60, marginRight: 25 }} />
+                    <Image source={Images.ProfilePicture} style={{ borderRadius: 25, height: 60, width: 60, marginRight: 25 }} />
                     <Block flex>
-                    <Text style={styles.nameTitle}>{userData != null && userData.info ? userData.info.name : ''}</Text>
-                    <Text style={{fontFamily: 'trueno', fontSize: 14, lineHeight: 15}}>{userData != null ? userData.email : ''}</Text>
+                        <Text style={styles.nameTitle}>{userData != null && userData.info ? userData.info.name : ''}</Text>
+                        <Text style={{fontFamily: 'trueno', fontSize: 14, lineHeight: 15}}>{userData != null ? userData.email : ''}</Text>
                     </Block>
                 </Block>
             
@@ -124,7 +125,8 @@ const styles = StyleSheet.create({
     header: {
       paddingHorizontal: 28,
       paddingTop: theme.SIZES.BASE,
-      justifyContent: 'center'
+      justifyContent: 'center',
+      marginTop: iPhoneX ? 20 : 0,
     },
     sectionTitle: {
       fontFamily: 'trueno-extrabold',
