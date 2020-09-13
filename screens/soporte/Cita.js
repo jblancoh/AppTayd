@@ -37,7 +37,7 @@ class SoporteCitaScreen extends React.Component {
                                 <Block style={styles.section}>
                                     <Text style={[styles.nameTitle, {paddingLeft: 20}]}>Agendar cita</Text>
 
-                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Soporte')} style={{ marginTop: -10 }}>
+                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Soporte')}>
                                         <Image source={Images.Icons.Close01} />
                                     </TouchableOpacity>
                                 </Block>
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
         width: width * 0.88,
         justifyContent: 'space-between',
         paddingHorizontal: 15,
-        paddingVertical: 15,
+        paddingVertical: 10,
         paddingLeft: 10,
     },
     item: {

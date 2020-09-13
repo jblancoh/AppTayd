@@ -4,6 +4,7 @@ import { Block, theme, Text } from "galio-framework";
 
 import { CardFullImage, TabBar, Icon } from "../../components";
 import { Images, nowTheme } from '../../constants/';
+import { iPhoneX } from "../../constants/utils";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 const { width, height } = Dimensions.get("screen");
@@ -18,8 +19,7 @@ class SoporteIndexScreen extends React.Component {
         return (
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
                 <Block flex>
-                    <StatusBar barStyle="light-content" />
-                    <Block flex row style={{ paddingTop: 10 }}>
+                    <Block flex row style={{paddingTop: iPhoneX() ? 30 : 10}}>
                         <Icon
                             name={'align-left-22x'}
                             family="NowExtra"

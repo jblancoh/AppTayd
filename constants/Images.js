@@ -109,6 +109,9 @@ const Icons = {
   FlechaArriba            : require('../assets/icons/T-Subir.png'),
   FlechaAbajo             : require('../assets/icons/T-Bajar.png'),
 
+  RegresarRojo  : require('../assets/icons/T-Regresar.png'),
+  RegresarBlanco  : require('../assets/icons/T-Regresar-Blanco.png'),
+
   Habitacion    : require('../assets/icons/T-Recamara.png'),
   Habitacion_G  : require('../assets/icons/T-Habitacion-gris.png'),
   Bano          : require('../assets/icons/T-Bano.png'),

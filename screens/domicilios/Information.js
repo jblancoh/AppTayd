@@ -4,10 +4,10 @@ import { Block, Button, Text, theme } from 'galio-framework';
 import Actions from '../../lib/actions';
 
 import { nowTheme, Images } from '../../constants/';
+import { iPhoneX } from "../../constants/utils";
 import PropertyCounter from '../../components/PropertyCounter';
 import PropertyType from '../../components/PropertyTypes';
 import PropertyService from '../../services/property';
-import { now } from 'lodash';
 
 const { height, width } = Dimensions.get('screen');
 const smallScreen = height < 812 ? true : false;
@@ -111,7 +111,7 @@ export default class DomicilioInfoScreen extends React.Component {
                 <Block flex>
                         <Block space="between" style={styles.padded}>
                             <Block>
-                                <Text style={[styles.title, smallScreen ? {paddingTop: 20} : {paddingVertical: 10}]}> Tipo de domicilio </Text>
+                                <Text style={[styles.title, smallScreen ? {paddingTop: 20} : {paddingVertical: 10}, {marginTop: iPhoneX ? 15 : 0}]}> Tipo de domicilio </Text>
 
                                 <View style={[{ justifyContent: 'center', alignContent: 'center', paddingTop: 5, paddingBottom: 15 }, styles.titleBorder]}>
                                     <PropertyType value={propertyTypeValue} updateValue={this.updatePropertyType} />

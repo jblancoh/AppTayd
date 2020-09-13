@@ -124,7 +124,7 @@ export default class AgendaInsumosScreen extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: Platform.OS === 'android' ? - HeaderHeight : 0,
+        marginTop: Platform.OS === 'android' ? -HeaderHeight : -HeaderHeight - 15,
     },
     padded: {
         paddingHorizontal: theme.SIZES.BASE * 2,

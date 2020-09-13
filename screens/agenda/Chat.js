@@ -1,9 +1,5 @@
 import React from "react";
-import {
-    StyleSheet,
-    Dimensions,
-    Text, View, Alert, ScrollView
-} from "react-native";
+import { StyleSheet, Dimensions, Text, View, Alert, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Platform, Keyboard } from "react-native";
 import { Block, Button, theme } from "galio-framework";
 import Pusher from 'pusher-js/react-native';
 
@@ -14,6 +10,12 @@ import env from '../../lib/enviroment';
 import ChatService from '../../services/chat';
 
 const { height, width } = Dimensions.get("screen");
+
+const DismissKeyboard = ({ children }) => (
+    <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "padding"} style={{flex: 1}}>
+      {children}
+    </KeyboardAvoidingView>
+);
 
 class AgendaChatScreen extends React.Component {
     constructor(props) {
@@ -115,64 +117,67 @@ class AgendaChatScreen extends React.Component {
     render() {
         let {messages, isLoading, userName} = this.state;
         return (
-            <Block flex style={styles.container}>
-                <Block flex space="between" style={styles.padded}>
-                    <View style={{height: height * 0.68}}>
-                        <ScrollView>
-                            {
-                                messages.length > 0 ?
-                                    messages.map(item => {
-                                        return !item.fromTayder ? (
-                                            <Block key={item.id} style={{alignSelf: 'flex-end'}}>
-                                                <Block style={[styles.cardContainer]}>
-                                                    <Text style={[styles.subtitleRed, {textAlign: 'right'}]}>{ userName }</Text>
-                                                    <Text style={[styles.subtitle, {textAlign: 'right'}]}>{ item.message }</Text>
+            <DismissKeyboard>
+                <Block flex style={styles.container}>
+                        <View style={{height: height * 0.68}}>
+                            <ScrollView
+                                ref={ref => scrollView = ref }
+                                onContentSizeChange={() => scrollView.scrollToEnd({ animated: true })}
+                            >
+                                {
+                                    messages.length > 0 ?
+                                        messages.map(item => {
+                                            return !item.fromTayder ? (
+                                                <Block key={item.id} style={{alignSelf: 'flex-end'}}>
+                                                    <Block style={[styles.cardContainer]}>
+                                                        <Text style={[styles.subtitleRed, {textAlign: 'right'}]}>{ userName }</Text>
+                                                        <Text style={[styles.subtitle, {textAlign: 'right'}]}>{ item.message }</Text>
+                                                    </Block>
+
+                                                    <Text style={[styles.dateTimeInfo, {textAlign: 'right'}]}>{this.formatDateTime(item)}</Text>
                                                 </Block>
+                                            ) : (
+                                                <Block key={item.id} style={{alignSelf: 'flex-start'}}>
+                                                    <Block style={[styles.cardContainer]}>
+                                                        <Text style={[styles.subtitleRed, {textAlign: 'left'}]}>{ item.provider_name }</Text>
+                                                        <Text style={[styles.subtitle, {textAlign: 'left'}]}>{ item.message }</Text>
+                                                    </Block>
 
-                                                <Text style={[styles.dateTimeInfo, {textAlign: 'right'}]}>{this.formatDateTime(item)}</Text>
-                                            </Block>
-                                        ) : (
-                                            <Block key={item.id} style={{alignSelf: 'flex-start'}}>
-                                                <Block style={[styles.cardContainer]}>
-                                                    <Text style={[styles.subtitleRed, {textAlign: 'left'}]}>{ item.provider_name }</Text>
-                                                    <Text style={[styles.subtitle, {textAlign: 'left'}]}>{ item.message }</Text>
+                                                    <Text style={[styles.dateTimeInfo, {textAlign: 'left'}]}>{this.formatDateTime(item)}</Text>
                                                 </Block>
+                                            )
+                                        })
+                                    : (
+                                        <Block middle>
+                                            <Text>Sin mensajes</Text>
+                                        </Block>
+                                    )
+                                }
+                            </ScrollView>
+                        </View>
 
-                                                <Text style={[styles.dateTimeInfo, {textAlign: 'left'}]}>{this.formatDateTime(item)}</Text>
-                                            </Block>
-                                        )
-                                    })
-                                : (
-                                    <Block middle>
-                                        <Text>Sin mensajes</Text>
-                                    </Block>
-                                )
-                            }
-                        </ScrollView>
-                    </View>
+                        <Block middle flex style={{justifyContent: 'flex-end', flexDirection: 'row'}}>
+                            <Input
+                                placeholder="Respuesta"
+                                value={this.state.message}
+                                onChangeText={(text) => this.setState({message : text})}
+                                style={styles.inputs}
+                            />
 
-                    <Block middle flex style={{justifyContent: 'flex-end', flexDirection: 'row'}}>
-                        <Input
-                            placeholder="Respuesta"
-                            value={this.state.message}
-                            onChangeText={(text) => this.setState({message : text})}
-                            style={styles.inputs}
-                        />
-
-                        <Button
-                            color={nowTheme.COLORS.BASE}
-                            round
-                            disabled={isLoading}
-                            loading={isLoading}
-                            loadingColor={nowTheme.COLORS.WHITE}
-                            style={styles.button}
-                            onPress={() => this._sendMessage()}
-                        >
-                            <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE }} size={14} color={nowTheme.COLORS.WHITE}>ENVIAR</Text>
-                        </Button>
-                    </Block>
+                            <Button
+                                color={nowTheme.COLORS.BASE}
+                                round
+                                disabled={isLoading}
+                                loading={isLoading}
+                                loadingColor={nowTheme.COLORS.WHITE}
+                                style={styles.button}
+                                onPress={() => this._sendMessage()}
+                            >
+                                <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE }} size={14} color={nowTheme.COLORS.WHITE}>ENVIAR</Text>
+                            </Button>
+                        </Block>
                 </Block>
-            </Block>
+            </DismissKeyboard>
         );
     }
 }
@@ -181,6 +186,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: 50,
+        paddingHorizontal: theme.SIZES.BASE * 1,
+        bottom: theme.SIZES.BASE,
         backgroundColor: '#F7F7F7'
     },
     cardContainer: {
@@ -199,10 +206,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 10,
         width: width * 0.7
-    },
-    padded: {
-        paddingHorizontal: theme.SIZES.BASE * 1,
-        bottom: theme.SIZES.BASE,
     },
     title: {
         fontFamily: 'trueno-extrabold',

@@ -279,6 +279,9 @@ class AgendaCheckoutScreen extends React.Component {
                         <View style={{height: smallScreen ? height * 0.7 : height * 0.62}}>
                             <ScrollView>
                                 <View style={[styles.sectionBorder, styles.section]}>
+                                    <TouchableOpacity onPress={() => navigation.navigate('AgendaFecha')}>
+                                        <Image source={Images.Icons.RegresarRojo} style={{width: 25, height: 25}} />
+                                    </TouchableOpacity>
                                     <Image source={Images.TaydLogoLarge} style={{width: 120, height: 25}} />
                                     <TouchableOpacity onPress={() => navigation.navigate('Schedule')}>
                                         <Text style={styles.textCancel}>Cancelar</Text>

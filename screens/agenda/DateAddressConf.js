@@ -2,10 +2,11 @@ import React from 'react';
 import { Image, StyleSheet, Dimensions, Platform, View, DatePickerAndroid, DatePickerIOS, TimePickerAndroid, ScrollView, Modal, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Block, Button, Text, theme } from 'galio-framework';
+import moment from 'moment';
 
 import { PropertyModalComponent } from '../../components'
 import { Images, nowTheme } from '../../constants/';
-import { HeaderHeight } from '../../constants/utils';
+import { HeaderHeight, iPhoneX } from '../../constants/utils';
 import PropertyService from "../../services/property";
 import Actions from "../../lib/actions";
 
@@ -31,12 +32,15 @@ export default class AgendaFechaScreen extends React.Component {
     async componentDidMount() {
         const { navigation } = this.props;
 
-        await  Actions.extractUserData().then((result) => {
+        await Actions.extractUserData().then((result) => {
              if(result != null) {
                  this.setState({userData : result.user});
                  this._getPropertyInfo();
              }
         });
+
+        this.state.date.setHours(this.state.date.getHours() + 2);
+        this.state.time.setHours(this.state.time.getHours() + 2);
 
         this.focusListener = await navigation.addListener('didFocus', () => {
             this._getPropertyInfo();
@@ -57,19 +61,41 @@ export default class AgendaFechaScreen extends React.Component {
             });
     }
 
+    _validateDateTime() {
+        let {date, time} = this.state;
+        let _month      = date.getMonth() <= 8 ? `0${date.getMonth() + 1}`: date.getMonth() + 1;
+        let _day        = date.getDate() <= 9 ? `0${date.getDate()}`: date.getDate();
+        let _minutes    = time.getMinutes() <= 9 ? `0${time.getMinutes()}`: time.getMinutes();
+        let _hours      = time.getHours() <= 9 ? `0${time.getHours()}`: time.getHours();
+
+        let scheduleStr = `${date.getFullYear()}-${_month}-${_day} ${_hours}:${_minutes}:00`;
+        let scheduleDT  = moment(scheduleStr.replace(' ', 'T'));
+        let nowDT       = moment();
+        let diffDT      = scheduleDT.diff(nowDT, 'hours');
+
+        if(diffDT >= 2)
+            return true;
+        else
+            return false;
+    }
+
     _handleNextAction() {
-        this.props.navigation.navigate("AgendaInsumos", {
-            userData        : this.state.userData,
-            propertyInfo    : this.state.propertyInfo,
-            datetime        : {
-                weekDay     : this.state.date.getDay(),
-                day         : this.state.date.getDate(),
-                month       : this.state.date.getMonth(),
-                year        : this.state.date.getFullYear(),
-                hour        : this.state.time.getHours(),
-                minutes     : this.state.time.getMinutes()
-            }
-        });
+        if(this._validateDateTime()) {
+            this.props.navigation.navigate("AgendaInsumos", {
+                userData        : this.state.userData,
+                propertyInfo    : this.state.propertyInfo,
+                datetime        : {
+                    weekDay     : this.state.date.getDay(),
+                    day         : this.state.date.getDate(),
+                    month       : this.state.date.getMonth(),
+                    year        : this.state.date.getFullYear(),
+                    hour        : this.state.time.getHours(),
+                    minutes     : this.state.time.getMinutes()
+                }
+            });
+        } else {
+            Alert.alert("Servicio", "El mínimo de tiempo para solicitar un servicio es de dos horas antes para garantizar el traslado.")
+        }
     }
 
     _openDatePicker = async() => {
@@ -175,7 +201,7 @@ export default class AgendaFechaScreen extends React.Component {
 
                     <Block flex style={{ backgroundColor: 'white' }}>
                         <Block space="between" style={styles.padded}>
-                            <Text style={[styles.title, {paddingTop: smallScreen ? 50 : 30}]}> Programa tu cita </Text>
+                            <Text style={[styles.title, {paddingTop: smallScreen ? 50 : 30}, {marginTop: iPhoneX && 30}]}> Programa tu cita </Text>
                             <Text style={[styles.subtitle, {paddingVertical: 10}]}> Selecciona el día y hora del servicio </Text>
 
                             <View style={[styles.titleBorder, { flexDirection: 'row', justifyContent: 'space-between'}]}>
@@ -251,7 +277,7 @@ export default class AgendaFechaScreen extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: Platform.OS === 'android' ? - HeaderHeight : - HeaderHeight,
+        marginTop: Platform.OS === 'android' ? -HeaderHeight : -HeaderHeight - 15,
     },
     padded: {
         paddingHorizontal: theme.SIZES.BASE * 2,
