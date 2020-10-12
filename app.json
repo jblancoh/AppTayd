@@ -3,24 +3,26 @@
     "name": "TAYD",
     "slug": "tayd",
     "privacy": "public",
-    "sdkVersion": "35.0.0",
     "platforms": [
       "ios",
       "android"
     ],
     "version": "1.0.1",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash_new.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#ffffff"
-    },
+    "icon": "./assets/ic_launcher.png",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
     "android": {
       "package": "com.tayd.taydApp",
+      "splash": {
+        "mdpi": "./assets/splash/splash-port-mdpi.png",
+        "hdpi": "./assets/splash/splash-port-hdpi.png",
+        "xhdpi": "./assets/splash/splash-port-xhdpi.png",
+        "xxhdpi": "./assets/splash/splash-port-xxhdpi.png",
+        "xxxhdpi": "./assets/splash/splash-port-xxxhdpi.png",
+        "resizeMode": "contain"
+      },
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyA8qjUbL-Zbv1pWZS9TBRD1QbdTM5_GsII"
@@ -31,8 +33,13 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.tayd.taydApp"
+      "supportsTablet": false,
+      "bundleIdentifier": "com.tayd.taydApp",
+      "buildNumber": "1.0.0",
+      "splash": {
+        "image": "./assets/splash/splash.png",
+        "resizeMode": "contain"
+      }
     },
     "packagerOpts": {
       "assetExts": [
