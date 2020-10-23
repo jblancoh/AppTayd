@@ -7,7 +7,7 @@
       "ios",
       "android"
     ],
-    "version": "1.0.1",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/ic_launcher.png",
     "updates": {
@@ -15,6 +15,8 @@
     },
     "android": {
       "package": "com.tayd.taydApp",
+      "versionCode": 4,
+      "permissions": ["CAMERA", "ACCESS_FINE_LOCATION"],
       "splash": {
         "mdpi": "./assets/splash/splash-port-mdpi.png",
         "hdpi": "./assets/splash/splash-port-hdpi.png",
@@ -35,16 +37,18 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.tayd.taydApp",
-      "buildNumber": "1.0.0",
+      "buildNumber": "1.0.4",
       "splash": {
         "image": "./assets/splash/splash.png",
         "resizeMode": "contain"
+      },
+      "infoPlist": {
+        "NSCameraUsageDescription": "Esta aplicación utiliza la cámara para escanear documentos solicitados.",
+        "NSLocationWhenInUseUsageDescription": "Esta aplicación utiliza tu ubicación para seleccionar tu inmueble en el mapa."
       }
     },
     "packagerOpts": {
-      "assetExts": [
-        "ttf"
-      ]
+
     },
     "description": "App de solicitud de servicios de limpieza."
   }

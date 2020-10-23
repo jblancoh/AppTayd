@@ -6,6 +6,7 @@ import { Input } from '../components';
 import { Images, nowTheme } from '../constants';
 import AuthenticationService from '../services/authentication';
 import { withNavigation } from 'react-navigation';
+import * as Linking from 'expo-linking';
 
 const { height, width } = Dimensions.get('screen');
 const smallScreen = height < 812 ? true : false;
@@ -26,14 +27,19 @@ class RegisterTayderScreen extends React.Component {
       lastname  : '',
       password  : '',
       isLoading : false,
+      chkTerms  : false,
     };
   }
 
   _onRegister = () => {
     if(this.state.email != '' && this.state.password != '' && this.state.phone != '' && this.state.name != '' && this.state.lastname != '') {
-      this._handleRequest();
+      if(!this.state.chkTerms) {
+        this._handleRequest();
+      } else {
+        Alert.alert('Upps!', 'Es necesario que aceptes los términos y condiciones de TAYD.');
+      }
     } else {
-      Alert.alert('Upps!', 'Al parecer el formulario de acceso se encuentra incompleto.');
+      Alert.alert('Upps!', 'Al parecer el formulario de registro se encuentra incompleto.');
     }
   }
   
@@ -75,6 +81,10 @@ class RegisterTayderScreen extends React.Component {
       })
   }
 
+  _handlePrivacyPress = () => {
+    Linking.openURL('http://www.tayd.mx/terminos-condiciones');
+  }
+
   render() {
     const { navigation } = this.props;
 
@@ -83,99 +93,102 @@ class RegisterTayderScreen extends React.Component {
           <Block flex>
             <StatusBar barStyle="light-content" />
             <ImageBackground source={Images.RegisterTayderBackground} style={{ height: height, width}}>
-              
-            <View>
-              <ScrollView>
-                <Block flex space="between" style={styles.padded}>
-                  <Block middle>
-                    <Text style={styles.title}>Registro</Text>
-                  </Block>
-                  <Block width={width * 0.8}>
-                    <Input
-                      placeholder="Número telefónico"
-                      placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
-                      type="phone-pad"
-                      style={styles.inputs}
-                      iconContent={
-                        <Image style={styles.inputIcons} source={Images.Icons.Telefono} />
-                      }
-                      onChangeText={(text) => this.setState({ phone: text })}
-                    />
-                  </Block>
-                  <Block width={width * 0.8}>
-                    <Input
-                      placeholder="Correo electrónico"
-                      placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
-                      type="email-address"
-                      style={styles.inputs}
-                      iconContent={
-                        <Image style={styles.inputIcons} source={Images.Icons.Correo} />
-                      }
-                      onChangeText={(text) => this.setState({ email: text })}
-                    />
-                  </Block>
-                  <Block width={width * 0.8}>
-                    <Input
-                      placeholder="Nombre(s)"
-                      placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
-                      style={styles.inputs}
-                      iconContent={
-                        <Image style={styles.inputIcons} source={Images.Icons.Nombre} />
-                      }
-                      onChangeText={(text) => this.setState({ name: text })}
-                    />
-                  </Block>
-                  <Block width={width * 0.8}>
-                    <Input
-                      placeholder="Apellido(s)"
-                      placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
-                      style={styles.inputs}
-                      iconContent={
-                        <Image style={styles.inputIcons} source={Images.Icons.Apellido} />
-                      }
-                      onChangeText={(text) => this.setState({ lastname: text })}
-                    />
-                  </Block>
-                  <Block width={width * 0.8}>
-                    <Input
-                      placeholder="Contraseña"
-                      placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
-                      password
-                      viewPass
-                      style={styles.inputs}
-                      iconContent={
-                        <Image style={styles.inputIcons} source={Images.Icons.Contrasena} />
-                      }
-                      onChangeText={(text) => this.setState({ password: text })}
-                    />
-                  </Block>
-                  <Block width={width * 0.6} style={{ justifyContent: 'center', alignSelf: 'center', marginVertical: 10, marginLeft: 15 }} row>
-                    <Checkbox
-                      checkboxStyle={{ borderWidth: 1, borderRadius: 2, borderColor: '#FFF', backgroundColor: '#302a31' }}
-                      color={nowTheme.COLORS.BASE}
-                      labelStyle={{ color: '#FFF', fontFamily: 'trueno', fontSize: 12 }}
-                      label="Acepto los términos y condiciones."
-                      initialValue={this.state.chkTerms}
-                      onChange={() => this.setState({ chkTerms: !this.state.chkTerms })}
-                    />
-                  </Block>
 
-                  <Block center style={{marginBottom: 20}}>
-                    <Button
-                      round
-                      color={nowTheme.COLORS.BASE}
-                      style={styles.button}
-                      loading={this.state.isLoading}
-                      disabled={this.state.isLoading}
-                      onPress={() => this._onRegister()}>
-                      <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.WHITE}>
-                        SIGUIENTE
-                      </Text>
-                    </Button>
+              <View>
+                <ScrollView>
+                  <Block flex space="between" style={styles.padded}>
+                    <Block middle>
+                      <Text style={styles.title}>Registro</Text>
+                    </Block>
+                    <Block width={width * 0.8}>
+                      <Input
+                        placeholder="Número telefónico"
+                        placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
+                        type="phone-pad"
+                        style={styles.inputs}
+                        iconContent={
+                          <Image style={styles.inputIcons} source={Images.Icons.Telefono} />
+                        }
+                        onChangeText={(text) => this.setState({ phone: text })}
+                      />
+                    </Block>
+                    <Block width={width * 0.8}>
+                      <Input
+                        placeholder="Correo electrónico"
+                        placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
+                        type="email-address"
+                        style={styles.inputs}
+                        iconContent={
+                          <Image style={styles.inputIcons} source={Images.Icons.Correo} />
+                        }
+                        onChangeText={(text) => this.setState({ email: text })}
+                      />
+                    </Block>
+                    <Block width={width * 0.8}>
+                      <Input
+                        placeholder="Nombre(s)"
+                        placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
+                        style={styles.inputs}
+                        iconContent={
+                          <Image style={styles.inputIcons} source={Images.Icons.Nombre} />
+                        }
+                        onChangeText={(text) => this.setState({ name: text })}
+                      />
+                    </Block>
+                    <Block width={width * 0.8}>
+                      <Input
+                        placeholder="Apellido(s)"
+                        placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
+                        style={styles.inputs}
+                        iconContent={
+                          <Image style={styles.inputIcons} source={Images.Icons.Apellido} />
+                        }
+                        onChangeText={(text) => this.setState({ lastname: text })}
+                      />
+                    </Block>
+                    <Block width={width * 0.8}>
+                      <Input
+                        placeholder="Contraseña"
+                        placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
+                        password
+                        viewPass
+                        style={styles.inputs}
+                        iconContent={
+                          <Image style={styles.inputIcons} source={Images.Icons.Contrasena} />
+                        }
+                        onChangeText={(text) => this.setState({ password: text })}
+                      />
+                    </Block>
+                    <Block width={width * 0.7} style={{ justifyContent: 'center', alignSelf: 'center', marginVertical: 10, marginLeft: width * 0.3 }}>
+                      <Text style={{color: nowTheme.COLORS.BASE, fontFamily: 'trueno', fontSize: 12}} onPress={this._handlePrivacyPress}>Ver términos y condiciones</Text>
+                    </Block>
+                    <Block width={width * 0.6} style={{ justifyContent: 'center', alignSelf: 'center', marginVertical: 10}}>
+                      <Checkbox
+                        checkboxStyle={{ borderWidth: 1, borderRadius: 2, borderColor: '#FFF', backgroundColor: '#302a31' }}
+                        color={nowTheme.COLORS.BASE}
+                        labelStyle={{ color: '#FFF', fontFamily: 'trueno', fontSize: 12 }}
+                        label="Acepto los términos y condiciones."
+                        initialValue={this.state.chkTerms}
+                        onChange={() => this.setState({ chkTerms: !this.state.chkTerms })}
+                      />
+                    </Block>
+
+                    <Block center style={{marginBottom: 20}}>
+                      <Button
+                        round
+                        color={nowTheme.COLORS.BASE}
+                        style={styles.button}
+                        loading={this.state.isLoading}
+                        disabled={this.state.isLoading}
+                        onPress={() => this._onRegister()}>
+                        <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.WHITE}>
+                          SIGUIENTE
+                        </Text>
+                      </Button>
+                    </Block>
                   </Block>
-                </Block>
-              </ScrollView>
-            </View>
+                </ScrollView>
+              </View>
             </ImageBackground>
           </Block>
       </DismissKeyboard>
@@ -191,12 +204,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   padded: {
-    marginTop: smallScreen ? 250 : 330,
+    marginTop: smallScreen ? 250 : 300,
     paddingHorizontal: theme.SIZES.BASE * 2,
   },
   title: {
     fontFamily: 'trueno-extrabold',
-    fontSize: 45,
+    fontSize: 40,
     textAlign: 'center',
     color: nowTheme.COLORS.WHITE,
   },

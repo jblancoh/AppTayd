@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, AsyncStorage } from 'react-native';
+import { Image, AsyncStorage, Alert } from 'react-native';
 import { AppLoading, Notifications } from 'expo';
 import * as Font from 'expo-font';
 import { Asset } from 'expo-asset';
@@ -11,10 +11,8 @@ import * as Permissions from 'expo-permissions';
 
 // cache app images
 const assetImages = [
-  Images.Onboarding,
   Images.Logo,
   Images.ProfilePicture,
-  Images.RegisterBackground,
   Images.ProfileBackground
 ];
 
@@ -28,17 +26,39 @@ function cacheImages(images) {
   });
 }
 
-async function getToken() {
+async function _getToken() {
   const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
 
   if(status !== 'granted') {
-    alert("Necesitas habilitar los permisos para las notificaciones");
     return;
   }
 
   const token = await Notifications.getExpoPushTokenAsync();
   await AsyncStorage.setItem('movil_token', token);
   console.log('Our token', token);
+}
+
+async function _checkLocationPermitionAsync() {
+  const {status} = await Permissions.getAsync(Permissions.LOCATION);
+
+  if(status !== 'granted') {
+    Alert.alert(
+      "Permisos",
+      "La aplicación requiere de tu ubicación para ubicar tu inmueble con más facilidad.",
+      [
+        { text: "OK", onPress: () => _getLocationAsync()}
+      ],
+      { cancelable: false }
+    )
+  }
+}
+
+async function _getLocationAsync() {
+  const { status } = await Permissions.askAsync(Permissions.LOCATION);
+
+  if(status !== 'granted') {
+    return;
+  }
 }
 
 export default class App extends React.Component {
@@ -63,10 +83,11 @@ export default class App extends React.Component {
       'trueno-light'      : require('./assets/font/TruenoLt.ttf'),
     });
 
-    getToken();
-    this.listener = Notifications.addListener(this.handleNotification);
-
     this.setState({ fontLoaded: true });
+
+    _checkLocationPermitionAsync();
+    _getToken();
+    this.listener = Notifications.addListener(this.handleNotification);
   }
 
   render() {

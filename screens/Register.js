@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Image, Dimensions, TouchableWithoutFeedback, Keyboard, Alert, ScrollView, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
 import { Block, Checkbox, Text, Button, } from 'galio-framework';
+import * as Linking from 'expo-linking';
 
 import { Input } from '../components';
 import { Images, nowTheme } from '../constants';
@@ -18,7 +19,7 @@ class RegisterScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isTayder  : this.props.navigation.state.params.isTayder,
+      isTayder  : false,
       phone     : '',
       email     : '',
       name      : '',
@@ -30,11 +31,19 @@ class RegisterScreen extends React.Component {
     };
   }
 
+  _handlePrivacyPress = () => {
+    Linking.openURL('http://www.tayd.mx/terminos-condiciones');
+  }
+
   _handleLogin = () => {
     if(this.state.email != '' && this.state.password != '' && this.state.password != '' && this.state.name != '' && this.state.lastname != '' && this.state.phone != '') {
-      this._handleRequest();
+      if(!this.state.chkTerms) {
+        this._handleRequest();
+      } else {
+        Alert.alert('Upps!', 'Es necesario que aceptes los términos y condiciones de TAYD.');
+      }
     } else {
-      Alert.alert('Upps!', 'Al parecer el formulario de acceso se encuentra incompleto.');
+      Alert.alert('Upps!', 'Al parecer el formulario de registro se encuentra incompleto.');
     }
   }
 
@@ -48,6 +57,7 @@ class RegisterScreen extends React.Component {
       name      : this.state.name,
       last_name : this.state.lastname,
       phone     : this.state.phone,
+      chkTerms  : false,
     };
 
     await AuthenticationService.signup(params)
@@ -145,6 +155,9 @@ class RegisterScreen extends React.Component {
                           }
                           onChangeText={(text) => this.setState({password: text })}
                         />
+                      </Block>
+                      <Block width={width * 0.7} style={{ justifyContent: 'center', alignSelf: 'center', marginVertical: 10, marginLeft: 15}} row>
+                        <Text style={{color: nowTheme.COLORS.BASE, fontFamily: 'trueno', fontSize: 12}} onPress={this._handlePrivacyPress}>Ver términos y condiciones</Text>
                       </Block>
                       <Block width={width * 0.6} style={{justifyContent: 'center', alignSelf: 'center', marginVertical: 10, marginLeft: 15}} row>
                         <Checkbox

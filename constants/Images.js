@@ -1,5 +1,4 @@
 // local imgs
-const Onboarding          = require('../assets/imgs/getPro-bg-1.png');
 const Logo                = require('../assets/imgs/tayd-logo.png');
 const LogoTayder          = require('../assets/imgs/tayd-logo-tayder.png');
 const TaydLogo            = require('../assets/imgs/tayd-logo2.png');
@@ -147,7 +146,6 @@ const Icons = {
 };
 
 export default {
-  Onboarding,
   Logo,
   TaydLogo,
   TaydLogoLarge,
