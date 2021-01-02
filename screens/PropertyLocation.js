@@ -23,7 +23,12 @@ class PropertyLocationScreen extends React.Component {
         super(props);
         this.state = {
             isLoading       : true,
-            location        : null,
+            location        : {
+              coords : {
+                latitude : 17.9866439,
+                longitude : -92.9564609
+              }
+            },
             errorMessage    : null,
 
             address           : ''
@@ -59,11 +64,7 @@ class PropertyLocationScreen extends React.Component {
       let { location } = this.state;
         return (
         <DismissKeyboard>
-          {
-            (location != null) ?
-            (
               <View style={styles.container}>
-
                 <MapView
                     style={styles.mapStyle}
                     pitchEnabled={true}
@@ -130,12 +131,6 @@ class PropertyLocationScreen extends React.Component {
                   </Button>
                 </Block>
               </View>
-            ) : (
-              <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={{fontFamily: 'trueno-semibold', color: nowTheme.COLORS.SECONDARY, fontSize: 24}}>Cargando...</Text>
-              </View>
-            )
-          }
         </DismissKeyboard>
         );
     }

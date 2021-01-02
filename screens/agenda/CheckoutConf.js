@@ -120,7 +120,7 @@ class AgendaCheckoutScreen extends React.Component {
                 this.setState({sourceInfo: response});
             })
             .catch(error => {
-                console.error(error);
+                console.log(error);
             });
     }
 
@@ -291,20 +291,23 @@ class AgendaCheckoutScreen extends React.Component {
                                 <View style={[styles.sectionBorder, styles.section]}>
                                     <Image source={Images.Icons.TarjetaBancaria} style={[styles.sectionItem, { width: 50, height: 34 }]} />
                                     <Text style={[styles.sectionItem, styles.textNormal, {width: 190, paddingLeft: 30}]}>
-                                        {sourceInfo != null && `${sourceInfo.brand}\n${sourceInfo.number}\n${sourceInfo.name}`}
+                                        {sourceInfo != null ? `${sourceInfo.brand}\n${sourceInfo.number}\n${sourceInfo.name}` : 'No tienes una tarjeta agregada.'}
                                     </Text>
-                                    <Icon
-                                        size={22}
-                                        color={nowTheme.COLORS.BASE}
-                                        name="chevron-right"
-                                        family="FontAwesome"
-                                        onPress={() => this.setState({showPaymentMethodModal: true})}
-                                    />
+                                    <TouchableOpacity onPress={() => this.setState({showPaymentMethodModal: true})}>
+                                        { sourceInfo != null && (
+                                            <Icon
+                                                size={22}
+                                                color={nowTheme.COLORS.BASE}
+                                                name="chevron-right"
+                                                family="FontAwesome"
+                                            />
+                                        )}
+                                    </TouchableOpacity>
                                 </View>
 
                                 <View style={[styles.sectionBorder, styles.section]}>
                                     <Text style={[styles.sectionItem, styles.textBold]}>Contacto</Text>
-                                    <Text style={[styles.sectionItem, styles.textNormal, { width: 230 }]}>{`${userData.email}\n${userData.info.phone}`}</Text>
+                                    <Text style={[styles.sectionItem, styles.textNormal, { width: 230 }]}>{`${userData.email}\n${userData.info?.phone}`}</Text>
                                 </View>
 
                                 <View style={[styles.sectionBorder, styles.section]}>
@@ -356,7 +359,7 @@ class AgendaCheckoutScreen extends React.Component {
                     </Block>
                 </Block>
 
-                { this.paymentMethodModal() }
+                { this.paymentMethodModal }
 
                 <Modal
                     animationType="fade"

@@ -7,7 +7,7 @@
       "ios",
       "android"
     ],
-    "version": "1.0.4",
+    "version": "1.0.6",
     "orientation": "portrait",
     "icon": "./assets/ic_launcher.png",
     "updates": {
@@ -15,7 +15,7 @@
     },
     "android": {
       "package": "com.tayd.taydApp",
-      "versionCode": 4,
+      "versionCode": 6,
       "permissions": ["CAMERA", "ACCESS_FINE_LOCATION"],
       "splash": {
         "mdpi": "./assets/splash/splash-port-mdpi.png",
@@ -37,7 +37,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.tayd.taydApp",
-      "buildNumber": "1.0.4",
+      "buildNumber": "1.0.6",
       "splash": {
         "image": "./assets/splash/splash.png",
         "resizeMode": "contain"
