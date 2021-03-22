@@ -214,31 +214,36 @@ class AgendaCheckoutScreen extends React.Component {
 
     storeService() {
         const {day, month, year, hour, minutes} = this.state.datetime;
-        let _month      = month <= 8 ? `0${month + 1}`: month + 1;
-        let _day        = day <= 9 ? `0${day}`: day;
-        let _minutes    = minutes <= 9 ? `0${minutes}`: minutes;
-        let _hours      = hour <= 9 ? `0${hour}`: hour
 
-        let params = {
-            user_id             : this.state.userData.id,
-            user_property_id    : this.state.propertyInfo.id,
-            stripe_customer_source_id : this.state.sourceInfo.id,
-            date                : `${year}-${_month}-${_day}`,
-            time                : `${_hours}:${_minutes}:00`,
-            has_consumables     : this.state.hasSupplies,
-            service_cost         : this.state.serviceCost,
-            discount            : 0,
-        };
-
-        ServicesService.store(params)
-            .then(response => {
-                this.props.navigation.navigate("AgendaSuccess", {
-                    schedule: this._datetimeFormat()
+        if(this.state.sourceInfo != null) {
+            let _month      = month <= 8 ? `0${month + 1}`: month + 1;
+            let _day        = day <= 9 ? `0${day}`: day;
+            let _minutes    = minutes <= 9 ? `0${minutes}`: minutes;
+            let _hours      = hour <= 9 ? `0${hour}`: hour
+    
+            let params = {
+                user_id             : this.state.userData.id,
+                user_property_id    : this.state.propertyInfo.id,
+                stripe_customer_source_id : this.state.sourceInfo.id,
+                date                : `${year}-${_month}-${_day}`,
+                time                : `${_hours}:${_minutes}:00`,
+                has_consumables     : this.state.hasSupplies,
+                service_cost         : this.state.serviceCost,
+                discount            : 0,
+            };
+    
+            ServicesService.store(params)
+                .then(response => {
+                    this.props.navigation.navigate("AgendaSuccess", {
+                        schedule: this._datetimeFormat()
+                    });
+                })
+                .catch(e => {
+                    this.setState({hasError: true, errorTitle: 'Servicio', errorMessage: e.data.error});
                 });
-            })
-            .catch(e => {
-                this.setState({hasError: true, errorTitle: 'Servicio', errorMessage: e.data.error});
-            });
+        } else {
+            this.setState({hasError: true, errorTitle: 'Tarjeta Bancaria', errorMessage: "No se ha registrado una tarjeta bancaria en tu cuenta."});
+        }
     }
 
     paymentMethodModal = () => {

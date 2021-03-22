@@ -161,7 +161,7 @@ export default class PropertyInfoScreen extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: isIphone ? HeaderHeight : 45,
+        marginTop: isIphone ? HeaderHeight + 15 : 45,
     },
     padded: {
         paddingHorizontal: theme.SIZES.BASE * 2,

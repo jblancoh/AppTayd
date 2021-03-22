@@ -34,7 +34,8 @@ class DomicilioLocationScreen extends React.Component {
             },
             errorMessage    : null,
 
-            address           : ''
+            address         : '',
+            reference       : ''
         };
 
         this._getLocationAsync();
@@ -56,6 +57,7 @@ class DomicilioLocationScreen extends React.Component {
       if(this.state.address != '') {
         this.props.navigation.navigate('DomicilioInfo', {
           address: this.state.address,
+          reference: this.state.reference,
           location: this.state.location.coords
         });
       } else {
@@ -101,7 +103,7 @@ class DomicilioLocationScreen extends React.Component {
               />
             </MapView>
             
-            <View style={[styles.bottomContainer, { height: 160 }]}>
+            <View style={[styles.bottomContainer, { height: 220 }]}>
               <View style={[{ justifyContent: 'center', alignContent: 'center', paddingTop: 15 }]}>
                 <Text style={{fontFamily: 'trueno-extrabold', textAlign: 'center', paddingBottom: 10}} color={nowTheme.COLORS.SECONDARY} size={24}>
                   Dirección
@@ -115,7 +117,7 @@ class DomicilioLocationScreen extends React.Component {
                   </Text>
                 </View>
 
-                <View style={{ marginBottom: 5, justifyContent: 'center', alignContent: 'center', paddingTop: 10, }}>
+                <View style={{ justifyContent: 'center', alignContent: 'center' }}>
                   <Input
                     placeholder="Av. Paseo Tabasco #457"
                     onChangeText={(text) => this.setState({address : text})}
@@ -123,7 +125,16 @@ class DomicilioLocationScreen extends React.Component {
                     iconContent={
                       <Image style={styles.inputIcons} source={Images.Icons.Ubicacion} />
                     }
-                    />
+                  />
+                </View>
+
+                <View style={{ marginBottom: 5, flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'center', alignItems: "center"}}>
+                    <Text style={{fontFamily: 'trueno', fontSize: 17, color: nowTheme.COLORS.DIVIDER, width: 95}}>Referencia: </Text>
+                  <Input
+                    placeholder="Ej: Casa Blanca"
+                    onChangeText={(text) => this.setState({reference : text})}
+                    style={styles.inputs}
+                  />
                 </View>
               </View>
             </View>
@@ -171,7 +182,7 @@ const styles = StyleSheet.create({
     borderRadius: 21.5,
     fontFamily: 'trueno',
     fontSize: 17,
-    letterSpacing: 20
+    letterSpacing: 17
   },
 
   bottomContainer: {

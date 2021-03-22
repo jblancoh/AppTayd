@@ -52,7 +52,7 @@ class ServiceComponent extends React.Component {
     }
 
     _showService = (item) => {
-        if(item.service_status_id == 3) {
+        if(item.service_status_id == 3 || item.service_status_id == 2) {
             this.props.navigation.navigate("AgendaProgreso", {
                 tayder: item.provider_user_name ,
                 status: item.service_status_name
@@ -135,9 +135,13 @@ class ServiceComponent extends React.Component {
                     {
                         this.state.showInfo && (
                             <Block center style={{alignItems: 'flex-end'}}>
-                                <Button color={nowTheme.COLORS.BASE} round style={styles.buttonContact} onPress={() => this.props.navigation.navigate("Chat", {service_id : item.id})}>
-                                    <Text style={{ fontFamily: 'trueno-semibold', lineHeight: 24 }} size={20} color={nowTheme.COLORS.WHITE}>CONTACTAR</Text>
-                                </Button>
+                                {
+                                    (item.service_status_id == 2 && item.service_status_id == 3) && (
+                                        <Button color={nowTheme.COLORS.BASE} round style={styles.buttonContact} onPress={() =>  this.props.navigation.navigate("Chat", {service_id : item.id})}>
+                                            <Text style={{ fontFamily: 'trueno-semibold', lineHeight: 24 }} size={20} color={nowTheme.COLORS.WHITE}>CONTACTAR</Text>
+                                        </Button>
+                                    )
+                                }
 
                                 <Block middle style={[styles.section, {marginVertical: 15}]}>
                                     <Button color={'rgb(240,240,240)'} round style={styles.buttonCancel} onPress={() => this.setState({showModal: true})}>
