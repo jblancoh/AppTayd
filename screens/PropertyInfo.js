@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Dimensions, Platform, ScrollView, View, AsyncStorage, Image, Alert } from 'react-native';
+import { StyleSheet, Dimensions, Platform, ScrollView, View, Image, Alert } from 'react-native';
 import { Block, Button, Text, theme } from 'galio-framework';
 import { HeaderHeight } from '../constants/utils';
 import Actions from '../lib/actions';
@@ -17,13 +17,14 @@ export default class PropertyInfoScreen extends React.Component {
         this.state = {
             userData        : null,
             isLoading       : false,
-            
 
             propertyTypeValue: null,
             propertyItems   : [],
             propertyData    : [],
 
             address         : this.props.navigation.state.params.address,
+            reference         : this.props.navigation.state.params.reference,
+            alias         : this.props.navigation.state.params.alias,
             location        : this.props.navigation.state.params.location,
         };
     }
@@ -82,7 +83,9 @@ export default class PropertyInfoScreen extends React.Component {
     
             let params = {
                 user_id             : this.state.userData.id,
-                name                : this.state.address,
+                name                : this.state.alias,
+                address             : this.state.address,
+                reference           : this.state.reference,
                 latitude            : this.state.location.latitude.toString(),
                 altitude            : this.state.location.longitude.toString(),
                 is_predetermined    : true,
@@ -90,12 +93,9 @@ export default class PropertyInfoScreen extends React.Component {
                 distribution        : this.state.propertyData,
                 first_login         : true,
             };
-    
+
             await PropertyService.store(params)
                 .then(async(response) => {
-                    await AsyncStorage.removeItem('user');
-                    await AsyncStorage.setItem('user', JSON.stringify(response.user));
-
                     this.setState({ isLoading: false, propertyTypeValue: null, propertyItems: [], propertyData: [] });
                     this.props.navigation.navigate('Home')
                 })

@@ -31,7 +31,7 @@ const Inicio004           = require('../assets/imgs/Inicio004.png');
 
 const Slide001            = require('../assets/imgs/slide1.png');
 const Slide002            = require('../assets/imgs/slide2.png');
-const Slide003            = require('../assets/imgs/slide3.png');
+const Slide003            = require('../assets/imgs/slide3.jpg');
 const Slide004            = require('../assets/imgs/slide4.jpg');
 
 const CarouselIndicador01 = require('../assets/imgs/IND--01.png');

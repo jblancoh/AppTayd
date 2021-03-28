@@ -74,6 +74,8 @@ class PropertyLocationScreen extends React.Component {
         if(this.state.alias != '')
           this.props.navigation.navigate('PropertyInfo', {
             address: this.state.address,
+            reference: this.state.reference,
+            alias: this.state.alias,
             location: this.state.location.coords
           });
       } else {

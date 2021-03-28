@@ -47,7 +47,7 @@ export default class Onboarding extends React.Component {
   async componentDidMount() {
    // await Actions.removeUserData().then((response) => console.log("BORRADO"));
 
-    await Actions.extractUserData().then((result) => {
+    /* await Actions.extractUserData().then((result) => {
       if (result != null) {
         if(result.user.first_login && !result.user.isTayder) {
           this.props.navigation.navigate('PropertyLocation');
@@ -63,7 +63,7 @@ export default class Onboarding extends React.Component {
           this.props.navigation.navigate('HomeTayder');
         }
       }
-    });
+    }); */
   }
 
   _renderItem = ({item, dimensions}) => {
