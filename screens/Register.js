@@ -47,12 +47,10 @@ const RegisterScreen = (baseProps) => {
   const _handleLogin = () => {
     if(form.email != '' && form.password != '' && form.password != '' && form.name != '' && form.lastname != '' && form.phone != '') {
       if(!chkTerms) {
-        if(enterCode && verificated)
-          _handleRequest();
-        else {
-          setEnterCode(true);
-          Alert.alert('Verificación', `Se enviará un código de verificación al número telefónico ${form.phone}`)
-        }
+        if(enterCode)
+          confirmCode();
+        else
+          sendCode();
       } else {
         Alert.alert('Upps!', 'Es necesario que aceptes los términos y condiciones de TAYD.');
       }
@@ -61,9 +59,45 @@ const RegisterScreen = (baseProps) => {
     }
   }
 
-  const _handleRequest = async() => {
-    setIsLoading(true);
+  const sendCode = () => {
+    let params = {
+      phone : form.phone
+    }
 
+    AuthenticationService.sendVerificationCode(params)
+      .then(response => {
+        Alert.alert('Verificación', `Se enviará un código de verificación al número telefónico ${form.phone}`)
+        setEnterCode(true);
+      })
+      .catch(err => {
+        console.log(err);
+        Alert.alert('Upps!', err.error);
+      });
+  }
+
+  const confirmCode = () => {
+    if(value.length == 6) {
+      setIsLoading(true);
+
+      let data = {
+        code: value,
+        phone: form.phone
+      };
+
+      AuthenticationService.confirmVerificationCode(data)
+        .then(response => {
+          _handleRequest();
+        })
+        .catch(err => {
+          Alert.alert('Upps!', err.error);
+          setIsLoading(false);
+        })
+    } else {
+      Alert.alert('Upps!', 'El código ingresado es incompleto.');
+    }
+  }
+
+  const _handleRequest = async() => {
     let params = {
       email     : form.email,
       password  : form.password,
@@ -71,7 +105,7 @@ const RegisterScreen = (baseProps) => {
       name      : form.name,
       last_name : form.lastname,
       phone     : form.phone,
-      chkTerms  : false,
+      chkTerms  : true,
     };
 
     await AuthenticationService.signup(params)
@@ -84,6 +118,7 @@ const RegisterScreen = (baseProps) => {
           password  : '',
           confirm   : '',
         });
+        setIsLoading(false);
         Alert.alert("Registro", "Se ha registrado tu cuenta exitosamente, inicia sesión para acceder a Tayd.")
         baseProps.navigation.navigate('Login', {hasMessage: true, message: 'Registro exitoso!'});
       })

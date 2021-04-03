@@ -16,8 +16,24 @@ function signup(user) {
     });
 }
 
+function sendVerificationCode(data) {
+    return request({
+        url: 'auth/send-verification',
+        method: 'POST',
+        data: data
+    });
+}
+
+function confirmVerificationCode(data) {
+    return request({
+        url: 'auth/confirm-verification',
+        method: 'POST',
+        data: data
+    });
+}
+
 const AuthenticationService = {
-    login, signup
+    login, signup, sendVerificationCode, confirmVerificationCode
 }
 
 export default AuthenticationService;
