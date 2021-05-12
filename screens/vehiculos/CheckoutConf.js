@@ -18,23 +18,31 @@ import Images from "../../constants/Images";
 import PaymentMethodService from "../../services/paymentMethod";
 import GeneralSettingService from "../../services/generalSetting";
 import ServicesService from "../../services/service";
+import Actions from "../../lib/actions";
 
 const { height, width } = Dimensions.get("screen");
 const smallScreen = height < 812 ? true : false;
 
-class AgendaCheckoutScreen extends React.Component {
+class VehicleCheckoutScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            datetime        : this.props.navigation.state.params.datetime,
+            vehicleType     : this.props.navigation.state.params.vehicleType,
+            vehicleItems    : this.props.navigation.state.params.vehicleItems,
+            vehicleColor    : this.props.navigation.state.params.vehicleColor,
+            vehicleBrand    : this.props.navigation.state.params.vehicleBrand,
+            services        : this.props.navigation.state.params.services,
+            address         : this.props.navigation.state.params.address,
+            reference       : this.props.navigation.state.params.reference,
+            location        : this.props.navigation.state.params.location,
+            isLoading       : false,
+            userData        : null,
             showPaymentMethodModal : false,
             hasError        : false,
             errorTitle      : '',
             errorMessage    : '',
-            userData        : this.props.navigation.state.params.userData,
-            propertyInfo    : this.props.navigation.state.params.propertyInfo,
-            propertyDist    : "",
-            datetime        : this.props.navigation.state.params.datetime,
-            hasSupplies     : this.props.navigation.state.params.hasSupplies,
+            serviceInfo     : "",
             sourceInfo      : null,
             weekDay         : ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
             months          : ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
@@ -49,36 +57,46 @@ class AgendaCheckoutScreen extends React.Component {
     async componentDidMount() {
         const { navigation } = this.props;
 
-        console.log("UserData", this.state.userData);
+        await Actions.extractUserData().then((result) => {
+                if(result != null) {
+                    this.setState({userData : result.user});
+                }
+            });
 
         await PaymentMethodService.getPredeterminedSource(this.state.userData.id)
-                .then(response => {
-                    this.setState({sourceInfo: response});
-                })
-                .catch(error => {
-                    console.error(error);
-                });
+            .then(response => {
+                this.setState({sourceInfo: response});
+            })
+            .catch(error => {
+                console.error(error);
+            });
 
 
         await GeneralSettingService.getAll()
-                .then(response => {
-                    this.setState({generalSettings: response});
-                })
-                .catch(e => console.error(e));
+            .then(response => {
+                this.setState({generalSettings: response});
+            })
+            .catch(e => console.error(e));
 
-        this._getPropertyDistribution();
+        this._getVehicleServicesDetails();
 
         this.focusListener = await navigation.addListener('didFocus', async () => {
             this.setState({
+                datetime        : this.props.navigation.state.params.datetime,
+                vehicleType     : this.props.navigation.state.params.vehicleType,
+                vehicleItems    : this.props.navigation.state.params.vehicleItems,
+                vehicleColor    : this.props.navigation.state.params.vehicleColor,
+                vehicleBrand    : this.props.navigation.state.params.vehicleBrand,
+                services        : this.props.navigation.state.params.services,
+                address         : this.props.navigation.state.params.address,
+                reference       : this.props.navigation.state.params.reference,
+                location        : this.props.navigation.state.params.location,
+                userData        : null,
                 showPaymentMethodModal : false,
                 hasError        : false,
                 errorTitle      : '',
                 errorMessage    : '',
-                userData        : this.props.navigation.state.params.userData,
-                propertyInfo    : this.props.navigation.state.params.propertyInfo,
-                propertyDist    : "",
-                datetime        : this.props.navigation.state.params.datetime,
-                hasSupplies     : this.props.navigation.state.params.hasSupplies,
+                serviceInfo     : "",
                 sourceInfo      : null,
                 serviceCost     : 0,
                 subtotal        : 0,
@@ -86,6 +104,12 @@ class AgendaCheckoutScreen extends React.Component {
                 total           : 0,
                 generalSettings : [],
             })
+
+            await Actions.extractUserData().then((result) => {
+                if(result != null) {
+                    this.setState({userData : result.user});
+                }
+            });
 
             await PaymentMethodService.getPredeterminedSource(this.state.userData.id)
                 .then(response => {
@@ -102,7 +126,7 @@ class AgendaCheckoutScreen extends React.Component {
                     })
                     .catch(e => console.error(e));
 
-            this._getPropertyDistribution();
+            this._getVehicleServicesDetails();
         });
     }
 
@@ -142,50 +166,27 @@ class AgendaCheckoutScreen extends React.Component {
     }
 
     _calculateService() {
-        let {generalSettings, subtotal, propertyInfo, hasSupplies} = this.state;
-        let generalSettingServiceKey = "",
-            bedroomDiscount     = 0,
-            bathroomDiscount    = 0,
-            serviceTotal        = 0,
+        let {generalSettings, subtotal} = this.state;
+        let serviceTotal        = 0,
             taydCommission      = 0,
             stripeCommission    = 0,
             taxStripe           = 0,
             taxService          = 0,
             newSubtotal         = 0;
 
-        switch(propertyInfo.property_type_id) {
-            case 1: generalSettingServiceKey = "SERVICIO_CASA";          break;
-            case 2: generalSettingServiceKey = "SERVICIO_DEPARTAMENTO";  break;
-            case 3: generalSettingServiceKey = "SERVICIO_OFICINA";       break;
-        }
-
-        let serviceSetting                  = generalSettings.filter(item => item.key == generalSettingServiceKey);
-        let taydSuppliesSetting             = generalSettings.filter(item => item.key == "SERVICIO_INSUMOS_EXTRA");
-        let taydCommissionSetting           = generalSettings.filter(item => item.key == "TAYD_COMISION");
+        let taydCommissionSetting           = generalSettings.filter(item => item.key == "TAYD_COMISION_30");
         let stripeCommissionPercentSetting  = generalSettings.filter(item => item.key == "STRIPE_COMISION_PORCENTAJE");
         let stripeCommissionExtraSetting    = generalSettings.filter(item => item.key == "STRIPE_COMISION_EXTRA");
         let taxPercentSetting               = generalSettings.filter(item => item.key == "IVA_PORCENTAJE");
-        let bedroom                         = propertyInfo.distribution.filter(item => item.key == "RECAMARA");
-        let bathroom                        = propertyInfo.distribution.filter(item => item.key == "BANO");
 
-        /**
-         * EL SERVICIO BASE DE DEPARTAMENTO O CASA INCLUYE LIMPIEZA DE UNA HABITACIÓN Y UN BAÑO,
-         * POR LO QUE HAY QUE DESCONTARLOS DEL ARRAY DE DISTRIBUCIÓN PARA QUE NO SUME EN EL SUBTOTAL.
-         */
-        if(bedroom.length >= 1 && bedroom[0].quantity >= 1)
-            bedroomDiscount = parseFloat(bedroom[0].price);
-
-        if(bathroom.length >= 1 && bathroom[0].quantity >= 1)
-            bathroomDiscount = parseFloat(bathroom[0].price);
-
-        // pre-subtotal del servicio (SERVICIO_BASE + SUBTOTAL) - (DESCUENTO_RECAMARA + DESCUENTO BAÑO)
-        serviceTotal    = (parseFloat(serviceSetting[0].value) + subtotal + (hasSupplies ? parseFloat(taydSuppliesSetting[0].value) : 0)) - (bedroomDiscount + bathroomDiscount);
-
-        // Impuesto aplicado al pre-subtotal
-        taxService      = serviceTotal * (parseFloat(taxPercentSetting[0].value) / 100);
+        // pre-subtotal del servicio
+        serviceTotal    = subtotal;
 
         // Comisión obtenida por Tayd
-        taydCommission  = (serviceTotal + taxService) * (parseFloat(taydCommissionSetting[0].value) / 100);
+        taydCommission  = serviceTotal * (parseFloat(taydCommissionSetting[0].value) / 100);
+
+        // Impuesto aplicado al pre-subtotal
+        taxService      = (serviceTotal + taydCommission) * (parseFloat(taxPercentSetting[0].value) / 100);
 
         // Comisión obtenida por Stripe
         stripeCommission = ((serviceTotal + taxService + taydCommission) * (parseFloat(stripeCommissionPercentSetting[0].value) / 100)) + parseFloat(stripeCommissionExtraSetting[0].value);
@@ -199,16 +200,16 @@ class AgendaCheckoutScreen extends React.Component {
         this.setState({subtotal: newSubtotal, serviceCost: serviceTotal});
     }
 
-    _getPropertyDistribution() {
+    _getVehicleServicesDetails() {
         let total           = 0;
-        let strDistribution = "";
+        let strDetails      = "";
 
-        this.state.propertyInfo.distribution.map(item => {
-            strDistribution += `${item.quantity} ${item.name} \n`;
-            total           += parseFloat(item.price) * item.quantity;
+        this.state.services.map(item => {
+            strDetails += `${item.label} \n`;
+            total      += parseFloat(item.price);
         });
 
-        this.setState({subtotal : total, propertyDist: strDistribution});
+        this.setState({subtotal : total, serviceInfo: strDetails});
         this._calculateService();
     }
 
@@ -223,16 +224,22 @@ class AgendaCheckoutScreen extends React.Component {
     
             let params = {
                 user_id             : this.state.userData.id,
-                service_type_id     : 1,
-                user_property_id    : this.state.propertyInfo.id,
+                service_type_id     : 2,
+                vehicle_type_id     : this.state.vehicleType,
                 stripe_customer_source_id : this.state.sourceInfo.id,
                 date                : `${year}-${_month}-${_day}`,
                 time                : `${_hours}:${_minutes}:00`,
-                has_consumables     : this.state.hasSupplies,
-                service_cost         : this.state.serviceCost,
+                has_consumables     : false,
+                service_cost        : this.state.serviceCost,
                 discount            : 0,
+                marca               : this.state.vehicleBrand,
+                color               : this.state.vehicleColor,
+                latitude            : this.state.location.latitude,
+                altitude            : this.state.location.longitude,
+                service_details     : this.state.services.map(item => item.vehicle_type_price_id)
             };
-    
+            console.log(params);
+
             ServicesService.store(params)
                 .then(response => {
                     this.props.navigation.navigate("AgendaSuccess", {
@@ -271,7 +278,7 @@ class AgendaCheckoutScreen extends React.Component {
 
     render() {
         const { navigation } = this.props;
-        const { propertyInfo, sourceInfo, propertyDist, subtotal, discount, userData } = this.state;
+        const { address, sourceInfo, serviceInfo, subtotal, discount, userData, isLoading } = this.state;
 
         return (
             <Block flex style={styles.container}>
@@ -313,12 +320,12 @@ class AgendaCheckoutScreen extends React.Component {
 
                                 <View style={[styles.sectionBorder, styles.section]}>
                                     <Text style={[styles.sectionItem, styles.textBold]}>Contacto</Text>
-                                    <Text style={[styles.sectionItem, styles.textNormal, { width: 230 }]}>{`${userData.email}\n${userData.info?.phone}`}</Text>
+                                    <Text style={[styles.sectionItem, styles.textNormal, { width: 230 }]}>{`${userData?.email}\n${userData?.info?.phone}`}</Text>
                                 </View>
 
                                 <View style={[styles.sectionBorder, styles.section]}>
                                     <Text style={[styles.sectionItem, styles.textBold]}>Dirección</Text>
-                                    <Text style={[styles.sectionItem, styles.textNormal, { width: 230 }]}>{ propertyInfo.name}</Text>
+                                    <Text style={[styles.sectionItem, styles.textNormal, { width: 230 }]}>{ address }</Text>
                                 </View>
 
                                 <View style={[styles.sectionBorder, styles.section]}>
@@ -327,9 +334,9 @@ class AgendaCheckoutScreen extends React.Component {
                                 </View>
 
                                 <View style={[styles.sectionBorder, styles.section]}>
-                                    <Text style={[styles.sectionItem, styles.textBold]}>Inmuebles</Text>
+                                    <Text style={[styles.sectionItem, styles.textBold]}>Servicios</Text>
                                     <Text style={[styles.sectionItem, styles.textNormal, { width: 230 }]}>
-                                        { propertyDist }
+                                        { serviceInfo }
                                     </Text>
                                 </View>
 
@@ -354,6 +361,8 @@ class AgendaCheckoutScreen extends React.Component {
                                         round
                                         color={nowTheme.COLORS.BASE}
                                         style={styles.button}
+                                        loading={isLoading}
+                                        disabled={isLoading}
                                         onPress={() => this.storeService()}>
                                         <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
                                             AGENDAR
@@ -465,4 +474,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default AgendaCheckoutScreen;
+export default VehicleCheckoutScreen;

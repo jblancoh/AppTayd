@@ -44,7 +44,7 @@ class ServiceComponent extends React.Component {
         let hour        = datetime.getHours();
 
         if(hour >= 12) {
-            if(hour > 12) hour    -= 12;
+            if(hour > 12) hour -= 12;
             type    = "p.m.";
         }
 
@@ -113,7 +113,7 @@ class ServiceComponent extends React.Component {
                                     <View>
                                         <Block style={styles.divider}>
                                             <Text style={[styles.scheduleSubtitleBold]} color={nowTheme.COLORS.SECONDARY}>
-                                                Recuerda  estar al pendiente de la llegada de nuestro TAYDER a tu domicilio
+                                                Recuerda  estar al pendiente de la llegada de nuestro TAYDER a tu ubicación
                                                 y no olvides revisar y calificar al final de las actividades de limpieza de nuestro servicio
 
                                                 Recuerda que solicitaste nuestros insumos, así que no te preocupes en absoluto y solo disfruta

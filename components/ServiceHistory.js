@@ -32,11 +32,10 @@ class ServiceHistoryComponent extends React.Component {
         return null;
     }
 
-    propertyTypeImage(id) {
+    serviceTypeImage(id) {
         switch(id) {
-            case 1: return (<Image source={Images.Icons.Casa} style={{ width: 65, height: 65 }} />)
-            case 2: return (<Image source={Images.Icons.Departamento} style={{ width: 65, height: 65 }} />)
-            case 3: return (<Image source={Images.Icons.Oficina} style={{ width: 65, height: 65 }} />)
+            case 1: return (<Image source={Images.Icons.Inmueble} style={{ width: 65, height: 65 }} />)
+            case 2: return (<Image source={Images.Icons.Vehiculo} style={{ width: 65, height: 65 }} />)
         }
     }
 
@@ -70,6 +69,16 @@ class ServiceHistoryComponent extends React.Component {
         return strDistribution;
     }
 
+    _getVehicleServiceDetails(item) {
+        let strService = "";
+
+        item.details.map(item => {
+            strService += `${item.name} \n`;
+        });
+
+        return strService;
+    }
+
     _handleNextAction = () => {
         this.props.navigation.navigate("RateService", {
             service : this.state.service
@@ -83,13 +92,13 @@ class ServiceHistoryComponent extends React.Component {
                 <Block middle style={styles.cardContainer}>
                     <Block row style={{ width: width - theme.SIZES.BASE * 3, paddingVertical: 20, paddingHorizontal: 10}}>
                         <Block style={{justifyContent: 'flex-start', alignContent: 'center'}}>
-                            {this.propertyTypeImage(service.property_type_id)}
+                            {this.serviceTypeImage(service.service_type_id)}
                         </Block>
 
                         <View style={{ width: 250, paddingHorizontal: 15}}>
-                            <Text style={[styles.historyTitle]}>{service.property_type_name}</Text>
+                            <Text style={[styles.historyTitle]}>{ service.service_type_id == 1 ? service.property_type_name : service.vehicle_type}</Text>
                             <Text style={[styles.historySubtitle, styles.divider]} color={nowTheme.COLORS.SECONDARY}>
-                                {service.property_name}
+                                {service.service_type_id == 1 ? service.property_name : service.vehicle_brand}
                             </Text>
                             <Block middle style={[styles.section, {width: '93%'}, this.state.showInfo && styles.divider]}>
                                 <Text style={[styles.historySubtitleBold]} color={nowTheme.COLORS.SECONDARY}>
@@ -110,7 +119,7 @@ class ServiceHistoryComponent extends React.Component {
                                     <View>
                                         <Block style={styles.divider}>
                                             <Text style={[styles.historySubtitle]} color={nowTheme.COLORS.SECONDARY}>
-                                                { this._getPropertyDistribution(service) }
+                                                { service.service_type_id == 1 ? this._getPropertyDistribution(service) : this._getVehicleServiceDetails(service) }
                                             </Text>
                                         </Block>
                                         <Text style={[styles.historySubtitle, styles.divider]} color={nowTheme.COLORS.SECONDARY}>

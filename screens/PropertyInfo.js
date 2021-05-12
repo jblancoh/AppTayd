@@ -23,8 +23,8 @@ export default class PropertyInfoScreen extends React.Component {
             propertyData    : [],
 
             address         : this.props.navigation.state.params.address,
-            reference         : this.props.navigation.state.params.reference,
-            alias         : this.props.navigation.state.params.alias,
+            reference       : this.props.navigation.state.params.reference,
+            alias           : this.props.navigation.state.params.alias,
             location        : this.props.navigation.state.params.location,
         };
     }

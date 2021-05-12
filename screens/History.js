@@ -27,7 +27,7 @@ class History extends React.Component {
     async componentDidMount() {
         const { navigation } = this.props;
 
-        await  Actions.extractUserData().then((result) => {
+        await Actions.extractUserData().then((result) => {
              if(result != null) {
                  this.setState({userData : result.user});
                  this._getServices();

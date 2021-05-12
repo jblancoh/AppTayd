@@ -1,9 +1,9 @@
 import React from 'react';
-import { Block } from "galio-framework";
 import { Easing, Animated, Dimensions } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
+
 // screens
 import Home from '../screens/Home';
 import History from '../screens/History';
@@ -40,6 +40,12 @@ import AgendaCheckoutScreen from '../screens/agenda/CheckoutConf';
 import AgendaSuccessScreen from '../screens/agenda/Success';
 import AgendaProgressScreen from '../screens/agenda/Progress';
 import AgendaChatScreen from '../screens/agenda/Chat';
+
+import VehicleDateTimeScreen from '../screens/vehiculos/DateTimeConfiguration';
+import VehicleSelectionScreen from '../screens/vehiculos/VehicleSelection';
+import VehicleServiceSelectionScreen from '../screens/vehiculos/VehicleServiceSelection';
+import VehicleLocationScreen from '../screens/vehiculos/Location';
+import VehicleCheckoutScreen from '../screens/vehiculos/CheckoutConf';
 
 import RateServiceScreen from '../screens/RateService';
 
@@ -441,6 +447,37 @@ const DrawerClient = createDrawerNavigator(
       }
     },
 
+    VehiculoFecha: {
+      screen: VehicleDateTimeScreen,
+      navigationOptions: {
+        drawerLabel: () => {}
+      }
+    },
+    VehiculoSeleccion: {
+      screen: VehicleSelectionScreen,
+      navigationOptions: {
+        drawerLabel: () => {}
+      }
+    },
+    VehiculoServicio: {
+      screen: VehicleServiceSelectionScreen,
+      navigationOptions: {
+        drawerLabel: () => {}
+      }
+    },
+    VehiculoUbicacion: {
+      screen: VehicleLocationScreen,
+      navigationOptions: {
+        drawerLabel: () => {}
+      }
+    },
+    VehiculoCheckout: {
+      screen: VehicleCheckoutScreen,
+      navigationOptions: {
+        drawerLabel: () => {}
+      }
+    },
+    
     Perfil: {
       screen: ProfileStack,
       navigationOptions: navOpt => ({

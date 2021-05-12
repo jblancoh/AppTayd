@@ -28,7 +28,7 @@ class Schedule extends React.Component {
     async componentDidMount() {
         const { navigation } = this.props;
 
-        await  Actions.extractUserData().then((result) => {
+        await Actions.extractUserData().then((result) => {
              if(result != null) {
                  this.setState({userData : result.user});
                  this._getServices();
@@ -101,23 +101,8 @@ class Schedule extends React.Component {
     render() {
         return (
             <Block flex center style={styles.home}>
-                {this.renderBlocks()}
+                { this.renderBlocks() }
 
-                {
-                    this.state.showMore && (
-                        <Block middle flex style={{ justifyContent: 'flex-end', paddingBottom: 20 }}>
-                            <Button
-                                round
-                                color={nowTheme.COLORS.BACKGROUND}
-                                style={styles.button}
-                                onPress={() => this.props.navigation.navigate('AgendaFecha')}>
-                                <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.BASE, }} size={14}>
-                                    AGENDAR UNA CITA  +
-                                </Text>
-                            </Button>
-                        </Block>
-                    )
-                }
                 <TabBar {...this.props} activeScreen="agenda" />
             </Block>
         );
