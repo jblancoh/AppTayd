@@ -236,6 +236,8 @@ class VehicleCheckoutScreen extends React.Component {
                 color               : this.state.vehicleColor,
                 latitude            : this.state.location.latitude,
                 altitude            : this.state.location.longitude,
+                address             : this.state.address,
+                reference           : this.state.reference,
                 service_details     : this.state.services.map(item => item.vehicle_type_price_id)
             };
             console.log(params);

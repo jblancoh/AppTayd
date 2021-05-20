@@ -26,20 +26,28 @@ class ServiceProgressTayder extends React.Component {
             service         : this.props.navigation.state.params.service,
             isLoading       : false,
             propertyDist    : "",
+            serviceDetails  : "",
         }
     }
 
     async componentDidMount() {
         const { navigation } = this.props;
+        const { service } = this.state;
 
-        this._getPropertyDistribution();
+        if(service.service_type_id == 1)
+            this._getPropertyDistribution();
+        else if(service.service_type_id == 2)
+            this._getVehicleServiceDetails();
 
         this.focusListener = await navigation.addListener('didFocus', () => {
             this.setState((state) => {
                 return {service: this.props.navigation.state.params.service}
             });
 
-            this._getPropertyDistribution();
+            if(service.service_type_id == 1)
+                this._getPropertyDistribution();
+            else if(service.service_type_id == 2)
+                this._getVehicleServiceDetails();
         });
     }
 
@@ -55,6 +63,16 @@ class ServiceProgressTayder extends React.Component {
         });
 
         this.setState({propertyDist: strDistribution});
+    }
+
+    _getVehicleServiceDetails() {
+        let strService = "";
+
+        this.state.service.details.map(item => {
+            strService += `${item.name} \n`;
+        });
+
+        this.setState({serviceDetails: strService});
     }
 
     _handleActionButton() {
@@ -87,7 +105,7 @@ class ServiceProgressTayder extends React.Component {
     }
 
     render() {
-        const { propertyDist, service, isLoading } = this.state;
+        const { serviceDetails, propertyDist, service, isLoading } = this.state;
 
         return (
             <Block flex style={styles.container}>
@@ -107,7 +125,7 @@ class ServiceProgressTayder extends React.Component {
                                         <Block style={[styles.sectionItem, styles.sectionBorder, {width: 280}]}>
                                             <Text style={[styles.textExtraBold]}>Cita en curso</Text>
                                             <Text style={[styles.textNormal]}>
-                                                Al finalizar las labores no olvides pasar lista de los inmuebles que limpiaste.
+                                                Al finalizar las labores no olvides pasar lista de lo que realizaste.
                                             </Text>
                                         </Block>
                                     </View>
@@ -116,7 +134,7 @@ class ServiceProgressTayder extends React.Component {
                                         <Image source={Images.Icons.Ubicacion2} style={[{ width: 45, height: 63, marginTop: 20 }]} />
                                         <Block style={[styles.sectionItem, styles.sectionBorder, {width: 280, marginLeft: 30}]}>
                                             <Text style={[styles.textRedBold]}>Dirección:</Text>
-                                            <Text style={[styles.textNormal]}>{service.property_name}</Text>
+                                            <Text style={[styles.textNormal]}>{service.service_type_id == 1 ? service.property_name : service.address}</Text>
                                         </Block>
                                     </View>
 
@@ -128,10 +146,10 @@ class ServiceProgressTayder extends React.Component {
                                     </View>
 
                                     <View style={[styles.section]}>
-                                        <Image source={Images.Icons.Casa} style={[{ width: 60, height: 60, marginTop: 20 }]} />
-                                        <Block style={[styles.sectionItem, {width: 280}]}>
-                                            <Text style={[styles.textRedBold]}>Inmueble: {service.property_type_name}</Text>
-                                            <Text style={[styles.textNormal]}>{propertyDist}</Text>
+                                        <Image source={service.service_type_id == 1 ? Images.Icons.Inmueble : Images.Icons.Vehiculo} style={[{ width: 60, height: 60, marginTop: 20 }]} />
+                                        <Block style={[styles.sectionItem, {width: 280, paddingTop: 20}]}>
+                                            <Text style={[styles.textRedBold]}>{service.service_type_id == 1 ? `Inmuebles: ${service.property_type_name}` : `Servicio: ${service.vehicle_type}`}</Text>
+                                            <Text style={[styles.textNormal]}>{service.service_type_id == 1 ? propertyDist : serviceDetails}</Text>
                                         </Block>
                                     </View>
 

@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, Dimensions, AsyncStorage, Image, StatusBar, View } from "react-native";
+import { StyleSheet, Dimensions, Image, StatusBar, View } from "react-native";
+import AsyncStorage from '@react-native-community/async-storage';
 import { Block, theme, Text, Button } from "galio-framework";
 import Carousel from 'react-native-snap-carousel';
 
