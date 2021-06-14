@@ -132,7 +132,7 @@ export default class VehicleDateTimeScreen extends React.Component {
             <Block flex style={styles.container}>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <Block flex>
-                        <Image source={Images.AgendaFecha} style={styles.image} />
+                        <Image source={Images.AgendaFecha2} style={styles.image} />
                     </Block>
 
                     <Block flex style={{ backgroundColor: 'white' }}>

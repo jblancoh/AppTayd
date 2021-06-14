@@ -110,7 +110,7 @@ export default class VehicleSelectionScreen extends React.Component {
             <Block flex style={styles.container}>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <Block flex>
-                        <Image source={Images.AgendaFecha} style={styles.image} />
+                        <Image source={Images.AgendaTipoServicio} style={styles.image} />
                     </Block>
 
                     <Block flex style={{ backgroundColor: 'white' }}>

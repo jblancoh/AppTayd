@@ -82,79 +82,69 @@ class ServiceComponent extends React.Component {
     }
 
     render() {
-        let {item, showModal, isCanceled, isLoading} = this.state;
+        let {item, showModal, isCanceled, isLoading, showInfo} = this.state;
 
         return (
             <Block key={item.id} flex style={{marginTop: 20}}>
                 <Block middle style={styles.cardContainer}>
-                    <Block row style={{ width: width - theme.SIZES.BASE * 3, paddingVertical: 20, paddingHorizontal: 10 }}>
-                        <Block style={{ justifyContent: 'flex-start', alignContent: 'center' }}>
-                            <Image source={Images.Icons.Calendario} style={{ width: 65, height: 65 }} />
+                    <TouchableOpacity onPress={() => this.setState({ showInfo: !showInfo })}>
+                        <Block row style={{ width: width - theme.SIZES.BASE * 3, paddingVertical: 20, paddingHorizontal: 10 }}>
+                            <Block style={{ justifyContent: 'flex-start', alignContent: 'center' }}>
+                                <Image source={Images.Icons.Calendario} style={{ width: 65, height: 65 }} />
+                            </Block>
+
+                            <View style={{ width: 250, paddingHorizontal: 15 }}>
+                                <Text style={[styles.scheduleTitle]}>
+                                    Próxima cita...
+                                </Text>
+                                <Block middle style={[styles.section, showInfo && styles.divider]}>
+                                    <Text style={[styles.scheduleSubtitle]} color={nowTheme.COLORS.SECONDARY}>{ this.formatDateTime(item) }</Text>
+                                </Block>
+
+                                {
+                                    showInfo && (
+                                        <View>
+                                            <Block style={styles.divider}>
+                                                <Text style={[styles.scheduleSubtitleBold]} color={nowTheme.COLORS.SECONDARY}>
+                                                    Recuerda  estar al pendiente de la llegada de nuestro TAYDER a tu ubicación
+                                                    y no olvides revisar y calificar al final de las actividades de limpieza de nuestro servicio
+
+                                                    Recuerda que solicitaste nuestros insumos, así que no te preocupes en absoluto y solo disfruta
+                                                    cómodamente de TAYD.
+                                                </Text>
+                                            </Block>
+
+                                            <Text style={styles.scheduleSubtitleBold}>Estatus:</Text>
+
+                                            <TouchableOpacity onPress={() => this._showService(item)}>
+                                                <Text style={styles.scheduleSubtitleBoldRed}>{item.service_status_name.toUpperCase()}</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    )
+                                }
+                            </View>
                         </Block>
 
-                        <View style={{ width: 250, paddingHorizontal: 15 }}>
-                            <Text style={[styles.scheduleTitle]}>
-                                Próxima cita...
-                            </Text>
-                            <Block middle style={[styles.section, this.state.showInfo && styles.divider]}>
-                                <Text style={[styles.scheduleSubtitle]} color={nowTheme.COLORS.SECONDARY}>{ this.formatDateTime(item) }</Text>
+                        {
+                            showInfo && (
+                                <Block center style={{alignItems: 'flex-end'}}>
+                                    {
+                                        (item.service_status_id == 2 && item.service_status_id == 3) && (
+                                            <Button color={nowTheme.COLORS.BASE} round style={styles.buttonContact} onPress={() =>  this.props.navigation.navigate("Chat", {service_id : item.id})}>
+                                                <Text style={{ fontFamily: 'trueno-semibold', lineHeight: 24 }} size={20} color={nowTheme.COLORS.WHITE}>CONTACTAR</Text>
+                                            </Button>
+                                        )
+                                    }
 
-                                {
-                                    !this.state.showInfo && (
-                                        <TouchableOpacity onPress={() => this.setState({ showInfo: true })}>
-                                            <Image source={Images.Icons.FlechaAbajo} style={{ width: 25, height: 25 }} />
-                                        </TouchableOpacity>
-                                    )
-                                }
-                            </Block>
-
-                            {
-                                this.state.showInfo && (
-                                    <View>
-                                        <Block style={styles.divider}>
-                                            <Text style={[styles.scheduleSubtitleBold]} color={nowTheme.COLORS.SECONDARY}>
-                                                Recuerda  estar al pendiente de la llegada de nuestro TAYDER a tu ubicación
-                                                y no olvides revisar y calificar al final de las actividades de limpieza de nuestro servicio
-
-                                                Recuerda que solicitaste nuestros insumos, así que no te preocupes en absoluto y solo disfruta
-                                                cómodamente de TAYD.
-                                            </Text>
-                                        </Block>
-
-                                        <Text style={styles.scheduleSubtitleBold}>Estatus:</Text>
-
-                                        <TouchableOpacity onPress={() => this._showService(item)}>
-                                            <Text style={styles.scheduleSubtitleBoldRed}>{item.service_status_name.toUpperCase()}</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                )
-                            }
-                        </View>
-                    </Block>
-
-                    {
-                        this.state.showInfo && (
-                            <Block center style={{alignItems: 'flex-end'}}>
-                                {
-                                    (item.service_status_id == 2 && item.service_status_id == 3) && (
-                                        <Button color={nowTheme.COLORS.BASE} round style={styles.buttonContact} onPress={() =>  this.props.navigation.navigate("Chat", {service_id : item.id})}>
-                                            <Text style={{ fontFamily: 'trueno-semibold', lineHeight: 24 }} size={20} color={nowTheme.COLORS.WHITE}>CONTACTAR</Text>
+                                    <Block middle style={[styles.section, {marginVertical: 15}]}>
+                                        <Button color={'rgb(240,240,240)'} round style={styles.buttonCancel} onPress={() => this.setState({showModal: true})}>
+                                            <Text style={{ fontFamily: 'trueno-semibold', lineHeight: 16 }} size={13} color={nowTheme.COLORS.BASE}>CANCELAR</Text>
                                         </Button>
-                                    )
-                                }
-
-                                <Block middle style={[styles.section, {marginVertical: 15}]}>
-                                    <Button color={'rgb(240,240,240)'} round style={styles.buttonCancel} onPress={() => this.setState({showModal: true})}>
-                                        <Text style={{ fontFamily: 'trueno-semibold', lineHeight: 16 }} size={13} color={nowTheme.COLORS.BASE}>CANCELAR</Text>
-                                    </Button>
-
-                                    <TouchableOpacity style={{paddingLeft: 20}} onPress={() => this.setState({ showInfo: false })}>
-                                        <Image source={Images.Icons.FlechaArriba} style={{ width: 25, height: 25 }} />
-                                    </TouchableOpacity>
+                                    </Block>
                                 </Block>
-                            </Block>
-                        )
-                    }
+                            )
+                        }
+                    </TouchableOpacity>
                 </Block>
 
                 <Modal

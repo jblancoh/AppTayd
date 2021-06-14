@@ -19,6 +19,9 @@ const TayderHombreLimpieza  = require('../assets/imgs/tayd-hombre-limpieza.png')
 const Agendar             = require('../assets/imgs/tayd-agendar.jpg');
 const AgendaInicio        = require('../assets/imgs/tayd-agenda-inicio.jpg');
 const AgendaFecha         = require('../assets/imgs/tayd-agenda-fecha.jpg');
+const AgendaFecha2        = require('../assets/imgs/tayd-agenda-fecha-2.jpg');
+const AgendaTipoAuto      = require('../assets/imgs/tayd-agenda-tipo-auto.jpg');
+const AgendaTipoServicio  = require('../assets/imgs/tayd-agenda-tipo-servicio.jpg');
 const AgendaInsumos       = require('../assets/imgs/tayd-agenda-insumos.jpg');
 const AgendaCheckout      = require('../assets/imgs/tayd-agenda-checkout.jpg');
 
@@ -183,6 +186,9 @@ export default {
   Agendar,
   AgendaInicio,
   AgendaFecha,
+  AgendaFecha2,
+  AgendaTipoAuto,
+  AgendaTipoServicio,
   AgendaInsumos,
   AgendaCheckout,
 
