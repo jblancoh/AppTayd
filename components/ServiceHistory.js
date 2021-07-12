@@ -86,84 +86,74 @@ class ServiceHistoryComponent extends React.Component {
     }
 
     render() {
-        let {service} = this.state;
+        let {service, showInfo} = this.state;
         return (
             <Block flex style={{marginTop: 20}}>
                 <Block middle style={styles.cardContainer}>
-                    <Block row style={{ width: width - theme.SIZES.BASE * 3, paddingVertical: 20, paddingHorizontal: 10}}>
-                        <Block style={{justifyContent: 'flex-start', alignContent: 'center'}}>
-                            {this.serviceTypeImage(service.service_type_id)}
-                        </Block>
+                <TouchableOpacity onPress={() => this.setState({ showInfo: !showInfo })}>
+                        <Block row style={{ width: width - theme.SIZES.BASE * 3, paddingVertical: 20, paddingHorizontal: 10}}>
+                            <Block style={{justifyContent: 'flex-start', alignContent: 'center'}}>
+                                {this.serviceTypeImage(service.service_type_id)}
+                            </Block>
 
-                        <View style={{ width: 250, paddingHorizontal: 15}}>
-                            <Text style={[styles.historyTitle]}>{ service.service_type_id == 1 ? service.property_type_name : service.vehicle_type}</Text>
-                            <Text style={[styles.historySubtitle, styles.divider]} color={nowTheme.COLORS.SECONDARY}>
-                                {service.service_type_id == 1 ? service.property_name : service.vehicle_brand}
-                            </Text>
-                            <Block middle style={[styles.section, {width: '93%'}, this.state.showInfo && styles.divider]}>
-                                <Text style={[styles.historySubtitleBold]} color={nowTheme.COLORS.SECONDARY}>
-                                    { this.formatDateTime(service) }
+                            <View style={{ width: 250, paddingHorizontal: 15}}>
+                                <Text style={[styles.historyTitle]}>{ service.service_type_id == 1 ? service.property_type_name : service.vehicle_type}</Text>
+                                <Text style={[styles.historySubtitle, styles.divider]} color={nowTheme.COLORS.SECONDARY}>
+                                    {service.service_type_id == 1 ? service.property_name : service.vehicle_brand}
                                 </Text>
-
+                                <Block middle style={[styles.section, {width: '93%'}, showInfo && styles.divider]}>
+                                    <Text style={[styles.historySubtitleBold]} color={nowTheme.COLORS.SECONDARY}>
+                                        { this.formatDateTime(service) }
+                                    </Text>
+                                </Block>
+                                
                                 {
-                                    !this.state.showInfo && (
-                                        <TouchableOpacity onPress={() => this.setState({ showInfo: true })}>
-                                            <Image source={Images.Icons.FlechaAbajo} style={{ width: 25, height: 25, marginLeft: 10 }} />
-                                        </TouchableOpacity>
+                                    showInfo && (
+                                        <View>
+                                            <Block style={styles.divider}>
+                                                <Text style={[styles.historySubtitle]} color={nowTheme.COLORS.SECONDARY}>
+                                                    { service.service_type_id == 1 ? this._getPropertyDistribution(service) : this._getVehicleServiceDetails(service) }
+                                                </Text>
+                                            </Block>
+                                            <Text style={[styles.historySubtitle, styles.divider]} color={nowTheme.COLORS.SECONDARY}>
+                                                {`${service.stripe_source_brand}\n${service.stripe_source_number}\n${service.stripe_source_name}`}
+                                            </Text>
+                                            <Block style={styles.divider}>
+                                                <View style={styles.section}>
+                                                    <Text style={styles.historySubtitle}>Subtotal</Text>
+                                                    <Text style={styles.historySubtitle}>${parseFloat(service.total - service.discount).toFixed(2)}</Text>
+                                                </View>
+                                                <View style={[styles.section]}>
+                                                    <Text style={styles.historySubtitle}>Cupón</Text>
+                                                    <Text style={styles.historySubtitle}>${service.discount}</Text>
+                                                </View>
+                                                <View style={[styles.section]}>
+                                                    <Text style={styles.historySubtitleBold}>Total</Text>
+                                                    <Text style={styles.historySubtitleBold}>${parseFloat(service.total).toFixed(2)}</Text>
+                                                </View>
+                                            </Block>
+
+                                            <Text style={styles.historySubtitleBold}>TAYDER:</Text>
+                                            <Text style={styles.historySubtitle}>{service.provider_user_name}</Text>
+
+                                            <Block middle style={[styles.section, {alignItems: 'flex-end'}]}>
+                                                <Button
+                                                    round
+                                                    color={service.rating > 0 ? nowTheme.COLORS.PLACEHOLDER : nowTheme.COLORS.BASE}
+                                                    disabled={service.rating > 0}
+                                                    style={styles.button}
+                                                    onPress={() => this._handleNextAction()}>
+                                                    <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.WHITE}>
+                                                        Quejas o sugerencias
+                                                    </Text>
+                                                </Button>
+                                            </Block>
+                                        </View>
                                     )
                                 }
-                            </Block>
-                            
-                            {
-                                this.state.showInfo && (
-                                    <View>
-                                        <Block style={styles.divider}>
-                                            <Text style={[styles.historySubtitle]} color={nowTheme.COLORS.SECONDARY}>
-                                                { service.service_type_id == 1 ? this._getPropertyDistribution(service) : this._getVehicleServiceDetails(service) }
-                                            </Text>
-                                        </Block>
-                                        <Text style={[styles.historySubtitle, styles.divider]} color={nowTheme.COLORS.SECONDARY}>
-                                            {`${service.stripe_source_brand}\n${service.stripe_source_number}\n${service.stripe_source_name}`}
-                                        </Text>
-                                        <Block style={styles.divider}>
-                                            <View style={styles.section}>
-                                                <Text style={styles.historySubtitle}>Subtotal</Text>
-                                                <Text style={styles.historySubtitle}>${parseFloat(service.total - service.discount).toFixed(2)}</Text>
-                                            </View>
-                                            <View style={[styles.section]}>
-                                                <Text style={styles.historySubtitle}>Cupón</Text>
-                                                <Text style={styles.historySubtitle}>${service.discount}</Text>
-                                            </View>
-                                            <View style={[styles.section]}>
-                                                <Text style={styles.historySubtitleBold}>Total</Text>
-                                                <Text style={styles.historySubtitleBold}>${parseFloat(service.total).toFixed(2)}</Text>
-                                            </View>
-                                        </Block>
-
-                                        <Text style={styles.historySubtitleBold}>TAYDER:</Text>
-                                        <Text style={styles.historySubtitle}>{service.provider_user_name}</Text>
-
-                                        <Block middle style={[styles.section, {alignItems: 'flex-end'}]}>
-                                            <Button
-                                                round
-                                                color={service.rating > 0 ? nowTheme.COLORS.PLACEHOLDER : nowTheme.COLORS.BASE}
-                                                disabled={service.rating > 0}
-                                                style={styles.button}
-                                                onPress={() => this._handleNextAction()}>
-                                                <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.WHITE}>
-                                                    Quejas o sugerencias
-                                                </Text>
-                                            </Button>
-
-                                            <TouchableOpacity style={{marginLeft: 20, marginBottom: 10}} onPress={() => this.setState({showInfo : false})}>
-                                                <Image source={Images.Icons.FlechaArriba} style={{ width: 25, height: 25 }} />
-                                            </TouchableOpacity>
-                                        </Block>
-                                    </View>
-                                )
-                            }
-                        </View>
-                    </Block>
+                            </View>
+                        </Block>
+                    </TouchableOpacity>
                 </Block>
             </Block>
         );
