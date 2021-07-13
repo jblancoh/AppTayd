@@ -1,6 +1,8 @@
 import React from 'react';
-import { Image, AsyncStorage, Alert } from 'react-native';
-import { AppLoading, Notifications } from 'expo';
+import { Image, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppLoading from 'expo-app-loading'
+import * as Notifications from 'expo-notifications'
 import * as Font from 'expo-font';
 import { Asset } from 'expo-asset';
 import { Block, GalioProvider } from 'galio-framework';
@@ -87,7 +89,7 @@ export default class App extends React.Component {
 
     _checkLocationPermitionAsync();
     _getToken();
-    this.listener = Notifications.addListener(this.handleNotification);
+    this.listener = Notifications.addNotificationReceivedListener(this.handleNotification);
   }
 
   render() {

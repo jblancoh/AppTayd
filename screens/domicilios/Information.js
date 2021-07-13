@@ -26,6 +26,7 @@ export default class DomicilioInfoScreen extends React.Component {
 
             address         : this.props.navigation.state.params.address,
             reference       : this.props.navigation.state.params.reference,
+            alias           : this.props.navigation.state.params.alias,
             location        : this.props.navigation.state.params.location,
         };
     }
@@ -84,7 +85,8 @@ export default class DomicilioInfoScreen extends React.Component {
     
             let params = {
                 user_id             : this.state.userData.id,
-                name                : this.state.address,
+                name                : this.state.alias,
+                address             : this.state.address,
                 reference           : this.state.reference,
                 latitude            : this.state.location.latitude.toString(),
                 altitude            : this.state.location.longitude.toString(),

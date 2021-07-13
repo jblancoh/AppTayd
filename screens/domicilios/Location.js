@@ -7,6 +7,7 @@ import * as Permissions from 'expo-permissions';
 
 import { Input } from '../../components';
 import { Images, nowTheme } from '../../constants';
+import PropertyService from "../../services/property";
 
 const { width, height } = Dimensions.get('screen');
 
@@ -25,17 +26,24 @@ class DomicilioLocationScreen extends React.Component {
         super(props);
         this.state = {
             isLoading       : true,
-            markers         : [],
-            location        : {
-              coords : {
-                latitude : 17.9866439,
-                longitude : -92.9564609
-              }
-            },
+            location        : null,
             errorMessage    : null,
-
             address         : '',
-            reference       : ''
+            reference       : '',
+            alias           : '',
+            wizardIndex     : 0,
+            wizardText      : [
+              {
+                title     : "Direccion",
+                subtitle  : "Usa el PIN para verificar tu domicilio en el mapa."
+              }, {
+                title     : "Referencia",
+                subtitle  : "Escribe una referencia para poder encontrar el lugar."
+              }, {
+                title     : "Alias",
+                subtitle  : "Usa un alias de tu direccion para identificarla facilmente."
+              }
+            ]
         };
 
         this._getLocationAsync();
@@ -50,101 +58,150 @@ class DomicilioLocationScreen extends React.Component {
       }
 
       let location = await Location.getCurrentPositionAsync({});
-      this.setState({ location });
+      PropertyService.getMapAddress(location.coords)
+        .then(response => this.setState({address: response.results[0].formatted_address}))
+        .catch(err => console.error(err));
+
+      this.setState({location});
     }
 
     handleBottomButton = () => {
-      if(this.state.address != '') {
-        this.props.navigation.navigate('DomicilioInfo', {
-          address: this.state.address,
-          reference: this.state.reference,
-          location: this.state.location.coords
-        });
+      if(this.state.wizardIndex == 0) {
+        if(this.state.address != '')
+          this.setState({wizardIndex: 1});
+      } else if(this.state.wizardIndex == 1) {
+        if(this.state.reference != '')
+          this.setState({wizardIndex: 2});
+      } else if(this.state.wizardIndex == 2) {
+        if(this.state.alias != '')
+          this.props.navigation.navigate('DomicilioInfo', {
+            address: this.state.address,
+            reference: this.state.reference,
+            alias: this.state.alias,
+            location: this.state.location.coords
+          });
       } else {
-        Alert.alert("Upps!", "No se ha colocado la dirección de la propiedad.");
+        Alert.alert("Upps!", "Los datos de tu domilio se encuentran incompletos.");
+      }
+    }
+
+    updateCoordsAddress(coords) {
+      PropertyService.getMapAddress(coords)
+        .then(response => this.setState({address: response.results[0].formatted_address}))
+        .catch(err => console.error(err));
+
+      this.setState({
+        location: {
+          coords: {
+            latitude: coords.latitude,
+            longitude: coords.longitude,
+          }
+        }
+      })
+    }
+
+    dynamicInput = () => {
+      let { address, reference, alias } = this.state;
+
+      if(this.state.wizardIndex == 0) {
+        return (
+          <Input
+            placeholder="Av. Paseo Tabasco #457"
+            value={address}
+            onChangeText={(text) => this.setState({address : text})}
+            style={styles.inputs}
+            iconContent={
+              <Image style={styles.inputIcons} source={Images.Icons.Ubicacion} />
+            }
+          />
+        )
+      } else if(this.state.wizardIndex == 1) {
+        return (
+          <Input
+            placeholder="Ej. Casa Blanca"
+            value={reference}
+            onChangeText={(text) => this.setState({reference : text})}
+            style={styles.inputs}
+          />
+        )
+      } else if(this.state.wizardIndex == 2) {
+        return (
+          <Input
+            placeholder="Mi casa"
+            value={alias}
+            onChangeText={(text) => this.setState({alias : text})}
+            style={styles.inputs}
+          />
+        )
       }
     }
 
     render() {
-      let { location } = this.state;
+      let { location, wizardText, wizardIndex } = this.state;
         return (
-        <DismissKeyboard>
-          <View style={styles.container}>
-            <MapView
-                style={styles.mapStyle}
-                pitchEnabled={true}
-                rotateEnabled={true}
-                scrollEnabled={true}
-                zoomEnabled={true}
-                initialRegion={{
-                    latitude: location.coords.latitude,
-                    longitude: location.coords.longitude,
-                    latitudeDelta: 0.01,
-                    longitudeDelta: 0.01
-                }}
-            >
-              <MapView.Marker
-                key={0}
-                draggable={true}
-                onDragEnd={(e) => this.setState({
-                  location: {
-                    coords: {
-                      latitude: e.nativeEvent.coordinate.latitude,
-                      longitude: e.nativeEvent.coordinate.longitude,
-                    }
-                  } 
-                })}
-                coordinate={{
-                  latitude: location.coords.latitude,
-                  longitude: location.coords.longitude,
-                }}
-                title={'Mi ubicación'}
-                description={'Esta ubicación será registrada en tayd'}
-              />
-            </MapView>
-            
-            <View style={[styles.bottomContainer, { height: 220 }]}>
-              <View style={[{ justifyContent: 'center', alignContent: 'center', paddingTop: 15 }]}>
-                <Text style={{fontFamily: 'trueno-extrabold', textAlign: 'center', paddingBottom: 10}} color={nowTheme.COLORS.SECONDARY} size={24}>
-                  Dirección
-                </Text>
-              </View>
-
-              <View>
-                <View style={{justifyContent: 'center', alignContent: 'center', paddingTop: 5}}>
-                  <Text style={{fontFamily: 'trueno', textAlign: 'center'}} color={nowTheme.COLORS.SECONDARY} size={12}>
-                    Usa el PIN para verificar tu domicilio en el mapa.
-                  </Text>
-                </View>
-
-                <View style={{ justifyContent: 'center', alignContent: 'center' }}>
-                  <Input
-                    placeholder="Av. Paseo Tabasco #457"
-                    onChangeText={(text) => this.setState({address : text})}
-                    style={styles.inputs}
-                    iconContent={
-                      <Image style={styles.inputIcons} source={Images.Icons.Ubicacion} />
-                    }
+          <DismissKeyboard>
+          {
+            location != null ?
+            (
+              <View style={styles.container}>
+                <MapView
+                    style={styles.mapStyle}
+                    pitchEnabled={true}
+                    rotateEnabled={true}
+                    scrollEnabled={true}
+                    zoomEnabled={true}
+                    initialRegion={{
+                        latitude: location.coords.latitude,
+                        longitude: location.coords.longitude,
+                        latitudeDelta: 0.01,
+                        longitudeDelta: 0.01
+                    }}
+                >
+                  <MapView.Marker
+                    key={0}
+                    draggable={true}
+                    onDragEnd={(e) => this.updateCoordsAddress(e.nativeEvent.coordinate)}
+                    coordinate={{
+                      latitude: location.coords.latitude,
+                      longitude: location.coords.longitude,
+                    }}
+                    title={'Mi ubicación'}
+                    description={'Esta ubicación será registrada en tayd'}
                   />
-                </View>
+                </MapView>
+                
+                <View style={[styles.bottomContainer, { height: 220 }]}>
+                  <View style={[{ justifyContent: 'center', alignContent: 'center', marginTop: 15 }]}>
+                    <Text style={{fontFamily: 'trueno-extrabold', textAlign: 'center', fontWeight: '700', paddingBottom: 10}} color={nowTheme.COLORS.SECONDARY} size={24}>
+                      {wizardText[wizardIndex].title}
+                    </Text>
+                  </View>
 
-                <View style={{ marginBottom: 5, flexDirection: 'row', justifyContent: 'space-evenly', alignContent: 'center', alignItems: "center"}}>
-                    <Text style={{fontFamily: 'trueno', fontSize: 17, color: nowTheme.COLORS.DIVIDER, width: 95}}>Referencia: </Text>
-                  <Input
-                    placeholder="Ej: Casa Blanca"
-                    onChangeText={(text) => this.setState({reference : text})}
-                    style={styles.inputs}
-                  />
+                  <View>
+                    <View style={{justifyContent: 'center', alignContent: 'center'}}>
+                      <Text style={{fontFamily: 'trueno', textAlign: 'center', fontWeight: '500'}} color={nowTheme.COLORS.SECONDARY} size={12}>
+                        {wizardText[wizardIndex].subtitle}
+                      </Text>
+                    </View>
+
+                    <View style={{ justifyContent: 'center', alignContent: 'center', paddingTop: 10, }}>
+                      { this.dynamicInput() }
+                    </View>
+
+                    <View style={{justifyContent: 'center', alignSelf: 'center', }}>
+                      <Button color={nowTheme.COLORS.BASE} round style={styles.createButton} onPress={() => this.handleBottomButton()}>
+                        <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.WHITE}> SIGUIENTE </Text>
+                      </Button>
+                    </View>
+                  </View>
                 </View>
               </View>
-            </View>
-
-            <Block center style={{zIndex : 2}}>
-              <Button color={nowTheme.COLORS.BASE} round style={styles.createButton} onPress={() => this.handleBottomButton()}>
-                <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.WHITE}> SIGUIENTE </Text>
-              </Button>
-            </Block>
-          </View>
+            ) : (
+              <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                <Text style={{fontFamily: 'trueno-semibold', color: nowTheme.COLORS.SECONDARY, fontSize: 24}}>Cargando...</Text>
+              </View>
+            )
+          }
         </DismissKeyboard>
         );
     }
@@ -201,7 +258,7 @@ const styles = StyleSheet.create({
     elevation: 1,
     justifyContent: 'center',
     alignContent : 'center',
-    marginBottom: 10,
+    marginBottom: 30,
   },
 
   createButton: {

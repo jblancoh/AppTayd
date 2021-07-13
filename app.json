@@ -17,6 +17,7 @@
       "package": "com.tayd.taydApp",
       "versionCode": 6,
       "permissions": ["CAMERA", "ACCESS_FINE_LOCATION"],
+      "useNextNotificationsApi": true,
       "splash": {
         "mdpi": "./assets/splash/splash-port-mdpi.png",
         "hdpi": "./assets/splash/splash-port-hdpi.png",
