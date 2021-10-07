@@ -66,7 +66,7 @@ class HistoryTayder extends React.Component {
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
                 <Block flex>
                     <StatusBar barStyle="light-content" />
-                    <Block row style={{ paddingTop: 10 }}>
+                    <Block row style={{ paddingTop: 25 }}>
                         <Image source={Images.ProfilePicture} style={{ borderRadius: 25, height: 60, width: 60, marginHorizontal: 25 }} />
                         <Block flex>
                             <Text style={styles.nameTitle}>{this.state.tayderName}</Text>
