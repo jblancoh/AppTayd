@@ -1,5 +1,6 @@
 import React from 'react';
-import { Image, StyleSheet, StatusBar, Dimensions, TouchableHighlight, View , TouchableWithoutFeedback, Keyboard, Alert, AsyncStorage, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { Image, StyleSheet, StatusBar, Dimensions, TouchableHighlight, View , TouchableWithoutFeedback, Keyboard, Alert, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { Block, Button, Text, theme } from 'galio-framework';
 import { Input } from '../components';
 

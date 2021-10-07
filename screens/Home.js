@@ -51,20 +51,14 @@ class Home extends React.Component {
               style={{fontWeight: '700', marginRight: 15, paddingTop: 5}}
             />
             <Block flex>
-              <Text style={styles.nameTitle}>Bienvenido {userData != null && 'info' in userData ? userData.info.name : ''}</Text>
+              <Text style={styles.nameTitle}>Bienvenido {userData?.info?.name}</Text>
               <Text>¿En qué podemos ayudarte?</Text>
             </Block>
           </Block>
 
           <CardFullImage position={1} image={Images.Inicio001} imageStyle={{ height: 300, width: '100%' }} />
 
-          <Block flex row>
-            <CardFullImage position={2} image={Images.Inicio002} imageStyle={{height : 320, width: '100%'}} style={{marginRight : theme.SIZES.BASE}} />
-            <Block flex>
-              <CardFullImage position={3} full image={Images.Inicio003} imageStyle={{ height: 155, width: '100%' }} />
-              <CardFullImage position={4} full image={Images.Inicio004} imageStyle={{ height: 155, width: '100%' }} />
-            </Block>
-          </Block>
+          <CardFullImage position={2} image={Images.Inicio002} imageStyle={{ height: 300, width: '100%' }} />
         </Block>
       </ScrollView>
     );

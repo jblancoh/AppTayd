@@ -110,7 +110,7 @@ export default class ServiceCardSliderTayder extends React.Component {
                                             <Image source={Images.Icons.Agenda} style={styles.image} />
                 
                                             <Text style={styles.serviceTitle}>{this.formatDateTime(item)}</Text>
-                                            <Text style={styles.serviceSubtitle}>{item.property_name}</Text>
+                                            <Text style={styles.serviceSubtitle}>{item.service_type_id == 1 ? item.property_name : item.address}</Text>
                                             <Text style={styles.serviceSubtitleRed}>{item.has_consumables ? 'Insumos solicitados' : ''}</Text>
                                         </Block>
 
@@ -183,8 +183,8 @@ const styles = StyleSheet.create({
     serviceTitle: {
         fontFamily: 'trueno-extrabold',
         color: nowTheme.COLORS.GREY5,
-        fontSize: smallScreen ? 28 : 31,
-        lineHeight: smallScreen ? 29 : 32,
+        fontSize: smallScreen ? 26 : 29,
+        lineHeight: smallScreen ? 27 : 30,
         textAlign: 'left',
         paddingVertical: smallScreen ? 10 : 20,
     },

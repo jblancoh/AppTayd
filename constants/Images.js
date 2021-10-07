@@ -19,19 +19,24 @@ const TayderHombreLimpieza  = require('../assets/imgs/tayd-hombre-limpieza.png')
 const Agendar             = require('../assets/imgs/tayd-agendar.jpg');
 const AgendaInicio        = require('../assets/imgs/tayd-agenda-inicio.jpg');
 const AgendaFecha         = require('../assets/imgs/tayd-agenda-fecha.jpg');
+const AgendaFecha2        = require('../assets/imgs/tayd-agenda-fecha-2.jpg');
+const AgendaTipoAuto      = require('../assets/imgs/tayd-agenda-tipo-auto.jpg');
+const AgendaTipoServicio  = require('../assets/imgs/tayd-agenda-tipo-servicio.jpg');
 const AgendaInsumos       = require('../assets/imgs/tayd-agenda-insumos.jpg');
 const AgendaCheckout      = require('../assets/imgs/tayd-agenda-checkout.jpg');
+
+const VehiculoFecha       = require('../assets/imgs/tayd-vehiculo-fecha.jpg');
 
 const MetodoPagoAddCard   = require('../assets/imgs/tayd-metodo-pago.jpg');
 
 const Inicio001           = require('../assets/imgs/Inicio001.png');
-const Inicio002           = require('../assets/imgs/Inicio002.png');
+const Inicio002           = require('../assets/imgs/Inicio002.jpg');
 const Inicio003           = require('../assets/imgs/Inicio003.png');
 const Inicio004           = require('../assets/imgs/Inicio004.png');
 
 const Slide001            = require('../assets/imgs/slide1.png');
 const Slide002            = require('../assets/imgs/slide2.png');
-const Slide003            = require('../assets/imgs/slide3.png');
+const Slide003            = require('../assets/imgs/slide3.jpg');
 const Slide004            = require('../assets/imgs/slide4.jpg');
 
 const CarouselIndicador01 = require('../assets/imgs/IND--01.png');
@@ -132,17 +137,31 @@ const Icons = {
   Terraza       : require('../assets/icons/T-Terraza.png'),
   Terraza_G     : require('../assets/icons/T-Patio-gris.png'),
 
-  Casa        : require('../assets/icons/T-casa.png'),
-  Departamento: require('../assets/icons/T-Depa.png'),
-  Oficina     : require('../assets/icons/T-Ofi.png'),
+  Casa          : require('../assets/icons/T-casa.png'),
+  Departamento  : require('../assets/icons/T-Depa.png'),
+  Oficina       : require('../assets/icons/T-Ofi.png'),
 
-  Casa_G      : require('../assets/icons/T-casa-gris.png'),
+  Casa_G         : require('../assets/icons/T-casa-gris.png'),
   Departamento_G : require('../assets/icons/T-Depa-gris.png'),
-  Oficina_G   : require('../assets/icons/T-Ofi-gris.png'),
+  Oficina_G      : require('../assets/icons/T-Ofi-gris.png'),
 
-  Casa_B      : require('../assets/icons/T-Casa-blanco.png'),
+  Casa_B         : require('../assets/icons/T-Casa-blanco.png'),
   Departamento_B : require('../assets/icons/T-Depa-blanco.png'),
-  Oficina_B   : require('../assets/icons/T-Ofi-blanco.png'),
+  Oficina_B      : require('../assets/icons/T-Ofi-blanco.png'),
+
+  Inmueble       : require('../assets/icons/T-Inmueble.png'),
+  Vehiculo      : require('../assets/icons/T-Vehiculo.png'),
+
+  Lavado        : require('../assets/icons/T-Lavado.png'),
+  Lavado_G      : require('../assets/icons/T-Lavado-gris.png'),
+  Aspirado      : require('../assets/icons/T-Aspirado.png'),
+  Aspirado_G    : require('../assets/icons/T-Aspirado-gris.png'),
+  Encerado      : require('../assets/icons/T-Encerado.png'),
+  Encerado_G    : require('../assets/icons/T-Encerado-gris.png'),
+  Pulido        : require('../assets/icons/T-Pulido.png'),
+  Pulido_G      : require('../assets/icons/T-Pulido-gris.png'),
+  Vestiduras    : require('../assets/icons/T-Vestiduras.png'),
+  Vestiduras_G  : require('../assets/icons/T-Vestiduras-gris.png'),
 };
 
 export default {
@@ -167,8 +186,13 @@ export default {
   Agendar,
   AgendaInicio,
   AgendaFecha,
+  AgendaFecha2,
+  AgendaTipoAuto,
+  AgendaTipoServicio,
   AgendaInsumos,
   AgendaCheckout,
+
+  VehiculoFecha,
 
   MetodoPagoAddCard,
 

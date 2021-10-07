@@ -10,7 +10,8 @@ import PropertyType from '../../components/PropertyTypes';
 import PropertyService from '../../services/property';
 
 const { height, width } = Dimensions.get('screen');
-const smallScreen = height < 812 ? true : false;
+const smallScreen       = height < 812 ? true : false;
+const isIphone          = Platform.OS === 'ios';
 
 export default class DomicilioInfoScreen extends React.Component {
     constructor(props) {
@@ -24,6 +25,8 @@ export default class DomicilioInfoScreen extends React.Component {
             propertyData    : [],
 
             address         : this.props.navigation.state.params.address,
+            reference       : this.props.navigation.state.params.reference,
+            alias           : this.props.navigation.state.params.alias,
             location        : this.props.navigation.state.params.location,
         };
     }
@@ -82,7 +85,9 @@ export default class DomicilioInfoScreen extends React.Component {
     
             let params = {
                 user_id             : this.state.userData.id,
-                name                : this.state.address,
+                name                : this.state.alias,
+                address             : this.state.address,
+                reference           : this.state.reference,
                 latitude            : this.state.location.latitude.toString(),
                 altitude            : this.state.location.longitude.toString(),
                 is_predetermined    : false,
@@ -134,29 +139,25 @@ export default class DomicilioInfoScreen extends React.Component {
                                                     return <PropertyCounter key={value.id} id={value.id} label={value.name} price={value.price} value={value.key} getValues={(quantity, data) => this.updatePropertyInfo(quantity, data)} />
                                                 })
                                             }
+
+                                                <Block middle style={{ width: width - theme.SIZES.BASE * 3.8 }}>
+                                                    <Button
+                                                        round
+                                                        color={nowTheme.COLORS.BASE}
+                                                        style={styles.createButton}
+                                                        loading={isLoading}
+                                                        disabled={isLoading}
+                                                        onPress={() => this._handleUploadProperty()}>
+                                                        <Text style={{ fontFamily: 'montserrat-bold' }} size={14} color={nowTheme.COLORS.WHITE}>
+                                                            SIGUIENTE
+                                                        </Text>
+                                                    </Button>
+                                                </Block>
                                             </ScrollView>
                                         </View>
                                     ) : (
                                         <Block center>
                                             <Image source={Images.TayderHombreLimpieza} style={{width: width, height: height * 0.45}} />
-                                        </Block>
-                                    )
-                                }
-
-                                {
-                                    propertyItems.length > 0 && (
-                                        <Block middle style={{ width: width - theme.SIZES.BASE * 3.8 }}>
-                                            <Button
-                                                round
-                                                color={nowTheme.COLORS.BASE}
-                                                style={styles.createButton}
-                                                loading={isLoading}
-                                                disabled={isLoading}
-                                                onPress={() => this._handleUploadProperty()}>
-                                                <Text style={{ fontFamily: 'montserrat-bold' }} size={14} color={nowTheme.COLORS.WHITE}>
-                                                    SIGUIENTE
-                                                </Text>
-                                            </Button>
                                         </Block>
                                     )
                                 }
@@ -172,7 +173,7 @@ const styles = StyleSheet.create({
     container: {
         //marginTop: Platform.OS === 'android' ? - HeaderHeight : 0,
         //marginTop: Platform.OS === 'android' ? HeaderHeight + 70 : 0,
-        top: 32,
+        top:  isIphone ? 32 : 10,
     },
     padded: {
         paddingHorizontal: theme.SIZES.BASE * 2,
@@ -204,6 +205,8 @@ const styles = StyleSheet.create({
     },
 
     createButton: {
+        justifyContent: 'center',
+        alignSelf: 'center',
         width: width * 0.5,
         marginTop: 20,
         marginBottom: 10,

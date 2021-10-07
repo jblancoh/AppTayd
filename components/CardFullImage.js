@@ -8,10 +8,8 @@ class CardFullImage extends React.Component {
 
   _navigate = (value, navigation) => {
     switch(value) {
-      case 1: navigation.navigate('Agenda');        break;
-      case 2: Alert.alert("Tayd V1.0");             break;
-      case 3: navigation.navigate('GeneraIngreso'); break;
-      case 4: Alert.alert("Próximamente");          break;
+      case 1: navigation.navigate('Agenda');          break;
+      case 2: navigation.navigate('VehiculoFecha');   break;
     }
   }
 

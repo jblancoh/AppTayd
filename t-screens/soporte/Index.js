@@ -19,7 +19,7 @@ class SoporteTayderIndexScreen extends React.Component {
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
                 <Block flex>
                     <StatusBar barStyle="light-content" />
-                    <Block flex row style={{ paddingTop: 10 }}>
+                    <Block flex row style={{ paddingTop: 25 }}>
                         <Image source={Images.ProfilePicture} style={{ borderRadius: 25, height: 60, width: 60, marginRight: 25 }} />
                         <Block flex>
                             <Text style={styles.nameTitle}>¿Necesitas ayuda?</Text>

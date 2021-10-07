@@ -120,7 +120,7 @@ class AgendaCheckoutScreen extends React.Component {
                 this.setState({sourceInfo: response});
             })
             .catch(error => {
-                console.error(error);
+                console.log(error);
             });
     }
 
@@ -214,31 +214,37 @@ class AgendaCheckoutScreen extends React.Component {
 
     storeService() {
         const {day, month, year, hour, minutes} = this.state.datetime;
-        let _month      = month <= 8 ? `0${month + 1}`: month + 1;
-        let _day        = day <= 9 ? `0${day}`: day;
-        let _minutes    = minutes <= 9 ? `0${minutes}`: minutes;
-        let _hours      = hour <= 9 ? `0${hour}`: hour
 
-        let params = {
-            user_id             : this.state.userData.id,
-            user_property_id    : this.state.propertyInfo.id,
-            stripe_customer_source_id : this.state.sourceInfo.id,
-            date                : `${year}-${_month}-${_day}`,
-            time                : `${_hours}:${_minutes}:00`,
-            has_consumables     : this.state.hasSupplies,
-            service_cost         : this.state.serviceCost,
-            discount            : 0,
-        };
-
-        ServicesService.store(params)
-            .then(response => {
-                this.props.navigation.navigate("AgendaSuccess", {
-                    schedule: this._datetimeFormat()
+        if(this.state.sourceInfo != null) {
+            let _month      = month <= 8 ? `0${month + 1}`: month + 1;
+            let _day        = day <= 9 ? `0${day}`: day;
+            let _minutes    = minutes <= 9 ? `0${minutes}`: minutes;
+            let _hours      = hour <= 9 ? `0${hour}`: hour
+    
+            let params = {
+                user_id             : this.state.userData.id,
+                service_type_id     : 1,
+                user_property_id    : this.state.propertyInfo.id,
+                stripe_customer_source_id : this.state.sourceInfo.id,
+                date                : `${year}-${_month}-${_day}`,
+                time                : `${_hours}:${_minutes}:00`,
+                has_consumables     : this.state.hasSupplies,
+                service_cost         : this.state.serviceCost,
+                discount            : 0,
+            };
+    
+            ServicesService.store(params)
+                .then(response => {
+                    this.props.navigation.navigate("AgendaSuccess", {
+                        schedule: this._datetimeFormat()
+                    });
+                })
+                .catch(e => {
+                    this.setState({hasError: true, errorTitle: 'Servicio', errorMessage: e.data.error});
                 });
-            })
-            .catch(e => {
-                this.setState({hasError: true, errorTitle: 'Servicio', errorMessage: e.data.error});
-            });
+        } else {
+            this.setState({hasError: true, errorTitle: 'Tarjeta Bancaria', errorMessage: "No se ha registrado una tarjeta bancaria en tu cuenta."});
+        }
     }
 
     paymentMethodModal = () => {
@@ -291,20 +297,23 @@ class AgendaCheckoutScreen extends React.Component {
                                 <View style={[styles.sectionBorder, styles.section]}>
                                     <Image source={Images.Icons.TarjetaBancaria} style={[styles.sectionItem, { width: 50, height: 34 }]} />
                                     <Text style={[styles.sectionItem, styles.textNormal, {width: 190, paddingLeft: 30}]}>
-                                        {sourceInfo != null && `${sourceInfo.brand}\n${sourceInfo.number}\n${sourceInfo.name}`}
+                                        {sourceInfo != null ? `${sourceInfo.brand}\n${sourceInfo.number}\n${sourceInfo.name}` : 'No tienes una tarjeta agregada.'}
                                     </Text>
-                                    <Icon
-                                        size={22}
-                                        color={nowTheme.COLORS.BASE}
-                                        name="chevron-right"
-                                        family="FontAwesome"
-                                        onPress={() => this.setState({showPaymentMethodModal: true})}
-                                    />
+                                    <TouchableOpacity onPress={() => this.setState({showPaymentMethodModal: true})}>
+                                        { sourceInfo != null && (
+                                            <Icon
+                                                size={22}
+                                                color={nowTheme.COLORS.BASE}
+                                                name="chevron-right"
+                                                family="FontAwesome"
+                                            />
+                                        )}
+                                    </TouchableOpacity>
                                 </View>
 
                                 <View style={[styles.sectionBorder, styles.section]}>
                                     <Text style={[styles.sectionItem, styles.textBold]}>Contacto</Text>
-                                    <Text style={[styles.sectionItem, styles.textNormal, { width: 230 }]}>{`${userData.email}\n${userData.info.phone}`}</Text>
+                                    <Text style={[styles.sectionItem, styles.textNormal, { width: 230 }]}>{`${userData.email}\n${userData.info?.phone}`}</Text>
                                 </View>
 
                                 <View style={[styles.sectionBorder, styles.section]}>
@@ -356,7 +365,7 @@ class AgendaCheckoutScreen extends React.Component {
                     </Block>
                 </Block>
 
-                { this.paymentMethodModal() }
+                { this.paymentMethodModal }
 
                 <Modal
                     animationType="fade"

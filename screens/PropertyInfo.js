@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Dimensions, Platform, ScrollView, View, AsyncStorage, Image, Alert } from 'react-native';
+import { StyleSheet, Dimensions, Platform, ScrollView, View, Image, Alert } from 'react-native';
 import { Block, Button, Text, theme } from 'galio-framework';
 import { HeaderHeight } from '../constants/utils';
 import Actions from '../lib/actions';
@@ -9,6 +9,7 @@ import PropertyType from '../components/PropertyTypes';
 import PropertyService from '../services/property';
 
 const { height, width } = Dimensions.get('screen');
+const isIphone          = Platform.OS === 'ios';
 
 export default class PropertyInfoScreen extends React.Component {
     constructor(props) {
@@ -22,6 +23,8 @@ export default class PropertyInfoScreen extends React.Component {
             propertyData    : [],
 
             address         : this.props.navigation.state.params.address,
+            reference       : this.props.navigation.state.params.reference,
+            alias           : this.props.navigation.state.params.alias,
             location        : this.props.navigation.state.params.location,
         };
     }
@@ -80,7 +83,9 @@ export default class PropertyInfoScreen extends React.Component {
     
             let params = {
                 user_id             : this.state.userData.id,
-                name                : this.state.address,
+                name                : this.state.alias,
+                address             : this.state.address,
+                reference           : this.state.reference,
                 latitude            : this.state.location.latitude.toString(),
                 altitude            : this.state.location.longitude.toString(),
                 is_predetermined    : true,
@@ -88,12 +93,9 @@ export default class PropertyInfoScreen extends React.Component {
                 distribution        : this.state.propertyData,
                 first_login         : true,
             };
-    
+
             await PropertyService.store(params)
                 .then(async(response) => {
-                    await AsyncStorage.removeItem('user');
-                    await AsyncStorage.setItem('user', JSON.stringify(response.user));
-
                     this.setState({ isLoading: false, propertyTypeValue: null, propertyItems: [], propertyData: [] });
                     this.props.navigation.navigate('Home')
                 })
@@ -124,36 +126,30 @@ export default class PropertyInfoScreen extends React.Component {
 
                     {
                         propertyItems.length > 0 ? (
-                            <View style={{height: height * 0.45}}>
-                                <ScrollView>
+                            <View style={{height: height * 0.45, justifyContent: 'center', alignContent: 'center'}}>
+                                <ScrollView contentContainerStyle={{justifyContent: 'center', alignContent: 'center'}}>
                                 {
                                     propertyItems.map((value) => {
                                         return <PropertyCounter key={value.id} id={value.id} label={value.name} price={value.price} value={value.key} getValues={(quantity, data) => this.updatePropertyInfo(quantity, data)} />
                                     })
+
                                 }
+                                    <Button
+                                        round
+                                        color={nowTheme.COLORS.BASE}
+                                        style={styles.createButton}
+                                        loading={isLoading}
+                                        disabled={isLoading}
+                                        onPress={() => this._handleUploadProperty()}>
+                                        <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.WHITE}>
+                                            SIGUIENTE
+                                        </Text>
+                                    </Button>
                                 </ScrollView>
                             </View>
                         ) : (
                             <Block center>
                                 <Image source={Images.TayderHombreLimpieza} style={{width: width, height: height * 0.45}} />
-                            </Block>
-                        )
-                    }
-
-                    {
-                        propertyItems.length > 0 && (
-                            <Block middle style={{ width: width - theme.SIZES.BASE * 4 }}>
-                                <Button
-                                    round
-                                    color={nowTheme.COLORS.BASE}
-                                    style={styles.createButton}
-                                    loading={isLoading}
-                                    disabled={isLoading}
-                                    onPress={() => this._handleUploadProperty()}>
-                                    <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.WHITE}>
-                                        SIGUIENTE
-                                    </Text>
-                                </Button>
                             </Block>
                         )
                     }
@@ -165,7 +161,7 @@ export default class PropertyInfoScreen extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: HeaderHeight,
+        marginTop: isIphone ? HeaderHeight + 15 : 45,
     },
     padded: {
         paddingHorizontal: theme.SIZES.BASE * 2,
@@ -193,6 +189,8 @@ const styles = StyleSheet.create({
     },
 
     createButton: {
+        justifyContent: 'center',
+        alignSelf: 'center',
         width: width * 0.5,
         marginTop: 20,
         marginBottom: 10

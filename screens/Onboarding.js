@@ -45,7 +45,7 @@ export default class Onboarding extends React.Component {
   }
 
   async componentDidMount() {
-   // await Actions.removeUserData().then((response) => console.log("BORRADO"));
+    //await Actions.removeUserData().then((response) => console.log("BORRADO"));
 
     await Actions.extractUserData().then((result) => {
       if (result != null) {

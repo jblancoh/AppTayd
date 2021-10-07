@@ -8,9 +8,9 @@ import {
     Modal,
     Platform,
     ImageBackground,
-    Alert,
-    AsyncStorage
+    Alert
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Block, Text, theme, Button } from "galio-framework";
 import Pusher from 'pusher-js/react-native';
 

@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, Dimensions, AsyncStorage, Image, StatusBar, View } from "react-native";
+import { StyleSheet, Dimensions, Image, StatusBar, View } from "react-native";
+import AsyncStorage from '@react-native-community/async-storage';
 import { Block, theme, Text, Button } from "galio-framework";
 import Carousel from 'react-native-snap-carousel';
 
@@ -104,7 +105,7 @@ export default class HomeTayder extends React.Component {
     return (
       <View style={styles.blocksContainer}>
         <Block flex>
-          <Block row style={{paddingTop: 10}}>
+          <Block row style={{paddingTop: 25}}>
             <Image source={Images.ProfilePicture} style={{borderRadius: 25, height: 60, width: 60, marginHorizontal: 25}} />
             <Block flex>
               <Text style={styles.nameTitle}>{this.state.tayderName}</Text>

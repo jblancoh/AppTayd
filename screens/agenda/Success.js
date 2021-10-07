@@ -61,7 +61,7 @@ class AgendaCheckoutScreen extends React.Component {
                             <Text style={styles.successTitle}>{this.state.successTitle}</Text>
                         </View>
                         
-                        <View style={{marginTop: 130, paddingBottom: 25}}>
+                        <View style={{marginTop: 80, paddingBottom: 25}}>
                             <Image source={Images.TaydLogoLarge} style={{ width: 120, height: 25 }} />
                         </View>
 
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     padded: {
-        top: smallScreen ? 200 : 285,
+        top: smallScreen ? 150 : 285,
         justifyContent: 'center',
         alignSelf: 'center',
         paddingHorizontal: theme.SIZES.BASE * 1.3,

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, StyleSheet, Dimensions, Platform, View, DatePickerAndroid, DatePickerIOS, TimePickerAndroid, ScrollView, Modal, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { Block, Button, Text, theme } from 'galio-framework';
 import moment from 'moment';
 
@@ -17,6 +18,8 @@ export default class AgendaFechaScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            showDate        : false,
+            showTime        : false,
             showDateTime    : false,
             showPropertyModal : false,
             isIphone        : Platform.OS === 'ios',
@@ -98,23 +101,6 @@ export default class AgendaFechaScreen extends React.Component {
         }
     }
 
-    _openDatePicker = async() => {
-        if(this.state.isIphone) {
-            this.setState({showDateTime: true});
-        } else {
-            try {
-                const { action, year, month, day } = await DatePickerAndroid.open({
-                    date: this.state.date,
-                });
-                if (action !== DatePickerAndroid.dismissedAction) {
-                    this.setState({date : new Date(year, month, day)});
-                }
-            } catch ({ code, message }) {
-                console.warn('Cannot open date picker', message);
-            }
-        }
-    }
-
     _dateFormat() {
         let date    = this.state.date;
         let week    = this.state.weekDay[date.getDay()];
@@ -137,25 +123,6 @@ export default class AgendaFechaScreen extends React.Component {
         return `${hour}:${minutes} ${type}`;
     }
 
-    _openTimePicker = async () => {
-        if(this.state.isIphone) {
-            this.setState({showDateTime: true});
-        } else {
-            try {
-                const { action, hour, minute } = await TimePickerAndroid.open({
-                    hour    : this.state.time.getHours(),
-                    minute  : this.state.time.getMinutes(),
-                    is24Hour: false
-                });
-                if (action !== DatePickerAndroid.dismissedAction) {
-                    this.setState({ time: new Date(2020, 4, 4, hour, minute) });
-                }
-            } catch ({ code, message }) {
-                console.warn('Cannot open date picker', message);
-            }
-        }
-    }
-
     propertyTypeImage(id) {
         switch(id) {
             case 1: return (<Image source={Images.Icons.Casa} style={{ width: 50, height: 50 }} />)
@@ -164,8 +131,17 @@ export default class AgendaFechaScreen extends React.Component {
         }
     }
 
-    setDateTime = (newDate) => {
-        this.setState({ date: newDate, time: newDate });
+    setDateTime = (event, selectedDate) => {
+        this.setState({ date: selectedDate, time: selectedDate });
+    }
+
+    _showDateTimeComponent = (type) => {
+        if(this.state.isIphone)
+            this.setState({showDateTime: true});
+        else if(type == "date")
+            this.setState({showDate: true});
+        else if(type == "time")
+            this.setState({showTime: true});
     }
 
     _propertyModalResponse = (newValue) => {
@@ -190,8 +166,18 @@ export default class AgendaFechaScreen extends React.Component {
         }
     }
 
+    onChangeDate = (event, selectedDate) => {
+        const currentDate = selectedDate || this.state.date;
+        this.setState({showDate: false, date: currentDate, time: currentDate})
+    };
+
+    onChangeTime = (event, selectedDate) => {
+        const currentDate = selectedDate || this.state.time;
+        this.setState({showTime: false, date: currentDate, time: currentDate})
+    };
+
     render() {
-        const { showDateTime, isIphone, propertyInfo } = this.state;
+        const { showDateTime, showDate, showTime, isIphone, propertyInfo, date, time } = this.state;
         return (
             <Block flex style={styles.container}>
                 <ScrollView showsVerticalScrollIndicator={false}>
@@ -206,16 +192,36 @@ export default class AgendaFechaScreen extends React.Component {
 
                             <View style={[styles.titleBorder, { flexDirection: 'row', justifyContent: 'space-between'}]}>
                                 <Text style={styles.subtitle}>Agendar día</Text>
-                                <TouchableOpacity onPress={() => this._openDatePicker()}>
+                                <TouchableOpacity onPress={() => this._showDateTimeComponent("date")}>
                                     <Text style={styles.datetimeText}>{this._dateFormat()}</Text>
                                 </TouchableOpacity>
+                                {
+                                    (showDate && !isIphone) && (
+                                        <DateTimePicker
+                                            value={date}
+                                            mode="date"
+                                            display="default"
+                                            onChange={this.onChangeDate}
+                                        />
+                                    )
+                                }
                             </View>
 
                             <View style={[styles.titleBorder, { flexDirection: 'row', justifyContent: 'space-between', paddingTop: 15}]}>
                                 <Text style={styles.subtitle}>Selecciona hora</Text>
-                                <TouchableOpacity onPress={() => this._openTimePicker()}>
+                                <TouchableOpacity onPress={() => this._showDateTimeComponent("time")}>
                                     <Text style={styles.datetimeText}>{this._timeFormat()}</Text>
                                 </TouchableOpacity>
+                                {
+                                    (showTime && !isIphone) && (
+                                        <DateTimePicker
+                                            value={time}
+                                            mode="time"
+                                            display="default"
+                                            onChange={this.onChangeTime}
+                                        />
+                                    )
+                                }
                             </View>
 
                             <Text style={[styles.title, { paddingTop: 20 }]}> Domicilio </Text>
@@ -256,7 +262,12 @@ export default class AgendaFechaScreen extends React.Component {
                     <View style={{ flex: 1, height: height, backgroundColor: 'rgba(0,0,0,.2)', justifyContent: 'flex-end', flexDirection: 'column',}}>
                         <View style={{ backgroundColor: 'white', padding: 15, paddingBottom: 30,}}>
                             <View>
-                                <DatePickerIOS date={this.state.date} onDateChange={this.setDateTime} />
+                                <DateTimePicker
+                                    value={date}
+                                    mode="datetime"
+                                    display="default"
+                                    onChange={this.onChangeDate}
+                                />
                             </View>
                             <Block middle style={{alignItems: 'center' }}>
                                 <Button
