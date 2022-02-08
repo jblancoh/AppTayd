@@ -15,18 +15,18 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userData  : null,
+      userData: null,
     };
   }
 
   async componentDidMount() {
     this._isMounted = true;
 
-    console.log("Boolean", iPhoneX());
+    // console.log("Boolean", iPhoneX());
 
     await Actions.extractUserData().then((result) => {
-      if(result != null && this._isMounted) {
-        this.setState({userData: result.user});
+      if (result != null && this._isMounted) {
+        this.setState({ userData: result.user });
       }
     });
   }
@@ -36,19 +36,19 @@ class Home extends React.Component {
   }
 
   renderBlocks = () => {
-    let {userData} = this.state;
+    let { userData } = this.state;
 
     return (
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
         <Block flex>
-          <Block flex row style={{paddingTop: iPhoneX() ? 30 : 10}}>
+          <Block flex row style={{ paddingTop: iPhoneX() ? 30 : 10 }}>
             <Icon
               name={'align-left-22x'}
               family="NowExtra"
               size={16}
               onPress={() => this.props.navigation.openDrawer()}
               color={nowTheme.COLORS.ICON}
-              style={{fontWeight: '700', marginRight: 15, paddingTop: 5}}
+              style={{ fontWeight: '700', marginRight: 15, paddingTop: 5 }}
             />
             <Block flex>
               <Text style={styles.nameTitle}>Bienvenido {userData?.info?.name}</Text>
