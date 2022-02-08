@@ -45,8 +45,8 @@ export default class HomeTayder extends React.Component {
     const { navigation } = this.props;
 
     await Actions.extractUserData().then((result) => {
-      if(result != null) {
-        this.setState({userData: result.user, isFirstLogin: result.user.first_login_tayder, tayderName: result.user.info.name});
+      if (result != null) {
+        this.setState({ userData: result.user, isFirstLogin: result.user.first_login_tayder, tayderName: result.user.info.name });
       }
     });
 
@@ -59,16 +59,16 @@ export default class HomeTayder extends React.Component {
 
   componentWillUnmount() {
     this.focusListener.remove();
-}
+  }
 
   async _updateFirstLogin() {
-    this.setState({hasAcceptButton : false, isLoading: true});
+    this.setState({ hasAcceptButton: false, isLoading: true });
 
     await UserService.firstLoginTayder(this.state.userData.id)
       .then(async (response) => {
-        await Actions.removeUserData().then(() => {});
+        await Actions.removeUserData().then(() => { });
         await AsyncStorage.setItem('user', JSON.stringify(response));
-        this.setState({isLoading: false, userData: response, isFirstLogin: response.first_login_tayder, tayderName: response.info.name});
+        this.setState({ isLoading: false, userData: response, isFirstLogin: response.first_login_tayder, tayderName: response.info.name });
       })
       .catch(e => console.error(e));
   }
@@ -77,7 +77,7 @@ export default class HomeTayder extends React.Component {
     await ServicesService.listTayderScheduled(this.state.userData.id)
       .then(response => {
         this.setState((state) => {
-          return {services: response}
+          return { services: response }
         });
       })
       .catch(error => console.error(error));
@@ -91,36 +91,36 @@ export default class HomeTayder extends React.Component {
   _renderItem = ({ item, index }) => {
     console.log(index);
     return (
-      <View style={{height: 560}}>
-        <Image source={item.image} style={{ height: 550, width: 300, resizeMode: 'stretch',}} />
+      <View style={{ height: 560 }}>
+        <Image source={item.image} style={{ height: 550, width: 300, resizeMode: 'stretch', }} />
       </View>
     )
   }
 
   onSnapToItem = (index) => {
-    this.setState({activeIndex : index});
+    this.setState({ activeIndex: index });
   }
 
   renderBlocks() {
     return (
       <View style={styles.blocksContainer}>
         <Block flex>
-          <Block row style={{paddingTop: 25}}>
-            <Image source={Images.ProfilePicture} style={{borderRadius: 25, height: 60, width: 60, marginHorizontal: 25}} />
+          <Block row style={{ paddingTop: 25 }}>
+            <Image source={Images.ProfilePicture} style={{ borderRadius: 25, height: 60, width: 60, marginHorizontal: 25 }} />
             <Block flex>
               <Text style={styles.nameTitle}>{this.state.tayderName}</Text>
-              <Block row style={{paddingTop: 10, justifyContent: "space-between"}}>
+              <Block row style={{ paddingTop: 10, justifyContent: "space-between" }}>
                 <Text style={[styles.statusText, this.state.isOnline ? styles.statusOnline : styles.statusOffline]}>{this.state.statusText}</Text>
                 <Switch
                   value={this.state.isOnline}
-                  style={{marginRight: 20, marginTop: -10}}
+                  style={{ marginRight: 20, marginTop: -10 }}
                   onValueChange={this._changeStatus}
                 />
               </Block>
             </Block>
           </Block>
 
-          <Block middle style={{paddingVertical: 25}}>
+          <Block middle style={{ paddingVertical: 25 }}>
             {
               this.state.hasAcceptButton && this.state.isFirstLogin ? (
                 <Carousel
@@ -151,7 +151,7 @@ export default class HomeTayder extends React.Component {
 
         {
           this.state.hasAcceptButton && this.state.isFirstLogin ? (
-            <Block style={{width: '100%', justifyContent: 'center', alignItems: 'center', paddingBottom: 20 }}>
+            <Block style={{ width: '100%', justifyContent: 'center', alignItems: 'center', paddingBottom: 20 }}>
               {
                 this.state.activeIndex == 7 && (
                   <Button
@@ -161,7 +161,7 @@ export default class HomeTayder extends React.Component {
                     color={nowTheme.COLORS.BASE}
                     style={styles.button}
                     onPress={() => this._updateFirstLogin()}>
-                    <Text style={{fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
+                    <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
                       EMPEZAR
                     </Text>
                   </Button>
