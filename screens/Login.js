@@ -1,6 +1,6 @@
 import React from 'react';
-import { Image, StyleSheet, StatusBar, Dimensions, TouchableHighlight, View , TouchableWithoutFeedback, Keyboard, Alert, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import { Image, StyleSheet, StatusBar, Dimensions, TouchableHighlight, View, TouchableWithoutFeedback, Keyboard, Alert, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Block, Button, Text, theme } from 'galio-framework';
 import { Input } from '../components';
 
@@ -11,7 +11,7 @@ import { withNavigation } from 'react-navigation';
 const { height, width } = Dimensions.get('screen');
 
 const DismissKeyboard = ({ children }) => (
-  <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={{flex: 1, backgroundColor: nowTheme.COLORS.BASE}}>
+  <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={{ flex: 1, backgroundColor: nowTheme.COLORS.BASE }}>
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
   </KeyboardAvoidingView>
 );
@@ -20,47 +20,47 @@ class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email     : '',
-      password  : '',
-      isLoading : false,
+      email: '',
+      password: '',
+      isLoading: false,
     };
   }
 
   _handleLogin = () => {
-    if(this.state.email != '' && this.state.password != '') {
+    if (this.state.email != '' && this.state.password != '') {
       this._handleRequest();
     } else {
       Alert.alert('Upps!', 'Al parecer el formulario de acceso se encuentra incompleto.');
     }
   }
-  
+
   async _handleRequest() {
-    this.setState({isLoading : true});
+    this.setState({ isLoading: true });
     let params = {
-      email     : this.state.email,
-      password  : this.state.password
+      email: this.state.email,
+      password: this.state.password
     };
 
     await AuthenticationService.login(params)
       .then(async (response) => {
-        if(response.user != null) {
+        if (response.user != null) {
           try {
             await AsyncStorage.setItem('access_token', response.access_token);
             await AsyncStorage.setItem('expires_at', response.expires_at);
             await AsyncStorage.setItem('user', JSON.stringify(response.user));
 
             this.setState({ isLoading: false });
-            if(response.user.first_login && !response.user.isTayder) {
+            if (response.user.first_login && !response.user.isTayder) {
               this.props.navigation.navigate('PropertyLocation');
-            } else if(!response.user.first_login && !response.user.isTayder) {
+            } else if (!response.user.first_login && !response.user.isTayder) {
               this.props.navigation.navigate('Home');
-            } else if(response.user.first_login_tayder && response.user.isTayder && !response.user.confirmed && !response.user.on_review) {
+            } else if (response.user.first_login_tayder && response.user.isTayder && !response.user.confirmed && !response.user.on_review) {
               this.props.navigation.navigate('DocumentosIndex');
-            } else if(response.user.first_login_tayder && response.user.isTayder && !response.user.confirmed && response.user.on_review) {
+            } else if (response.user.first_login_tayder && response.user.isTayder && !response.user.confirmed && response.user.on_review) {
               this.props.navigation.navigate('DocumentosValidacion');
-            } else if(response.user.first_login_tayder && response.user.isTayder && response.user.confirmed) {
+            } else if (response.user.first_login_tayder && response.user.isTayder && response.user.confirmed) {
               this.props.navigation.navigate('Welcome');
-            } else if(!response.user.first_login_tayder && response.user.isTayder) {
+            } else if (!response.user.first_login_tayder && response.user.isTayder) {
               this.props.navigation.navigate('HomeTayder');
             }
 
@@ -136,8 +136,8 @@ class LoginScreen extends React.Component {
                     </View>
                   </Block>
 
-                  <Block width={width * 0.8} style={{marginBottom: theme.SIZES.BASE * 2 }}>
-                    <View style={{alignSelf: 'center', justifyContent: 'center' }}>
+                  <Block width={width * 0.8} style={{ marginBottom: theme.SIZES.BASE * 2 }}>
+                    <View style={{ alignSelf: 'center', justifyContent: 'center' }}>
                       <TouchableHighlight onPress={() => { }}>
                         <View>
                           <Text style={{ fontFamily: 'trueno-semibold', fontSize: 12, fontWeight: '700' }} color={nowTheme.COLORS.WHITE}>
