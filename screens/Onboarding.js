@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, StyleSheet, StatusBar, Dimensions, Platform, TouchableHighlight, View } from 'react-native';
+import { Image, StyleSheet, StatusBar, Dimensions, Platform, TouchableHighlight, View, SafeAreaView } from 'react-native';
 import { Block, Button, Text, theme, Toast } from 'galio-framework';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import { Switch } from '../components';
@@ -14,22 +14,22 @@ const slides = [
   {
     key: 'first',
     image: require('../assets/imgs/slide1.jpg'),
-    last  : false,
+    last: false,
   },
   {
     key: 'second',
-    image : Images.Slide002,
-    last  : false,
+    image: Images.Slide002,
+    last: false,
   },
   {
     key: 'third',
-    image : Images.Slide003,
-    last  : false,
+    image: Images.Slide003,
+    last: false,
   },
   {
     key: 'last',
-    image : Images.Slide004,
-    last  : true,
+    image: Images.Slide004,
+    last: true,
   }
 ];
 
@@ -37,10 +37,10 @@ export default class Onboarding extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isTayder  : false,
+      isTayder: false,
       showRealApp: false,
       hasMessage: this.props.navigation.state.params ? this.props.navigation.state.params.hasMessage : false,
-      message   : this.props.navigation.state.params ? this.props.navigation.state.params.message : '',
+      message: this.props.navigation.state.params ? this.props.navigation.state.params.message : '',
     };
   }
 
@@ -49,50 +49,50 @@ export default class Onboarding extends React.Component {
 
     await Actions.extractUserData().then((result) => {
       if (result != null) {
-        if(result.user.first_login && !result.user.isTayder) {
+        if (result.user.first_login && !result.user.isTayder) {
           this.props.navigation.navigate('PropertyLocation');
-        } else if(!result.user.first_login && !result.user.isTayder) {
+        } else if (!result.user.first_login && !result.user.isTayder) {
           this.props.navigation.navigate('Home');
-        } else if(result.user.first_login_tayder && result.user.isTayder && !result.user.confirmed && !result.user.on_review) {
+        } else if (result.user.first_login_tayder && result.user.isTayder && !result.user.confirmed && !result.user.on_review) {
           this.props.navigation.navigate('DocumentosIndex');
-        } else if(result.user.first_login_tayder && result.user.isTayder && !result.user.confirmed && result.user.on_review) {
+        } else if (result.user.first_login_tayder && result.user.isTayder && !result.user.confirmed && result.user.on_review) {
           this.props.navigation.navigate('DocumentosValidacion');
-        } else if(result.user.first_login_tayder && result.user.isTayder && result.user.confirmed) {
+        } else if (result.user.first_login_tayder && result.user.isTayder && result.user.confirmed) {
           this.props.navigation.navigate('Welcome');
-        } else if(!result.user.first_login_tayder && result.user.isTayder) {
+        } else if (!result.user.first_login_tayder && result.user.isTayder) {
           this.props.navigation.navigate('HomeTayder');
         }
       }
     });
   }
 
-  _renderItem = ({item, dimensions}) => {
-    if(item.key == "first") {
+  _renderItem = ({ item, dimensions }) => {
+    if (item.key == "first") {
       return (
-        <View style={{flex: 1,}}>
+        <View style={{ flex: 1 }}>
           <StatusBar barStyle="dark-content" />
-          <Image style={{ flex: 1, resizeMode: 'cover', width: '100%', height: 'auto' }} source={Images.Slide001} />
+          <Image style={{ width: dimensions.width, height: dimensions.height, resizeMode: 'cover' }} source={Images.Slide001} />
         </View>
       );
-    } else if(item.key == "second") {
+    } else if (item.key == "second") {
       return (
         <View style={{ flex: 1, }}>
           <StatusBar barStyle="dark-content" />
-          <Image style={{ flex: 1, resizeMode: 'cover', width: '100%', height: 'auto' }} source={Images.Slide002} />
+          <Image style={{ width: dimensions.width, height: dimensions.height, resizeMode: 'cover' }} source={Images.Slide002} />
         </View>
       );
     } else if (item.key == "third") {
       return (
         <View style={{ flex: 1, }}>
           <StatusBar barStyle="dark-content" />
-          <Image style={{ flex: 1, resizeMode: 'cover', width: '100%', height: 'auto' }} source={Images.Slide003} />
+          <Image style={{ width: dimensions.width, height: dimensions.height, resizeMode: 'cover' }} source={Images.Slide003} />
         </View>
       );
     } else if (item.key == "last") {
       return (
         <View style={{ flex: 1, }}>
           <StatusBar barStyle="dark-content" />
-          <Image style={{ flex: 1, resizeMode: 'cover', width: '100%', height: 'auto' }} source={Images.Slide004} />
+          <Image style={{ width: dimensions.width, height: dimensions.height, resizeMode: 'cover' }} source={Images.Slide004} />
         </View>
       );
     }
@@ -120,39 +120,39 @@ export default class Onboarding extends React.Component {
   render() {
     const { navigation } = this.props;
 
-    if(this.state.showRealApp) {
+    if (this.state.showRealApp) {
       return (
-        <Block flex style={[styles.container, this.state.isTayder ? styles.containerBlack:styles.containerRed]}>
+        <Block flex style={[styles.container, this.state.isTayder ? styles.containerBlack : styles.containerRed]}>
           <StatusBar barStyle="light-content" />
           <Block flex>
             <Block space="between" style={styles.padded}>
               <Toast isShow={this.state.hasMessage} positionIndicator="top" color="success">{this.state.message}</Toast>
               <Block>
-                <Block row style={{justifyContent : 'center'}}>
+                <Block row style={{ justifyContent: 'center' }}>
                   <Image source={this.state.isTayder ? Images.LogoTayder : Images.Logo} style={[this.state.isTayder ? styles.logoTayder : styles.logoTayd]} />
                 </Block>
-  
-                <Block middle style={{width: width - theme.SIZES.BASE * 4, backgroundColor : 'green'}}>
-                    <Text style={[styles.sloganText, {bottom : 25}]} color="white">
-                      {this.state.isTayder ? 'Forma parte de nuestro equipo y genera ganancias' : 'Bienvenido a la nueva red de limpieza doméstica'}
-                    </Text>
+
+                <Block middle style={{ width: width - theme.SIZES.BASE * 4, backgroundColor: 'green' }}>
+                  <Text style={[styles.sloganText, { bottom: 25 }]} color="white">
+                    {this.state.isTayder ? 'Forma parte de nuestro equipo y genera ganancias' : 'Bienvenido a la nueva red de limpieza doméstica'}
+                  </Text>
                 </Block>
-  
-                <Block middle style={{width: width - theme.SIZES.BASE * 4}}>
+
+                <Block middle style={{ width: width - theme.SIZES.BASE * 4 }}>
                   <Image source={Images.TaydLogo} style={styles.logoTaydHorizontal} />
                 </Block>
-  
-                <Block middle style={{marginBottom : 8, width: width - theme.SIZES.BASE * 4}}>
-                  <Text style={{fontFamily: 'trueno-semibold', fontWeight: '600', fontSize: smallScreen ? 16 : 18}} color={nowTheme.COLORS.WHITE}>¿Eres Tayder?</Text>
+
+                <Block middle style={{ marginBottom: 8, width: width - theme.SIZES.BASE * 4 }}>
+                  <Text style={{ fontFamily: 'trueno-semibold', fontWeight: '600', fontSize: smallScreen ? 16 : 18 }} color={nowTheme.COLORS.WHITE}>¿Eres Tayder?</Text>
                 </Block>
-  
-                <Block middle style={{marginBottom : theme.SIZES.BASE,  width: width - theme.SIZES.BASE * 4}}>
+
+                <Block middle style={{ marginBottom: theme.SIZES.BASE, width: width - theme.SIZES.BASE * 4 }}>
                   <Switch
                     value={this.state.isTayder}
-                    onValueChange={(value) => this.setState({isTayder : !this.state.isTayder})}
+                    onValueChange={(value) => this.setState({ isTayder: !this.state.isTayder })}
                   />
                 </Block>
-  
+
                 <Block row>
                   <Button
                     shadowless
@@ -165,32 +165,32 @@ export default class Onboarding extends React.Component {
                 </Block>
                 {
                   !this.state.isTayder
-                  ? (
-                    <Block row style={{marginTop: theme.SIZES.BASE * 0.8,marginBottom: theme.SIZES.BASE * 0.5}}>
-                      <Button
-                        shadowless
-                        style={styles.button}
-                        color={nowTheme.COLORS.WHITE}
-                        onPress={() => navigation.navigate('Register', {isTayder: this.state.isTayder})}
-                      >
-                        <Text style={{ fontFamily: 'trueno-semibold', fontSize: 20, fontWeight: '600' }} color={nowTheme.COLORS.BASE}>
-                          REGISTRARSE
-                        </Text>
-                      </Button>
-                    </Block>
-                  )
-                  : (
-                    <Block row style={{marginTop: theme.SIZES.BASE * 0.8,marginBottom: theme.SIZES.BASE * 2}}>
-                      <View style={{flexDirection : 'row', alignContent : 'center', justifyContent:'center'}}>
-                        <Text style={{ fontFamily: 'trueno-semibold', fontSize: 16 }} color={nowTheme.COLORS.WHITE}>¿Aún no tienes una cuenta? </Text>
-                        <TouchableHighlight onPress={() => navigation.navigate('RegisterTayder', {isTayder: this.state.isTayder})}>
-                          <View>
-                            <Text style={{ fontFamily: 'trueno-semibold', fontSize: 19, fontWeight: '400' }} color={nowTheme.COLORS.BASE}> Regístrate</Text>
-                          </View>
-                        </TouchableHighlight>
-                      </View>
-                    </Block>
-                  )
+                    ? (
+                      <Block row style={{ marginTop: theme.SIZES.BASE * 0.8, marginBottom: theme.SIZES.BASE * 0.5 }}>
+                        <Button
+                          shadowless
+                          style={styles.button}
+                          color={nowTheme.COLORS.WHITE}
+                          onPress={() => navigation.navigate('Register', { isTayder: this.state.isTayder })}
+                        >
+                          <Text style={{ fontFamily: 'trueno-semibold', fontSize: 20, fontWeight: '600' }} color={nowTheme.COLORS.BASE}>
+                            REGISTRARSE
+                          </Text>
+                        </Button>
+                      </Block>
+                    )
+                    : (
+                      <Block row style={{ marginTop: theme.SIZES.BASE * 0.8, marginBottom: theme.SIZES.BASE * 2 }}>
+                        <View style={{ flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>
+                          <Text style={{ fontFamily: 'trueno-semibold', fontSize: 16 }} color={nowTheme.COLORS.WHITE}>¿Aún no tienes una cuenta? </Text>
+                          <TouchableHighlight onPress={() => navigation.navigate('RegisterTayder', { isTayder: this.state.isTayder })}>
+                            <View>
+                              <Text style={{ fontFamily: 'trueno-semibold', fontSize: 19, fontWeight: '400' }} color={nowTheme.COLORS.BASE}> Regístrate</Text>
+                            </View>
+                          </TouchableHighlight>
+                        </View>
+                      </Block>
+                    )
                 }
               </Block>
             </Block>
@@ -198,14 +198,16 @@ export default class Onboarding extends React.Component {
         </Block>
       );
     } else {
-      return <AppIntroSlider
-              renderItem={this._renderItem}
-              slides={slides}
-              nextLabel=''
-              dotStyle={{backgroundColor: nowTheme.COLORS.WHITE}}
-              activeDotStyle={{backgroundColor: nowTheme.COLORS.BASE}}
-              renderDoneButton={this._renderDoneButton}
-              onDone={this._onDone} />;
+      return <SafeAreaView style={{ flex: 1 }}>
+        <AppIntroSlider
+          renderItem={this._renderItem}
+          slides={slides}
+          nextLabel=''
+          dotStyle={{ backgroundColor: nowTheme.COLORS.WHITE }}
+          activeDotStyle={{ backgroundColor: nowTheme.COLORS.BASE }}
+          renderDoneButton={this._renderDoneButton}
+          onDone={this._onDone} />
+      </SafeAreaView>
     }
   }
 }
@@ -221,15 +223,15 @@ const styles = StyleSheet.create({
     backgroundColor: nowTheme.COLORS.BLACK,
   },
 
-  logoTayd : {
-    width   : smallScreen ? 400 : 480,
-    height  : smallScreen ? 400 : 480,
-    bottom  : smallScreen ? 0 : 25
+  logoTayd: {
+    width: smallScreen ? 400 : 480,
+    height: smallScreen ? 400 : 480,
+    bottom: smallScreen ? 0 : 25
   },
-  logoTayder : {
-    width   : smallScreen ? 250 : 300,
-    height  : smallScreen ? 250 : 300,
-    bottom  : smallScreen ? 110 : 125
+  logoTayder: {
+    width: smallScreen ? 250 : 300,
+    height: smallScreen ? 250 : 300,
+    bottom: smallScreen ? 110 : 125
   },
   logoTaydHorizontal: {
     width: smallScreen ? 250 : 320,
@@ -237,13 +239,13 @@ const styles = StyleSheet.create({
     bottom: 10
   },
 
-  sloganText : {
-    fontFamily  : 'trueno-semibold',
-    position    : 'absolute',
+  sloganText: {
+    fontFamily: 'trueno-semibold',
+    position: 'absolute',
     letterSpacing: 2,
     paddingHorizontal: smallScreen ? 12 : 20,
     fontWeight: '600',
-    textAlign   : 'center',
+    textAlign: 'center',
     fontSize: smallScreen ? 16 : 18,
   },
   padded: {
