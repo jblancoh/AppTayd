@@ -37,7 +37,7 @@
     "react-native": "0.64.3",
     "react-native-app-intro-slider": "^3.0.0",
     "react-native-confirmation-code-field": "^6.5.1",
-    "react-native-gesture-handler": "2.1.1",
+    "react-native-gesture-handler": "^1.0.12",
     "react-native-maps": "0.27.1",
     "react-native-ratings": "^7.2.0",
     "react-native-reanimated": "2.1.0",
