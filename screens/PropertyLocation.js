@@ -3,7 +3,6 @@ import { StyleSheet, Image, Dimensions, TouchableWithoutFeedback, Keyboard, View
 import { Block, Text, Button } from 'galio-framework';
 import MapView from 'react-native-maps';
 import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions';
 
 import { Input } from '../components';
 import { Images, nowTheme } from '../constants';
@@ -48,7 +47,7 @@ class PropertyLocationScreen extends React.Component {
   }
 
   _getLocationAsync = async () => {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
       this.setState({
         errorMessage: 'No se ha concedido permiso para acceder a la localización.',
