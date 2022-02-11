@@ -6,7 +6,7 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "prebuildCommand": "prebuild --npm"
+      "prebuildCommand": "npm install —force"
     },
     "preview": {
       "distribution": "internal"
