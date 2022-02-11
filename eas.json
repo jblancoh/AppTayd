@@ -6,7 +6,7 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "prebuildCommand": "npm install —force"
+      "prebuildCommand": "npm install --legacy-peer-deps"
     },
     "preview": {
       "distribution": "internal"
