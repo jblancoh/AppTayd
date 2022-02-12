@@ -1,5 +1,5 @@
 import React from 'react';
-import { withNavigation } from 'react-navigation';
+import { withNavigation } from '@react-navigation/compat';
 import { TouchableOpacity, StyleSheet, Platform, Dimensions } from 'react-native';
 import { Button, Block, NavBar, Text, theme, Button as GaButton } from 'galio-framework';
 
@@ -43,11 +43,11 @@ class Header extends React.Component {
   handleLeftPress = () => {
     const { back, navigation, goToSchedule, goToScheduleTayder } = this.props;
 
-    if(back && goToSchedule) {
+    if (back && goToSchedule) {
       return navigation.navigate("Schedule");
     }
 
-    if(back && goToScheduleTayder) {
+    if (back && goToScheduleTayder) {
       return navigation.navigate("HomeTayder");
     }
 
@@ -230,11 +230,11 @@ class Header extends React.Component {
               size={16}
               onPress={this.handleLeftPress}
               color={iconColor || nowTheme.COLORS.ICON}
-              style={{fontWeight: '700'}}
+              style={{ fontWeight: '700' }}
             />
           }
           leftStyle={{ paddingVertical: 12, flex: 0.2 }}
-          titleStyle={[styles.title, {color: nowTheme.COLORS[white ? 'WHITE' : 'HEADER']}, titleColor && { color: titleColor }]}
+          titleStyle={[styles.title, { color: nowTheme.COLORS[white ? 'WHITE' : 'HEADER'] }, titleColor && { color: titleColor }]}
           {...props}
         />
         {/* {this.renderHeader()} */}

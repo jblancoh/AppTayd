@@ -36,11 +36,12 @@ const slides = [
 export default class Onboarding extends React.Component {
   constructor(props) {
     super(props);
+    console.log(' this.props', this.props.route)
     this.state = {
       isTayder: false,
       showRealApp: false,
-      hasMessage: this.props.navigation.state.params ? this.props.navigation.state.params.hasMessage : false,
-      message: this.props.navigation.state.params ? this.props.navigation.state.params.message : '',
+      hasMessage: this.props.route.params ? this.props.route.params.hasMessage : false,
+      message: this.props.route.params ? this.props.route.params.message : '',
     };
   }
 
@@ -52,7 +53,7 @@ export default class Onboarding extends React.Component {
         if (result.user.first_login && !result.user.isTayder) {
           this.props.navigation.navigate('PropertyLocation');
         } else if (!result.user.first_login && !result.user.isTayder) {
-          this.props.navigation.navigate('Home');
+          this.props.navigation.navigate('DrawerClient', { screen: 'Home' });
         } else if (result.user.first_login_tayder && result.user.isTayder && !result.user.confirmed && !result.user.on_review) {
           this.props.navigation.navigate('DocumentosIndex');
         } else if (result.user.first_login_tayder && result.user.isTayder && !result.user.confirmed && result.user.on_review) {
