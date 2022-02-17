@@ -13,7 +13,7 @@ const smallScreen = height < 812 ? true : false;
 const slides = [
   {
     key: 'first',
-    image: require('../assets/imgs/slide1.jpg'),
+    image: require('../assets/imgs/slide1_no_text.jpg'),
     last: false,
   },
   {

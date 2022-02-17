@@ -65,216 +65,269 @@ import SoporteCitaScreen from '../screens/soporte/Cita';
 import SoporteTayderIndexScreen from '../t-screens/soporte/Index';
 import SoporteTayderGuiaBasicaScreen from '../t-screens/soporte/GuiaBasica';
 
-// // drawer
-import DrawerUser from './Drawer';
+// drawer
+import DrawerUser from './DrawerUser';
 import DrawerTayder from './DrawerTayder';
 import DrawerItem from '../components/DrawerItem';
 
-// // header for screens
-// import Header from '../components/Header';
-// import { nowTheme } from '../constants';
+// header for screens
+import Header from '../components/Header';
+import { nowTheme } from '../constants';
 
-// const { width } = Dimensions.get('screen');
+const { width } = Dimensions.get('screen');
 
 const Stack = createStackNavigator()
 const Drawer = createDrawerNavigator();
 
-// const transitionConfig = (transitionProps, prevTransitionProps) => ({
-//   transitionSpec: {
-//     duration: 400,
-//     easing: Easing.out(Easing.poly(4)),
-//     timing: Animated.timing
-//   },
-//   screenInterpolator: sceneProps => {
-//     const { layout, position, scene } = sceneProps;
-//     const thisSceneIndex = scene.index;
-//     const width = layout.initWidth;
+const transitionConfig = (transitionProps, prevTransitionProps) => ({
+  transitionSpec: {
+    duration: 400,
+    easing: Easing.out(Easing.poly(4)),
+    timing: Animated.timing
+  },
+  screenInterpolator: sceneProps => {
+    const { layout, position, scene } = sceneProps;
+    const thisSceneIndex = scene.index;
+    const width = layout.initWidth;
 
-//     const scale = position.interpolate({
-//       inputRange: [thisSceneIndex - 1, thisSceneIndex, thisSceneIndex + 1],
-//       outputRange: [4, 1, 1]
-//     });
-//     const opacity = position.interpolate({
-//       inputRange: [thisSceneIndex - 1, thisSceneIndex, thisSceneIndex + 1],
-//       outputRange: [0, 1, 1]
-//     });
-//     const translateX = position.interpolate({
-//       inputRange: [thisSceneIndex - 1, thisSceneIndex],
-//       outputRange: [width, 0]
-//     });
+    const scale = position.interpolate({
+      inputRange: [thisSceneIndex - 1, thisSceneIndex, thisSceneIndex + 1],
+      outputRange: [4, 1, 1]
+    });
+    const opacity = position.interpolate({
+      inputRange: [thisSceneIndex - 1, thisSceneIndex, thisSceneIndex + 1],
+      outputRange: [0, 1, 1]
+    });
+    const translateX = position.interpolate({
+      inputRange: [thisSceneIndex - 1, thisSceneIndex],
+      outputRange: [width, 0]
+    });
 
-//     const scaleWithOpacity = { opacity };
-//     const screenName = 'Search';
+    const scaleWithOpacity = { opacity };
+    const screenName = 'Search';
 
-//     if (
-//       screenName === transitionProps.scene.route.routeName ||
-//       (prevTransitionProps && screenName === prevTransitionProps.scene.route.routeName)
-//     ) {
-//       return scaleWithOpacity;
-//     }
-//     return { transform: [{ translateX }] };
-//   }
-// });
+    if (
+      screenName === transitionProps.scene.route.routeName ||
+      (prevTransitionProps && screenName === prevTransitionProps.scene.route.routeName)
+    ) {
+      return scaleWithOpacity;
+    }
+    return { transform: [{ translateX }] };
+  }
+});
 
-// const ProfileStack = createStackNavigator(
-//   {
-//     Profile: {
-//       screen: ProfileScreen,
-//       navigationOptions: ({ navigation }) => ({
-//         header: (
-//           <Header title="Perfil" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
-//         ),
-//         headerTransparent: true
-//       })
-//     }
-//   },
-//   {
-//     cardStyle: { backgroundColor: '#FFFFFF' },
-//     transitionConfig
-//   }
-// );
+function ProfileStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        gestureEnabled: false
+      }}
+    >
+      <Stack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={navOpt => {
+          return {
+            header: (
+              <Header title="Perfil" iconColor={nowTheme.COLORS.SECONDARY} navigation={navOpt} />
+            ),
+            headerTransparent: false
+          }
+        }
+        }
+      />
+    </Stack.Navigator>
+  )
+}
+function ChatStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        gestureEnabled: false
+      }}
+    >
+      <Stack.Screen
+        name="Chat"
+        component={AgendaChatScreen}
+        options={navOpt => {
+          return {
+            header: (
+              <Header title="Chat" iconColor={nowTheme.COLORS.SECONDARY} navigation={navOpt} />
+            ),
+            headerTransparent: false
+          }
+        }
+        }
+      />
+    </Stack.Navigator>
+  )
+}
+function ChatTayderStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        gestureEnabled: false
+      }}
+    >
+      <Stack.Screen
+        name="ChatTayder"
+        component={ChatTayderScreen}
+        options={navOpt => {
+          return {
+            header: (
+              <Header title="Chat" iconColor={nowTheme.COLORS.SECONDARY} navigation={navOpt} />
+            ),
+            headerTransparent: false
+          }
+        }
+        }
+      />
+    </Stack.Navigator>
+  )
+}
 
-// const ChatStack = createStackNavigator(
-//   {
-//     Chat: {
-//       screen: AgendaChatScreen,
-//       navigationOptions: ({ navigation }) => ({
-//         header: (
-//           <Header back goToSchedule title="Chat" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
-//         ),
-//         headerTransparent: false
-//       })
-//     }
-//   },
-//   {
-//     cardStyle: { backgroundColor: '#FFFFFF' },
-//     transitionConfig
-//   }
-// );
+function DomicilioStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        gestureEnabled: false
+      }}
+    >
+      <Stack.Screen
+        name="DomicilioIndex"
+        component={DomicilioIndexScreen}
+        options={navOpt => {
+          return {
+            header: (
+              <Header title="Domicilio" iconColor={nowTheme.COLORS.SECONDARY} navigation={navOpt} />
+            ),
+            headerTransparent: false
+          }
+        }}
+      />
+      <Stack.Screen
+        name="DomicilioLocation"
+        component={DomicilioLocationScreen}
+        options={navOpt => {
+          return {
+            header: (
+              <Header title="Domicilio" iconColor={nowTheme.COLORS.SECONDARY} navigation={navOpt} />
+            ),
+            headerTransparent: false
+          }
+        }}
+      />
+      <Stack.Screen
+        name="DomicilioInfo"
+        component={DomicilioInfoScreen}
+        options={navOpt => {
+          return {
+            header: (
+              <Header title="Domicilio" iconColor={nowTheme.COLORS.SECONDARY} navigation={navOpt} />
+            ),
+            headerTransparent: false
+          }
+        }}
+      />
+    </Stack.Navigator>
+  )
+}
+function MetodoPagoStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        gestureEnabled: false
+      }}
+    >
+      <Stack.Screen
+        name="MetodoPagoIndex"
+        component={MetodoPagoIndexScreen}
+        options={navOpt => {
+          return {
+            header: (
+              <Header title="Método de pago" iconColor={nowTheme.COLORS.SECONDARY} navigation={navOpt} />
+            ),
+            headerTransparent: false
+          }
+        }}
+      />
+      <Stack.Screen
+        name="MetodoPagoAddCard"
+        component={MetodoPagoAddCardScreen}
+        options={navOpt => {
+          return {
+            header: (
+              <Header title="Método de pago" iconColor={nowTheme.COLORS.SECONDARY} navigation={navOpt} />
+            ),
+            headerTransparent: false
+          }
+        }}
+      />
+    </Stack.Navigator>
+  )
+}
 
-// const ChatTayderStack = createStackNavigator(
-//   {
-//     ChatTayder: {
-//       screen: ChatTayderScreen,
-//       navigationOptions: ({ navigation }) => ({
-//         header: (
-//           <Header back goToScheduleTayder title="Chat" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
-//         ),
-//         headerTransparent: false
-//       })
-//     }
-//   },
-//   {
-//     cardStyle: { backgroundColor: '#FFFFFF' },
-//     transitionConfig
-//   }
-// );
+function GeneraIngresoStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        gestureEnabled: false
+      }}
+    >
+      <Stack.Screen
+        name="GeneraIngresoIndex"
+        component={GeneraIngresoIndexScreen}
+        options={navOpt => {
+          return {
+            header: (
+              <Header title="Genera Ingresos" iconColor={nowTheme.COLORS.SECONDARY} navigation={navOpt} />
+            ),
+            headerTransparent: false
+          }
+        }
+        }
+      />
+    </Stack.Navigator>
+  )
+}
 
-// const DomicilioStack = createStackNavigator(
-//   {
-//     DomicilioIndex: {
-//       screen: DomicilioIndexScreen,
-//       navigationOptions: ({ navigation }) => ({
-//         header: (
-//           <Header title="Domicilio" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
-//         ),
-//         headerTransparent: false
-//       })
-//     },
-//     DomicilioLocation: {
-//       screen: DomicilioLocationScreen,
-//       navigationOptions: ({ navigation }) => ({
-//         header: (
-//           <Header back title="Domicilio" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
-//         ),
-//         headerTransparent: false
-//       })
-//     },
-//     DomicilioInfo: {
-//       screen: DomicilioInfoScreen,
-//       navigationOptions: ({ navigation }) => ({
-//         header: (
-//           <Header back title="Domicilio" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
-//         ),
-//         headerTransparent: false
-//       })
-//     },
-//   },
-//   {
-//     cardStyle: { backgroundColor: '#FFFFFF' },
-//     transitionConfig
-//   }
-// );
-
-// const MetodoPagoStack = createStackNavigator(
-//   {
-//     MetodoPagoIndex: {
-//       screen: MetodoPagoIndexScreen,
-//       navigationOptions: ({ navigation }) => ({
-//         header: (
-//           <Header title="Método de pago" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
-//         ),
-//         headerTransparent: false
-//       })
-//     }, 
-//     MetodoPagoAddCard: {
-//       screen: MetodoPagoAddCardScreen,
-//       navigationOptions: ({ navigation }) => ({
-//         header: (
-//           <Header back title="Método de pago" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
-//         ),
-//         headerTransparent: false
-//       })
-//     }
-//   },
-//   {
-//     cardStyle: { backgroundColor: '#FFFFFF' },
-//     transitionConfig
-//   }
-// );
-
-// const GeneraIngresoStack = createStackNavigator(
-//   {
-//     GeneraIngresoIndex: {
-//       screen: GeneraIngresoIndexScreen,
-//       navigationOptions: ({ navigation }) => ({
-//         header: (
-//           <Header title="Genera Ingresos" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
-//         ),
-//         headerTransparent: false
-//       })
-//     }
-//   },
-//   {
-//     cardStyle: { backgroundColor: '#FFFFFF' },
-//     transitionConfig
-//   }
-// );
-
-// const CuponesStack = createStackNavigator(
-//   {
-//     CuponesIndex: {
-//       screen: CuponesIndexScreen,
-//       navigationOptions: ({ navigation }) => ({
-//         header: (
-//           <Header title="Cupones" iconColor={nowTheme.COLORS.SECONDARY} navigation={navigation} />
-//         ),
-//         headerTransparent: false
-//       })
-//     }
-//   },
-//   {
-//     cardStyle: { backgroundColor: '#FFFFFF' },
-//     transitionConfig
-//   }
-// );
+function CuponesStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        gestureEnabled: false
+      }}
+    >
+      <Stack.Screen
+        name="CuponesIndex"
+        component={CuponesIndexScreen}
+        options={navOpt => {
+          console.log('navOpt>>>', navOpt)
+          return {
+            header: (
+              <Header title="Cupones" iconColor={nowTheme.COLORS.SECONDARY} navigation={navOpt} />
+            ),
+            headerTransparent: false
+          }
+        }
+        }
+      />
+    </Stack.Navigator>
+  )
+}
 
 
 function Drawer2() {
   return (
     <Drawer.Navigator>
       <Drawer.Screen
-
         name="HomeTayder"
         component={HomeTayder}
         options={navOpt => ({
@@ -284,307 +337,318 @@ function Drawer2() {
         })
         }
       />
-    </Drawer.Navigator>
-  )
-}
-// const Drawer2 = createDrawerNavigator(
-//   {
-//     HomeTayder: {
-//       screen: HomeTayder,
-//       navigationOptions: navOpt => ({
-//         drawerLabel: ({ focused }) => (
-//           <DrawerItem focused={focused} screen="HomeTayder" title="Inicio" />
-//         )
-//       })
-//     },
-//     HistoryTayder: {
-//       screen: HistoryTayder,
-//       navigationOptions: {
-//         drawerLabel: () => { }
-//       }
-//     },
-//     ServiceInfoTayder: {
-//       screen: ServiceInfoTayder,
-//       navigationOptions: {
-//         drawerLabel: () => { }
-//       }
-//     },
-//     ServiceProgressTayder: {
-//       screen: ServiceProgressTayder,
-//       navigationOptions: {
-//         drawerLabel: () => { }
-//       }
-//     },
-//     ServiceFinishTayder: {
-//       screen: ServiceFinishTayder,
-//       navigationOptions: {
-//         drawerLabel: () => { }
-//       }
-//     },
-//     EarningsTayder: {
-//       screen: EarningsTayder,
-//       navigationOptions: {
-//         drawerLabel: () => { }
-//       }
-//     },
-//     ChatServiceTayder: {
-//       screen: ChatTayderStack,
-//       navigationOptions: {
-//         drawerLabel: () => { }
-//       }
-//     },
-//     SoporteTayder: {
-//       screen: SoporteTayderIndexScreen,
-//       navigationOptions: {
-//         drawerLabel: () => { }
-//       }
-//     },
-//     SoporteTayderGuiaBasica: {
-//       screen: SoporteTayderGuiaBasicaScreen,
-//       navigationOptions: {
-//         drawerLabel: () => { }
-//       }
-//     },
-//   },
-//   {
-//     contentComponent: DrawerTayder,
-//     drawerBackgroundColor: '#F7F7F7',
-//     drawerWidth: width * 0.95,
-//     contentOptions: {
-//       activeTintColor: nowTheme.COLORS.SECONDARY,
-//       inactiveTintColor: nowTheme.COLORS.SECONDARY,
-//       activeBackgroundColor: 'transparent',
-//       itemStyle: {
-//         width: width * 1,
-//         backgroundColor: 'transparent'
-//       },
-//       labelStyle: {
-//         fontSize: 18,
-//         marginLeft: 20,
-//         fontWeight: 'normal'
-//       },
-//       itemsContainerStyle: {
-//         paddingVertical: 16,
-//         paddingHorizonal: 12,
-//         justifyContent: 'center',
-//         alignContent: 'center',
-//         alignItems: 'center',
-//         overflow: 'hidden',
-//       }
-//     },
-//     initialRouteName: 'HomeTayder',
-//   }
-// )
-
-function DrawerClient() {
-  return (
-    <Drawer.Navigator
-      initialRouteName={'Home'}
-    >
       <Drawer.Screen
-        name="Home"
-        component={Home}
+        name="HistoryTayder"
+        component={HistoryTayder}
         options={navOpt => ({
-          drawerLabel: ({ focused }) => (
-            <DrawerItem focused={focused} screen="Home" title="Inicio" />
-          )
+          drawerLabel: () => { }
+        })
+        }
+      />
+      <Drawer.Screen
+        name="ServiceInfoTayder"
+        component={ServiceInfoTayder}
+        options={navOpt => ({
+          drawerLabel: () => { }
+        })
+        }
+      />
+      <Drawer.Screen
+        name="ServiceProgressTayder"
+        component={ServiceProgressTayder}
+        options={navOpt => ({
+          drawerLabel: () => { }
+        })
+        }
+      />
+      <Drawer.Screen
+        name="ServiceFinishTayder"
+        component={ServiceFinishTayder}
+        options={navOpt => ({
+          drawerLabel: () => { }
+        })
+        }
+      />
+      <Drawer.Screen
+        name="EarningsTayder"
+        component={EarningsTayder}
+        options={navOpt => ({
+          drawerLabel: () => { }
+        })
+        }
+      />
+      <Drawer.Screen
+        name="ChatServiceTayder"
+        component={ChatTayderStack}
+        options={navOpt => ({
+          drawerLabel: () => { }
+        })
+        }
+      />
+      <Drawer.Screen
+        name="SoporteTayder"
+        component={SoporteTayderIndexScreen}
+        options={navOpt => ({
+          drawerLabel: () => { }
+        })
+        }
+      />
+      <Drawer.Screen
+        name="SoporteTayderGuiaBasica"
+        component={SoporteTayderGuiaBasicaScreen}
+        options={navOpt => ({
+          drawerLabel: () => { }
         })
         }
       />
     </Drawer.Navigator>
   )
 }
-// const DrawerClient = createDrawerNavigator(
-//     History: {
-//       screen: History,
-//       navigationOptions: {
-//         drawerLabel: () => { }
-//       }
-//     },
-//     RateService: {
-//       screen: RateServiceScreen,
-//       navigationOptions: {
-//         drawerLabel: () => { }
-//       }
-//     },
 
-//     Soporte: {
-//       screen: SoporteIndexScreen,
-//       navigationOptions: {
-//         drawerLabel: () => { }
-//       }
-//     },
-//     SoporteCita: {
-//       screen: SoporteCitaScreen,
-//       navigationOptions: {
-//         drawerLabel: () => { }
-//       }
-//     },
-//     BolsaTrabajo: {
-//       screen: SoporteCitaScreen,
-//       navigationOptions: {
-//         drawerLabel: () => { }
-//       }
-//     },
-
-//     Schedule: {
-//       screen: Schedule,
-//       navigationOptions: {
-//         drawerLabel: () => { }
-//       }
-//     },
-//     Agenda: {
-//       screen: AgendaIndexScreen,
-//       navigationOptions: {
-//         drawerLabel: () => {}
-//       }
-//     },
-//     AgendaFecha: {
-//       screen: AgendaFechaScreen,
-//       navigationOptions: {
-//         drawerLabel: () => {}
-//       }
-//     },
-//     AgendaInsumos: {
-//       screen: AgendaInsumosScreen,
-//       navigationOptions: {
-//         drawerLabel: () => { }
-//       }
-//     },
-//     AgendaCheckout: {
-//       screen: AgendaCheckoutScreen,
-//       navigationOptions: {
-//         drawerLabel: () => { }
-//       }
-//     },
-//     AgendaSuccess: {
-//       screen: AgendaSuccessScreen,
-//       navigationOptions: {
-//         drawerLabel: () => { }
-//       }
-//     },
-//     AgendaProgreso: {
-//       screen: AgendaProgressScreen,
-//       navigationOptions: {
-//         drawerLabel: () => { }
-//       }
-//     },
-//     AgendaChat: {
-//       screen: ChatStack,
-//       navigationOptions: {
-//         drawerLabel: () => { }
-//       }
-//     },
-
-//     VehiculoFecha: {
-//       screen: VehicleDateTimeScreen,
-//       navigationOptions: {
-//         drawerLabel: () => {}
-//       }
-//     },
-//     VehiculoSeleccion: {
-//       screen: VehicleSelectionScreen,
-//       navigationOptions: {
-//         drawerLabel: () => {}
-//       }
-//     },
-//     VehiculoServicio: {
-//       screen: VehicleServiceSelectionScreen,
-//       navigationOptions: {
-//         drawerLabel: () => {}
-//       }
-//     },
-//     VehiculoUbicacion: {
-//       screen: VehicleLocationScreen,
-//       navigationOptions: {
-//         drawerLabel: () => {}
-//       }
-//     },
-//     VehiculoCheckout: {
-//       screen: VehicleCheckoutScreen,
-//       navigationOptions: {
-//         drawerLabel: () => {}
-//       }
-//     },
-
-//     Perfil: {
-//       screen: ProfileStack,
-//       navigationOptions: navOpt => ({
-//         drawerLabel: ({ focused }) => (
-//           <DrawerItem focused={focused} screen="Profile" title="Perfil" />
-//         )
-//       })
-//     },
-//     Idioma: {
-//       screen: ProfileStack,
-//       navigationOptions: navOpt => ({
-//         drawerLabel: ({ focused }) => (
-//           <DrawerItem focused={focused} screen="Profile" title="Idioma" />
-//         )
-//       })
-//     },
-//     Domicilio: {
-//       screen: DomicilioStack,
-//       navigationOptions: navOpt => ({
-//         drawerLabel: ({ focused }) => (
-//           <DrawerItem focused={focused} screen="DomicilioIndex" title="Domicilio" />
-//         )
-//       })
-//     },
-//     MetodoPago: {
-//       screen: MetodoPagoStack,
-//       navigationOptions: navOpt => ({
-//         drawerLabel: ({ focused }) => (
-//           <DrawerItem focused={focused} screen="MetodoPagoIndex" title="Método de pago" />
-//         )
-//       })
-//     },
-//     GeneraIngreso: {
-//       screen: GeneraIngresoStack,
-//       navigationOptions: {
-//         drawerLabel: () => { }
-//       }
-//     },
-//     Cupones: {
-//       screen: CuponesStack,
-//       navigationOptions: {
-//         drawerLabel: () => {}
-//       }
-//     }
-//   },
-//   {
-//     contentComponent: DrawerUser,
-//     drawerBackgroundColor: '#F7F7F7',
-//     drawerWidth: width * 0.95,
-//     contentOptions: {
-//       activeTintColor: nowTheme.COLORS.SECONDARY,
-//       inactiveTintColor: nowTheme.COLORS.SECONDARY,
-//       activeBackgroundColor: 'transparent',
-//       itemStyle: {
-//         width: width * 1,
-//         backgroundColor: 'transparent'
-//       },
-//       labelStyle: {
-//         fontSize: 18,
-//         marginLeft: 20,
-//         fontWeight: 'normal'
-//       },
-//       itemsContainerStyle: {
-//         paddingVertical: 16,
-//         paddingHorizonal: 12,
-//         justifyContent: 'center',
-//         alignContent: 'center',
-//         alignItems: 'center',
-//         overflow: 'hidden',
-//       }
-//     },
-//     initialRouteName: 'Home',
-//   }
-// );
-// {
-//   headerMode: 'none',
-//   initialRouteName : "Onboarding",
-// });
+function DrawerClient() {
+  return (
+    <Drawer.Navigator
+      initialRouteName={'Home'}
+      drawerContent={props => <DrawerUser {...props} />}
+      drawerStyle={
+        {
+          width: width * 0.95,
+          backgroundColor: '#F7F7F7'
+        }
+      }
+      drawerContentOptions={{
+        activeTintColor: nowTheme.COLORS.SECONDARY,
+        inactiveTintColor: nowTheme.COLORS.SECONDARY,
+        activeBackgroundColor: 'transparent',
+        itemStyle: {
+          width: width * 1,
+          backgroundColor: 'transparent'
+        },
+        labelStyle: {
+          fontSize: 18,
+          marginLeft: 20,
+          fontWeight: 'normal'
+        },
+        itemsContainerStyle: {
+          paddingVertical: 16,
+          paddingHorizonal: 12,
+          justifyContent: 'center',
+          alignContent: 'center',
+          alignItems: 'center',
+          overflow: 'hidden',
+        }
+      }}
+    >
+      <Drawer.Screen
+        name="Home"
+        component={Home}
+        options={() => ({
+          drawerLabel: ({ focused }) => (
+            <DrawerItem focused={focused} screen="Home" title="Inicio" />
+          )
+        })}
+      />
+      <Drawer.Screen
+        name="History"
+        component={History}
+        options={{
+          drawerLabel: () => null
+        }}
+      />
+      <Drawer.Screen
+        name="RateService"
+        component={RateServiceScreen}
+        options={() => ({
+          drawerLabel: () => null
+        })}
+      />
+      <Drawer.Screen
+        name="Soporte"
+        component={SoporteIndexScreen}
+        options={() => ({
+          drawerLabel: () => null
+        })
+        }
+      />
+      <Drawer.Screen
+        name="SoporteCita"
+        component={SoporteCitaScreen}
+        options={() => ({
+          drawerLabel: () => null
+        })
+        }
+      />
+      <Drawer.Screen
+        name="BolsaTrabajo"
+        component={SoporteCitaScreen}
+        options={() => ({
+          drawerLabel: () => null
+        })
+        }
+      />
+      <Drawer.Screen
+        name="Schedule"
+        component={Schedule}
+        options={() => ({
+          drawerLabel: () => null
+        })
+        }
+      />
+      <Drawer.Screen
+        name="Agenda"
+        component={AgendaIndexScreen}
+        options={() => ({
+          drawerLabel: () => null
+        })
+        }
+      />
+      <Drawer.Screen
+        name="AgendaFecha"
+        component={AgendaFechaScreen}
+        options={() => ({
+          drawerLabel: () => null
+        })
+        }
+      />
+      <Drawer.Screen
+        name="AgendaInsumos"
+        component={AgendaInsumosScreen}
+        options={() => ({
+          drawerLabel: () => null
+        })
+        }
+      />
+      <Drawer.Screen
+        name="AgendaCheckout"
+        component={AgendaCheckoutScreen}
+        options={() => ({
+          drawerLabel: () => null
+        })
+        }
+      />
+      <Drawer.Screen
+        name="AgendaSuccess"
+        component={AgendaSuccessScreen}
+        options={() => ({
+          drawerLabel: () => null
+        })
+        }
+      />
+      <Drawer.Screen
+        name="AgendaProgreso"
+        component={AgendaProgressScreen}
+        options={() => ({
+          drawerLabel: () => null
+        })
+        }
+      />
+      <Drawer.Screen
+        name="AgendaChat"
+        component={ChatStack}
+        options={() => ({
+          drawerLabel: () => null
+        })
+        }
+      />
+      <Drawer.Screen
+        name="VehiculoFecha"
+        component={VehicleDateTimeScreen}
+        options={() => ({
+          drawerLabel: () => null
+        })
+        }
+      />
+      <Drawer.Screen
+        name="VehiculoSeleccion"
+        component={VehicleSelectionScreen}
+        options={() => ({
+          drawerLabel: () => null
+        })
+        }
+      />
+      <Drawer.Screen
+        name="VehiculoServicio"
+        component={VehicleServiceSelectionScreen}
+        options={() => ({
+          drawerLabel: () => null
+        })
+        }
+      />
+      <Drawer.Screen
+        name="VehiculoUbicacion"
+        component={VehicleLocationScreen}
+        options={() => ({
+          drawerLabel: () => null
+        })
+        }
+      />
+      <Drawer.Screen
+        name="VehiculoCheckout"
+        component={VehicleCheckoutScreen}
+        options={() => ({
+          drawerLabel: () => null
+        })
+        }
+      />
+      <Drawer.Screen
+        name="Perfil"
+        component={ProfileStack}
+        options={() => ({
+          drawerLabel: ({ focused }) => (
+            <DrawerItem focused={focused} screen="Profile" title="Perfil" />
+          )
+        })
+        }
+      />
+      <Drawer.Screen
+        name="Idioma"
+        component={ProfileStack}
+        options={() => ({
+          drawerLabel: ({ focused }) => (
+            <DrawerItem focused={focused} screen="Profile" title="Idioma" />
+          )
+        })
+        }
+      />
+      <Drawer.Screen
+        name="Domicilio"
+        component={DomicilioStack}
+        options={() => ({
+          drawerLabel: ({ focused }) => (
+            <DrawerItem focused={focused} screen="DomicilioIndex" title="Domicilio" />
+          )
+        })
+        }
+      />
+      <Drawer.Screen
+        name="MetodoPago"
+        component={MetodoPagoStack}
+        options={() => ({
+          drawerLabel: ({ focused }) => (
+            <DrawerItem focused={focused} screen="MetodoPagoIndex" title="Método de pago" />
+          )
+        })
+        }
+      />
+      <Drawer.Screen
+        name="GeneraIngreso"
+        component={GeneraIngresoStack}
+        options={() => ({
+          drawerLabel: () => { }
+        })
+        }
+      />
+      <Drawer.Screen
+        name="Cupones"
+        component={CuponesStack}
+        options={() => ({
+          drawerLabel: () => { }
+        })
+        }
+      />
+    </Drawer.Navigator>
+  )
+}
 
 function RootStack() {
   return (
