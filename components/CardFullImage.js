@@ -1,5 +1,5 @@
 import React from 'react';
-import { withNavigation } from 'react-navigation';
+import { withNavigation } from '@react-navigation/compat';
 import PropTypes from 'prop-types';
 import { StyleSheet, Image, TouchableWithoutFeedback, Alert } from 'react-native';
 import { Block, theme } from 'galio-framework';
@@ -7,9 +7,9 @@ import { Block, theme } from 'galio-framework';
 class CardFullImage extends React.Component {
 
   _navigate = (value, navigation) => {
-    switch(value) {
-      case 1: navigation.navigate('Agenda');          break;
-      case 2: navigation.navigate('VehiculoFecha');   break;
+    switch (value) {
+      case 1: navigation.navigate('Agenda'); break;
+      case 2: navigation.navigate('VehiculoFecha'); break;
     }
   }
 
@@ -30,7 +30,7 @@ class CardFullImage extends React.Component {
 
     return (
       <Block row={horizontal} card flex style={cardContainer}>
-        <TouchableWithoutFeedback onPress={() => this._navigate(position, navigation)} style={{zIndex : -1}}>
+        <TouchableWithoutFeedback onPress={() => this._navigate(position, navigation)} style={{ zIndex: -1 }}>
           <Block>
             <Block flex style={imgContainer}>
               <Image resizeMode="cover" source={image} style={imageStyles} />

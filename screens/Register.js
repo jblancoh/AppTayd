@@ -3,7 +3,7 @@ import { StyleSheet, Image, Dimensions, TouchableWithoutFeedback, Keyboard, Aler
 import { Block, Checkbox, Text, Button, } from 'galio-framework';
 import * as Linking from 'expo-linking';
 import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field';
-import { withNavigation } from 'react-navigation';
+import { withNavigation } from '@react-navigation/compat';
 
 import { Input } from '../components';
 import { Images, nowTheme } from '../constants';
@@ -12,7 +12,7 @@ import AuthenticationService from '../services/authentication';
 const { width, height } = Dimensions.get('screen');
 
 const DismissKeyboard = ({ children }) => (
-  <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={{flex: 1}}>
+  <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={{ flex: 1 }}>
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
   </KeyboardAvoidingView>
 );
@@ -20,13 +20,13 @@ const DismissKeyboard = ({ children }) => (
 const RegisterScreen = (baseProps) => {
   const [value, setValue] = useState('');
   const [form, setForm] = useState({
-    isTayder  : false,
-    phone     : '',
-    email     : '',
-    name      : '',
-    lastname  : '',
-    password  : '',
-    confirm   : '',
+    isTayder: false,
+    phone: '',
+    email: '',
+    name: '',
+    lastname: '',
+    password: '',
+    confirm: '',
   });
   const [chkTerms, setChkTerms] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +34,7 @@ const RegisterScreen = (baseProps) => {
   const [verificated, setVerificated] = useState(false);
   const title = enterCode ? 'Verificación' : 'Registro';
   const buttonText = enterCode ? 'VERIFICAR CÓDIGO' : 'REGISTRAR';
-  const ref = useBlurOnFulfill({value, cellCount: 6});
+  const ref = useBlurOnFulfill({ value, cellCount: 6 });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
     setValue,
@@ -45,9 +45,9 @@ const RegisterScreen = (baseProps) => {
   }
 
   const _handleLogin = () => {
-    if(form.email != '' && form.password != '' && form.password != '' && form.name != '' && form.lastname != '' && form.phone != '') {
-      if(!chkTerms) {
-        if(enterCode)
+    if (form.email != '' && form.password != '' && form.password != '' && form.name != '' && form.lastname != '' && form.phone != '') {
+      if (!chkTerms) {
+        if (enterCode)
           confirmCode();
         else
           sendCode();
@@ -61,7 +61,7 @@ const RegisterScreen = (baseProps) => {
 
   const sendCode = () => {
     let params = {
-      phone : form.phone
+      phone: form.phone
     }
 
     AuthenticationService.sendVerificationCode(params)
@@ -76,7 +76,7 @@ const RegisterScreen = (baseProps) => {
   }
 
   const confirmCode = () => {
-    if(value.length == 6) {
+    if (value.length == 6) {
       setIsLoading(true);
 
       let data = {
@@ -97,30 +97,30 @@ const RegisterScreen = (baseProps) => {
     }
   }
 
-  const _handleRequest = async() => {
+  const _handleRequest = async () => {
     let params = {
-      email     : form.email,
-      password  : form.password,
-      isTayder  : form.isTayder,
-      name      : form.name,
-      last_name : form.lastname,
-      phone     : form.phone,
-      chkTerms  : true,
+      email: form.email,
+      password: form.password,
+      isTayder: form.isTayder,
+      name: form.name,
+      last_name: form.lastname,
+      phone: form.phone,
+      chkTerms: true,
     };
 
     await AuthenticationService.signup(params)
       .then(async (response) => {
         setForm({
-          phone     : '',
-          email     : '',
-          name      : '',
-          lastname  : '',
-          password  : '',
-          confirm   : '',
+          phone: '',
+          email: '',
+          name: '',
+          lastname: '',
+          password: '',
+          confirm: '',
         });
         setIsLoading(false);
         Alert.alert("Registro", "Se ha registrado tu cuenta exitosamente, inicia sesión para acceder a Tayd.")
-        baseProps.navigation.navigate('Login', {hasMessage: true, message: 'Registro exitoso!'});
+        baseProps.navigation.navigate('Login', { hasMessage: true, message: 'Registro exitoso!' });
       })
       .catch(error => {
         setIsLoading(false);
@@ -134,7 +134,7 @@ const RegisterScreen = (baseProps) => {
   }
 
   const _goBack = () => {
-    if(enterCode)
+    if (enterCode)
       setEnterCode(false);
     else
       baseProps.navigation.navigate('Onboarding');
@@ -144,14 +144,14 @@ const RegisterScreen = (baseProps) => {
     <DismissKeyboard>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
         <Block flex middle>
-          <TouchableOpacity onPress={() => _goBack()} style={{alignSelf: 'flex-start', marginLeft: 20}}>
-            <Image source={Images.Icons.RegresarRojo} style={{width: 25, height: 25}} />
+          <TouchableOpacity onPress={() => _goBack()} style={{ alignSelf: 'flex-start', marginLeft: 20 }}>
+            <Image source={Images.Icons.RegresarRojo} style={{ width: 25, height: 25 }} />
           </TouchableOpacity>
           <Block flex space="evenly">
             <Block middle style={styles.titleContainer}>
               <Block middle>
-                <Text style={{fontFamily: 'trueno-extrabold', textAlign: 'center'}} color={nowTheme.COLORS.BASE} size={32}>
-                  { title }
+                <Text style={{ fontFamily: 'trueno-extrabold', textAlign: 'center' }} color={nowTheme.COLORS.BASE} size={32}>
+                  {title}
                 </Text>
               </Block>
 
@@ -226,14 +226,14 @@ const RegisterScreen = (baseProps) => {
                               onChangeText={(text) => setForm({ ...form, password: text })}
                             />
                           </Block>
-                          <Block width={width * 0.7} style={{ justifyContent: 'center', alignSelf: 'center', marginVertical: 10, marginLeft: 15}} row>
-                            <Text style={{color: nowTheme.COLORS.BASE, fontFamily: 'trueno', fontSize: 12}} onPress={() => _handlePrivacyPress()}>Ver términos y condiciones</Text>
+                          <Block width={width * 0.7} style={{ justifyContent: 'center', alignSelf: 'center', marginVertical: 10, marginLeft: 15 }} row>
+                            <Text style={{ color: nowTheme.COLORS.BASE, fontFamily: 'trueno', fontSize: 12 }} onPress={() => _handlePrivacyPress()}>Ver términos y condiciones</Text>
                           </Block>
-                          <Block width={width * 0.6} style={{justifyContent: 'center', alignSelf: 'center', marginVertical: 10, marginLeft: 15}} row>
+                          <Block width={width * 0.6} style={{ justifyContent: 'center', alignSelf: 'center', marginVertical: 10, marginLeft: 15 }} row>
                             <Checkbox
-                              checkboxStyle={{borderWidth: 1, borderRadius: 2, borderColor: '#C0C0C0'}}
+                              checkboxStyle={{ borderWidth: 1, borderRadius: 2, borderColor: '#C0C0C0' }}
                               color={nowTheme.COLORS.BASE}
-                              labelStyle={{ color: '#C0C0C0', fontFamily: 'montserrat-regular', fontSize: 12}}
+                              labelStyle={{ color: '#C0C0C0', fontFamily: 'montserrat-regular', fontSize: 12 }}
                               label="Acepto los términos y condiciones."
                               initialValue={chkTerms}
                               onChange={() => setChkTerms(!chkTerms)}
@@ -242,7 +242,7 @@ const RegisterScreen = (baseProps) => {
                         </Block>
                       ) : (
                         <Block>
-                          <Block width={width * 0.8} style={{justifyContent: 'center', alignSelf: 'center'}}>
+                          <Block width={width * 0.8} style={{ justifyContent: 'center', alignSelf: 'center' }}>
                             <CodeField
                               ref={ref}
                               {...props}
@@ -252,7 +252,7 @@ const RegisterScreen = (baseProps) => {
                               rootStyle={styles.codeFieldRoot}
                               keyboardType="numeric"
                               textContentType="oneTimeCode"
-                              renderCell={({index, symbol, isFocused}) => (
+                              renderCell={({ index, symbol, isFocused }) => (
                                 <View
                                   onLayout={getCellOnLayoutHandler(index)}
                                   key={index}
@@ -285,7 +285,7 @@ const RegisterScreen = (baseProps) => {
                       disabled={isLoading}
                       onPress={() => _handleLogin()}>
                       <Text style={{ fontFamily: 'montserrat-bold' }} size={14} color={nowTheme.COLORS.WHITE}>
-                        { buttonText }
+                        {buttonText}
                       </Text>
                     </Button>
                   </Block>
@@ -324,9 +324,9 @@ const styles = StyleSheet.create({
   titleContainer: {
     backgroundColor: nowTheme.COLORS.WHITE
   },
-  logoTayder : {
-    width   : 300,
-    height  : 300,
+  logoTayder: {
+    width: 300,
+    height: 300,
   },
 
   inputIcons: {

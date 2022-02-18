@@ -1,5 +1,5 @@
 import React from 'react';
-import { withNavigation } from 'react-navigation';
+import { withNavigation } from '@react-navigation/compat';
 import PropTypes from 'prop-types';
 import { StyleSheet, Image, TouchableWithoutFeedback, View } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
@@ -28,7 +28,7 @@ class Card extends React.Component {
 
     return (
       <Block row={horizontal} card flex style={cardContainer}>
-        <TouchableWithoutFeedback onPress={() => {}}>
+        <TouchableWithoutFeedback onPress={() => { }}>
           <View>
             <Block flex style={imgContainer}>
               <Image resizeMode="cover" source={image} style={imageStyles} />
@@ -46,7 +46,7 @@ class Card extends React.Component {
                     </Text>
                   </Block>
                 ) : (
-                    <Block />
+                  <Block />
                 )}
               </Block>
             </Block>

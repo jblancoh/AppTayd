@@ -6,8 +6,7 @@ import { Input } from '../components';
 
 import { Images, nowTheme } from '../constants/';
 import AuthenticationService from '../services/authentication';
-import { withNavigation } from 'react-navigation';
-
+import { withNavigation } from '@react-navigation/compat';
 const { height, width } = Dimensions.get('screen');
 
 const DismissKeyboard = ({ children }) => (

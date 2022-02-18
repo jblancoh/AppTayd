@@ -4,7 +4,7 @@ import { Block, Button, Text, theme } from 'galio-framework';
 import { Camera } from 'expo-camera';
 
 import { Images, nowTheme } from '../../constants';
-import { withNavigation } from 'react-navigation';
+import { withNavigation } from '@react-navigation/compat';
 
 const { height, width } = Dimensions.get('screen');
 const smallScreen = height < 812 ? true : false;
@@ -17,7 +17,7 @@ class DocumentosStep2Screen extends React.Component {
       cameraType: Camera.Constants.Type.back,
       openCamera: false,
 
-      file1: this.props.navigation.state.params.fileINE
+      file1: this.props.route.params.fileINE
     };
   }
 

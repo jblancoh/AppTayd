@@ -22,10 +22,10 @@ export default class PropertyInfoScreen extends React.Component {
       propertyItems: [],
       propertyData: [],
 
-      address: this.props.navigation.state.params.address,
-      reference: this.props.navigation.state.params.reference,
-      alias: this.props.navigation.state.params.alias,
-      location: this.props.navigation.state.params.location,
+      address: this.props.route.params.address,
+      reference: this.props.route.params.reference,
+      alias: this.props.route.params.alias,
+      location: this.props.route.params.location,
     };
   }
 
@@ -97,7 +97,7 @@ export default class PropertyInfoScreen extends React.Component {
       await PropertyService.store(params)
         .then(async (response) => {
           this.setState({ isLoading: false, propertyTypeValue: null, propertyItems: [], propertyData: [] });
-          this.props.navigation.navigate('Home')
+          this.props.navigation.navigate('DrawerClient', { screen: 'Home' });
         })
         .catch(error => {
           this.setState({ isLoading: false });

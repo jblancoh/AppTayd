@@ -22,12 +22,12 @@ class VehicleLocationScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      datetime: this.props.navigation.state.params.datetime,
-      vehicleType: this.props.navigation.state.params.vehicleType,
-      vehicleItems: this.props.navigation.state.params.vehicleItems,
-      vehicleColor: this.props.navigation.state.params.vehicleColor,
-      vehicleBrand: this.props.navigation.state.params.vehicleBrand,
-      services: this.props.navigation.state.params.services,
+      datetime: this.props.route.params.datetime,
+      vehicleType: this.props.route.params.vehicleType,
+      vehicleItems: this.props.route.params.vehicleItems,
+      vehicleColor: this.props.route.params.vehicleColor,
+      vehicleBrand: this.props.route.params.vehicleBrand,
+      services: this.props.route.params.services,
       isLoading: true,
       location: null,
       errorMessage: null,
@@ -57,12 +57,12 @@ class VehicleLocationScreen extends React.Component {
         address: '',
         reference: '',
         wizardIndex: 0,
-        datetime: this.props.navigation.state.params.datetime,
-        vehicleType: this.props.navigation.state.params.vehicleType,
-        vehicleItems: this.props.navigation.state.params.vehicleItems,
-        vehicleColor: this.props.navigation.state.params.vehicleColor,
-        vehicleBrand: this.props.navigation.state.params.vehicleBrand,
-        services: this.props.navigation.state.params.services,
+        datetime: this.props.route.params.datetime,
+        vehicleType: this.props.route.params.vehicleType,
+        vehicleItems: this.props.route.params.vehicleItems,
+        vehicleColor: this.props.route.params.vehicleColor,
+        vehicleBrand: this.props.route.params.vehicleBrand,
+        services: this.props.route.params.services,
       });
 
       this._getLocationAsync();

@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableOpacity, Image, StyleSheet, StatusBar, Dimensions, View, Alert, ScrollView } from 'react-native';
 import { Block, Button, Text, theme } from 'galio-framework';
 import { Camera } from 'expo-camera';
-import { withNavigation } from 'react-navigation';
+import { withNavigation } from '@react-navigation/compat';
 
 import { Images, nowTheme } from '../../constants';
 import Actions from '../../lib/actions';
@@ -22,9 +22,9 @@ class DocumentosStep4Screen extends React.Component {
       hasPermissionCamera: null,
       cameraType: Camera.Constants.Type.back,
       openCamera: false,
-      file1: this.props.navigation.state.params.fileINE,
-      file2: this.props.navigation.state.params.fileRFC,
-      file3: this.props.navigation.state.params.fileCLABE,
+      file1: this.props.route.params.fileINE,
+      file2: this.props.route.params.fileRFC,
+      file3: this.props.route.params.fileCLABE,
       file4: null
     };
   }

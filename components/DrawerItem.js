@@ -8,16 +8,16 @@ import nowTheme from '../constants/Theme';
 
 class DrawerItem extends React.Component {
   renderIcon = () => {
-    const { title, focused } = this.props;
+    const { title } = this.props;
 
     switch (title) {
       case 'Inicio':
         return (
-          <Image source={Images.Icons.Home} style={{width: 30, height: 30}} />
+          <Image source={Images.Icons.Home} style={{ width: 30, height: 30 }} />
         );
       case 'Perfil':
         return (
-          <Image source={Images.Icons.Perfil} style={{width: 30, height: 30}} />
+          <Image source={Images.Icons.Perfil} style={{ width: 30, height: 30 }} />
         );
       case 'Idioma':
         return (
@@ -60,7 +60,7 @@ class DrawerItem extends React.Component {
     return (
       <Block flex row style={containerStyles}>
         <Block middle flex={0.1} style={{ marginLeft: 25, marginRight: 25 }}>
-          { this.renderIcon() }
+          {this.renderIcon()}
         </Block>
 
         <Block row center flex={0.9}>
