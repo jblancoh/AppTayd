@@ -58,7 +58,7 @@ export default class HomeTayder extends React.Component {
   }
 
   componentWillUnmount() {
-    this.focusListener.remove();
+    this.focusListener()
   }
 
   async _updateFirstLogin() {

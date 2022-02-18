@@ -70,7 +70,7 @@ class VehicleLocationScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    this.focusListener.remove();
+    this.focusListener()
   }
 
   _getLocationAsync = async () => {

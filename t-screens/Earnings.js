@@ -41,7 +41,7 @@ export default class EarningsTayder extends React.Component {
     }
 
     componentWillUnmount() {
-        this.focusListener.remove();
+        this.focusListener()
     }
 
     async _getEarnings() {

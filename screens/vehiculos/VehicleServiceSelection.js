@@ -43,7 +43,7 @@ export default class VehicleSelectionScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    this.focusListener.remove();
+    this.focusListener()
   }
 
   updateServiceInfo = (selected, data) => {
