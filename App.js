@@ -3,13 +3,13 @@ import { Image, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppLoading from 'expo-app-loading'
 import * as Notifications from 'expo-notifications'
+import * as Location from 'expo-location'
 import * as Font from 'expo-font';
 import { Asset } from 'expo-asset';
 import { Block, GalioProvider } from 'galio-framework';
 
 import Screens from './navigation/Screens';
 import { Images, nowTheme } from './constants';
-import * as Permissions from 'expo-permissions';
 
 // cache app images
 const assetImages = [
@@ -29,9 +29,9 @@ function cacheImages(images) {
 }
 
 async function _getToken() {
-  const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+  const { status } = await Notifications.requestPermissionsAsync()
 
-  if(status !== 'granted') {
+  if (status !== 'granted') {
     return;
   }
 
@@ -41,14 +41,14 @@ async function _getToken() {
 }
 
 async function _checkLocationPermitionAsync() {
-  const {status} = await Permissions.getAsync(Permissions.LOCATION);
+  const { status } = await Location.requestForegroundPermissionsAsync()
 
-  if(status !== 'granted') {
+  if (status !== 'granted') {
     Alert.alert(
       "Permisos",
       "La aplicación requiere de tu ubicación para ubicar tu inmueble con más facilidad.",
       [
-        { text: "OK", onPress: () => _getLocationAsync()}
+        { text: "OK", onPress: () => _getLocationAsync() }
       ],
       { cancelable: false }
     )
@@ -56,9 +56,9 @@ async function _checkLocationPermitionAsync() {
 }
 
 async function _getLocationAsync() {
-  const { status } = await Permissions.askAsync(Permissions.LOCATION);
+  const { status } = await Location.requestForegroundPermissionsAsync()
 
-  if(status !== 'granted') {
+  if (status !== 'granted') {
     return;
   }
 }
@@ -69,7 +69,7 @@ export default class App extends React.Component {
     fontLoaded: false
   };
 
-  handleNotification = ({origin, data}) => {
+  handleNotification = ({ origin, data }) => {
     console.log(
       `Push notification ${origin} with data: ${JSON.stringify(data)}`,
     );
@@ -78,11 +78,11 @@ export default class App extends React.Component {
   async componentDidMount() {
     Font.loadAsync({
       'montserrat-regular': require('./assets/font/Montserrat-Regular.ttf'),
-      'montserrat-bold'   : require('./assets/font/Montserrat-Bold.ttf'),
-      'trueno-extrabold'  : require('./assets/font/TruenoExBd.ttf'),
-      'trueno-semibold'   : require('./assets/font/TruenoSBd.ttf'),
-      'trueno'            : require('./assets/font/TruenoRg.ttf'),
-      'trueno-light'      : require('./assets/font/TruenoLt.ttf'),
+      'montserrat-bold': require('./assets/font/Montserrat-Bold.ttf'),
+      'trueno-extrabold': require('./assets/font/TruenoExBd.ttf'),
+      'trueno-semibold': require('./assets/font/TruenoSBd.ttf'),
+      'trueno': require('./assets/font/TruenoRg.ttf'),
+      'trueno-light': require('./assets/font/TruenoLt.ttf'),
     });
 
     this.setState({ fontLoaded: true });
