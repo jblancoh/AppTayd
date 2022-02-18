@@ -3,17 +3,54 @@
 // import { ScrollView, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
 // import { Block, Text, theme } from 'galio-framework';
 // import Images from '../constants/Images';
+// import { iPhoneX } from "../constants/utils";
 // import { DrawerItem } from '../components/index';
 // import Actions from '../lib/actions';
 
 // import nowTheme from '../constants/Theme';
 
-// export default class DrawerTayder extends React.Component {
+// export default class Drawer extends React.Component {
 //     constructor(props) {
 //         super(props);
 //         this.state = {
 //             userData: null,
 //         }
+//         this.items = [
+//             {
+//                 navOptionName: 'Inicio',
+//                 screenToNavigate: 'NavScreen1',
+//             },
+//             {
+//                 navOptionName: 'Perfil',
+//                 screenToNavigate: 'NavScreen2',
+//             },
+//             {
+//                 navOptionName: 'Idioma',
+//                 screenToNavigate: 'NavScreen3',
+//             },
+//             {
+//                 navOptionName: 'Domicilio',
+//                 screenToNavigate: 'NavScreen3',
+//             },
+//             {
+//                 navOptionName: 'Método de pago',
+//                 screenToNavigate: 'NavScreen3',
+//             }
+//         ];
+//         this.itemsBottom = [
+//             {
+//                 navOptionName: 'Cupones',
+//                 screenToNavigate: 'NavScreen1',
+//             },
+//             {
+//                 navOptionName: 'Comparte y gana',
+//                 screenToNavigate: 'NavScreen2',
+//             },
+//             {
+//                 navOptionName: 'Genera ingresos extras',
+//                 screenToNavigate: 'NavScreen3',
+//             },
+//         ];
 //     }
 
 //     async componentDidMount() {
@@ -32,7 +69,7 @@
 //             }, 500);
 //           }
 //         });
-//       }
+//     }
 
 //     render() {
 //         let {userData} = this.state;
@@ -40,10 +77,10 @@
 //         return (
 //             <Block style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
 //                 <Block row style={styles.header}>
-//                     <Image source={Images.ProfilePicture} style={{ borderRadius: 50, height: 60, width: 60, marginRight: 25 }} />
+//                     <Image source={Images.ProfilePicture} style={{ borderRadius: 25, height: 60, width: 60, marginRight: 25 }} />
 //                     <Block flex>
-//                     <Text style={styles.nameTitle}>{userData != null && userData.info ? userData.info.name : ''}</Text>
-//                     <Text style={{fontFamily: 'trueno', fontSize: 14, lineHeight: 15}}>{userData != null ? userData.email : ''}</Text>
+//                         <Text style={styles.nameTitle}>{userData != null && userData.info ? userData.info.name : ''}</Text>
+//                         <Text style={{fontFamily: 'trueno', fontSize: 14, lineHeight: 15}}>{userData != null ? userData.email : ''}</Text>
 //                     </Block>
 //                 </Block>
             
@@ -54,7 +91,19 @@
 //                     <DrawerNavigatorItems {...this.props} />
             
 //                     <Text style={styles.sectionTitle}>Extra</Text>
-
+            
+//                     <TouchableOpacity onPress={() => this.props.navigation.navigate('CuponesIndex')} style={{fontFamily: 'trueno', fontSize: 18, paddingTop: 20 }}>
+//                         <DrawerItem {...this.props} title="Cupones" />
+//                     </TouchableOpacity>
+            
+//                     <TouchableOpacity onPress={() => this.props.navigation.navigate('CuponesIndex')} style={{ fontFamily: 'trueno', fontSize: 18, }}>
+//                         <DrawerItem {...this.props} title="Comparte y gana" />
+//                     </TouchableOpacity>
+            
+//                     <TouchableOpacity onPress={() => this.props.navigation.navigate('GeneraIngreso')} style={{ fontFamily: 'trueno', fontSize: 18, }}>
+//                         <DrawerItem {...this.props} title="Genera ingresos extras" />
+//                     </TouchableOpacity>
+            
 //                     <TouchableOpacity onPress={() => this._logout(this.props)} style={{ fontFamily: 'trueno', fontSize: 18, }}>
 //                         <DrawerItem {...this.props} title="Cerrar sesión" />
 //                     </TouchableOpacity>
@@ -76,7 +125,8 @@
 //     header: {
 //       paddingHorizontal: 28,
 //       paddingTop: theme.SIZES.BASE,
-//       justifyContent: 'center'
+//       justifyContent: 'center',
+//       marginTop: iPhoneX ? 20 : 0,
 //     },
 //     sectionTitle: {
 //       fontFamily: 'trueno-extrabold',
