@@ -89,7 +89,6 @@ export default class HomeTayder extends React.Component {
   }
 
   _renderItem = ({ item, index }) => {
-    console.log(index);
     return (
       <View style={{ height: 560 }}>
         <Image source={item.image} style={{ height: 550, width: 300, resizeMode: 'stretch', }} />
