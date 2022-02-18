@@ -37,7 +37,6 @@ async function _getToken() {
 
   const token = await Notifications.getExpoPushTokenAsync();
   await AsyncStorage.setItem('movil_token', token.data);
-  console.log('Our token', token);
 }
 
 async function _checkLocationPermitionAsync() {

@@ -36,7 +36,6 @@ const slides = [
 export default class Onboarding extends React.Component {
   constructor(props) {
     super(props);
-    console.log(' this.props', this.props.route)
     this.state = {
       isTayder: false,
       showRealApp: false,
@@ -61,7 +60,7 @@ export default class Onboarding extends React.Component {
         } else if (result.user.first_login_tayder && result.user.isTayder && result.user.confirmed) {
           this.props.navigation.navigate('Welcome');
         } else if (!result.user.first_login_tayder && result.user.isTayder) {
-          this.props.navigation.navigate('HomeTayder');
+          this.props.navigation.navigate('DrawerTayder', { screen: 'HomeTayder' });
         }
       }
     });

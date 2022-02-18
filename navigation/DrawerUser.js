@@ -72,7 +72,7 @@ function DrawerUser(props) {
             <Block style={{ paddingTop: 20 }}>
               <Text style={styles.sectionTitle}>Cuenta</Text>
             </Block>
-            <TouchableOpacity onPress={() => props.navigation.navigate('Home')} style={{ fontFamily: 'trueno', fontSize: 18, paddingTop: 20 }}>
+            <TouchableOpacity onPress={() => props.navigation.navigate('DrawerClient', { screen: 'Home' })} style={{ fontFamily: 'trueno', fontSize: 18, paddingTop: 20 }}>
               <Item {...props} title="Inicio" />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => props.navigation.navigate('Domicilio')} style={{ fontFamily: 'trueno', fontSize: 18 }}>

@@ -16,11 +16,11 @@ class History extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showInfo    : false,
-            services    : [],
-            userData    : null,
-            weekDay     : ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
-            months      : ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
+            showInfo: false,
+            services: [],
+            userData: null,
+            weekDay: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+            months: ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
         };
     }
 
@@ -28,25 +28,25 @@ class History extends React.Component {
         const { navigation } = this.props;
 
         await Actions.extractUserData().then((result) => {
-             if(result != null) {
-                 this.setState({userData : result.user});
-                 this._getServices();
-             }
+            if (result != null) {
+                this.setState({ userData: result.user });
+                this._getServices();
+            }
         });
 
-        this.focusListener = await navigation.addListener('didFocus', () => {
+        this.focusListener = await navigation.addListener('focus', () => {
             this._getServices();
         });
     }
 
     componentWillUnmount() {
-        this.focusListener.remove();
+        this.focusListener()
     }
 
     async _getServices() {
         await ServicesService.listHistory(this.state.userData.id)
             .then(response => {
-                this.setState({services : response})
+                this.setState({ services: response })
             })
             .catch(error => {
                 console.error(error);
@@ -59,14 +59,14 @@ class History extends React.Component {
             <Block flex center style={styles.home}>
                 <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
                     <Block flex>
-                        <Block flex row style={{paddingTop: iPhoneX() ? 30 : 10}}>
+                        <Block flex row style={{ paddingTop: iPhoneX() ? 30 : 10 }}>
                             <Icon
                                 name={'align-left-22x'}
                                 family="NowExtra"
                                 size={16}
                                 onPress={() => this.props.navigation.openDrawer()}
                                 color={nowTheme.COLORS.ICON}
-                                style={{fontWeight: '700', marginRight: 15, paddingTop: 5}}
+                                style={{ fontWeight: '700', marginRight: 15, paddingTop: 5 }}
                             />
                             <Block flex>
                                 <Text style={styles.nameTitle}>Historial</Text>
@@ -82,9 +82,9 @@ class History extends React.Component {
                             )
                         }
 
-                        <View style={{height: smallScreen ? height * 0.8 : height * 0.73}}>
+                        <View style={{ height: smallScreen ? height * 0.8 : height * 0.73 }}>
                             <ScrollView>
-                                { this.state.services.map((item) => <ServiceHistoryComponent key={item.id} item={item} {...this.props} />) }
+                                {this.state.services.map((item) => <ServiceHistoryComponent key={item.id} item={item} {...this.props} />)}
                             </ScrollView>
                         </View>
 

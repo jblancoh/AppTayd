@@ -240,7 +240,6 @@ class VehicleCheckoutScreen extends React.Component {
         reference: this.state.reference,
         service_details: this.state.services.map(item => item.vehicle_type_price_id)
       };
-      console.log(params);
 
       ServicesService.store(params)
         .then(response => {

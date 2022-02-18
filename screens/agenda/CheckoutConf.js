@@ -49,7 +49,6 @@ class AgendaCheckoutScreen extends React.Component {
   async componentDidMount() {
     const { navigation } = this.props;
 
-    console.log("UserData", this.state.userData);
 
     await PaymentMethodService.getPredeterminedSource(this.state.userData.id)
       .then(response => {
