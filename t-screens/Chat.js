@@ -41,7 +41,7 @@ class ChatTayderScreen extends React.Component {
       }
     });
 
-    this.focusListener = await navigation.addListener('didFocus', () => {
+    this.focusListener = await navigation.addListener('focus', () => {
       this.setState({ service_id: this.props.route.params.service_id });
       this._getMessages();
     });

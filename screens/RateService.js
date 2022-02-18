@@ -31,7 +31,7 @@ class RateServiceScreen extends React.Component {
       }
     });
 
-    this.focusListener = await navigation.addListener('didFocus', () => {
+    this.focusListener = await navigation.addListener('focus', () => {
       this.setState({
         service: this.props.route.params.service,
       })

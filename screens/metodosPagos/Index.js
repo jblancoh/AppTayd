@@ -19,22 +19,22 @@ class MetodoPagoIndexScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            userData    : null,
-            sources     : [],
+            userData: null,
+            sources: [],
         }
     }
 
     async componentDidMount() {
         const { navigation } = this.props;
 
-       await  Actions.extractUserData().then((result) => {
-            if(result != null) {
-                this.setState({userData : result.user});
+        await Actions.extractUserData().then((result) => {
+            if (result != null) {
+                this.setState({ userData: result.user });
                 this._getSources();
             }
         });
 
-        this.focusListener = await navigation.addListener('didFocus', () => {
+        this.focusListener = await navigation.addListener('focus', () => {
             this._getSources();
         });
     }
@@ -46,7 +46,7 @@ class MetodoPagoIndexScreen extends React.Component {
     async _getSources() {
         await PaymentMethodService.list(this.state.userData.id)
             .then(response => {
-                this.setState({sources : response})
+                this.setState({ sources: response })
             })
             .catch(error => {
                 console.error(error);
@@ -55,7 +55,7 @@ class MetodoPagoIndexScreen extends React.Component {
     }
 
     async setPredetermined(itemSource) {
-        if(!itemSource.is_predetermined) {
+        if (!itemSource.is_predetermined) {
             await PaymentMethodService.setPredeterminedSource(itemSource.id)
                 .then(response => {
                     this._getSources();
@@ -73,7 +73,7 @@ class MetodoPagoIndexScreen extends React.Component {
         return (
             <Block flex style={styles.container}>
                 <Block flex space="between" style={styles.padded}>
-                    <View style={{height: height * 0.68}}>
+                    <View style={{ height: height * 0.68 }}>
                         <ScrollView>
                             {
                                 this.state.sources.map((item) => {

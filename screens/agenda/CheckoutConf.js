@@ -68,7 +68,7 @@ class AgendaCheckoutScreen extends React.Component {
 
     this._getPropertyDistribution();
 
-    this.focusListener = await navigation.addListener('didFocus', async () => {
+    this.focusListener = await navigation.addListener('focus', async () => {
       this.setState({
         showPaymentMethodModal: false,
         hasError: false,

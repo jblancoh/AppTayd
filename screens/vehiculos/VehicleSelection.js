@@ -24,7 +24,7 @@ export default class VehicleServiceSelectionScreen extends React.Component {
   }
 
   async componentDidMount() {
-    this.focusListener = await this.props.navigation.addListener('didFocus', () => {
+    this.focusListener = await this.props.navigation.addListener('focus', () => {
       this.setState({
         datetime: this.props.route.params.datetime,
         vehicleColor: '',

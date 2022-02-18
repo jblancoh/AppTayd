@@ -16,12 +16,12 @@ class Schedule extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showMore        : false,
-            showInfo        : false,
-            userData        : null,
-            weekDay         : ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
-            months          : ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
-            services        : [],
+            showMore: false,
+            showInfo: false,
+            userData: null,
+            weekDay: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+            months: ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
+            services: [],
         }
     }
 
@@ -29,13 +29,13 @@ class Schedule extends React.Component {
         const { navigation } = this.props;
 
         await Actions.extractUserData().then((result) => {
-             if(result != null) {
-                 this.setState({userData : result.user});
-                 this._getServices();
-             }
+            if (result != null) {
+                this.setState({ userData: result.user });
+                this._getServices();
+            }
         });
 
-        this.focusListener = await navigation.addListener('didFocus', () => {
+        this.focusListener = await navigation.addListener('focus', () => {
             this._getServices();
         });
     }
@@ -47,7 +47,7 @@ class Schedule extends React.Component {
     async _getServices() {
         await ServicesService.listScheduled(this.state.userData.id)
             .then(response => {
-                this.setState({services : response, showMore: response.length > 0 ? true : false})
+                this.setState({ services: response, showMore: response.length > 0 ? true : false })
             })
             .catch(error => {
                 console.error(error);
@@ -59,14 +59,14 @@ class Schedule extends React.Component {
         return (
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
                 <Block flex>
-                    <Block flex row style={{paddingTop: iPhoneX() ? 30 : 10}}>
+                    <Block flex row style={{ paddingTop: iPhoneX() ? 30 : 10 }}>
                         <Icon
                             name={'align-left-22x'}
                             family="NowExtra"
                             size={16}
                             onPress={() => this.props.navigation.openDrawer()}
                             color={nowTheme.COLORS.ICON}
-                            style={{fontWeight: '700', marginRight: 15, paddingTop: 5}}
+                            style={{ fontWeight: '700', marginRight: 15, paddingTop: 5 }}
                         />
                         <Block flex>
                             <Text style={styles.nameTitle}>Agenda</Text>
@@ -81,14 +81,14 @@ class Schedule extends React.Component {
                                     <CardFullImage image={Images.Agendar} imageStyle={{ height: smallScreen ? height * 0.7 : height * 0.62, width: '100%' }} />
                                 </TouchableOpacity>
 
-                                <Block flex style={{paddingVertical: 20, paddingHorizontal: 45}}>
-                                    <Text style={[styles.footerTitle, { textAlign: 'center',}]}>Comienza la experiencia TAYD agendando una cita</Text>
+                                <Block flex style={{ paddingVertical: 20, paddingHorizontal: 45 }}>
+                                    <Text style={[styles.footerTitle, { textAlign: 'center', }]}>Comienza la experiencia TAYD agendando una cita</Text>
                                 </Block>
                             </Block>
                         ) : (
-                            <View style={{height: height * 0.68}}>
+                            <View style={{ height: height * 0.68 }}>
                                 <ScrollView>
-                                    { this.state.services.map((item) => <ServiceComponent key={item.id} item={item} onClose={() => this._getServices()} {...this.props} /> )}
+                                    {this.state.services.map((item) => <ServiceComponent key={item.id} item={item} onClose={() => this._getServices()} {...this.props} />)}
                                 </ScrollView>
                             </View>
                         )
@@ -101,7 +101,7 @@ class Schedule extends React.Component {
     render() {
         return (
             <Block flex center style={styles.home}>
-                { this.renderBlocks() }
+                {this.renderBlocks()}
 
                 <TabBar {...this.props} activeScreen="agenda" />
             </Block>

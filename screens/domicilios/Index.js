@@ -19,22 +19,22 @@ class DomicilioIndexScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            userData    : null,
-            properties  : [],
+            userData: null,
+            properties: [],
         }
     }
 
     async componentDidMount() {
         const { navigation } = this.props;
 
-        await  Actions.extractUserData().then((result) => {
-            if(result != null) {
-                this.setState({userData : result.user});
+        await Actions.extractUserData().then((result) => {
+            if (result != null) {
+                this.setState({ userData: result.user });
                 this._getProperties();
             }
         });
 
-        this.focusListener = await navigation.addListener('didFocus', () => {
+        this.focusListener = await navigation.addListener('focus', () => {
             this._getProperties();
         });
     }
@@ -46,7 +46,7 @@ class DomicilioIndexScreen extends React.Component {
     async _getProperties() {
         await PropertyService.getUserProperties(this.state.userData.id)
             .then(response => {
-                this.setState({properties : response})
+                this.setState({ properties: response })
             })
             .catch(error => {
                 console.error(error);
@@ -55,7 +55,7 @@ class DomicilioIndexScreen extends React.Component {
     }
 
     async setPredetermined(itemProperty) {
-        if(!itemProperty.is_predetermined) {
+        if (!itemProperty.is_predetermined) {
             await PropertyService.setPredeterminedProperty(itemProperty.id)
                 .then(response => {
                     this._getProperties();
@@ -73,7 +73,7 @@ class DomicilioIndexScreen extends React.Component {
         return (
             <Block flex style={styles.container}>
                 <Block flex space="between" style={styles.padded}>
-                    <View style={{height: height * 0.68}}>
+                    <View style={{ height: height * 0.68 }}>
                         <ScrollView>
                             {
                                 this.state.properties.map((item) => {
@@ -84,9 +84,9 @@ class DomicilioIndexScreen extends React.Component {
                                                     {item.is_predetermined == true && (<Image source={require('../../assets/icons/success.png')} style={{ width: 25, height: 25 }} />)}
                                                 </View>
 
-                                                <Block row style={[{ width: width - theme.SIZES.BASE * 4, paddingBottom: 10, paddingHorizontal: 15, alignItems: 'center' }, !item.is_predetermined && {paddingTop: 15}]}>
+                                                <Block row style={[{ width: width - theme.SIZES.BASE * 4, paddingBottom: 10, paddingHorizontal: 15, alignItems: 'center' }, !item.is_predetermined && { paddingTop: 15 }]}>
                                                     <View style={{ paddingHorizontal: 25 }}>
-                                                        {item.property_type_id == 1 && (<Image source={Images.Icons.Casa} style={styles.imageProperty} />) }
+                                                        {item.property_type_id == 1 && (<Image source={Images.Icons.Casa} style={styles.imageProperty} />)}
                                                         {item.property_type_id == 2 && (<Image source={Images.Icons.Departamento} style={styles.imageProperty} />)}
                                                         {item.property_type_id == 3 && (<Image source={Images.Icons.Oficina} style={styles.imageProperty} />)}
                                                     </View>
@@ -104,7 +104,7 @@ class DomicilioIndexScreen extends React.Component {
                         </ScrollView>
                     </View>
 
-                    <Block middle flex style={{justifyContent: 'flex-end'}}>
+                    <Block middle flex style={{ justifyContent: 'flex-end' }}>
                         <Button
                             round
                             color={nowTheme.COLORS.WHITE}

@@ -52,7 +52,7 @@ export default class HomeTayder extends React.Component {
 
     await this._getScheduledServices();
 
-    this.focusListener = await navigation.addListener('didFocus', () => {
+    this.focusListener = await navigation.addListener('focus', () => {
       this._getScheduledServices();
     });
   }

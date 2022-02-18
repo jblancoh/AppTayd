@@ -16,14 +16,14 @@ export default class VehicleDateTimeScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showDate        : false,
-            showTime        : false,
-            showDateTime    : false,
-            isIphone        : Platform.OS === 'ios',
-            date            : new Date(),
-            time            : new Date(),
-            weekDay         : ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
-            months          : ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+            showDate: false,
+            showTime: false,
+            showDateTime: false,
+            isIphone: Platform.OS === 'ios',
+            date: new Date(),
+            time: new Date(),
+            weekDay: ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
+            months: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
         };
     }
 
@@ -31,7 +31,7 @@ export default class VehicleDateTimeScreen extends React.Component {
         this.state.date.setHours(this.state.date.getHours() + 2);
         this.state.time.setHours(this.state.time.getHours() + 2);
 
-        this.focusListener = await this.props.navigation.addListener('didFocus', () => {
+        this.focusListener = await this.props.navigation.addListener('focus', () => {
             this.setState({
                 date: new Date(),
                 time: new Date()
@@ -47,33 +47,33 @@ export default class VehicleDateTimeScreen extends React.Component {
     }
 
     _validateDateTime() {
-        let {date, time} = this.state;
-        let _month      = date.getMonth() <= 8 ? `0${date.getMonth() + 1}`: date.getMonth() + 1;
-        let _day        = date.getDate() <= 9 ? `0${date.getDate()}`: date.getDate();
-        let _minutes    = time.getMinutes() <= 9 ? `0${time.getMinutes()}`: time.getMinutes();
-        let _hours      = time.getHours() <= 9 ? `0${time.getHours()}`: time.getHours();
+        let { date, time } = this.state;
+        let _month = date.getMonth() <= 8 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
+        let _day = date.getDate() <= 9 ? `0${date.getDate()}` : date.getDate();
+        let _minutes = time.getMinutes() <= 9 ? `0${time.getMinutes()}` : time.getMinutes();
+        let _hours = time.getHours() <= 9 ? `0${time.getHours()}` : time.getHours();
 
         let scheduleStr = `${date.getFullYear()}-${_month}-${_day} ${_hours}:${_minutes}:00`;
-        let scheduleDT  = moment(scheduleStr.replace(' ', 'T'));
-        let nowDT       = moment();
-        let diffDT      = scheduleDT.diff(nowDT, 'hours');
+        let scheduleDT = moment(scheduleStr.replace(' ', 'T'));
+        let nowDT = moment();
+        let diffDT = scheduleDT.diff(nowDT, 'hours');
 
-        if(diffDT >= 2)
+        if (diffDT >= 2)
             return true;
         else
             return false;
     }
 
     _handleNextAction() {
-        if(this._validateDateTime()) {
+        if (this._validateDateTime()) {
             this.props.navigation.navigate("VehiculoSeleccion", {
-                datetime        : {
-                    weekDay     : this.state.date.getDay(),
-                    day         : this.state.date.getDate(),
-                    month       : this.state.date.getMonth(),
-                    year        : this.state.date.getFullYear(),
-                    hour        : this.state.time.getHours(),
-                    minutes     : this.state.time.getMinutes()
+                datetime: {
+                    weekDay: this.state.date.getDay(),
+                    day: this.state.date.getDate(),
+                    month: this.state.date.getMonth(),
+                    year: this.state.date.getFullYear(),
+                    hour: this.state.time.getHours(),
+                    minutes: this.state.time.getMinutes()
                 }
             });
         } else {
@@ -82,22 +82,22 @@ export default class VehicleDateTimeScreen extends React.Component {
     }
 
     _dateFormat() {
-        let date    = this.state.date;
-        let week    = this.state.weekDay[date.getDay()];
-        let month   = this.state.months[date.getMonth()];
+        let date = this.state.date;
+        let week = this.state.weekDay[date.getDay()];
+        let month = this.state.months[date.getMonth()];
 
         return `${week} ${date.getDate()}/${month}/${date.getFullYear()}`;
     }
 
     _timeFormat() {
-        let time    = this.state.time;
-        let type    = "a.m.";
+        let time = this.state.time;
+        let type = "a.m.";
         let minutes = time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes();
-        let hour    = time.getHours();
+        let hour = time.getHours();
 
-        if(hour >= 12) {
-            if(hour > 12) hour    -= 12;
-            type    = "p.m.";
+        if (hour >= 12) {
+            if (hour > 12) hour -= 12;
+            type = "p.m.";
         }
 
         return `${hour}:${minutes} ${type}`;
@@ -108,22 +108,22 @@ export default class VehicleDateTimeScreen extends React.Component {
     }
 
     _showDateTimeComponent = (type) => {
-        if(this.state.isIphone)
-            this.setState({showDateTime: true});
-        else if(type == "date")
-            this.setState({showDate: true});
-        else if(type == "time")
-            this.setState({showTime: true});
+        if (this.state.isIphone)
+            this.setState({ showDateTime: true });
+        else if (type == "date")
+            this.setState({ showDate: true });
+        else if (type == "time")
+            this.setState({ showTime: true });
     }
 
     onChangeDate = (event, selectedDate) => {
         const currentDate = selectedDate || this.state.date;
-        this.setState({showDate: false, date: currentDate, time: currentDate})
+        this.setState({ showDate: false, date: currentDate, time: currentDate })
     };
 
     onChangeTime = (event, selectedDate) => {
         const currentDate = selectedDate || this.state.time;
-        this.setState({showTime: false, date: currentDate, time: currentDate})
+        this.setState({ showTime: false, date: currentDate, time: currentDate })
     };
 
     render() {
@@ -137,10 +137,10 @@ export default class VehicleDateTimeScreen extends React.Component {
 
                     <Block flex style={{ backgroundColor: 'white' }}>
                         <Block space="between" style={styles.padded}>
-                            <Text style={[styles.title, {paddingTop: smallScreen ? 50 : 30}, {marginTop: iPhoneX && 30}]}> Programa tu cita </Text>
-                            <Text style={[styles.subtitle, {paddingVertical: 10}]}> Selecciona el día y hora del servicio </Text>
+                            <Text style={[styles.title, { paddingTop: smallScreen ? 50 : 30 }, { marginTop: iPhoneX && 30 }]}> Programa tu cita </Text>
+                            <Text style={[styles.subtitle, { paddingVertical: 10 }]}> Selecciona el día y hora del servicio </Text>
 
-                            <View style={[styles.titleBorder, { flexDirection: 'row', justifyContent: 'space-between'}]}>
+                            <View style={[styles.titleBorder, { flexDirection: 'row', justifyContent: 'space-between' }]}>
                                 <Text style={styles.subtitle}>Agendar día</Text>
                                 <TouchableOpacity onPress={() => this._showDateTimeComponent("date")}>
                                     <Text style={styles.datetimeText}>{this._dateFormat()}</Text>
@@ -157,7 +157,7 @@ export default class VehicleDateTimeScreen extends React.Component {
                                 }
                             </View>
 
-                            <View style={[styles.titleBorder, { flexDirection: 'row', justifyContent: 'space-between', paddingTop: 15}]}>
+                            <View style={[styles.titleBorder, { flexDirection: 'row', justifyContent: 'space-between', paddingTop: 15 }]}>
                                 <Text style={styles.subtitle}>Selecciona hora</Text>
                                 <TouchableOpacity onPress={() => this._showDateTimeComponent("time")}>
                                     <Text style={styles.datetimeText}>{this._timeFormat()}</Text>
@@ -194,8 +194,8 @@ export default class VehicleDateTimeScreen extends React.Component {
                     transparent
                     visible={showDateTime && isIphone}
                     presentationStyle="overFullScreen">
-                    <View style={{ flex: 1, height: height, backgroundColor: 'rgba(0,0,0,.2)', justifyContent: 'flex-end', flexDirection: 'column',}}>
-                        <View style={{ backgroundColor: 'white', padding: 15, paddingBottom: 30,}}>
+                    <View style={{ flex: 1, height: height, backgroundColor: 'rgba(0,0,0,.2)', justifyContent: 'flex-end', flexDirection: 'column', }}>
+                        <View style={{ backgroundColor: 'white', padding: 15, paddingBottom: 30, }}>
                             <View>
                                 <DateTimePicker
                                     value={date}
@@ -204,7 +204,7 @@ export default class VehicleDateTimeScreen extends React.Component {
                                     onChange={this.onChangeDate}
                                 />
                             </View>
-                            <Block middle style={{alignItems: 'center' }}>
+                            <Block middle style={{ alignItems: 'center' }}>
                                 <Button
                                     round
                                     color={nowTheme.COLORS.BASE}
@@ -231,9 +231,9 @@ const styles = StyleSheet.create({
     },
 
     image: {
-        width       : width,
-        height      : 350,
-        marginTop   : smallScreen ? 30 : 70,
+        width: width,
+        height: 350,
+        marginTop: smallScreen ? 30 : 70,
     },
     title: {
         fontFamily: 'trueno-extrabold',

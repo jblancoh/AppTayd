@@ -39,7 +39,7 @@ class ServiceProgressTayder extends React.Component {
     else if (service.service_type_id == 2)
       this._getVehicleServiceDetails();
 
-    this.focusListener = await navigation.addListener('didFocus', () => {
+    this.focusListener = await navigation.addListener('focus', () => {
       this.setState((state) => {
         return { service: this.props.route.params.service }
       });

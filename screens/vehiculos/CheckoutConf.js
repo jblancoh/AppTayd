@@ -80,7 +80,7 @@ class VehicleCheckoutScreen extends React.Component {
 
     this._getVehicleServicesDetails();
 
-    this.focusListener = await navigation.addListener('didFocus', async () => {
+    this.focusListener = await navigation.addListener('focus', async () => {
       this.setState({
         datetime: this.props.route.params.datetime,
         vehicleType: this.props.route.params.vehicleType,
