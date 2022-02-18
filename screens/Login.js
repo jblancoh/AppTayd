@@ -19,8 +19,8 @@ class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      password: '',
+      email: __DEV__ ? 'jonathan@yopmail.com' : '',
+      password: __DEV__ ? 'Password123' : '',
       isLoading: false,
     };
   }
@@ -52,7 +52,7 @@ class LoginScreen extends React.Component {
             if (response.user.first_login && !response.user.isTayder) {
               this.props.navigation.navigate('PropertyLocation');
             } else if (!response.user.first_login && !response.user.isTayder) {
-              this.props.navigation.navigate('Home');
+              this.props.navigation.navigate('DrawerClient', { screen: 'Home' });
             } else if (response.user.first_login_tayder && response.user.isTayder && !response.user.confirmed && !response.user.on_review) {
               this.props.navigation.navigate('DocumentosIndex');
             } else if (response.user.first_login_tayder && response.user.isTayder && !response.user.confirmed && response.user.on_review) {
@@ -60,11 +60,10 @@ class LoginScreen extends React.Component {
             } else if (response.user.first_login_tayder && response.user.isTayder && response.user.confirmed) {
               this.props.navigation.navigate('Welcome');
             } else if (!response.user.first_login_tayder && response.user.isTayder) {
-              this.props.navigation.navigate('HomeTayder');
+              this.props.navigation.navigate('DrawerTayder', { screen: 'HomeTayder' });
             }
 
           } catch (error) {
-            console.error(error);
             this.setState({ isLoading: false });
             Alert.alert('Inicio de sesión', 'Ocurrió un error inesperado al iniciar sesión.');
           }
