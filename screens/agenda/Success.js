@@ -28,7 +28,7 @@ class AgendaCheckoutScreen extends React.Component {
   async componentDidMount() {
     const { navigation } = this.props;
 
-    this.focusListener = await navigation.addListener('didFocus', () => {
+    this.focusListener = await navigation.addListener('focus', () => {
       this.setState({
         hasError: false,
         successTitle: 'Agendado con éxito',
@@ -38,7 +38,7 @@ class AgendaCheckoutScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    this.focusListener.remove();
+    this.focusListener()
   }
 
   render() {

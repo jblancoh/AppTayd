@@ -16,48 +16,48 @@ import CouponService from "../../services/coupon";
 const { height, width } = Dimensions.get("screen");
 
 const DismissKeyboard = ({ children }) => (
-    <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={{flex: 1}}>
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
+    <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={{ flex: 1 }}>
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
     </KeyboardAvoidingView>
-  );
+);
 
 class CuponesIndexScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoading   : false,
-            userData    : null,
-            coupons     : [],
-            showModal   : false,
-            isCreated   : false,
+            isLoading: false,
+            userData: null,
+            coupons: [],
+            showModal: false,
+            isCreated: false,
             couponResponse: null,
-            code        : "",
+            code: "",
         }
     }
 
     async componentDidMount() {
         const { navigation } = this.props;
 
-        await  Actions.extractUserData().then((result) => {
-            if(result != null) {
-                this.setState({userData : result.user});
+        await Actions.extractUserData().then((result) => {
+            if (result != null) {
+                this.setState({ userData: result.user });
                 this._getCoupons();
             }
         });
 
-        this.focusListener = await navigation.addListener('didFocus', () => {
+        this.focusListener = await navigation.addListener('focus', () => {
             this._getCoupons();
         });
     }
 
     componentWillUnmount() {
-        this.focusListener.remove();
+        this.focusListener()
     }
 
     async _getCoupons() {
         await CouponService.getAll(this.state.userData.id)
             .then(response => {
-                this.setState({coupons : response})
+                this.setState({ coupons: response })
             })
             .catch(error => {
                 Alert.alert("Ocurrió un fallo al buscar los cupones.");
@@ -65,14 +65,14 @@ class CuponesIndexScreen extends React.Component {
     }
 
     storeCoupon() {
-        if(this.state.code != ''){
-            this.setState({isLoading: true});
-            CouponService.store({code: this.state.code}, this.state.userData.id)
+        if (this.state.code != '') {
+            this.setState({ isLoading: true });
+            CouponService.store({ code: this.state.code }, this.state.userData.id)
                 .then(response => {
-                    this.setState({isCreated: true, code: '', couponResponse: response, isLoading: false})
+                    this.setState({ isCreated: true, code: '', couponResponse: response, isLoading: false })
                 })
                 .catch(error => {
-                    this.setState({showModal: false, code: '', isLoading: false})
+                    this.setState({ showModal: false, code: '', isLoading: false })
                     Alert.alert("Upps!", error.data.error)
                 })
         } else {
@@ -95,21 +95,21 @@ class CuponesIndexScreen extends React.Component {
 
     render() {
         const { navigation } = this.props;
-        const { showModal} = this.state;
+        const { showModal } = this.state;
 
         return (
             <DismissKeyboard>
                 <Block flex style={styles.container}>
                     <Block flex space="between" style={styles.padded}>
-                    {
-                        this.state.coupons.length == 0 && (
-                            <Block style={styles.emptyContainer}>
-                                <Text style={styles.redText}>Aún no tienes cupones guardados</Text>
-                            </Block>
-                        )
-                    }
+                        {
+                            this.state.coupons.length == 0 && (
+                                <Block style={styles.emptyContainer}>
+                                    <Text style={styles.redText}>Aún no tienes cupones guardados</Text>
+                                </Block>
+                            )
+                        }
 
-                        <View style={{height: height * 0.68}}>
+                        <View style={{ height: height * 0.68 }}>
                             <ScrollView>
                                 {
                                     this.state.coupons.map((item) => {
@@ -120,7 +120,7 @@ class CuponesIndexScreen extends React.Component {
                                                         {item.is_predetermined == true && (<Image source={require('../../assets/icons/success.png')} style={{ width: 25, height: 25 }} />)}
                                                     </View>
 
-                                                    <Block row style={[{ width: width - theme.SIZES.BASE * 4, paddingBottom: 10, paddingHorizontal: 15, alignItems: 'center' }, !item.is_predetermined && {paddingTop: 15}]}>
+                                                    <Block row style={[{ width: width - theme.SIZES.BASE * 4, paddingBottom: 10, paddingHorizontal: 15, alignItems: 'center' }, !item.is_predetermined && { paddingTop: 15 }]}>
                                                         <View style={{ paddingHorizontal: 25 }}>
                                                             <Image source={Images.Icons.Cupones} style={styles.iconCard} />
                                                         </View>
@@ -138,12 +138,12 @@ class CuponesIndexScreen extends React.Component {
                             </ScrollView>
                         </View>
 
-                        <Block middle flex style={{justifyContent: 'flex-end'}}>
+                        <Block middle flex style={{ justifyContent: 'flex-end' }}>
                             <Button
                                 round
                                 color={nowTheme.COLORS.WHITE}
                                 style={styles.button}
-                                onPress={() => this.setState({showModal: true})}>
+                                onPress={() => this.setState({ showModal: true })}>
                                 <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.BASE, }} size={14}>
                                     AGREGAR CUPÓN  +
                                 </Text>
@@ -156,24 +156,24 @@ class CuponesIndexScreen extends React.Component {
                         transparent
                         visible={showModal}
                         presentationStyle="overFullScreen">
-                        <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={{flex: 1}}>
+                        <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={{ flex: 1 }}>
                             <View style={styles.modalContainer}>
                                 {
                                     !this.state.isCreated ? (
-                                        <View style={{ backgroundColor: 'white', padding: 15, paddingBottom: 30,}}>
-                                            <View style={{justifyContent: 'center', alignItems: 'center', paddingBottom: 25}}>
-                                                <Image source={Images.Icons.Cupones} style={{height: 79, width: 79}} />
+                                        <View style={{ backgroundColor: 'white', padding: 15, paddingBottom: 30, }}>
+                                            <View style={{ justifyContent: 'center', alignItems: 'center', paddingBottom: 25 }}>
+                                                <Image source={Images.Icons.Cupones} style={{ height: 79, width: 79 }} />
                                                 <Text style={styles.modalTitle}>Agrega un código promocional</Text>
-                                                <Block width={width * 0.8} style={{marginTop: 10}}>
+                                                <Block width={width * 0.8} style={{ marginTop: 10 }}>
                                                     <Input
-                                                    placeholder="ABCDE12345"
-                                                    placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
-                                                    onChangeText={(text) => this.setState({ code: text })}
-                                                    style={styles.inputs}
+                                                        placeholder="ABCDE12345"
+                                                        placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
+                                                        onChangeText={(text) => this.setState({ code: text })}
+                                                        style={styles.inputs}
                                                     />
                                                 </Block>
                                             </View>
-                                            <Block middle style={{alignItems: 'center' }}>
+                                            <Block middle style={{ alignItems: 'center' }}>
                                                 <Button
                                                     round
                                                     color={nowTheme.COLORS.BASE}
@@ -187,16 +187,16 @@ class CuponesIndexScreen extends React.Component {
                                             </Block>
                                         </View>
                                     ) : (
-                                        <View style={{ backgroundColor: 'white', padding: 15, paddingBottom: 30,}}>
-                                            <View style={{justifyContent: 'center', alignItems: 'center', paddingBottom: 25}}>
-                                                <Image source={require('../../assets/icons/success.png')} style={{height: 79, width: 79}} />
-                                                <Text style={[styles.modalTitle, {marginBottom: 15}]}>Agregado con éxito</Text>
+                                        <View style={{ backgroundColor: 'white', padding: 15, paddingBottom: 30, }}>
+                                            <View style={{ justifyContent: 'center', alignItems: 'center', paddingBottom: 25 }}>
+                                                <Image source={require('../../assets/icons/success.png')} style={{ height: 79, width: 79 }} />
+                                                <Text style={[styles.modalTitle, { marginBottom: 15 }]}>Agregado con éxito</Text>
                                                 <Text style={styles.modalDescription}>
                                                     <Text style={styles.modalDescriptionRed}>{this.state.couponResponse.title} </Text>
                                                     {this.state.couponResponse.description}
                                                 </Text>
                                             </View>
-                                            <Block middle style={{alignItems: 'center' }}>
+                                            <Block middle style={{ alignItems: 'center' }}>
                                                 <Button
                                                     round
                                                     color={nowTheme.COLORS.BASE}

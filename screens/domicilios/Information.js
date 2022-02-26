@@ -98,7 +98,7 @@ export default class DomicilioInfoScreen extends React.Component {
       await PropertyService.store(params)
         .then(response => {
           this.setState({ isLoading: false, propertyTypeValue: null, propertyItems: [], propertyData: [] });
-          this.props.navigation.navigate('DomicilioIndex')
+          this.props.navigation.navigate('Domicilio', { screen: 'DomicilioIndex', params: { isNewProperty: true } })
         })
         .catch(error => {
           this.setState({ isLoading: false });
@@ -112,57 +112,47 @@ export default class DomicilioInfoScreen extends React.Component {
   render() {
     let { propertyTypeValue, propertyItems, isLoading } = this.state;
     return (
-      <Block flex style={styles.container}>
-        <Block flex>
-          <Block space="between" style={styles.padded}>
-            <Block>
-              <Text style={[styles.title, smallScreen ? { paddingTop: 20 } : { paddingVertical: 10 }, { marginTop: iPhoneX ? 15 : 0 }]}> Tipo de domicilio </Text>
-
-              <View style={[{ justifyContent: 'center', alignContent: 'center', paddingTop: 5, paddingBottom: 15 }, styles.titleBorder]}>
-                <PropertyType value={propertyTypeValue} updateValue={this.updatePropertyType} />
-              </View>
-
-              <Block middle style={{ width: width - theme.SIZES.BASE * 4, paddingTop: 15 }}>
-                <Text style={[styles.title]}> Inmueble </Text>
-
-                <Text style={styles.subtitle} color={nowTheme.COLORS.SECONDARY}>
-                  Selecciona las áreas idóneas a limpiar
-                </Text>
-              </Block>
-
-              {
-                propertyItems.length > 0 ? (
-                  <View style={{ height: height * 0.38 }}>
-                    <ScrollView>
-                      {
-                        propertyItems.map((value) => {
-                          return <PropertyCounter key={value.id} id={value.id} label={value.name} price={value.price} value={value.key} getValues={(quantity, data) => this.updatePropertyInfo(quantity, data)} />
-                        })
-                      }
-
-                      <Block middle style={{ width: width - theme.SIZES.BASE * 3.8 }}>
-                        <Button
-                          round
-                          color={nowTheme.COLORS.BASE}
-                          style={styles.createButton}
-                          loading={isLoading}
-                          disabled={isLoading}
-                          onPress={() => this._handleUploadProperty()}>
-                          <Text style={{ fontFamily: 'montserrat-bold' }} size={14} color={nowTheme.COLORS.WHITE}>
-                            SIGUIENTE
-                          </Text>
-                        </Button>
-                      </Block>
-                    </ScrollView>
-                  </View>
-                ) : (
-                  <Block center>
-                    <Image source={Images.TayderHombreLimpieza} style={{ width: width, height: height * 0.45 }} />
-                  </Block>
-                )
-              }
-            </Block>
+      <Block safe flex={1}>
+        <Block flex={2} style={styles.padded}>
+          <Text style={[styles.title, { paddingVertical: 5 }]}> Tipo de domicilio </Text>
+          <View style={[{ justifyContent: 'center', alignContent: 'center', paddingTop: 5, paddingBottom: 15 }, styles.titleBorder]}>
+            <PropertyType value={propertyTypeValue} updateValue={this.updatePropertyType} />
+          </View>
+          <Block flex middle style={{ width: width - theme.SIZES.BASE * 4, paddingTop: 15 }}>
+            <Text style={[styles.title]}>Inmueble</Text>
+            <Text style={styles.subtitle} color={nowTheme.COLORS.SECONDARY}>Selecciona las áreas idóneas a limpiar</Text>
           </Block>
+        </Block>
+        <Block flex={5} center>
+          {propertyItems.length > 0 ? (
+            <ScrollView
+              contentContainerStyle={{ justifyContent: 'center', alignContent: 'center' }}
+              showsVerticalScrollIndicator={false}
+            >
+              {
+                propertyItems.map((value) => {
+                  return <PropertyCounter key={value.id} id={value.id} label={value.name} price={value.price} value={value.key} getValues={(quantity, data) => this.updatePropertyInfo(quantity, data)} />
+                })
+
+              }
+              <Button
+                round
+                color={nowTheme.COLORS.BASE}
+                style={styles.createButton}
+                loading={isLoading}
+                disabled={isLoading}
+                onPress={() => this._handleUploadProperty()}>
+                <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.WHITE}>
+                  SIGUIENTE
+                </Text>
+              </Button>
+            </ScrollView>
+          )
+            : (
+              <Block flex center style={{ paddingTop: 25 }}>
+                <Image source={Images.TayderHombreLimpieza} style={{ width: width, height: height * 0.45 }} />
+              </Block>
+            )}
         </Block>
       </Block>
     );
@@ -170,27 +160,17 @@ export default class DomicilioInfoScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    //marginTop: Platform.OS === 'android' ? - HeaderHeight : 0,
-    //marginTop: Platform.OS === 'android' ? HeaderHeight + 70 : 0,
-    top: isIphone ? 32 : 10,
-  },
   padded: {
     paddingHorizontal: theme.SIZES.BASE * 2,
-    bottom: Platform.OS === 'android' ? theme.SIZES.BASE * 2 : theme.SIZES.BASE * 3,
   },
 
-  image: {
-    width: 480,
-    height: 280,
-    bottom: 10
-  },
   title: {
     fontFamily: 'trueno-extrabold',
     color: nowTheme.COLORS.GREY5,
     paddingHorizontal: 10,
-    fontSize: 28,
+    fontSize: 24,
     textAlign: 'center',
+    lineHeight: 38
   },
   titleBorder: {
     borderBottomWidth: 1,
@@ -198,8 +178,8 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontFamily: 'trueno',
-    textAlign: 'center',
     color: nowTheme.COLORS.GREY5,
+    textAlign: 'center',
     fontSize: 16,
     paddingBottom: 15,
   },
@@ -209,8 +189,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: width * 0.5,
     marginTop: 20,
-    marginBottom: 10,
-    shadowRadius: 0,
-    shadowOpacity: 0
+    marginBottom: 10
   },
 });

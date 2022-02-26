@@ -24,8 +24,8 @@ export default class VehicleType extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            vehicleTypes    : [],
-            newValue        : this.props.value,
+            vehicleTypes: [],
+            newValue: this.props.value,
         };
     }
 
@@ -52,19 +52,19 @@ export default class VehicleType extends React.Component {
                 {
                     vehicleTypes.map((value) => {
                         return (
-                            <TouchableOpacity style={{backgroundColor: 'transparent'}} key={value.id} onPress={() => this._onPress(value.id, value.prices)}>
+                            <TouchableOpacity style={{ backgroundColor: 'transparent' }} key={value.id} onPress={() => this._onPress(value.id, value.prices)}>
                                 <View style={styles.checkboxContainer}>
                                     {
                                         (newValue == value.id)
-                                        ? (
-                                            <Image source={icons[value.id - 1]} style={{width: 85, height: 50, borderRadius: 15}}/>
-                                        ) 
-                                        : (
-                                            <Image source={iconsDisabled[value.id - 1]} style={{ width: 85, height: 50, borderRadius: 15 }}/>
-                                        )
+                                            ? (
+                                                <Image source={icons[value.id - 1]} style={{ width: 85, height: 50, borderRadius: 15 }} />
+                                            )
+                                            : (
+                                                <Image source={iconsDisabled[value.id - 1]} style={{ width: 85, height: 50, borderRadius: 15 }} />
+                                            )
                                     }
                                     <View style={{ marginLeft: 5, paddingTop: 10, flexDirection: 'row' }}>
-                                        <Text style={styles.label}>{ value.name }</Text>
+                                        <Text style={styles.label}>{value.name}</Text>
                                     </View>
                                 </View>
                             </TouchableOpacity>
@@ -77,8 +77,8 @@ export default class VehicleType extends React.Component {
 }
 
 VehicleType.propTypes = {
-    newValue    : PropTypes.number,
-    label       : PropTypes.string,
+    newValue: PropTypes.number,
+    label: PropTypes.string,
 };
 
 const styles = StyleSheet.create({

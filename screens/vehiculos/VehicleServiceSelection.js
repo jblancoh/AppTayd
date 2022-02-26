@@ -26,8 +26,7 @@ export default class VehicleSelectionScreen extends React.Component {
   }
 
   async componentDidMount() {
-    this.focusListener = await this.props.navigation.addListener('didFocus', () => {
-      console.log("sda");
+    this.focusListener = await this.props.navigation.addListener('focus', () => {
       this.setState({
         datetime: this.props.route.params.datetime,
         vehicleType: this.props.route.params.vehicleType,
@@ -43,7 +42,7 @@ export default class VehicleSelectionScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    this.focusListener.remove();
+    this.focusListener()
   }
 
   updateServiceInfo = (selected, data) => {

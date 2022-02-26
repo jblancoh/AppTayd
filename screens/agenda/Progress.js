@@ -28,7 +28,7 @@ class AgendaProgressScreen extends React.Component {
       }
     });
 
-    this.focusListener = await navigation.addListener('didFocus', () => {
+    this.focusListener = await navigation.addListener('focus', () => {
       this.setState({
         tayder: this.props.route.params.tayder,
         serviceStatus: this.props.route.params.status,
@@ -37,7 +37,7 @@ class AgendaProgressScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    this.focusListener.remove();
+    this.focusListener()
   }
 
   renderBlocks = () => {

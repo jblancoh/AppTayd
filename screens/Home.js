@@ -21,9 +21,6 @@ class Home extends React.Component {
 
   async componentDidMount() {
     this._isMounted = true;
-
-    // console.log("Boolean", iPhoneX());
-
     await Actions.extractUserData().then((result) => {
       if (result != null && this._isMounted) {
         this.setState({ userData: result.user });

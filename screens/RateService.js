@@ -31,7 +31,7 @@ class RateServiceScreen extends React.Component {
       }
     });
 
-    this.focusListener = await navigation.addListener('didFocus', () => {
+    this.focusListener = await navigation.addListener('focus', () => {
       this.setState({
         service: this.props.route.params.service,
       })
@@ -39,7 +39,7 @@ class RateServiceScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    this.focusListener.remove();
+    this.focusListener()
   }
 
   ratingCompleted = (rating) => {

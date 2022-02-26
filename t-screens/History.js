@@ -20,9 +20,9 @@ class HistoryTayder extends React.Component {
             isOnline: true,
             statusText: 'En Línea',
 
-            weekDay         : ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
-            months          : ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
-            services        : [],
+            weekDay: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+            months: ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
+            services: [],
         };
     }
 
@@ -30,25 +30,25 @@ class HistoryTayder extends React.Component {
         const { navigation } = this.props;
 
         await Actions.extractUserData().then((result) => {
-          if (result != null) {
-            this.setState({userData: result.user, tayderName: result.user.info.name});
-            this._getServices();
-          }
+            if (result != null) {
+                this.setState({ userData: result.user, tayderName: result.user.info.name });
+                this._getServices();
+            }
         });
 
-        this.focusListener = await navigation.addListener('didFocus', () => {
+        this.focusListener = await navigation.addListener('focus', () => {
             this._getServices();
         });
     }
 
     componentWillUnmount() {
-        this.focusListener.remove();
+        this.focusListener()
     }
 
     async _getServices() {
         await ServicesService.listTayderHistory(this.state.userData.id)
             .then(response => {
-                this.setState({services : response})
+                this.setState({ services: response })
             })
             .catch(error => {
                 console.error(error);
@@ -70,11 +70,11 @@ class HistoryTayder extends React.Component {
                         <Image source={Images.ProfilePicture} style={{ borderRadius: 25, height: 60, width: 60, marginHorizontal: 25 }} />
                         <Block flex>
                             <Text style={styles.nameTitle}>{this.state.tayderName}</Text>
-                            <Block row style={{paddingTop: 10, justifyContent: "space-between"}}>
+                            <Block row style={{ paddingTop: 10, justifyContent: "space-between" }}>
                                 <Text style={[styles.statusText, this.state.isOnline ? styles.statusOnline : styles.statusOffline]}>{this.state.statusText}</Text>
                                 <Switch
                                     value={this.state.isOnline}
-                                    style={{marginRight: 20, marginTop: -10}}
+                                    style={{ marginRight: 20, marginTop: -10 }}
                                     onValueChange={this._changeStatus}
                                 />
                             </Block>
@@ -89,15 +89,15 @@ class HistoryTayder extends React.Component {
                         )
                     }
 
-                    <View style={{height: height * 0.72}}>
+                    <View style={{ height: height * 0.72 }}>
                         <ScrollView>
-                        {
-                            this.state.services.map((item) => {
-                                return (
-                                    <ServiceCardHistoryTayder key={item.id} item={item} />
-                                )
-                            })
-                        }
+                            {
+                                this.state.services.map((item) => {
+                                    return (
+                                        <ServiceCardHistoryTayder key={item.id} item={item} />
+                                    )
+                                })
+                            }
                         </ScrollView>
                     </View>
 

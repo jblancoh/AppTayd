@@ -12,4 +12,3 @@ pass: Mendoza11
 Galio es una de la bibliotecas UI más guays que puedes usar, con licencia MIT. Creada con mucho detalle por desarrolladores para desarrolladores. Componentes listos para usar, tipografía y un tema por defecto que se adapta a cualquier proyecto.
 
 [Documentacion](https://galio.io/docs/#/)
-

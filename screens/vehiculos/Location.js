@@ -49,7 +49,7 @@ class VehicleLocationScreen extends React.Component {
   }
 
   async componentDidMount() {
-    this.focusListener = await this.props.navigation.addListener('didFocus', () => {
+    this.focusListener = await this.props.navigation.addListener('focus', () => {
       this.setState({
         isLoading: true,
         location: null,
@@ -70,7 +70,7 @@ class VehicleLocationScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    this.focusListener.remove();
+    this.focusListener()
   }
 
   _getLocationAsync = async () => {
