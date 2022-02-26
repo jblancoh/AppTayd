@@ -88,7 +88,6 @@ function DrawerUser(props) {
             <TouchableOpacity onPress={() => props.navigation.navigate('GeneraIngreso')} style={{ fontFamily: 'trueno', fontSize: 18, }}>
               <Item {...props} title="Genera ingresos extras" />
             </TouchableOpacity>
-
             <TouchableOpacity onPress={() => _logout(props)} style={{ fontFamily: 'trueno', fontSize: 18, }}>
               <Item {...props} title="Cerrar sesión" />
             </TouchableOpacity>

@@ -44,9 +44,11 @@ class MetodoPagoIndexScreen extends React.Component {
     }
 
     async _getSources() {
+        const { route } = this.props
         await PaymentMethodService.list(this.state.userData.id)
             .then(response => {
                 this.setState({ sources: response })
+                route?.params?.isNewCard && this.setPredetermined(response[response.length - 1])
             })
             .catch(error => {
                 console.error(error);

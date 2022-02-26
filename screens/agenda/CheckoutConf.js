@@ -364,7 +364,7 @@ class AgendaCheckoutScreen extends React.Component {
           </Block>
         </Block>
 
-        {this.paymentMethodModal}
+        {this.paymentMethodModal()}
 
         <Modal
           animationType="fade"
