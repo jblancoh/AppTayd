@@ -37,10 +37,14 @@ class MetodoPagoIndexScreen extends React.Component {
         this.focusListener = await navigation.addListener('focus', () => {
             this._getSources();
         });
+        this.blurListener = await navigation.addListener('blur', () => {
+            navigation.dispatch(CommonActions.setParams({ isNewCard: false }));
+        });
     }
 
     componentWillUnmount() {
         this.focusListener()
+        this.blurListener()
     }
 
     async _getSources() {
