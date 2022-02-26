@@ -25,7 +25,7 @@ class VehicleLocationScreen extends React.Component {
       datetime: this.props.route.params.datetime,
       vehicleType: this.props.route.params.vehicleType,
       vehicleItems: this.props.route.params.vehicleItems,
-      vehicleColor: this.props.route.params.vehicleColor,
+      vehicleModel: this.props.route.params.vehicleModel,
       vehicleBrand: this.props.route.params.vehicleBrand,
       services: this.props.route.params.services,
       isLoading: true,
@@ -60,7 +60,7 @@ class VehicleLocationScreen extends React.Component {
         datetime: this.props.route.params.datetime,
         vehicleType: this.props.route.params.vehicleType,
         vehicleItems: this.props.route.params.vehicleItems,
-        vehicleColor: this.props.route.params.vehicleColor,
+        vehicleModel: this.props.route.params.vehicleModel,
         vehicleBrand: this.props.route.params.vehicleBrand,
         services: this.props.route.params.services,
       });
@@ -99,7 +99,7 @@ class VehicleLocationScreen extends React.Component {
           datetime: this.state.datetime,
           vehicleType: this.state.vehicleType,
           vehicleItems: this.state.vehicleItems,
-          vehicleColor: this.state.vehicleColor,
+          vehicleModel: this.state.vehicleModel,
           vehicleBrand: this.state.vehicleBrand,
           services: this.state.services,
           address: this.state.address,
@@ -122,7 +122,8 @@ class VehicleLocationScreen extends React.Component {
           latitude: coords.latitude,
           longitude: coords.longitude,
         }
-      }
+      },
+      wizardIndex: 0
     })
   }
 

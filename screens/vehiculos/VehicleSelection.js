@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, StyleSheet, Dimensions, Platform, View, ScrollView } from 'react-native';
 import { Block, Button, Text, theme } from 'galio-framework';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Images, nowTheme } from '../../constants';
 import { HeaderHeight, iPhoneX } from '../../constants/utils';
 import { Input } from '../../components';
@@ -17,7 +17,7 @@ export default class VehicleServiceSelectionScreen extends React.Component {
       datetime: this.props.route.params.datetime,
       isIphone: Platform.OS === 'ios',
       vehicleTypeValue: null,
-      vehicleColor: '',
+      vehicleModel: '',
       vehicleBrand: '',
       vehicleItems: [],
     };
@@ -27,7 +27,7 @@ export default class VehicleServiceSelectionScreen extends React.Component {
     this.focusListener = await this.props.navigation.addListener('focus', () => {
       this.setState({
         datetime: this.props.route.params.datetime,
-        vehicleColor: '',
+        vehicleModel: '',
         vehicleBrand: '',
         vehicleTypeValue: null,
         vehicleItems: [],
@@ -49,43 +49,43 @@ export default class VehicleServiceSelectionScreen extends React.Component {
         datetime: this.state.datetime,
         vehicleType: this.state.vehicleTypeValue,
         vehicleItems: this.state.vehicleItems,
-        vehicleColor: this.state.vehicleColor,
+        vehicleModel: this.state.vehicleModel,
         vehicleBrand: this.state.vehicleBrand
       });
     }
   }
 
   render() {
-    const { vehicleTypeValue, vehicleColor, vehicleBrand } = this.state;
+    const { vehicleTypeValue, vehicleModel, vehicleBrand } = this.state;
     return (
-      <Block flex style={styles.container}>
+      <KeyboardAwareScrollView style={{ height: '100%' }}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Block flex>
-            <Image source={Images.AgendaTipoAuto} style={styles.image} />
-          </Block>
+          <Block safe flex={1}>
+            <Block flex={1} style={{ backgroundColor: 'green' }}>
+              <Image source={Images.AgendaTipoAuto} style={styles.image} />
+            </Block>
+            <Block flex={2} style={styles.padded}>
+              <Block flex={1.8}>
+                <Text style={[styles.title, { paddingTop: smallScreen ? 30 : 5 }, { marginTop: iPhoneX && 10 }]}> Tipo de Vehículo </Text>
+                <Text style={[styles.subtitle, { paddingVertical: 10 }]}> Selecciona tu tipo de vehículo </Text>
+                <VehicleType value={vehicleTypeValue} updateValue={this.updateVehicleType} />
+              </Block>
+              <Block flex={1} middle style={{ marginTop: 15 }}>
+                <Input
+                  placeholder="Marca"
+                  value={vehicleBrand}
+                  onChangeText={(text) => this.setState({ vehicleBrand: text })}
+                  style={styles.inputs}
+                />
 
-          <Block flex style={{ backgroundColor: 'white' }}>
-            <Block space="between" style={styles.padded}>
-              <Text style={[styles.title, { paddingTop: smallScreen ? 50 : 30 }, { marginTop: iPhoneX && 30 }]}> Tipo de Vehículo </Text>
-              <Text style={[styles.subtitle, { paddingVertical: 10 }]}> Selecciona tu tipo de vehículo </Text>
-
-              <VehicleType value={vehicleTypeValue} updateValue={this.updateVehicleType} />
-
-              <Input
-                placeholder="Marca"
-                value={vehicleBrand}
-                onChangeText={(text) => this.setState({ vehicleBrand: text })}
-                style={styles.inputs}
-              />
-
-              <Input
-                placeholder="Color"
-                value={vehicleColor}
-                onChangeText={(text) => this.setState({ vehicleColor: text })}
-                style={styles.inputs}
-              />
-
-              <Block middle style={{ width: width - theme.SIZES.BASE * 4, marginTop: 25 }}>
+                <Input
+                  placeholder="Modelo"
+                  value={vehicleModel}
+                  onChangeText={(text) => this.setState({ vehicleModel: text })}
+                  style={styles.inputs}
+                />
+              </Block>
+              <Block flex={1} middle style={{ width: width - theme.SIZES.BASE * 4 }}>
                 <Button
                   round
                   color={nowTheme.COLORS.BASE}
@@ -100,24 +100,22 @@ export default class VehicleServiceSelectionScreen extends React.Component {
             </Block>
           </Block>
         </ScrollView>
-      </Block>
+      </KeyboardAwareScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: Platform.OS === 'android' ? -HeaderHeight : -HeaderHeight - 15,
+    flex: 1,
   },
   padded: {
     paddingHorizontal: theme.SIZES.BASE * 2,
-    bottom: Platform.OS === 'android' ? theme.SIZES.BASE * 2 : theme.SIZES.BASE * 3,
   },
 
   image: {
     width: width,
-    height: 350,
-    marginTop: smallScreen ? 30 : 70,
+    height: height / 3,
   },
   title: {
     fontFamily: 'trueno-extrabold',

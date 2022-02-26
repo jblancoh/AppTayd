@@ -61,7 +61,7 @@ class MetodoPagoIndexScreen extends React.Component {
     }
 
     async setPredetermined(itemSource) {
-        if (!itemSource.is_predetermined) {
+        if (!itemSource?.is_predetermined) {
             await PaymentMethodService.setPredeterminedSource(itemSource.id)
                 .then(response => {
                     this._getSources();

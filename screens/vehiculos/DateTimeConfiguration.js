@@ -29,21 +29,31 @@ export default class VehicleDateTimeScreen extends React.Component {
 
     async componentDidMount() {
         this.state.date.setHours(this.state.date.getHours() + 2);
-        this.state.time.setHours(this.state.time.getHours() + 2);
-
+        this.state.time.setHours(this.state.time.getHours() + 2, this.state.time.getMinutes() + 1)
+        this.setState({
+            date: this.state.date,
+            time: this.state.time
+        });
         this.focusListener = await this.props.navigation.addListener('focus', () => {
+            this.state.date.setHours(this.state.date.getHours() + 2);
+            this.state.time.setHours(this.state.time.getHours() + 2, this.state.time.getMinutes() + 1)
+            this.setState({
+                date: this.state.date,
+                time: this.state.time
+            });
+        });
+        this.blurListener = await this.props.navigation.addListener('blur', () => {
             this.setState({
                 date: new Date(),
-                time: new Date()
+                time: new Date(),
             });
-
-            this.state.date.setHours(this.state.date.getHours() + 2);
-            this.state.time.setHours(this.state.time.getHours() + 2);
         });
     }
 
     componentWillUnmount() {
         this.focusListener()
+        this.blurListener()
+
     }
 
     _validateDateTime() {
@@ -99,7 +109,6 @@ export default class VehicleDateTimeScreen extends React.Component {
             if (hour > 12) hour -= 12;
             type = "p.m.";
         }
-
         return `${hour}:${minutes} ${type}`;
     }
 
@@ -129,14 +138,14 @@ export default class VehicleDateTimeScreen extends React.Component {
     render() {
         const { showDateTime, showDate, showTime, isIphone, date, time } = this.state;
         return (
-            <Block flex style={styles.container}>
+            <Block safe flex>
                 <ScrollView showsVerticalScrollIndicator={false}>
-                    <Block flex>
+                    <Block flex={1}>
                         <Image source={Images.AgendaFecha2} style={styles.image} />
                     </Block>
 
-                    <Block flex style={{ backgroundColor: 'white' }}>
-                        <Block space="between" style={styles.padded}>
+                    <Block flex={2} style={{ backgroundColor: 'white' }}>
+                        <Block flex={1} space="between" style={styles.padded}>
                             <Text style={[styles.title, { paddingTop: smallScreen ? 50 : 30 }, { marginTop: iPhoneX && 30 }]}> Programa tu cita </Text>
                             <Text style={[styles.subtitle, { paddingVertical: 10 }]}> Selecciona el día y hora del servicio </Text>
 
@@ -222,18 +231,12 @@ export default class VehicleDateTimeScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        marginTop: Platform.OS === 'android' ? -HeaderHeight : -HeaderHeight - 15,
-    },
     padded: {
         paddingHorizontal: theme.SIZES.BASE * 2,
-        bottom: Platform.OS === 'android' ? theme.SIZES.BASE * 2 : theme.SIZES.BASE * 3,
     },
-
     image: {
         width: width,
-        height: 350,
-        marginTop: smallScreen ? 30 : 70,
+        height: height / 3,
     },
     title: {
         fontFamily: 'trueno-extrabold',

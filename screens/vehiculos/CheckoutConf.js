@@ -30,7 +30,7 @@ class VehicleCheckoutScreen extends React.Component {
       datetime: this.props.route.params.datetime,
       vehicleType: this.props.route.params.vehicleType,
       vehicleItems: this.props.route.params.vehicleItems,
-      vehicleColor: this.props.route.params.vehicleColor,
+      vehicleModel: this.props.route.params.vehicleModel,
       vehicleBrand: this.props.route.params.vehicleBrand,
       services: this.props.route.params.services,
       address: this.props.route.params.address,
@@ -85,7 +85,7 @@ class VehicleCheckoutScreen extends React.Component {
         datetime: this.props.route.params.datetime,
         vehicleType: this.props.route.params.vehicleType,
         vehicleItems: this.props.route.params.vehicleItems,
-        vehicleColor: this.props.route.params.vehicleColor,
+        vehicleModel: this.props.route.params.vehicleModel,
         vehicleBrand: this.props.route.params.vehicleBrand,
         services: this.props.route.params.services,
         address: this.props.route.params.address,
@@ -233,7 +233,7 @@ class VehicleCheckoutScreen extends React.Component {
         service_cost: this.state.serviceCost,
         discount: 0,
         marca: this.state.vehicleBrand,
-        color: this.state.vehicleColor,
+        modelo: this.state.vehicleModel,
         latitude: this.state.location.latitude,
         altitude: this.state.location.longitude,
         address: this.state.address,
@@ -248,7 +248,7 @@ class VehicleCheckoutScreen extends React.Component {
           });
         })
         .catch(e => {
-          this.setState({ hasError: true, errorTitle: 'Servicio', errorMessage: e.data.error });
+          this.setState({ hasError: true, errorTitle: 'Servicio', errorMessage: e.data?.error || e.data?.message });
         });
     } else {
       this.setState({ hasError: true, errorTitle: 'Tarjeta Bancaria', errorMessage: "No se ha registrado una tarjeta bancaria en tu cuenta." });
@@ -293,7 +293,7 @@ class VehicleCheckoutScreen extends React.Component {
             <View style={{ height: smallScreen ? height * 0.7 : height * 0.62 }}>
               <ScrollView>
                 <View style={[styles.sectionBorder, styles.section]}>
-                  <TouchableOpacity onPress={() => navigation.navigate('AgendaFecha')}>
+                  <TouchableOpacity onPress={() => navigation.navigate('VehiculoSeleccion')}>
                     <Image source={Images.Icons.RegresarRojo} style={{ width: 25, height: 25 }} />
                   </TouchableOpacity>
                   <Image source={Images.TaydLogoLarge} style={{ width: 120, height: 25 }} />
@@ -375,7 +375,7 @@ class VehicleCheckoutScreen extends React.Component {
           </Block>
         </Block>
 
-        {this.paymentMethodModal}
+        {this.paymentMethodModal()}
 
         <Modal
           animationType="fade"

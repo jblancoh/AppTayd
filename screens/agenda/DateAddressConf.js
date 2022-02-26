@@ -41,17 +41,32 @@ export default class AgendaFechaScreen extends React.Component {
                 this._getPropertyInfo();
             }
         });
-
         this.state.date.setHours(this.state.date.getHours() + 2);
-        this.state.time.setHours(this.state.time.getHours() + 2);
-
+        this.state.time.setHours(this.state.time.getHours() + 2, this.state.time.getMinutes() + 1)
+        this.setState({
+            date: this.state.date,
+            time: this.state.time
+        });
         this.focusListener = await navigation.addListener('focus', () => {
             this._getPropertyInfo();
+            this.state.date.setHours(this.state.date.getHours() + 2);
+            this.state.time.setHours(this.state.time.getHours() + 2, this.state.time.getMinutes() + 1)
+            this.setState({
+                date: this.state.date,
+                time: this.state.time
+            });
+        });
+        this.blurListener = await this.props.navigation.addListener('blur', () => {
+            this.setState({
+                date: new Date(),
+                time: new Date(),
+            });
         });
     }
 
     componentWillUnmount() {
         this.focusListener()
+        this.blurListener()
     }
 
     _getPropertyInfo() {

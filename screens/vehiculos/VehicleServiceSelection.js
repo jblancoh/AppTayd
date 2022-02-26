@@ -17,7 +17,7 @@ export default class VehicleSelectionScreen extends React.Component {
       datetime: this.props.route.params.datetime,
       vehicleType: this.props.route.params.vehicleType,
       vehicleItems: this.props.route.params.vehicleItems,
-      vehicleColor: this.props.route.params.vehicleColor,
+      vehicleModel: this.props.route.params.vehicleModel,
       vehicleBrand: this.props.route.params.vehicleBrand,
       isIphone: Platform.OS === 'ios',
       serviceData: [],
@@ -31,7 +31,7 @@ export default class VehicleSelectionScreen extends React.Component {
         datetime: this.props.route.params.datetime,
         vehicleType: this.props.route.params.vehicleType,
         vehicleItems: this.props.route.params.vehicleItems,
-        vehicleColor: this.props.route.params.vehicleColor,
+        vehicleModel: this.props.route.params.vehicleModel,
         vehicleBrand: this.props.route.params.vehicleBrand,
         serviceData: [],
         refresh: true
@@ -94,7 +94,7 @@ export default class VehicleSelectionScreen extends React.Component {
         datetime: this.state.datetime,
         vehicleType: this.state.vehicleType,
         vehicleItems: this.state.vehicleItems,
-        vehicleColor: this.state.vehicleColor,
+        vehicleModel: this.state.vehicleModel,
         vehicleBrand: this.state.vehicleBrand,
         services: this.state.serviceData
       });
@@ -106,38 +106,36 @@ export default class VehicleSelectionScreen extends React.Component {
   render() {
     const { vehicleItems, refresh } = this.state;
     return (
-      <Block flex style={styles.container}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <Block flex>
-            <Image source={Images.AgendaTipoServicio} style={styles.image} />
-          </Block>
+      <Block safe flex={1} style={styles.container}>
+        <Block flex={1}>
+          <Image source={Images.AgendaTipoServicio} style={styles.image} />
+        </Block>
 
-          <Block flex style={{ backgroundColor: 'white' }}>
-            <Block space="between" style={styles.padded}>
-              <Text style={[styles.title, { paddingTop: smallScreen ? 50 : 30 }, { marginTop: iPhoneX && 30 }]}> Servicios </Text>
-              <Text style={[styles.subtitle, { paddingVertical: 10 }]}> Selecciona los servicios a realizar </Text>
+        <Block flex={2} style={{ backgroundColor: 'white' }}>
+          <Block flex={1} space="between" style={styles.padded}>
+            <Text style={[styles.title, { paddingTop: smallScreen ? 50 : 30 }, { marginTop: iPhoneX && 30 }]}> Servicios </Text>
+            <Text style={[styles.subtitle, { paddingVertical: 10 }]}> Selecciona los servicios a realizar </Text>
 
-              {
-                !refresh &&
-                vehicleItems.map((value) => {
-                  return <VehicleService key={value.id} id={value.id} label={value.name} price={value.price} value={value.key} getValues={(selected, data) => this.updateServiceInfo(selected, data)} />
-                })
-              }
+            {
+              !refresh &&
+              vehicleItems.map((value) => {
+                return <VehicleService key={value.id} id={value.id} label={value.name} price={value.price} value={value.key} getValues={(selected, data) => this.updateServiceInfo(selected, data)} />
+              })
+            }
 
-              <Block middle style={{ width: width - theme.SIZES.BASE * 4, marginTop: 25 }}>
-                <Button
-                  round
-                  color={nowTheme.COLORS.BASE}
-                  style={styles.createButton}
-                  onPress={() => this._handleNextAction()}>
-                  <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.WHITE}>
-                    SIGUIENTE
-                  </Text>
-                </Button>
-              </Block>
+            <Block middle style={{ width: width - theme.SIZES.BASE * 4, marginTop: 25 }}>
+              <Button
+                round
+                color={nowTheme.COLORS.BASE}
+                style={styles.createButton}
+                onPress={() => this._handleNextAction()}>
+                <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.WHITE}>
+                  SIGUIENTE
+                </Text>
+              </Button>
             </Block>
           </Block>
-        </ScrollView>
+        </Block>
       </Block>
     );
   }
@@ -145,7 +143,7 @@ export default class VehicleSelectionScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: Platform.OS === 'android' ? -HeaderHeight : -HeaderHeight - 15,
+    // marginTop: Platform.OS === 'android' ? -HeaderHeight : -HeaderHeight - 15,
   },
   padded: {
     paddingHorizontal: theme.SIZES.BASE * 2,
@@ -154,8 +152,7 @@ const styles = StyleSheet.create({
 
   image: {
     width: width,
-    height: 350,
-    marginTop: smallScreen ? 30 : 70,
+    height: height / 3,
   },
   title: {
     fontFamily: 'trueno-extrabold',
