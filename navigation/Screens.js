@@ -325,7 +325,37 @@ function CuponesStack() {
 
 function Drawer2() {
   return (
-    <Drawer.Navigator>
+    <Drawer.Navigator
+      initialRouteName={'HomeTayder'}
+      drawerContent={props => <DrawerTayder {...props} />}
+      drawerStyle={
+        {
+          width: width * 0.95,
+          backgroundColor: '#F7F7F7'
+        }
+      }
+      drawerContentOptions={{
+        activeTintColor: nowTheme.COLORS.SECONDARY,
+        inactiveTintColor: nowTheme.COLORS.SECONDARY,
+        activeBackgroundColor: 'transparent',
+        itemStyle: {
+          width: width * 1,
+          backgroundColor: 'transparent'
+        },
+        labelStyle: {
+          fontSize: 18,
+          marginLeft: 20,
+          fontWeight: 'normal'
+        },
+        itemsContainerStyle: {
+          paddingVertical: 16,
+          paddingHorizonal: 12,
+          justifyContent: 'center',
+          alignContent: 'center',
+          alignItems: 'center',
+          overflow: 'hidden',
+        }
+      }}>
       <Drawer.Screen
         name="HomeTayder"
         component={HomeTayder}
@@ -662,130 +692,66 @@ function RootStack() {
         <Stack.Screen
           name="Onboarding"
           component={Onboarding}
-        // options={{
-        //   header: null,
-        //   gesturesEnabled: true
-        // }}
         />
         <Stack.Screen
           name="Login"
           component={LoginScreen}
-        // options={{
-        //   header: null,
-        //   gesturesEnabled: true
-        // }}
         />
         <Stack.Screen
           name="Register"
           component={RegisterScreen}
-        // options={{
-        //   header: null,
-        //   gesturesEnabled: true
-        // }}
         />
         <Stack.Screen
           name="RegisterTayder"
           component={RegisterTayderScreen}
-        // options={{
-        //   header: null,
-        //   gesturesEnabled: true
-        // }}
         />
         <Stack.Screen
           name="DocumentosIndex"
           component={DocumentosIndexScreen}
-        // options={{
-        //   header: null,
-        //   gesturesEnabled: true
-        // }}
         />
         <Stack.Screen
           name="DocumentosStep1"
           component={DocumentosStep1Screen}
-        // options={{
-        //   header: null,
-        //   gesturesEnabled: true
-        // }}
         />
         <Stack.Screen
           name="DocumentosStep2"
           component={DocumentosStep2Screen}
-        // options={{
-        //   header: null,
-        //   gesturesEnabled: true
-        // }}
         />
         <Stack.Screen
           name="DocumentosStep3"
           component={DocumentosStep3Screen}
-        // options={{
-        //   header: null,
-        //   gesturesEnabled: true
-        // }}
         />
         <Stack.Screen
           name="DocumentosStep4"
           component={DocumentosStep4Screen}
-        // options={{
-        //   header: null,
-        //   gesturesEnabled: true
-        // }}
         />
         <Stack.Screen
           name="DocumentosSuccess"
           component={DocumentosSuccessScreen}
-        // options={{
-        //   header: null,
-        //   gesturesEnabled: true
-        // }}
         />
         <Stack.Screen
           name="DocumentosValidacion"
           component={DocumentosValidationScreen}
-        // options={{
-        //   header: null,
-        //   gesturesEnabled: true
-        // }}
         />
         <Stack.Screen
           name="Welcome"
           component={WelcomeScreen}
-        // options={{
-        //   header: null,
-        //   gesturesEnabled: true
-        // }}
         />
         <Stack.Screen
           name="PropertyLocation"
           component={PropertyLocationScreen}
-        // options={{
-        //   header: null,
-        //   gesturesEnabled: true
-        // }}
         />
         <Stack.Screen
           name="PropertyInfo"
           component={PropertyInfoScreen}
-        // options={{
-        //   header: null,
-        //   gesturesEnabled: true
-        // }}
         />
         <Stack.Screen
           name="DrawerClient"
           component={DrawerClient}
-        // options={{
-        //   header: null,
-        //   gesturesEnabled: true
-        // }}
         />
         <Stack.Screen
           name="DrawerTayder"
           component={Drawer2}
-        // options={{
-        //   header: null,
-        //   gesturesEnabled: true
-        // }}
         />
       </Stack.Navigator>
     </NavigationContainer>

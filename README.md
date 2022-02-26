@@ -3,8 +3,14 @@
 
 ## Información de usuarios para pruebas
 
+Usuario
 user: chranmc@gmail.com
 pass: Mendoza11
+
+Tayder
+user: chranmc11@gmail.com
+pass: Mendoza11
+
 ## Librerias
 
 ### Galio-framework
