@@ -19,34 +19,40 @@ class MetodoPagoIndexScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            userData    : null,
-            sources     : [],
+            userData: null,
+            sources: [],
         }
     }
 
     async componentDidMount() {
         const { navigation } = this.props;
 
-       await  Actions.extractUserData().then((result) => {
-            if(result != null) {
-                this.setState({userData : result.user});
+        await Actions.extractUserData().then((result) => {
+            if (result != null) {
+                this.setState({ userData: result.user });
                 this._getSources();
             }
         });
 
-        this.focusListener = await navigation.addListener('didFocus', () => {
+        this.focusListener = await navigation.addListener('focus', () => {
             this._getSources();
+        });
+        this.blurListener = await navigation.addListener('blur', () => {
+            navigation.dispatch(CommonActions.setParams({ isNewCard: false }));
         });
     }
 
     componentWillUnmount() {
-        this.focusListener.remove();
+        this.focusListener()
+        this.blurListener()
     }
 
     async _getSources() {
+        const { route } = this.props
         await PaymentMethodService.list(this.state.userData.id)
             .then(response => {
-                this.setState({sources : response})
+                this.setState({ sources: response })
+                route?.params?.isNewCard && this.setPredetermined(response[response.length - 1])
             })
             .catch(error => {
                 console.error(error);
@@ -55,7 +61,7 @@ class MetodoPagoIndexScreen extends React.Component {
     }
 
     async setPredetermined(itemSource) {
-        if(!itemSource.is_predetermined) {
+        if (!itemSource.is_predetermined) {
             await PaymentMethodService.setPredeterminedSource(itemSource.id)
                 .then(response => {
                     this._getSources();
@@ -73,7 +79,7 @@ class MetodoPagoIndexScreen extends React.Component {
         return (
             <Block flex style={styles.container}>
                 <Block flex space="between" style={styles.padded}>
-                    <View style={{height: height * 0.68}}>
+                    <View style={{ height: height * 0.68 }}>
                         <ScrollView>
                             {
                                 this.state.sources.map((item) => {

@@ -95,7 +95,8 @@ class DomicilioLocationScreen extends React.Component {
           latitude: coords.latitude,
           longitude: coords.longitude,
         }
-      }
+      },
+      wizardIndex: 0
     })
   }
 

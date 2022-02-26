@@ -52,13 +52,13 @@ export default class HomeTayder extends React.Component {
 
     await this._getScheduledServices();
 
-    this.focusListener = await navigation.addListener('didFocus', () => {
+    this.focusListener = await navigation.addListener('focus', () => {
       this._getScheduledServices();
     });
   }
 
   componentWillUnmount() {
-    this.focusListener.remove();
+    this.focusListener()
   }
 
   async _updateFirstLogin() {
@@ -89,7 +89,6 @@ export default class HomeTayder extends React.Component {
   }
 
   _renderItem = ({ item, index }) => {
-    console.log(index);
     return (
       <View style={{ height: 560 }}>
         <Image source={item.image} style={{ height: 550, width: 300, resizeMode: 'stretch', }} />

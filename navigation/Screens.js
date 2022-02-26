@@ -309,7 +309,6 @@ function CuponesStack() {
         name="CuponesIndex"
         component={CuponesIndexScreen}
         options={navOpt => {
-          console.log('navOpt>>>', navOpt)
           return {
             header: (
               <Header title="Cupones" iconColor={nowTheme.COLORS.SECONDARY} navigation={navOpt} />

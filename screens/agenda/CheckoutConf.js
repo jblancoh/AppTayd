@@ -49,7 +49,6 @@ class AgendaCheckoutScreen extends React.Component {
   async componentDidMount() {
     const { navigation } = this.props;
 
-    console.log("UserData", this.state.userData);
 
     await PaymentMethodService.getPredeterminedSource(this.state.userData.id)
       .then(response => {
@@ -68,7 +67,7 @@ class AgendaCheckoutScreen extends React.Component {
 
     this._getPropertyDistribution();
 
-    this.focusListener = await navigation.addListener('didFocus', async () => {
+    this.focusListener = await navigation.addListener('focus', async () => {
       this.setState({
         showPaymentMethodModal: false,
         hasError: false,
@@ -365,7 +364,7 @@ class AgendaCheckoutScreen extends React.Component {
           </Block>
         </Block>
 
-        {this.paymentMethodModal}
+        {this.paymentMethodModal()}
 
         <Modal
           animationType="fade"

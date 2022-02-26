@@ -28,25 +28,25 @@ export default class EarningsTayder extends React.Component {
         const { navigation } = this.props;
 
         await Actions.extractUserData().then((result) => {
-          if (result != null) {
-            this.setState({userData: result.user, tayderName: result.user.info.name});
-          }
+            if (result != null) {
+                this.setState({ userData: result.user, tayderName: result.user.info.name });
+            }
         });
 
         await this._getEarnings()
 
-        this.focusListener = await navigation.addListener('didFocus', () => {
+        this.focusListener = await navigation.addListener('focus', () => {
             this._getEarnings();
         });
     }
 
     componentWillUnmount() {
-        this.focusListener.remove();
+        this.focusListener()
     }
 
     async _getEarnings() {
         await ServicesService.getUserEarnings(this.state.userData.id)
-            .then(response => this.setState({countServices: response.count, totalServices: parseFloat(response.subtotal)}))
+            .then(response => this.setState({ countServices: response.count, totalServices: parseFloat(response.subtotal) }))
             .catch(error => console.error(error));
     }
 
@@ -56,7 +56,7 @@ export default class EarningsTayder extends React.Component {
     }
 
     renderBlocks() {
-        let {countServices, totalServices} = this.state;
+        let { countServices, totalServices } = this.state;
         return (
             <View style={styles.blocksContainer}>
                 <Block flex>
@@ -64,11 +64,11 @@ export default class EarningsTayder extends React.Component {
                         <Image source={Images.ProfilePicture} style={{ borderRadius: 25, height: 60, width: 60, marginHorizontal: 25 }} />
                         <Block flex>
                             <Text style={styles.nameTitle}>{this.state.tayderName}</Text>
-                            <Block row style={{paddingTop: 10, justifyContent: "space-between"}}>
+                            <Block row style={{ paddingTop: 10, justifyContent: "space-between" }}>
                                 <Text style={[styles.statusText, this.state.isOnline ? styles.statusOnline : styles.statusOffline]}>{this.state.statusText}</Text>
                                 <Switch
                                     value={this.state.isOnline}
-                                    style={{marginRight: 20, marginTop: -10}}
+                                    style={{ marginRight: 20, marginTop: -10 }}
                                     onValueChange={this._changeStatus}
                                 />
                             </Block>
@@ -76,7 +76,7 @@ export default class EarningsTayder extends React.Component {
                     </Block>
 
                     <ScrollView>
-                        <Block style={{paddingTop: 25, paddingHorizontal: 20}}>
+                        <Block style={{ paddingTop: 25, paddingHorizontal: 20 }}>
                             <Text style={[styles.title2, { color: nowTheme.COLORS.WHITE }]}>Haz</Text>
                             <Text style={[styles.title2, { color: nowTheme.COLORS.WHITE }]}>realizado</Text>
                             <Text style={[styles.title2, { color: nowTheme.COLORS.BASE }]}>{countServices} servicios</Text>

@@ -12,10 +12,10 @@ const smallScreen = height < 812 ? true : false;
 const stripe = require('stripe-client')(Env.STRIPE_PUBLIC_KEY);
 
 const DismissKeyboard = ({ children }) => (
-    <KeyboardAvoidingView behavior={ Platform.OS == "ios" ? "position" : "height"} style={{flex: 1}}>
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
+    <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "position" : "height"} style={{ flex: 1 }}>
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
     </KeyboardAvoidingView>
-  );
+);
 
 export default class MetodoPagoAddCardScreen extends React.Component {
     constructor(props) {
@@ -31,14 +31,14 @@ export default class MetodoPagoAddCardScreen extends React.Component {
             cardMonth: '',
             cardYear: '',
             cardCVV: '',
-            
+
         };
     }
 
     componentDidMount() {
         Actions.extractUserData().then((result) => {
             if (result != null) {
-                this.setState({userData: result.user});
+                this.setState({ userData: result.user });
             }
         });
     }
@@ -46,7 +46,7 @@ export default class MetodoPagoAddCardScreen extends React.Component {
     _validateForm() {
         let response = true;
 
-        if(this.state.name.trim() == "")
+        if (this.state.name.trim() == "")
             response = false
 
         if (this.state.lastName.trim() == "")
@@ -67,85 +67,84 @@ export default class MetodoPagoAddCardScreen extends React.Component {
     formatDateExpiration = (value) => {
         let newDate = value.replace(
             /^([1-9]\/|[2-9])$/g, '0$1/' // 3 > 03/
-          ).replace(
+        ).replace(
             /^(0[1-9]|1[0-2])$/g, '$1/' // 11 > 11/
-          ).replace(
+        ).replace(
             /^([0-1])([3-9])$/g, '0$1/$2' // 13 > 01/3
-          ).replace(
+        ).replace(
             /^(0?[1-9]|1[0-2])([0-9]{2})$/g, '$1/$2' // 141 > 01/41
-          ).replace(
+        ).replace(
             /^([0]+)\/|[0]+$/g, '0' // 0/ > 0 and 00 > 0
-          ).replace(
+        ).replace(
             /[^\d\/]|^[\/]*$/g, '' // To allow only digits and `/`
-          ).replace(
+        ).replace(
             /\/\//g, '/' // Prevent entering more than 1 `/`
-          );
+        );
 
         let arrDate = newDate.split("/");
-        let year    = "";
-        let month   = "";
-        if(arrDate.length == 2) {
-            month   = arrDate[0];
-            year    = arrDate[1];
+        let year = "";
+        let month = "";
+        if (arrDate.length == 2) {
+            month = arrDate[0];
+            year = arrDate[1];
         }
 
-        this.setState({cardDate: newDate, cardMonth: month, cardYear: year});
+        this.setState({ cardDate: newDate, cardMonth: month, cardYear: year });
     }
 
     async _handleNextAction() {
-        this.setState({isLoading : true});
+        // this.setState({ isLoading: true });
 
-        if(this._validateForm()) {
+        if (this._validateForm()) {
             let information = {
                 card: {
-                  number: this.state.cardNumber,
-                  exp_month: this.state.cardMonth,
-                  exp_year: this.state.cardYear,
-                  cvc: this.state.cardCVV,
-                  name: `${this.state.name} ${this.state.lastName}`
+                    number: this.state.cardNumber,
+                    exp_month: this.state.cardMonth,
+                    exp_year: this.state.cardYear,
+                    cvc: this.state.cardCVV,
+                    name: `${this.state.name} ${this.state.lastName}`
                 }
             }
 
             var card = await stripe.createToken(information);
 
-            if(card != null && !card.error) {
+            if (card != null && !card.error) {
                 let objPaymentMethod = {
-                    user_id : this.state.userData.id,
-                    token   : card.id
+                    user_id: this.state.userData.id,
+                    token: card.id
                 };
-        
                 await PaymentMethodService.store(objPaymentMethod)
                     .then(response => {
-                        this.setState({isLoading : false});
-                        this.props.navigation.navigate("MetodoPagoIndex");
+                        this.setState({ isLoading: false });
+                        this.props.navigation.navigate("MetodoPago", { screen: 'MetodoPagoIndex', params: { isNewCard: true } });
                     })
                     .catch(e => {
                         Alert.alert("Método de pago", e.data.error);
-                        this.setState({isLoading : false});
+                        this.setState({ isLoading: false });
                     });
             } else {
-                this.setState({isLoading : false});
+                this.setState({ isLoading: false });
                 Alert.alert("Método de pago", card.error.message);
             }
         } else {
-            this.setState({isLoading : false});
+            this.setState({ isLoading: false });
             Alert.alert("Método de pago", "Los campos no cumplen con la información requerida.")
         }
-        
+
     }
 
     render() {
-        const {isIphone, name, lastName, cardCVV, cardDate, cardNumber, isLoading } = this.state;
+        const { isIphone, name, lastName, cardCVV, cardDate, cardNumber, isLoading } = this.state;
         return (
             <DismissKeyboard>
                 <ScrollView>
-                    <Block style={{height: smallScreen ? height * 0.35 : height * 0.38}}>
+                    <Block style={{ height: smallScreen ? height * 0.35 : height * 0.38 }}>
                         <Image source={Images.MetodoPagoAddCard} style={styles.image} />
                     </Block>
 
                     <Block space="between" style={styles.padded}>
-                        <View style={{height: height * 0.6}}>
-                            <Block width={width * 0.8} style={{paddingTop: 15}}>
+                        <View style={{ height: height * 0.6 }}>
+                            <Block width={width * 0.8} style={{ paddingTop: 15 }}>
                                 <Text style={[styles.subtitle]}>Propietario de la tarjeta</Text>
                                 <Input
                                     placeholder="Nombre"
@@ -177,14 +176,14 @@ export default class MetodoPagoAddCardScreen extends React.Component {
                                     type="number-pad"
                                     style={[styles.inputs, cardNumber != '' ? styles.inputEnabled : styles.inputDisabled]}
                                     iconContent={
-                                        <Image style={{marginRight: 25, width: 35, height: 22}} source={this.state.cardNumber != '' ? Images.Icons.TarjetaBancaria : Images.Icons.TarjetaBancariaGris} />
+                                        <Image style={{ marginRight: 25, width: 35, height: 22 }} source={this.state.cardNumber != '' ? Images.Icons.TarjetaBancaria : Images.Icons.TarjetaBancariaGris} />
                                     }
-                                    onChangeText={(text) => this.setState({cardNumber: text})}
+                                    onChangeText={(text) => this.setState({ cardNumber: text })}
                                 />
                             </Block>
 
                             <Block width={width * 0.8} style={{ paddingTop: 15, flexDirection: 'row' }}>
-                                <Block width={width * 0.4} style={{paddingRight: 15}}>
+                                <Block width={width * 0.4} style={{ paddingRight: 15 }}>
                                     <Text style={[styles.subtitle]}>Fecha de vto.</Text>
                                     <Input
                                         value={this.state.cardDate}
@@ -200,7 +199,7 @@ export default class MetodoPagoAddCardScreen extends React.Component {
                                     />
                                 </Block>
 
-                                <Block width={width * 0.4} style={{paddingLeft: 15}}>
+                                <Block width={width * 0.4} style={{ paddingLeft: 15 }}>
                                     <Text style={[styles.subtitle]}>CVV</Text>
                                     <Input
                                         placeholder="000"
@@ -216,7 +215,7 @@ export default class MetodoPagoAddCardScreen extends React.Component {
                                 </Block>
                             </Block>
 
-                            <Block middle style={{width: width - theme.SIZES.BASE * 4, justifyContent: 'flex-end'}}>
+                            <Block middle style={{ width: width - theme.SIZES.BASE * 4, justifyContent: 'flex-end' }}>
                                 <Button
                                     round
                                     loading={isLoading}

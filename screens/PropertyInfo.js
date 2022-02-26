@@ -91,7 +91,7 @@ export default class PropertyInfoScreen extends React.Component {
         is_predetermined: true,
         property_type_id: this.state.propertyTypeValue,
         distribution: this.state.propertyData,
-        first_login: true,
+        first_login: false,
       };
 
       await PropertyService.store(params)

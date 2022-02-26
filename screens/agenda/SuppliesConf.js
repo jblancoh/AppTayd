@@ -30,7 +30,7 @@ export default class AgendaInsumosScreen extends React.Component {
       })
       .catch(error => console.error(error));
 
-    this.focusListener = await navigation.addListener('didFocus', () => {
+    this.focusListener = await navigation.addListener('focus', () => {
       this.setState({
         isSelected: false,
         userData: this.props.route.params.userData,
@@ -41,7 +41,7 @@ export default class AgendaInsumosScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    this.focusListener.remove();
+    this.focusListener()
   }
 
   _handleSelection() {
