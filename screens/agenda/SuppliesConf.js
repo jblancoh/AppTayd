@@ -60,16 +60,16 @@ export default class AgendaInsumosScreen extends React.Component {
   render() {
     const { isSelected, setting } = this.state;
     return (
-      <Block flex style={styles.container}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <Block>
+      <Block flex safe style={styles.container}>
+        <Block flex={1}>
+          <Block flex={1}>
             <Image source={Images.AgendaInsumos} style={styles.image} />
           </Block>
 
-          <Block flex style={{ backgroundColor: 'white' }}>
+          <Block flex={1} style={{ backgroundColor: 'white' }}>
             <Block space="between" style={styles.padded}>
               <Block>
-                <Text style={[styles.title, { paddingTop: 50 }]}>¿Cuentas con los insumos necesarios?</Text>
+                <Text style={[styles.title, { paddingVertical: 20 }]}>¿Cuentas con los insumos necesarios?</Text>
                 <Text style={[styles.subtitle, { paddingVertical: 10, height: 100 }]}>
                   En TAYD ofrecemos los materiales básicos para limpiar tu domicilio de manera profunda con un costo extra de ${setting != null ? parseFloat(setting.value).toFixed(2) : '0.00'}
                 </Text>
@@ -116,7 +116,7 @@ export default class AgendaInsumosScreen extends React.Component {
               </Block>
             </Block>
           </Block>
-        </ScrollView>
+        </Block>
       </Block>
     );
   }
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   },
   padded: {
     paddingHorizontal: theme.SIZES.BASE * 2,
-    bottom: Platform.OS === 'android' ? theme.SIZES.BASE * 2 : theme.SIZES.BASE * 3,
+    // bottom: Platform.OS === 'android' ? theme.SIZES.BASE * 2 : theme.SIZES.BASE * 3,
   },
 
   image: {

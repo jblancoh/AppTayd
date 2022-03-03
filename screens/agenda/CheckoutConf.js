@@ -273,13 +273,12 @@ class AgendaCheckoutScreen extends React.Component {
     const { propertyInfo, sourceInfo, propertyDist, subtotal, discount, userData } = this.state;
 
     return (
-      <Block flex style={styles.container}>
+      <Block flex safe style={styles.container}>
         <StatusBar barStyle="light-content" />
-        <Block flex center>
+        <Block flex={1} center>
           <ImageBackground source={Images.AgendaCheckout} style={{ height, width, zIndex: 1 }} />
         </Block>
-
-        <Block flex space="between" style={styles.padded}>
+        <Block flex={2.3} space="between" style={{ zIndex: 2 }}>
           <Block style={styles.cardContainer}>
             <View style={{ height: smallScreen ? height * 0.7 : height * 0.62 }}>
               <ScrollView>
@@ -403,16 +402,8 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     height: height < 812 ? height * 0.7 : height * 0.7,
-  },
-  padded: {
-    top: smallScreen ? 150 : 285,
-    justifyContent: 'center',
-    alignSelf: 'center',
-    paddingHorizontal: theme.SIZES.BASE * 1.3,
-    position: 'absolute',
-    bottom: theme.SIZES.BASE,
-    zIndex: 2,
     width: width,
+    alignItems: 'center',
   },
   title: {
     fontFamily: 'trueno-extrabold',
@@ -447,6 +438,7 @@ const styles = StyleSheet.create({
   section: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    width: width - 20
   },
   sectionItem: {
     paddingLeft: 15

@@ -14,16 +14,16 @@ export default class ServiceCardSliderTayder extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            weekDay         : ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
-            months          : ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
-            items           : this.props.items,
+            weekDay: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+            months: ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
+            items: this.props.items,
         };
     }
 
     componentDidUpdate(nextProps) {
         const { items } = this.props
         if (nextProps.items !== items) {
-            this.setState({items: items})
+            this.setState({ items: items })
         }
     }
 
@@ -32,24 +32,24 @@ export default class ServiceCardSliderTayder extends React.Component {
         let arrDate = arrItem[0].split("-");
         let arrTime = arrItem[1].split(":");
 
-        let datetime    = new Date(Number(arrDate[0]), Number(arrDate[1]) - 1, Number(arrDate[2]), Number(arrTime[0]), Number(arrTime[1]));
-        let week        = this.state.weekDay[datetime.getDay()];
-        let month       = this.state.months[datetime.getMonth()];
-        let type        = "a.m.";
-        let minutes     = datetime.getMinutes() < 10 ? `0${datetime.getMinutes()}` : datetime.getMinutes();
-        let hour        = datetime.getHours();
+        let datetime = new Date(Number(arrDate[0]), Number(arrDate[1]) - 1, Number(arrDate[2]), Number(arrTime[0]), Number(arrTime[1]));
+        let week = this.state.weekDay[datetime.getDay()];
+        let month = this.state.months[datetime.getMonth()];
+        let type = "a.m.";
+        let minutes = datetime.getMinutes() < 10 ? `0${datetime.getMinutes()}` : datetime.getMinutes();
+        let hour = datetime.getHours();
 
-        if(hour >= 12) {
-            if(hour > 12) hour -= 12;
-            type    = "p.m.";
+        if (hour >= 12) {
+            if (hour > 12) hour -= 12;
+            type = "p.m.";
         }
 
-        if(arrItem[0] == moment().format('YYYY-MM-DD')) {
+        if (arrItem[0] == moment().format('YYYY-MM-DD')) {
             return `Cita agendada para hoy a ${hour == 1 ? 'la' : 'las'} ${hour}:${minutes} ${type}`;
         }
 
         let dateTomorrow = moment().add(1, "days").format('YYYY-MM-DD')
-        if(arrItem[0] == dateTomorrow) {
+        if (arrItem[0] == dateTomorrow) {
             return `Cita agendada para mañana a ${hour == 1 ? 'la' : 'las'} ${hour}:${minutes} ${type}`;
         } else {
             return `Cita agendada para el ${datetime.getDate()} de ${month} a ${hour == 1 ? 'la' : 'las'} ${hour}:${minutes} ${type}`;
@@ -57,11 +57,11 @@ export default class ServiceCardSliderTayder extends React.Component {
     }
 
     _handleDetailsNavigation = (item) => {
-        if(item.service_status_id == 2) {
+        if (item.service_status_id == 2) {
             this.props.navigation.navigate("ServiceInfoTayder", {
-                service : item
+                service: item
             });
-        } else if(item.service_status_id == 3) {
+        } else if (item.service_status_id == 3) {
             this.props.navigation.navigate("ServiceProgressTayder", {
                 service: item
             });
@@ -70,13 +70,13 @@ export default class ServiceCardSliderTayder extends React.Component {
 
     startService = (item) => {
         let objService = {
-            service_id : item.id
+            service_id: item.id
         };
 
         Alert.alert("Servicio", "¿Deseas iniciar este servicio?", [
             {
                 text: 'Cancelar',
-                onPress: () => this.setState({openCamera: false}),
+                onPress: () => this.setState({ openCamera: false }),
                 style: 'cancel'
             },
             {
@@ -84,7 +84,7 @@ export default class ServiceCardSliderTayder extends React.Component {
                     ServicesService.startService(objService)
                         .then(response => {
                             this.props.navigation.navigate("ServiceProgressTayder", {
-                                service : item
+                                service: item
                             });
                         })
                         .catch(error => {
@@ -97,7 +97,8 @@ export default class ServiceCardSliderTayder extends React.Component {
     }
 
     render() {
-        let {items} = this.state;
+        let { items } = this.state;
+        console.log('items>>>', items)
         return (
             <Block style={styles.componentContainer}>
                 <ScrollView horizontal={true}>
@@ -106,9 +107,9 @@ export default class ServiceCardSliderTayder extends React.Component {
                             items.map(item => {
                                 return (
                                     <Block key={item.id} style={styles.cardContainer}>
-                                        <Block style={{paddingHorizontal: 30}}>
+                                        <Block style={{ paddingHorizontal: 30 }}>
                                             <Image source={Images.Icons.Agenda} style={styles.image} />
-                
+
                                             <Text style={styles.serviceTitle}>{this.formatDateTime(item)}</Text>
                                             <Text style={styles.serviceSubtitle}>{item.service_type_id == 1 ? item.property_name : item.address}</Text>
                                             <Text style={styles.serviceSubtitleRed}>{item.has_consumables ? 'Insumos solicitados' : ''}</Text>
@@ -130,7 +131,7 @@ export default class ServiceCardSliderTayder extends React.Component {
                                                     <Button
                                                         round
                                                         color={nowTheme.COLORS.BASE}
-                                                        style={[styles.button, {marginVertical: 15}]}
+                                                        style={[styles.button, { marginVertical: 15 }]}
                                                         onPress={() => this.startService(item)}>
                                                         <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
                                                             EMPEZAR
@@ -142,14 +143,14 @@ export default class ServiceCardSliderTayder extends React.Component {
                                     </Block>
                                 )
                             })
-                        : (
-                            <Block style={styles.cardContainer}>
-                                <Image source={Images.Icons.Agenda} style={{paddingTop: 60, marginBottom: 40, width: 140, height: 140}} />
+                            : (
+                                <Block style={styles.cardContainer}>
+                                    <Image source={Images.Icons.Agenda} style={{ paddingTop: 60, marginBottom: 40, width: 140, height: 140 }} />
 
-                                <Text style={styles.titleNoItems}>Aún no cuentas con citas agendadas</Text>
-                                <Text style={styles.subtitleNoItems}>No olvides estar en línea para poder recibir solicitudes</Text>
-                            </Block>
-                        )
+                                    <Text style={styles.titleNoItems}>Aún no cuentas con citas agendadas</Text>
+                                    <Text style={styles.subtitleNoItems}>No olvides estar en línea para poder recibir solicitudes</Text>
+                                </Block>
+                            )
                     }
                 </ScrollView>
             </Block>
@@ -167,7 +168,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 20,
         marginHorizontal: 15,
-    
         backgroundColor: nowTheme.COLORS.WHITE,
         borderRadius: 25,
         width: width * 0.85,

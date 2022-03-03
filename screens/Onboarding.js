@@ -90,7 +90,7 @@ export default class Onboarding extends React.Component {
       );
     } else if (item.key == "last") {
       return (
-        <View style={{ flex: 1, }}>
+        <View style={{ flex: 1 }}>
           <StatusBar barStyle="dark-content" />
           <Image style={{ width: dimensions.width, height: dimensions.height, resizeMode: 'cover' }} source={Images.Slide004} />
         </View>
@@ -103,8 +103,7 @@ export default class Onboarding extends React.Component {
       <Button
         shadowless
         style={styles.buttonCircle}
-        color={nowTheme.COLORS.WHITE}
-        onPress={() => this.setState({ showRealApp: true })}
+        onPress={this._onDone}
       >
         <Text style={{ fontFamily: 'trueno-semibold', fontSize: 20, fontWeight: '600' }} color={nowTheme.COLORS.BASE}>
           COMENZAR
@@ -206,7 +205,7 @@ export default class Onboarding extends React.Component {
           dotStyle={{ backgroundColor: nowTheme.COLORS.WHITE }}
           activeDotStyle={{ backgroundColor: nowTheme.COLORS.BASE }}
           renderDoneButton={this._renderDoneButton}
-          onDone={this._onDone} />
+        />
       </SafeAreaView>
     }
   }
@@ -261,14 +260,9 @@ const styles = StyleSheet.create({
   },
 
   buttonCircle: {
-    width: width - theme.SIZES.BASE * 4,
     height: theme.SIZES.BASE * 3,
     borderRadius: 50,
-    bottom: 50,
-    marginRight: 20,
-
     backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
+
 });
