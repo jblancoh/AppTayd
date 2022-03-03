@@ -32,23 +32,23 @@ export default class TabBar extends React.Component {
 
     async componentDidMount() {
         await Actions.extractUserData().then((result) => {
-            if(result != null) {
-              this.setState({userData: result.user});
+            if (result != null) {
+                this.setState({ userData: result.user });
             }
         });
 
         var pusher = new Pusher(env.PUSHER_KEY, {
             cluster: env.PUSHER_CLUSTER
         });
-          
+
         var channel = await pusher.subscribe('notifications' + this.state.userData.id);
         channel.bind('service-status', (data) => {
-            this.setState({showAlert: true, alertMessage: data.message})
+            this.setState({ showAlert: true, alertMessage: data.message })
         });
     }
 
     _closeAlert = () => {
-        this.setState({showAlert: false, alertMessage: ""})
+        this.setState({ showAlert: false, alertMessage: "" })
     }
 
     render() {
@@ -82,7 +82,7 @@ export default class TabBar extends React.Component {
                     <View style={{ flex: 1, height: height, backgroundColor: 'rgba(0,0,0,.3)', justifyContent: 'flex-start', alignItems: 'center' }}>
                         <View style={styles.alertContainer}>
                             <Text style={styles.alertMessage}>{this.state.alertMessage}</Text>
-                            <TouchableOpacity onPress={() => this._closeAlert()} style={{marginTop: -1}}>
+                            <TouchableOpacity onPress={() => this._closeAlert()} style={{ marginTop: -1 }}>
                                 <Image source={Images.Icons.Close01} />
                             </TouchableOpacity>
                         </View>

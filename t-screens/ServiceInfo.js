@@ -174,7 +174,7 @@ class ServiceInfoTayder extends React.Component {
                   <Block style={[styles.sectionItem, styles.sectionBorder, { width: 280 }]}>
                     <Text style={[styles.textExtraBold]}>Cita aceptada</Text>
                     <Text style={[styles.textNormal]}>
-                      <Text style={styles.textBold}>{service.request_user_name} </Text>
+                      <Text style={styles.textBold}>{service?.request_user_name} </Text>
                       agendó una cita contigo para el {this.formatDateTime(service)}
                     </Text>
                   </Block>

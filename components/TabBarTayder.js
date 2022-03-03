@@ -29,15 +29,15 @@ export default class TabBarTayder extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            screen      : this.props.activeScreen,
-            token       : AsyncStorage.getItem('access_token'),
-            showAlert   : false,
-            userData    : null,
-            data        : null,
-            isLoading   : false,
-            weekDay     : ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
-            months      : ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
-            scheduleDT  : "",
+            screen: this.props.activeScreen,
+            token: AsyncStorage.getItem('access_token'),
+            showAlert: false,
+            userData: null,
+            data: null,
+            isLoading: false,
+            weekDay: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+            months: ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
+            scheduleDT: "",
         }
     }
 
@@ -52,42 +52,41 @@ export default class TabBarTayder extends React.Component {
             }, */
             cluster: env.PUSHER_CLUSTER
         });
-          
         var channel = pusher.subscribe('private-notifications');
         channel.bind('service-accepted', (data) => {
             this._refreshData(data);
         });
 
         Actions.extractUserData().then((result) => {
-            if(result != null) {
-                this.setState({userData : result.user});
+            if (result != null) {
+                this.setState({ userData: result.user });
             }
-       });
+        });
     }
 
     _refreshData(data) {
-        this.setState({showAlert: true, data: data, scheduleDT: this.formatDateTime(data) });
+        this.setState({ showAlert: true, data: data, scheduleDT: this.formatDateTime(data) });
     }
 
     async _acceptService() {
-        this.setState({isLoading: true });
+        this.setState({ isLoading: true });
 
         let objService = {
-            service_id  : this.state.data.id,
-            user_id     : this.state.userData.id
+            service_id: this.state.data.id,
+            user_id: this.state.userData.id
         };
 
         await ServicesService.acceptService(objService)
             .then(response => {
-                this.setState({showAlert: false, data: null, isLoading: false});
+                this.setState({ showAlert: false, data: null, isLoading: false });
                 this.props.navigation.navigate("ServiceInfoTayder", {
-                    service : response[0]
+                    service: response[0]
                 });
             })
             .catch(error => {
-                this.setState({showAlert: false, isLoading: false});
+                this.setState({ showAlert: false, isLoading: false });
                 Alert.alert("Servicio", "Ocurrió un problema al aceptar el servicio.")
-             });
+            });
     }
 
     formatDateTime = (item) => {
@@ -95,16 +94,16 @@ export default class TabBarTayder extends React.Component {
         let arrDate = arrItem[0].split("-");
         let arrTime = arrItem[1].split(":");
 
-        let datetime    = new Date(Number(arrDate[0]), Number(arrDate[1]) - 1, Number(arrDate[2]), Number(arrTime[0]), Number(arrTime[1]));
-        let week        = this.state.weekDay[datetime.getDay()];
-        let month       = this.state.months[datetime.getMonth()];
-        let type        = "a.m.";
-        let minutes     = datetime.getMinutes() < 10 ? `0${datetime.getMinutes()}` : datetime.getMinutes();
-        let hour        = datetime.getHours();
+        let datetime = new Date(Number(arrDate[0]), Number(arrDate[1]) - 1, Number(arrDate[2]), Number(arrTime[0]), Number(arrTime[1]));
+        let week = this.state.weekDay[datetime.getDay()];
+        let month = this.state.months[datetime.getMonth()];
+        let type = "a.m.";
+        let minutes = datetime.getMinutes() < 10 ? `0${datetime.getMinutes()}` : datetime.getMinutes();
+        let hour = datetime.getHours();
 
-        if(hour >= 12) {
-            if(hour > 12) hour    -= 12;
-            type    = "p.m.";
+        if (hour >= 12) {
+            if (hour > 12) hour -= 12;
+            type = "p.m.";
         }
 
         return `${week} ${datetime.getDate()} de ${month} del ${datetime.getFullYear()}, ${hour}:${minutes} ${type}`;
@@ -140,8 +139,8 @@ export default class TabBarTayder extends React.Component {
                     presentationStyle="overFullScreen">
                     <View style={{ flex: 1, height: height, backgroundColor: 'rgba(0,0,0,.3)', alignItems: 'center' }}>
                         <View style={styles.alertContainer}>
-                            <ImageBackground source={Images.LightsBackground} style={{width: width * 0.85}}>
-                                <Block middle style={{paddingHorizontal: 15 }}>
+                            <ImageBackground source={Images.LightsBackground} style={{ width: width * 0.85 }}>
+                                <Block middle style={{ paddingHorizontal: 15 }}>
                                     <Image source={Images.TaydLogoLarge} style={{ width: 120, height: 25, marginTop: 30 }} />
 
                                     <Image source={Images.Icons.Agenda} style={{ width: 120, height: 120, marginVertical: 30 }} />
@@ -155,7 +154,7 @@ export default class TabBarTayder extends React.Component {
                                             round
                                             color={nowTheme.COLORS.PLACEHOLDER}
                                             style={styles.button}
-                                            onPress={() => this.setState({showAlert: false})}>
+                                            onPress={() => this.setState({ showAlert: false })}>
                                             <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
                                                 RECHAZAR
                                             </Text>
@@ -166,7 +165,7 @@ export default class TabBarTayder extends React.Component {
                                             loading={this.state.isLoading}
                                             disabled={this.state.isLoading}
                                             color={nowTheme.COLORS.BASE}
-                                            style={[styles.button, {marginTop: 15, marginBottom: 25}]}
+                                            style={[styles.button, { marginTop: 15, marginBottom: 25 }]}
                                             onPress={() => this._acceptService()}>
                                             <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
                                                 ACEPTAR
@@ -243,5 +242,4 @@ const styles = StyleSheet.create({
         shadowRadius: 0,
         shadowOpacity: 0
     },
-    
 });

@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, Dimensions, Text, View, Alert, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Platform, Keyboard } from "react-native";
 import { Block, Button, theme } from "galio-framework";
 import Pusher from 'pusher-js/react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import { Input } from '../../components';
 import nowTheme from "../../constants/Theme";
@@ -12,7 +13,10 @@ import ChatService from '../../services/chat';
 const { height, width } = Dimensions.get("screen");
 
 const DismissKeyboard = ({ children }) => (
-  <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "padding"} style={{ flex: 1 }}>
+  <KeyboardAvoidingView
+    style={{ flex: 1 }}
+    showsVerticalScrollIndicator={false}
+  >
     {children}
   </KeyboardAvoidingView>
 );
@@ -23,7 +27,7 @@ class AgendaChatScreen extends React.Component {
     this.state = {
       userData: null,
       userName: '',
-      service_id: this.props.route.params.service_id,
+      service_id: this.props.route?.params?.service_id,
       messages: [],
       message: '',
       isLoading: false,
@@ -42,12 +46,13 @@ class AgendaChatScreen extends React.Component {
     });
 
     this.focusListener = await navigation.addListener('focus', () => {
-      this.setState({ service_id: this.props.route.params.service_id });
+      this.setState({ service_id: this.props.route?.params?.service_id });
       this._getMessages();
     });
 
     var pusher = new Pusher(env.PUSHER_KEY, {
-      cluster: env.PUSHER_CLUSTER
+      cluster: env.PUSHER_CLUSTER,
+      activityTimeout: 120000
     });
 
     var channel = pusher.subscribe('chat' + this.state.service_id);
@@ -118,11 +123,13 @@ class AgendaChatScreen extends React.Component {
     let { messages, isLoading, userName } = this.state;
     return (
       <DismissKeyboard>
-        <Block flex style={styles.container}>
-          <View style={{ height: height * 0.68 }}>
+        <Block flex={1} style={styles.container}>
+          <Block flex={4}>
             <ScrollView
-              ref={ref => scrollView = ref}
-              onContentSizeChange={() => scrollView.scrollToEnd({ animated: true })}
+              ref={ref => this.scrollView = ref}
+              onContentSizeChange={() => this.scrollView?.scrollToEnd({ animated: true })}
+              onLayout={() => this.scrollView?.scrollToEnd({ animated: true })}
+              showsVerticalScrollIndicator={false}
             >
               {
                 messages.length > 0 ?
@@ -153,17 +160,16 @@ class AgendaChatScreen extends React.Component {
                     </Block>
                   )
               }
-            </ScrollView>
-          </View>
 
-          <Block middle flex style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
+            </ScrollView>
+          </Block>
+          <Block flex={0.5} middle style={{ flexDirection: 'row' }}>
             <Input
               placeholder="Respuesta"
               value={this.state.message}
               onChangeText={(text) => this.setState({ message: text })}
               style={styles.inputs}
             />
-
             <Button
               color={nowTheme.COLORS.BASE}
               round
@@ -184,11 +190,11 @@ class AgendaChatScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingTop: 50,
+    paddingTop: 30,
     paddingHorizontal: theme.SIZES.BASE * 1,
     bottom: theme.SIZES.BASE,
-    backgroundColor: '#F7F7F7'
+    backgroundColor: '#F7F7F7',
+    height: height,
   },
   cardContainer: {
     backgroundColor: nowTheme.COLORS.WHITE,
@@ -242,14 +248,12 @@ const styles = StyleSheet.create({
     fontFamily: 'trueno',
     fontSize: 17,
     letterSpacing: 20,
-
     width: width * 0.6,
     marginRight: 10
   },
   button: {
     width: width * 0.3,
     height: theme.SIZES.BASE * 2.5,
-
     shadowRadius: 0,
     shadowOpacity: 0,
   },

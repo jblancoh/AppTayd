@@ -83,10 +83,9 @@ class ServiceComponent extends React.Component {
 
   render() {
     let { item, showModal, isCanceled, isLoading, showInfo } = this.state;
-
     return (
-      <Block key={item.id} flex style={{ marginTop: 20 }}>
-        <Block middle style={styles.cardContainer}>
+      <Block key={item.id} flex={1} style={{ marginTop: 20, paddingBottom: 10 }}>
+        <Block flex={1} middle style={styles.cardContainer}>
           <TouchableOpacity onPress={() => this.setState({ showInfo: !showInfo })}>
             <Block row style={{ width: width - theme.SIZES.BASE * 3, paddingVertical: 20, paddingHorizontal: 10 }}>
               <Block style={{ justifyContent: 'flex-start', alignContent: 'center' }}>
@@ -114,7 +113,7 @@ class ServiceComponent extends React.Component {
                         </Text>
                       </Block>
 
-                      <Text style={styles.scheduleSubtitleBold}>Estatus:</Text>
+                      <Text style={styles.scheduleSubtitleBold}>Estado:</Text>
 
                       <TouchableOpacity onPress={() => this._showService(item)}>
                         <Text style={styles.scheduleSubtitleBoldRed}>{item.service_status_name.toUpperCase()}</Text>
@@ -129,14 +128,14 @@ class ServiceComponent extends React.Component {
               showInfo && (
                 <Block center style={{ alignItems: 'flex-end' }}>
                   {
-                    (item.service_status_id == 2 && item.service_status_id == 3) && (
-                      <Button color={nowTheme.COLORS.BASE} round style={styles.buttonContact} onPress={() => this.props.navigation.navigate("Chat", { service_id: item.id })}>
+                    (item.service_status_id == 2 || item.service_status_id == 3) && (
+                      <Button color={nowTheme.COLORS.BASE} round style={styles.buttonContact} onPress={() => this.props.navigation.navigate("AgendaChat", { screen: "Chat", params: { service_id: item.id } })}>
                         <Text style={{ fontFamily: 'trueno-semibold', lineHeight: 24 }} size={20} color={nowTheme.COLORS.WHITE}>CONTACTAR</Text>
                       </Button>
                     )
                   }
 
-                  <Block middle style={[styles.section, { marginVertical: 15 }]}>
+                  <Block center style={[styles.section, { marginVertical: 15 }]}>
                     <Button color={'rgb(240,240,240)'} round style={styles.buttonCancel} onPress={() => this.setState({ showModal: true })}>
                       <Text style={{ fontFamily: 'trueno-semibold', lineHeight: 16 }} size={13} color={nowTheme.COLORS.BASE}>CANCELAR</Text>
                     </Button>
