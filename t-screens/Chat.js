@@ -4,7 +4,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
-  Text, View, Alert, ScrollView
+  Text, View, Alert, ScrollView,
+  KeyboardAvoidingView
 } from "react-native";
 import { Block, Button, theme } from "galio-framework";
 import Pusher from 'pusher-js/react-native';
@@ -17,6 +18,14 @@ import ChatService from '../services/chat';
 
 const { height, width } = Dimensions.get("screen");
 
+const DismissKeyboard = ({ children }) => (
+  <KeyboardAvoidingView
+    style={{ flex: 1 }}
+    showsVerticalScrollIndicator={false}
+  >
+    {children}
+  </KeyboardAvoidingView>
+);
 class ChatTayderScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -117,10 +126,15 @@ class ChatTayderScreen extends React.Component {
   render() {
     let { messages, isLoading, userName } = this.state;
     return (
-      <Block flex style={styles.container}>
-        <Block flex space="between" style={styles.padded}>
-          <View style={{ height: height * 0.68 }}>
-            <ScrollView>
+      <DismissKeyboard>
+        <Block flex={1} style={styles.container}>
+          <Block flex={4}>
+            <ScrollView
+              ref={ref => this.scrollView = ref}
+              onContentSizeChange={() => this.scrollView?.scrollToEnd({ animated: true })}
+              onLayout={() => this.scrollView?.scrollToEnd({ animated: true })}
+              showsVerticalScrollIndicator={false}
+            >
               {
                 messages.length > 0 ?
                   messages.map(item => {
@@ -151,9 +165,8 @@ class ChatTayderScreen extends React.Component {
                   )
               }
             </ScrollView>
-          </View>
-
-          <Block middle flex style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
+          </Block>
+          <Block flex={0.5} middle style={{ flexDirection: 'row' }}>
             <Input
               placeholder="Respuesta"
               value={this.state.message}
@@ -174,15 +187,17 @@ class ChatTayderScreen extends React.Component {
             </Button>
           </Block>
         </Block>
-      </Block>
+      </DismissKeyboard>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingTop: 50,
+    paddingTop: 30,
+    paddingHorizontal: theme.SIZES.BASE * 1,
+    bottom: theme.SIZES.BASE,
+    height: height,
     backgroundColor: nowTheme.COLORS.BLACK
   },
   cardContainer: {
@@ -201,10 +216,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     width: width * 0.7
-  },
-  padded: {
-    paddingHorizontal: theme.SIZES.BASE * 1,
-    bottom: theme.SIZES.BASE,
   },
   title: {
     fontFamily: 'trueno-extrabold',
@@ -241,14 +252,12 @@ const styles = StyleSheet.create({
     fontFamily: 'trueno',
     fontSize: 17,
     letterSpacing: 20,
-
     width: width * 0.6,
     marginRight: 10
   },
   button: {
     width: width * 0.3,
     height: theme.SIZES.BASE * 2.5,
-
     shadowRadius: 0,
     shadowOpacity: 0,
   },

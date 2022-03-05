@@ -45,7 +45,11 @@
       },
       "infoPlist": {
         "NSCameraUsageDescription": "Esta aplicación utiliza la cámara para escanear documentos solicitados.",
-        "NSLocationWhenInUseUsageDescription": "Esta aplicación utiliza tu ubicación para seleccionar tu inmueble en el mapa."
+        "NSLocationWhenInUseUsageDescription": "Esta aplicación utiliza tu ubicación para seleccionar tu inmueble en el mapa.",
+        "LSApplicationQueriesSchemes": [
+            "comgooglemaps",
+            "waze"
+          ]
       }
     },
     "packagerOpts": {

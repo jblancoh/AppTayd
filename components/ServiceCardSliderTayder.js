@@ -98,7 +98,6 @@ export default class ServiceCardSliderTayder extends React.Component {
 
     render() {
         let { items } = this.state;
-        console.log('items>>>', items)
         return (
             <Block style={styles.componentContainer}>
                 <ScrollView horizontal={true}>

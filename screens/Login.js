@@ -10,7 +10,7 @@ import { withNavigation } from '@react-navigation/compat';
 const { height, width } = Dimensions.get('screen');
 
 const DismissKeyboard = ({ children }) => (
-  <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={{ flex: 1, backgroundColor: nowTheme.COLORS.BASE }}>
+  <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : ""} style={{ flex: 1, backgroundColor: nowTheme.COLORS.BASE }}>
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
   </KeyboardAvoidingView>
 );
@@ -19,8 +19,8 @@ class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: __DEV__ ? 'jonathan@yopmail.com' : '',
-      password: __DEV__ ? 'Password123' : '',
+      email: __DEV__ ? props.route.params?.isTayder ? 'chranmc11@gmail.com' : 'jonathan@yopmail.com' : '',
+      password: __DEV__ ? props.route.params?.isTayder ? 'Mendoza11' : 'Password123' : '',
       isLoading: false,
     };
   }
@@ -106,6 +106,7 @@ class LoginScreen extends React.Component {
                       iconContent={
                         <Image style={styles.inputIcons} source={Images.Icons.Usuario_L} />
                       }
+                      autoCapitalize='none'
                     />
                   </Block>
                   <Block width={width * 0.8}>
@@ -120,6 +121,7 @@ class LoginScreen extends React.Component {
                         <Image style={styles.inputIcons} source={Images.Icons.Password_L} />
                       }
                       iconColor={'#FFF'}
+
                     />
                   </Block>
 

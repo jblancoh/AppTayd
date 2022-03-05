@@ -157,7 +157,7 @@ export default class Onboarding extends React.Component {
                     shadowless
                     style={styles.button}
                     color={nowTheme.COLORS.WHITE}
-                    onPress={() => navigation.navigate('Login')}
+                    onPress={() => navigation.navigate('Login', { isTayder: this.state.isTayder })}
                   >
                     <Text style={{ fontFamily: 'trueno-semibold', fontSize: 20, fontWeight: '600' }} color={this.state.isTayder ? nowTheme.COLORS.BLACK : nowTheme.COLORS.BASE}>INICIAR SESIÓN</Text>
                   </Button>

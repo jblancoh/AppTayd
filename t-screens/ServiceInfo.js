@@ -8,13 +8,15 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
-  Modal
+  Modal,
+  Alert
 } from "react-native";
 import { Block, Button, theme } from "galio-framework";
 import MapView from 'react-native-maps';
 import nowTheme from "../constants/Theme";
 import Images from "../constants/Images";
 import ServicesService from "../services/service";
+import { showLocation } from 'react-native-map-link'
 
 const { height, width } = Dimensions.get("screen");
 const smallScreen = height < 812 ? true : false;
@@ -126,12 +128,30 @@ class ServiceInfoTayder extends React.Component {
     this.props.navigation.navigate("HomeTayder");
   }
 
+  _showLocation = () => {
+    const { service } = this.state;
+    if (service?.property_altitude && service?.property_latitude) {
+      return showLocation({
+        longitude: service.property_altitude,
+        latitude: service.property_latitude,
+        title: service.service_type_id == 1 ? service.property_name : service.address,  // optional
+        googleForceLatLon: true,
+        alwaysIncludeGoogle: true,
+        appsWhiteList: ['google-maps'], // optionally you can set which apps to show (default: will show all supported apps installed on device)
+        directionsMode: 'car' // optional, accepted values are 'car', 'walk', 'public-transport' or 'bike'
+      })
+    } else {
+      Alert.alert("Algo salio mal", "No se encontraron datos para abrir el mapa.");
+    }
+  }
+
   render() {
     const { serviceDetails, propertyDist, service, mapRefresh, showModal, isLoading, isCanceled } = this.state;
 
     return (
-      <Block flex style={styles.container}>
+      <Block flex safe style={styles.container}>
         <StatusBar barStyle="dark-content" />
+        <Block flex={1} space="between" />
         {
           service != null && !mapRefresh ? (
             <MapView
@@ -164,9 +184,8 @@ class ServiceInfoTayder extends React.Component {
             </View>
           )
         }
-
-        <Block flex space="between" style={styles.padded}>
-          <Block style={styles.cardContainer}>
+        <Block flex={2} space="between">
+          <Block flex={1}>
             <View style={{ height: smallScreen ? height * 0.6 : height * 0.62 }}>
               <ScrollView>
                 <View style={[styles.section]}>
@@ -184,7 +203,11 @@ class ServiceInfoTayder extends React.Component {
                   <Image source={Images.Icons.Ubicacion2} style={[{ width: 45, height: 63, marginTop: 20 }]} />
                   <Block style={[styles.sectionItem, styles.sectionBorder, { width: 280, marginLeft: 30 }]}>
                     <Text style={[styles.textRedBold]}>Dirección:</Text>
-                    <Text style={[styles.textNormal]}>{service.service_type_id == 1 ? service.property_name : service.address}</Text>
+                    <TouchableOpacity
+                      onPress={this._showLocation}
+                    >
+                      <Text style={[styles.textNormal]}>{service.service_type_id == 1 ? service.property_name : service.address}</Text>
+                    </TouchableOpacity>
                   </Block>
                 </View>
 
@@ -217,7 +240,7 @@ class ServiceInfoTayder extends React.Component {
                     <Button
                       color={nowTheme.COLORS.WHITE}
                       style={styles.buttonContact}
-                      onPress={() => this.props.navigation.navigate("ChatTayder", { service_id: service.id })}>
+                      onPress={() => this.props.navigation.navigate("ChatServiceTayder", { screen: "ChatTayder", params: { service_id: service.id } })}>
                       <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.BASE, lineHeight: 16, textAlign: 'center' }} size={14}>
                         CONTACTAR CLIENTE
                       </Text>
@@ -300,9 +323,6 @@ class ServiceInfoTayder extends React.Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: theme.COLORS.BLACK
-  },
-  cardContainer: {
-    height: height < 812 ? height * 0.7 : height * 0.7,
   },
   mapStyle: {
     position: 'absolute',

@@ -43,6 +43,7 @@
     "react-native-confirmation-code-field": "^6.5.1",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
+    "react-native-map-link": "^2.8.3",
     "react-native-maps": "0.27.1",
     "react-native-ratings": "^7.2.0",
     "react-native-reanimated": "~2.1.0",

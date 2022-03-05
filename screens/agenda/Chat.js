@@ -2,7 +2,6 @@ import React from "react";
 import { StyleSheet, Dimensions, Text, View, Alert, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Platform, Keyboard } from "react-native";
 import { Block, Button, theme } from "galio-framework";
 import Pusher from 'pusher-js/react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import { Input } from '../../components';
 import nowTheme from "../../constants/Theme";

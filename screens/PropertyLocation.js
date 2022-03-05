@@ -11,7 +11,7 @@ import PropertyService from "../services/property";
 const { width, height } = Dimensions.get('screen');
 
 const DismissKeyboard = ({ children }) => (
-  <KeyboardAvoidingView behavior={"height"} style={{ flex: 1 }}>
+  <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : ""} style={{ flex: 1 }}>
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       {children}
     </TouchableWithoutFeedback>

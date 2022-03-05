@@ -12,7 +12,7 @@ const { height, width } = Dimensions.get('screen');
 const smallScreen = height < 812 ? true : false;
 
 const DismissKeyboard = ({ children }) => (
-  <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "position" : "padding"} style={{ flex: 1 }}>
+  <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : ""} style={{ flex: 1 }}>
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
   </KeyboardAvoidingView>
 );
