@@ -18,7 +18,7 @@ class SoporteTayderIndexScreen extends React.Component {
         return (
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
                 <Block flex>
-                    <StatusBar barStyle="light-content" />
+                    <StatusBar barStyle="dark-content" />
                     <Block flex row style={{ paddingTop: 25 }}>
                         <Image source={Images.ProfilePicture} style={{ borderRadius: 25, height: 60, width: 60, marginRight: 25 }} />
                         <Block flex>
@@ -31,7 +31,7 @@ class SoporteTayderIndexScreen extends React.Component {
                         <TouchableOpacity onPress={() => this.setState({ showMore: true })}>
                             <CardFullImage image={Images.TaydAyuda} imageStyle={{ height: height * 0.40, width: '100%' }} />
                         </TouchableOpacity>
-                        
+
                         <Block flex style={{ paddingTop: 15 }}>
                             <Block middle style={styles.cardContainer}>
                                 <TouchableOpacity style={styles.section} onPress={() => this.props.navigation.navigate('SoporteTayderGuiaBasica')}>
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
         paddingVertical: theme.SIZES.BASE,
         paddingHorizontal: 2,
     },
-    
+
     cardContainer: {
         backgroundColor: nowTheme.COLORS.WHITE,
         borderRadius: 25,
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         paddingVertical: 10,
     },
-    
+
     section: {
         flexDirection: 'row',
         width: width * 0.9,

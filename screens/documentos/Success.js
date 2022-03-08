@@ -21,22 +21,22 @@ class DocumentosSuccessScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            hasError    : false,
+            hasError: false,
         }
     }
 
     _logout() {
         Actions.removeUserData().then((response) => {
-          if(response) {
-              this.props.navigation.navigate('Onboarding')
-          }
+            if (response) {
+                this.props.navigation.navigate('Onboarding')
+            }
         });
     }
 
     render() {
         return (
             <Block flex style={styles.container}>
-                <StatusBar barStyle="light-content" />
+                <StatusBar barStyle="dark-content" />
                 <Block flex center>
                     <ImageBackground source={Images.BlackLightsBackground} style={{ height, width, zIndex: 1 }} />
                 </Block>
@@ -44,14 +44,14 @@ class DocumentosSuccessScreen extends React.Component {
                 <Block flex space="between" style={styles.padded}>
                     <Block style={styles.cardContainer}>
                         <View>
-                            <Image source={require('../../assets/icons/success.png')} style={{height: 100, width: 100}} />
+                            <Image source={require('../../assets/icons/success.png')} style={{ height: 100, width: 100 }} />
                         </View>
 
-                        <View style={{ paddingHorizontal: 40, paddingTop: 40, paddingBottom: 10}}>
+                        <View style={{ paddingHorizontal: 40, paddingTop: 40, paddingBottom: 10 }}>
                             <Text style={styles.successTitle}>Enviado</Text>
                         </View>
 
-                        <View style={{paddingHorizontal: 40}}>
+                        <View style={{ paddingHorizontal: 40 }}>
                             <Text style={styles.textNormal}>
                                 En breve nuestro equipo revisará tu solicitud para ponerse en contacto contigo.
                                 Te invitamos a estar pendiente de tu correo electrónico.

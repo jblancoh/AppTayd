@@ -46,7 +46,7 @@ class AgendaCheckoutScreen extends React.Component {
 
     return (
       <Block flex style={styles.container}>
-        <StatusBar barStyle="light-content" />
+        <StatusBar barStyle="dark-content" />
         <Block flex center>
           <ImageBackground source={Images.LightsBackground} style={{ height, width, zIndex: 1 }} />
         </Block>

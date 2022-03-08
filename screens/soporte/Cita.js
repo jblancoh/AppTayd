@@ -18,7 +18,7 @@ class SoporteCitaScreen extends React.Component {
         return (
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
                 <Block flex>
-                    <StatusBar barStyle="light-content" />
+                    <StatusBar barStyle="dark-content" />
                     <Block flex row style={{ paddingTop: 30 }}>
                         <Image source={Images.ProfilePicture} style={{ borderRadius: 50, height: 60, width: 60, marginRight: 25 }} />
                         <Block flex>
@@ -35,7 +35,7 @@ class SoporteCitaScreen extends React.Component {
                         <Block flex style={{ paddingTop: 15 }}>
                             <Block middle style={styles.cardContainer}>
                                 <Block style={styles.section}>
-                                    <Text style={[styles.nameTitle, {paddingLeft: 20}]}>Agendar cita</Text>
+                                    <Text style={[styles.nameTitle, { paddingLeft: 20 }]}>Agendar cita</Text>
 
                                     <TouchableOpacity onPress={() => this.props.navigation.navigate('Soporte')}>
                                         <Image source={Images.Icons.Close01} />
@@ -47,7 +47,7 @@ class SoporteCitaScreen extends React.Component {
                                     <Text style={styles.itemSubtitle}>En la pantalla de inicio pulsa en el banner de "Limpieza a un toque" y sigue las instrucciones.</Text>
                                 </Block>
 
-                                <Block style={[styles.item, {paddingBottom: 15}]}>
+                                <Block style={[styles.item, { paddingBottom: 15 }]}>
                                     <Text style={styles.itemTitle}>Opción 2</Text>
                                     <Text style={styles.itemSubtitle}>En la pestaña "Agenda" pulsa en el banner "Agendar una cita" y sigue las instrucciones.</Text>
                                 </Block>

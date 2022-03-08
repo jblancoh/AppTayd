@@ -122,7 +122,7 @@ export default class Onboarding extends React.Component {
     if (this.state.showRealApp) {
       return (
         <Block flex style={[styles.container, this.state.isTayder ? styles.containerBlack : styles.containerRed]}>
-          <StatusBar barStyle="light-content" />
+          <StatusBar barStyle="dark-content" />
           <Block flex>
             <Block space="between" style={styles.padded}>
               <Toast isShow={this.state.hasMessage} positionIndicator="top" color="success">{this.state.message}</Toast>

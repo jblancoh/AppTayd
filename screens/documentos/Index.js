@@ -37,7 +37,7 @@ class DocumentosIndexScreen extends React.Component {
 
     return (
       <Block flex style={styles.container}>
-        <StatusBar barStyle="light-content" />
+        <StatusBar barStyle="dark-content" />
 
         <Block middle style={{ paddingTop: 30 }}>
           <Text style={styles.title}>

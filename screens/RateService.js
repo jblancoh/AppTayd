@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Dimensions, ScrollView, Image, View, TextInput, Alert, Modal, TouchableOpacity } from "react-native";
+import { StyleSheet, Dimensions, ScrollView, Image, View, TextInput, Alert, Modal, StatusBar } from "react-native";
 import { Block, theme, Text, Button } from "galio-framework";
 
 import { TabBar, Rating } from "../components";
@@ -75,9 +75,9 @@ class RateServiceScreen extends React.Component {
 
   render() {
     let { userData, isLoading, showModal } = this.state;
-
     return (
       <Block flex center style={styles.home}>
+        <StatusBar barStyle="dark-content" />
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
           <Block flex>
             <Block flex row style={{ paddingTop: 10 }}>

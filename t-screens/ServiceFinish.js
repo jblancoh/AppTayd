@@ -26,7 +26,7 @@ class ServiceFinishTayder extends React.Component {
 
         return (
             <Block flex style={styles.container}>
-                <StatusBar barStyle="light-content" />
+                <StatusBar barStyle="dark-content" />
                 <Block flex center>
                     <ImageBackground source={Images.BlackLightsBackground} style={{ height, width, zIndex: 1 }} />
                 </Block>
@@ -34,18 +34,18 @@ class ServiceFinishTayder extends React.Component {
                 <Block flex space="between" style={styles.padded}>
                     <Block style={styles.cardContainer}>
                         <View>
-                            <Image source={require('../assets/icons/success.png')} style={{height: 110, width: 110}} />
+                            <Image source={require('../assets/icons/success.png')} style={{ height: 110, width: 110 }} />
                         </View>
 
-                        <View style={{paddingHorizontal: 40, marginVertical: 25}}>
+                        <View style={{ paddingHorizontal: 40, marginVertical: 25 }}>
                             <Text style={styles.successTitle}>¡Muchas gracias!</Text>
                         </View>
 
-                        <View style={{paddingHorizontal: 40, paddingBottom: 10}}>
+                        <View style={{ paddingHorizontal: 40, paddingBottom: 10 }}>
                             <Text style={styles.textNormal}>En breve reflejaremos tu ingreso acumulado por este servicio.</Text>
                         </View>
 
-                        <View style={{paddingHorizontal: 40, paddingBottom: 30}}>
+                        <View style={{ paddingHorizontal: 40, paddingBottom: 30 }}>
                             <Text style={styles.textNormal}>
                                 Es posible que comentarios y calificación del cliente también aparezcan
                                 en tu historial para una retroalimentación del servicio.

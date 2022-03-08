@@ -18,21 +18,21 @@ export default class DocumentosValidationScreen extends React.Component {
 
     _logout() {
         Actions.removeUserData().then((response) => {
-          if(response) {
-              this.props.navigation.navigate('Login')
-          }
+            if (response) {
+                this.props.navigation.navigate('Login')
+            }
         });
     }
 
     render() {
         return (
             <Block flex style={styles.home}>
-                <StatusBar barStyle="light-content" />
+                <StatusBar barStyle="dark-content" />
 
                 <Block center style={styles.cardContainer}>
-                    <ImageBackground source={Images.LightsBackground} style={{width: width * 0.85, height: height * 0.7}}>
-                        <Block middle style={{paddingHorizontal: 15 }}>
-                            <Image source={Images.Icons.Validacion} style={{marginTop: 30, width: 220, height: 180 }} />
+                    <ImageBackground source={Images.LightsBackground} style={{ width: width * 0.85, height: height * 0.7 }}>
+                        <Block middle style={{ paddingHorizontal: 15 }}>
+                            <Image source={Images.Icons.Validacion} style={{ marginTop: 30, width: 220, height: 180 }} />
 
                             <Text style={[styles.title]}>Validando Documentos</Text>
                             <Text style={[styles.subtitle]}>
@@ -43,14 +43,14 @@ export default class DocumentosValidationScreen extends React.Component {
                     </ImageBackground>
                 </Block>
 
-                <Block center style={{marginVertical: 25}}>
+                <Block center style={{ marginVertical: 25 }}>
                     <Button
                         round
                         color={nowTheme.COLORS.BASE}
                         style={styles.button}
                         onPress={() => this._logout()}
                     >
-                        <Text style={{fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, lineHeight: 16 }} size={14}>
+                        <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, lineHeight: 16 }} size={14}>
                             ENTENDIDO
                         </Text>
                     </Button>

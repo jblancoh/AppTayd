@@ -91,7 +91,7 @@ class RegisterTayderScreen extends React.Component {
     return (
       <DismissKeyboard>
         <Block flex>
-          <StatusBar barStyle="light-content" />
+          <StatusBar barStyle="dark-content" />
           <ImageBackground source={Images.RegisterTayderBackground} style={{ height: height, width }}>
 
             <View>

@@ -19,7 +19,7 @@ class SoporteTayderGuiaBasicaScreen extends React.Component {
         return (
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
                 <Block flex>
-                    <StatusBar barStyle="light-content" />
+                    <StatusBar barStyle="dark-content" />
                     <Block flex row style={{ paddingTop: 30 }}>
                         <Image source={Images.ProfilePicture} style={{ borderRadius: 25, height: 60, width: 60, marginRight: 25 }} />
                         <Block flex>
@@ -31,14 +31,14 @@ class SoporteTayderGuiaBasicaScreen extends React.Component {
                     <Block style={{ marginTop: 10 }}>
                         <Block flex middle style={styles.cardContainer}>
                             <Block style={styles.section}>
-                                <Text style={[styles.nameTitle, {paddingLeft: 20}]}> </Text>
+                                <Text style={[styles.nameTitle, { paddingLeft: 20 }]}> </Text>
 
-                                <TouchableOpacity onPress={() => this.props.navigation.navigate('SoporteTayder')} style={{marginTop: 15}}>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('SoporteTayder')} style={{ marginTop: 15 }}>
                                     <Image source={Images.Icons.Close01} />
                                 </TouchableOpacity>
                             </Block>
 
-                            <Image source={Images.TaydAyudaPasos} style={styles.imageStyle}/>
+                            <Image source={Images.TaydAyudaPasos} style={styles.imageStyle} />
                         </Block>
                     </Block>
                 </Block>

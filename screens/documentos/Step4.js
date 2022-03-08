@@ -134,7 +134,7 @@ class DocumentosStep4Screen extends React.Component {
 
     return (
       <Block flex style={styles.container}>
-        <StatusBar barStyle="light-content" />
+        <StatusBar barStyle="dark-content" />
         {
           this.state.openCamera
             ? (

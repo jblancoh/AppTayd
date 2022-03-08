@@ -82,7 +82,7 @@ class LoginScreen extends React.Component {
     return (
       <DismissKeyboard>
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.containerRed}>
-          <StatusBar barStyle="light-content" />
+          <StatusBar barStyle="dark-content" />
           <Block flex space="evenly">
             <Image source={Images.Logo} style={styles.logoTayder} />
 

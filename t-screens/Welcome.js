@@ -19,7 +19,7 @@ class WelcomeScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            
+
         }
     }
     render() {
@@ -27,18 +27,18 @@ class WelcomeScreen extends React.Component {
 
         return (
             <Block flex style={styles.container}>
-                <StatusBar barStyle="light-content" />
+                <StatusBar barStyle="dark-content" />
                 <Block flex center>
                     <ImageBackground source={Images.RegisterTayderBackground} style={{ height, width, zIndex: 1 }} />
                 </Block>
 
                 <Block flex space="between" style={styles.padded}>
                     <Block style={styles.cardContainer}>
-                        <View style={{ paddingHorizontal: 40, paddingTop: 40, paddingBottom: 10}}>
+                        <View style={{ paddingHorizontal: 40, paddingTop: 40, paddingBottom: 10 }}>
                             <Text style={styles.successTitle}>¡Bienvenido al equipo!</Text>
                         </View>
 
-                        <View style={{paddingHorizontal: 40, paddingBottom: 20}}>
+                        <View style={{ paddingHorizontal: 40, paddingBottom: 20 }}>
                             <Text style={styles.textNormal}>
                                 A continuación haremos un breve recorrido por el panel de los TAYDERS.
                             </Text>

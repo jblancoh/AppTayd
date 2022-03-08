@@ -282,9 +282,8 @@ class VehicleCheckoutScreen extends React.Component {
     const { address, sourceInfo, serviceInfo, subtotal, discount, userData, isLoading } = this.state;
 
     return (
-      <Block flex safe style={styles.container}>
-        <StatusBar barStyle="light-content" />
-        <Block flex={1} center>
+      <Block flex style={styles.container}>
+        <Block flex={smallScreen ? 0.8 : 1} center>
           <ImageBackground source={Images.AgendaCheckout} style={{ height, width, zIndex: 1 }} />
         </Block>
         <Block flex={2.3} space="between" style={{ zIndex: 2 }}>

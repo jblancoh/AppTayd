@@ -184,82 +184,81 @@ class ServiceInfoTayder extends React.Component {
             </View>
           )
         }
-        <Block flex={2} space="between">
-          <Block flex={1}>
-            <View style={{ height: smallScreen ? height * 0.6 : height * 0.62 }}>
-              <ScrollView>
-                <View style={[styles.section]}>
-                  <Image source={Images.Icons.Calendario} style={[{ width: 60, height: 60, marginTop: 20 }]} />
-                  <Block style={[styles.sectionItem, styles.sectionBorder, { width: 280 }]}>
-                    <Text style={[styles.textExtraBold]}>Cita aceptada</Text>
-                    <Text style={[styles.textNormal]}>
-                      <Text style={styles.textBold}>{service?.request_user_name} </Text>
-                      agendó una cita contigo para el {this.formatDateTime(service)}
+        <Block flex={1.7} space="between">
+          <ScrollView>
+            <Block flex={0.6} style={{ alignItems: 'center' }}>
+              <View style={[styles.section]}>
+                <Image source={Images.Icons.Calendario} style={[{ width: 60, height: 60, marginTop: 20 }]} />
+                <Block style={[styles.sectionItem, styles.sectionBorder, { width: 280 }]}>
+                  <Text style={[styles.textExtraBold]}>Cita aceptada</Text>
+                  <Text style={[styles.textNormal]}>
+                    <Text style={styles.textBold}>{service?.request_user_name} </Text>
+                    agendó una cita contigo para el {this.formatDateTime(service)}
+                  </Text>
+                </Block>
+              </View>
+
+              <View style={[styles.section]}>
+                <Image source={Images.Icons.Ubicacion2} style={[{ width: 45, height: 63, marginTop: 20 }]} />
+                <Block style={[styles.sectionItem, styles.sectionBorder, { width: 280 }]}>
+                  <Text style={[styles.textRedBold]}>Dirección:</Text>
+                  <TouchableOpacity
+                    onPress={this._showLocation}
+                  >
+                    <Text style={[styles.textNormal]}>{service.service_type_id == 1 ? service.property_name : service.address}</Text>
+                  </TouchableOpacity>
+                </Block>
+              </View>
+
+              <View style={[styles.section]}>
+                <Image source={service.service_type_id == 1 ? Images.Icons.Inmueble : Images.Icons.Vehiculo} style={[{ width: 60, height: 60, marginTop: 20 }]} />
+                <Block style={[styles.sectionItem, styles.sectionBorder, { width: 280 }]}>
+                  <Text style={[styles.textRedBold]}>{service.service_type_id == 1 ? `Inmuebles: ${service.property_type_name}` : `Servicio: ${service.vehicle_type}`}</Text>
+                  <Text style={[styles.textNormal]}>{service.service_type_id == 1 ? propertyDist : serviceDetails}</Text>
+                </Block>
+              </View>
+
+              <View style={[styles.section, { marginVertical: 10 }]}>
+                <Block style={{ width: 60 }} />
+                <Block style={[styles.sectionItem, { width: 300 }]}>
+                  <Text style={[styles.textBold]}>{service.has_consumables ? 'Se solicitaron insumos.' : 'No se solicitaron insumos.'}</Text>
+                </Block>
+              </View>
+
+              <Block middle style={{ marginBottom: 25 }}>
+                <Block row style={{ marginBottom: 15 }}>
+                  <Button
+                    color={nowTheme.COLORS.BLACK}
+                    style={styles.buttonCancel}
+                    onPress={() => this.setState({ showModal: true })}>
+                    <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.BASE, lineHeight: 16, textAlign: 'center' }} size={14}>
+                      CANCELAR SERVICIO
                     </Text>
-                  </Block>
-                </View>
-
-                <View style={[styles.section]}>
-                  <Image source={Images.Icons.Ubicacion2} style={[{ width: 45, height: 63, marginTop: 20 }]} />
-                  <Block style={[styles.sectionItem, styles.sectionBorder, { width: 280, marginLeft: 30 }]}>
-                    <Text style={[styles.textRedBold]}>Dirección:</Text>
-                    <TouchableOpacity
-                      onPress={this._showLocation}
-                    >
-                      <Text style={[styles.textNormal]}>{service.service_type_id == 1 ? service.property_name : service.address}</Text>
-                    </TouchableOpacity>
-                  </Block>
-                </View>
-
-                <View style={[styles.section]}>
-                  <Image source={service.service_type_id == 1 ? Images.Icons.Inmueble : Images.Icons.Vehiculo} style={[{ width: 60, height: 60, marginTop: 20 }]} />
-                  <Block style={[styles.sectionItem, styles.sectionBorder, { width: 280 }]}>
-                    <Text style={[styles.textRedBold]}>{service.service_type_id == 1 ? `Inmuebles: ${service.property_type_name}` : `Servicio: ${service.vehicle_type}`}</Text>
-                    <Text style={[styles.textNormal]}>{service.service_type_id == 1 ? propertyDist : serviceDetails}</Text>
-                  </Block>
-                </View>
-
-                <View style={[styles.section, { marginVertical: 20 }]}>
-                  <Block style={{ width: 60 }} />
-                  <Block style={[styles.sectionItem, { width: 300 }]}>
-                    <Text style={[styles.textBold]}>{service.has_consumables ? 'Se solicitaron insumos.' : 'No se solicitaron insumos.'}</Text>
-                  </Block>
-                </View>
-
-                <Block middle style={{ marginBottom: 25 }}>
-                  <Block row style={{ marginBottom: 15 }}>
-                    <Button
-                      color={nowTheme.COLORS.BLACK}
-                      style={styles.buttonCancel}
-                      onPress={() => this.setState({ showModal: true })}>
-                      <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.BASE, lineHeight: 16, textAlign: 'center' }} size={14}>
-                        CANCELAR SERVICIO
-                      </Text>
-                    </Button>
-
-                    <Button
-                      color={nowTheme.COLORS.WHITE}
-                      style={styles.buttonContact}
-                      onPress={() => this.props.navigation.navigate("ChatServiceTayder", { screen: "ChatTayder", params: { service_id: service.id } })}>
-                      <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.BASE, lineHeight: 16, textAlign: 'center' }} size={14}>
-                        CONTACTAR CLIENTE
-                      </Text>
-                    </Button>
-                  </Block>
+                  </Button>
 
                   <Button
-                    round
-                    color={nowTheme.COLORS.BASE}
-                    style={styles.button}
-                    onPress={() => this._handleActionButton()}>
-                    <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, lineHeight: 16 }} size={14}>
-                      ENTENDIDO
+                    color={nowTheme.COLORS.WHITE}
+                    style={styles.buttonContact}
+                    onPress={() => this.props.navigation.navigate("ChatServiceTayder", { screen: "ChatTayder", params: { service_id: service.id } })}>
+                    <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.BASE, lineHeight: 16, textAlign: 'center' }} size={14}>
+                      CONTACTAR CLIENTE
                     </Text>
                   </Button>
                 </Block>
-              </ScrollView>
-            </View>
-          </Block>
+
+                <Button
+                  round
+                  color={nowTheme.COLORS.BASE}
+                  style={styles.button}
+                  onPress={() => this._handleActionButton()}>
+                  <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, lineHeight: 16 }} size={14}>
+                    ENTENDIDO
+                  </Text>
+                </Button>
+              </Block>
+            </Block>
+          </ScrollView>
+
         </Block>
 
         <Modal
@@ -329,7 +328,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    bottom: height * 0.6,
+    bottom: height * 0.62,
   },
   padded: {
     top: smallScreen ? 350 : 390,
@@ -343,27 +342,26 @@ const styles = StyleSheet.create({
   },
   textExtraBold: {
     fontFamily: 'trueno-extrabold',
-    fontSize: 26,
+    fontSize: smallScreen ? 22 : 26,
     lineHeight: 29,
     color: nowTheme.COLORS.WHITE,
-
     marginBottom: 10,
   },
   textBold: {
     fontFamily: 'trueno-semibold',
-    fontSize: 16,
+    fontSize: smallScreen ? 12 : 16,
     lineHeight: 17,
     color: nowTheme.COLORS.WHITE,
   },
   textRedBold: {
     fontFamily: 'trueno-semibold',
-    fontSize: 16,
+    fontSize: smallScreen ? 12 : 16,
     lineHeight: 17,
     color: nowTheme.COLORS.BASE,
   },
   textNormal: {
     fontFamily: 'trueno',
-    fontSize: 16,
+    fontSize: smallScreen ? 12 : 16,
     lineHeight: 19,
     color: nowTheme.COLORS.WHITE,
   },

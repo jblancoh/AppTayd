@@ -7,8 +7,8 @@ import { Images, nowTheme } from '../constants/';
 import Actions from '../lib/actions';
 import { iPhoneX } from "../constants/utils";
 
-const { width } = Dimensions.get("screen");
-
+const { width, height } = Dimensions.get("screen");
+const smallScreen = height < 812 ? true : false;
 class Home extends React.Component {
   _isMounted = false;
 
@@ -36,9 +36,9 @@ class Home extends React.Component {
     let { userData } = this.state;
 
     return (
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
+      <ScrollView scrollEnabled={!smallScreen} showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
         <Block flex>
-          <Block flex row style={{ paddingTop: iPhoneX() ? 30 : 10 }}>
+          <Block flex row style={{ paddingTop: iPhoneX() ? 30 : 0 }}>
             <Icon
               name={'align-left-22x'}
               family="NowExtra"
@@ -47,15 +47,15 @@ class Home extends React.Component {
               color={nowTheme.COLORS.ICON}
               style={{ fontWeight: '700', marginRight: 15, paddingTop: 5 }}
             />
-            <Block flex>
+            <Block flex={1}>
               <Text style={styles.nameTitle}>Bienvenido {userData?.info?.name}</Text>
               <Text>¿En qué podemos ayudarte?</Text>
             </Block>
           </Block>
-
-          <CardFullImage position={1} image={Images.Inicio001} imageStyle={{ height: 300, width: '100%' }} />
-
-          <CardFullImage position={2} image={Images.Inicio002} imageStyle={{ height: 300, width: '100%' }} />
+          <Block flex={1}>
+            <CardFullImage position={1} image={Images.Inicio001} imageStyle={{ height: smallScreen ? 250 : 300, width: '100%' }} />
+            <CardFullImage position={2} image={Images.Inicio002} imageStyle={{ height: smallScreen ? 250 : 300, width: '100%' }} />
+          </Block>
         </Block>
       </ScrollView>
     );
@@ -65,7 +65,6 @@ class Home extends React.Component {
     return (
       <Block flex center style={styles.home}>
         {this.renderBlocks()}
-
         <TabBar {...this.props} activeScreen="home" />
       </Block>
     );

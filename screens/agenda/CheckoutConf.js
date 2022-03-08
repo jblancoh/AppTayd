@@ -273,15 +273,14 @@ class AgendaCheckoutScreen extends React.Component {
     const { propertyInfo, sourceInfo, propertyDist, subtotal, discount, userData } = this.state;
 
     return (
-      <Block flex safe style={styles.container}>
-        <StatusBar barStyle="light-content" />
-        <Block flex={1} center>
+      <Block flex style={styles.container}>
+        <Block flex={smallScreen ? 0.8 : 1} center>
           <ImageBackground source={Images.AgendaCheckout} style={{ height, width, zIndex: 1 }} />
         </Block>
         <Block flex={2.3} space="between" style={{ zIndex: 2 }}>
           <Block style={styles.cardContainer}>
             <View style={{ height: smallScreen ? height * 0.7 : height * 0.62 }}>
-              <ScrollView>
+              <ScrollView scrollEnabled={!smallScreen}>
                 <View style={[styles.sectionBorder, styles.section]}>
                   <TouchableOpacity onPress={() => navigation.navigate('AgendaFecha')}>
                     <Image source={Images.Icons.RegresarRojo} style={{ width: 25, height: 25 }} />

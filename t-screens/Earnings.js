@@ -103,7 +103,7 @@ export default class EarningsTayder extends React.Component {
     render() {
         return (
             <Block flex center style={styles.home}>
-                <StatusBar barStyle="light-content" />
+                <StatusBar barStyle="dark-content" />
 
                 {this.renderBlocks()}
 

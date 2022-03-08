@@ -96,7 +96,7 @@ class History extends React.Component {
 const styles = StyleSheet.create({
     home: {
         width: width,
-        backgroundColor: nowTheme.COLORS.GREY5,
+        backgroundColor: nowTheme.COLORS.BACKGROUND,
     },
     nameTitle: {
         fontFamily: 'trueno-extrabold',

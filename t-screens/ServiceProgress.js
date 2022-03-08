@@ -109,7 +109,7 @@ class ServiceProgressTayder extends React.Component {
 
     return (
       <Block flex style={styles.container}>
-        <StatusBar barStyle="light-content" />
+        <StatusBar barStyle="dark-content" />
 
         <ImageBackground source={Images.BlackLightsBackground} style={{ width, height }}>
           <Block flex space="between" style={styles.padded}>

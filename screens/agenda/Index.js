@@ -21,7 +21,7 @@ class AgendaIndexScreen extends React.Component {
 
         return (
             <Block flex style={styles.container}>
-                <StatusBar barStyle="light-content" />
+                <StatusBar barStyle="dark-content" />
                 <Block flex center>
                     <ImageBackground source={Images.AgendaInicio} style={{ height, width, zIndex: 1 }} />
                 </Block>
@@ -29,20 +29,20 @@ class AgendaIndexScreen extends React.Component {
                 <Block flex space="between" style={styles.padded}>
                     <Block middle row style={styles.cardContainer}>
                         <ScrollView showsVerticalScrollIndicator={false}>
-                            <Block middle style={{paddingHorizontal: 40, paddingVertical: 20}}>
-                                <Text style={[styles.title, {paddingBottom: 15}]}>
+                            <Block middle style={{ paddingHorizontal: 40, paddingVertical: 20 }}>
+                                <Text style={[styles.title, { paddingBottom: 15 }]}>
                                     El futuro de la limpieza
                                 </Text>
 
-                                <Text style={[styles.subtitle, {paddingBottom: 15}]}>
+                                <Text style={[styles.subtitle, { paddingBottom: 15 }]}>
                                     En TAYD ordenamos y limpiamos tu domicilio de manera profesional y segura.
                                 </Text>
 
-                                <Text style={[styles.subtitle, {paddingBottom: 20}]}>
+                                <Text style={[styles.subtitle, { paddingBottom: 20 }]}>
                                     Nuestros TAYDERS son el mejor equipo capacitado que harán todo.
                                 </Text>
 
-                                <Text style={[styles.title, {paddingBottom: 15}]}>
+                                <Text style={[styles.title, { paddingBottom: 15 }]}>
                                     ¿Te ayudamos?
                                 </Text>
 
@@ -76,19 +76,19 @@ const styles = StyleSheet.create({
         paddingTop: smallScreen ? 30 : 0,
     },
     cardContainer: {
-        height          : height < 812 ? height * 0.50 : height * 0.45,
+        height: height < 812 ? height * 0.50 : height * 0.45,
 
-        backgroundColor : nowTheme.COLORS.WHITE,
-        borderRadius    : 25,
-        shadowColor     : nowTheme.COLORS.BLACK,
-        shadowOffset    : {
+        backgroundColor: nowTheme.COLORS.WHITE,
+        borderRadius: 25,
+        shadowColor: nowTheme.COLORS.BLACK,
+        shadowOffset: {
             width: 0,
             height: 4
         },
-        shadowRadius    : 8,
-        shadowOpacity   : 0.1,
-        elevation       : 1,
-        overflow        : 'hidden',
+        shadowRadius: 8,
+        shadowOpacity: 0.1,
+        elevation: 1,
+        overflow: 'hidden',
     },
     padded: {
         top: smallScreen ? 250 : 300,
