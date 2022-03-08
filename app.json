@@ -38,7 +38,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.tayd.taydApp",
-      "buildNumber": "1.1",
+      "buildNumber": "1.2",
       "splash": {
         "image": "./assets/splash/splash.png",
         "resizeMode": "contain"

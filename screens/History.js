@@ -59,7 +59,7 @@ class History extends React.Component {
             <Block flex center style={styles.home}>
                 <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
                     <Block flex>
-                        <Block flex row style={{ paddingTop: iPhoneX() ? 30 : 10 }}>
+                        <Block flex={0.5} row style={{ paddingTop: iPhoneX() ? 30 : 10 }}>
                             <Icon
                                 name={'align-left-22x'}
                                 family="NowExtra"
@@ -73,24 +73,20 @@ class History extends React.Component {
                                 <Text>Revisa el historial de servicios TAYD</Text>
                             </Block>
                         </Block>
-
                         {
                             this.state.services.length == 0 && (
-                                <Block flex style={styles.emptyContainer}>
+                                <Block flex={1} style={styles.emptyContainer}>
                                     <Text style={styles.redText}>Aún no cuentas con historial</Text>
                                 </Block>
                             )
                         }
-
-                        <View style={{ height: smallScreen ? height * 0.8 : height * 0.73 }}>
+                        <Block flex={6} >
                             <ScrollView>
                                 {this.state.services.map((item) => <ServiceHistoryComponent key={item.id} item={item} {...this.props} />)}
                             </ScrollView>
-                        </View>
-
+                        </Block>
                     </Block>
                 </ScrollView>
-
                 <TabBar {...this.props} activeScreen="history" />
             </Block>
         );
@@ -100,7 +96,7 @@ class History extends React.Component {
 const styles = StyleSheet.create({
     home: {
         width: width,
-        backgroundColor: nowTheme.COLORS.BACKGROUND,
+        backgroundColor: nowTheme.COLORS.GREY5,
     },
     nameTitle: {
         fontFamily: 'trueno-extrabold',

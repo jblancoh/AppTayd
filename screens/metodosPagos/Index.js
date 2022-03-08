@@ -9,6 +9,7 @@ import {
 import { Block, Button, theme } from "galio-framework";
 import Actions from '../../lib/actions';
 import PaymentMethodService from '../../services/paymentMethod';
+import { CommonActions } from '@react-navigation/native';
 
 const { height, width } = Dimensions.get("screen");
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Dimensions, ScrollView, Image, View, TextInput, Alert } from "react-native";
+import { StyleSheet, Dimensions, ScrollView, Image, View, TextInput, Alert, Modal, TouchableOpacity } from "react-native";
 import { Block, theme, Text, Button } from "galio-framework";
 
 import { TabBar, Rating } from "../components";
@@ -19,6 +19,7 @@ class RateServiceScreen extends React.Component {
       isLoading: false,
       rateValue: 0,
       comments: '',
+      showModal: false,
     }
   }
 
@@ -47,7 +48,7 @@ class RateServiceScreen extends React.Component {
   }
 
   _handleNextAction() {
-    if (this.state.rateValue > 0 && this.state.comments.trim() != '') {
+    if (this.state.rateValue > 0) {
       this.setState({ isLoading: true });
       let objRate = {
         service_id: this.state.service.id,
@@ -56,20 +57,24 @@ class RateServiceScreen extends React.Component {
       }
       ServicesService.rateService(objRate)
         .then(response => {
-          Alert.alert("Servicio", "Gracias por tus comentarios.");
           this.setState({ rateValue: 0, comments: '', isLoading: false });
-          this.props.navigation.navigate("History");
+          this.setState({ showModal: true })
         })
         .catch(error => {
           Alert.alert("servicio", error.data.error);
         })
     } else {
-      Alert.alert("Servicio", "Es necesario seleccionar una calificación y dejar tu comentario.");
+      Alert.alert("Servicio", "Es necesario seleccionar una calificación.");
     }
   }
 
+  _closeModal = () => {
+    this.setState({ showModal: false });
+    this.props.navigation.navigate("History");
+  }
+
   render() {
-    let { userData, isLoading } = this.state;
+    let { userData, isLoading, showModal } = this.state;
 
     return (
       <Block flex center style={styles.home}>
@@ -133,7 +138,34 @@ class RateServiceScreen extends React.Component {
             </View>
           </Block>
         </ScrollView>
-
+        <Modal
+          animationType="slide"
+          transparent
+          visible={showModal}
+          presentationStyle="overFullScreen">
+          <View style={{ flex: 1 }}>
+            <View style={styles.modalContainer}>
+              {
+                <View style={{ backgroundColor: 'white', padding: 15, paddingBottom: 30, }}>
+                  <View style={{ justifyContent: 'center', alignItems: 'center', paddingBottom: 25 }}>
+                    <Image source={require('../assets/icons/success.png')} style={{ height: 79, width: 79 }} />
+                    <Text style={styles.modalTitle}>Gracias por tu calificación.</Text>
+                    <Text style={styles.modalDescription}>Lo tomaremos en cuenta para mejorar nuestro servcicio</Text>
+                  </View>
+                  <Block middle style={{ alignItems: 'center' }}>
+                    <Button
+                      round
+                      color={nowTheme.COLORS.BASE}
+                      style={styles.modalButton}
+                      onPress={() => this._closeModal()}>
+                      <Text style={{ fontFamily: 'trueno-semibold', color: '#FFF' }} size={14} color={nowTheme.COLORS.WHITE}>LISTO</Text>
+                    </Button>
+                  </Block>
+                </View>
+              }
+            </View>
+          </View>
+        </Modal>
         <TabBar {...this.props} activeScreen="agenda" />
       </Block>
     );
@@ -208,7 +240,32 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     shadowRadius: 0,
     shadowOpacity: 0
-  }
+  },
+  modalContainer: {
+    flex: 1,
+    height: height,
+    backgroundColor: 'rgba(0,0,0,.2)',
+    justifyContent: 'flex-end',
+    flexDirection: 'column'
+  },
+  modalTitle: {
+    fontFamily: 'trueno-extrabold',
+    fontSize: 30,
+    color: nowTheme.COLORS.SECONDARY,
+    textAlign: 'center',
+  },
+  modalDescription: {
+    fontFamily: 'trueno',
+    fontSize: 16,
+    color: nowTheme.COLORS.SECONDARY,
+    textAlign: 'center',
+  },
+  modalButton: {
+    width: width * 0.4,
+    height: theme.SIZES.BASE * 2.5,
+    shadowRadius: 0,
+    shadowOpacity: 0
+  },
 });
 
 export default RateServiceScreen;

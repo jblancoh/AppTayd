@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Alert } from 'react-native';
+import { Image, Alert, LogBox } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppLoading from 'expo-app-loading'
 import * as Notifications from 'expo-notifications'
@@ -7,7 +7,6 @@ import * as Location from 'expo-location'
 import * as Font from 'expo-font';
 import { Asset } from 'expo-asset';
 import { Block, GalioProvider } from 'galio-framework';
-
 import Screens from './navigation/Screens';
 import { Images, nowTheme } from './constants';
 
@@ -17,7 +16,7 @@ const assetImages = [
   Images.ProfilePicture,
   Images.ProfileBackground
 ];
-
+LogBox.ignoreLogs(["Setting a timer"]);
 function cacheImages(images) {
   return images.map(image => {
     if (typeof image === 'string') {

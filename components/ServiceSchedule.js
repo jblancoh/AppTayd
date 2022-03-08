@@ -190,7 +190,7 @@ class ServiceComponent extends React.Component {
                         color={nowTheme.COLORS.BASE}
                         style={styles.modalButton}
                         onPress={() => this._closeModal()}>
-                        <Text style={{ fontFamily: 'trueno-semibold', color: '#FFF' }} size={14} color={nowTheme.COLORS.WHITE}>LISTO</Text>
+                        <Text style={{ fontFamily: 'trueno-semibold', color: '#FFF' }} size={14} color={nowTheme.COLORS.WHITE}>ENTENDIDO</Text>
                       </Button>
                     </Block>
                   </View>

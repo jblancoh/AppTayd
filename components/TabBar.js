@@ -73,7 +73,6 @@ export default class TabBar extends React.Component {
                     <Image source={this.state.screen == 'soporte' ? Images.Icons.Ayuda : Images.Icons.Ayuda_G} style={{ width: 22, height: 22 }} />
                     <Text style={[styles.tabTitle, this.state.screen == 'soporte' ? styles.titleActive : styles.titleInactive]}>Ayuda</Text>
                 </TouchableOpacity>
-
                 <Modal
                     animationType="fade"
                     transparent
