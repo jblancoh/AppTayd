@@ -112,7 +112,7 @@ export default class TabBarTayder extends React.Component {
     render() {
         return (
             <View style={[styles.tabBar, styles.tabBarColor]}>
-                <TouchableOpacity style={styles.tabItem} onPress={() => this.props.navigation.navigate("HomeTayder")}>
+                <TouchableOpacity style={styles.tabItem} onPress={() => this.props.navigation.navigate('DrawerTayder', { screen: 'HomeTayder' })}>
                     <Image source={this.state.screen == 'home' ? Images.Icons.Inicio : Images.Icons.Inicio_G} style={{ width: 22, height: 22 }} />
                     <Text style={[styles.tabTitle, this.state.screen == 'home' ? styles.titleActive : styles.titleInactive]}>Inicio</Text>
                 </TouchableOpacity>

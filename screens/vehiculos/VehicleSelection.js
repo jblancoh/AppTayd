@@ -60,7 +60,7 @@ export default class VehicleServiceSelectionScreen extends React.Component {
     return (
       <KeyboardAwareScrollView style={{ height: '100%' }}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Block safe flex={1}>
+          <Block flex={1}>
             <Block flex={1} style={{ backgroundColor: 'green' }}>
               <Image source={Images.AgendaTipoAuto} style={styles.image} />
             </Block>

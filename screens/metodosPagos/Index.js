@@ -4,7 +4,8 @@ import {
     StyleSheet,
     ScrollView,
     Dimensions,
-    Text, View, TouchableOpacity
+    Text, View, TouchableOpacity,
+    Alert
 } from "react-native";
 import { Block, Button, theme } from "galio-framework";
 import Actions from '../../lib/actions';

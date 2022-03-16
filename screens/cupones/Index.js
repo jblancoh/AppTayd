@@ -16,7 +16,7 @@ import CouponService from "../../services/coupon";
 const { height, width } = Dimensions.get("screen");
 
 const DismissKeyboard = ({ children }) => (
-    <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={{ flex: 1 }}>
+    <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : ""} style={{ flex: 1 }}>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
     </KeyboardAvoidingView>
 );

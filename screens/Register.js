@@ -12,7 +12,7 @@ import AuthenticationService from '../services/authentication';
 const { width, height } = Dimensions.get('screen');
 
 const DismissKeyboard = ({ children }) => (
-  <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={{ flex: 1 }}>
+  <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : ""} style={{ flex: 1 }}>
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
   </KeyboardAvoidingView>
 );
@@ -80,7 +80,7 @@ const RegisterScreen = (baseProps) => {
       setIsLoading(true);
 
       let data = {
-        code: value,
+        code: parseInt(value),
         phone: form.phone
       };
 
@@ -130,7 +130,6 @@ const RegisterScreen = (baseProps) => {
 
   const _tryAgain = () => {
     setEnterCode(false);
-    setCode('');
   }
 
   const _goBack = () => {

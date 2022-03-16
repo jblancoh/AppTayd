@@ -125,7 +125,7 @@ class ServiceInfoTayder extends React.Component {
 
   _closeModal = () => {
     this.setState({ showModal: false, isCanceled: false });
-    this.props.navigation.navigate("HomeTayder");
+    this.props.navigation.navigate('DrawerTayder', { screen: 'HomeTayder' })
   }
 
   _showLocation = () => {

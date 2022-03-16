@@ -9,7 +9,8 @@ import {
   Image,
   Modal,
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from "react-native";
 import { Block, Button, theme } from "galio-framework";
 import { Icon, PaymentMethodModalComponent } from '../../components';
@@ -283,12 +284,12 @@ class VehicleCheckoutScreen extends React.Component {
 
     return (
       <Block flex style={styles.container}>
-        <Block flex={smallScreen ? 0.8 : 1} center>
+        <Block flex={smallScreen ? 0.7 : 1} center>
           <ImageBackground source={Images.AgendaCheckout} style={{ height, width, zIndex: 1 }} />
         </Block>
         <Block flex={2.3} space="between" style={{ zIndex: 2 }}>
           <Block style={styles.cardContainer}>
-            <View style={{ height: smallScreen ? height * 0.7 : height * 0.62 }}>
+            <View style={{ height: smallScreen ? height * 0.8 : height * 0.62 }}>
               <ScrollView>
                 <View style={[styles.sectionBorder, styles.section]}>
                   <TouchableOpacity onPress={() => navigation.navigate('VehiculoSeleccion')}>
@@ -355,7 +356,7 @@ class VehicleCheckoutScreen extends React.Component {
                   <Text style={[styles.sectionItem, styles.textBold,]}>{`$${(subtotal - discount).toFixed(2)}`}</Text>
                 </View>
 
-                <Block middle style={{ paddingTop: 25 }}>
+                <Block middle style={{ paddingVertical: 35 }}>
                   <Button
                     round
                     color={nowTheme.COLORS.BASE}

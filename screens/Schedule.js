@@ -1,12 +1,13 @@
 import React from "react";
-import { StyleSheet, Dimensions, ScrollView, Image, View } from "react-native";
+import { StyleSheet, Dimensions, ScrollView, Image, View, Alert } from "react-native";
 import { Block, theme, Text, Button } from "galio-framework";
 import { TouchableOpacity } from "react-native-gesture-handler";
-
+import Pusher from 'pusher-js/react-native';
 import { CardFullImage, TabBar, ServiceComponent, Icon } from "../components";
 import { Images, nowTheme } from '../constants/';
 import { iPhoneX } from "../constants/utils";
 import Actions from "../lib/actions";
+import env from '../lib/enviroment';
 import ServicesService from "../services/service";
 
 const { width, height } = Dimensions.get("screen");
@@ -35,22 +36,39 @@ class Schedule extends React.Component {
             }
         });
 
+        var pusher = new Pusher(env.PUSHER_KEY, {
+            cluster: env.PUSHER_CLUSTER
+        });
+
+        this.channel = await pusher.subscribe('notifications' + this.state.userData.id);
+        this.channel.bind('service-status', (data) => {
+            this._getServices()
+        });
+
         this.focusListener = await navigation.addListener('focus', () => {
             this._getServices();
         });
     }
 
     componentWillUnmount() {
-        this.focusListener()
+        if (typeof this.channel === 'function') {
+            this.channel()
+        }
+        if (typeof this.focusListener === 'function') {
+            this.focusListener()
+        }
+        // if (typeof this._getServices === 'function') {
+        //     this._getServices()
+        // }
     }
 
     async _getServices() {
         await ServicesService.listScheduled(this.state.userData.id)
             .then(response => {
                 this.setState({ services: response, showMore: response.length > 0 ? true : false })
+                // this.forceUpdate()
             })
             .catch(error => {
-                console.error(error);
                 Alert.alert("No se encontraron servicios vinculados a este usuario.");
             })
     }

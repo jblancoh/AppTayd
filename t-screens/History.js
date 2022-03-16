@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Dimensions, ScrollView, Image, StatusBar, View } from "react-native";
+import { StyleSheet, Dimensions, ScrollView, Image, StatusBar, View, Alert } from "react-native";
 import { Block, theme, Text } from "galio-framework";
 
 import Actions from '../lib/actions';

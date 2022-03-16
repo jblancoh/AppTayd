@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Modal, View, Image, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Modal, View, Image, Dimensions, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { Block, Text, theme, Button } from "galio-framework";
 import { nowTheme, Images } from '../constants'
 import PaymentMethodService from '../services/paymentMethod';
@@ -109,7 +109,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     borderRadius: 25,
     marginTop: smallScreen ? 120 : 150,
-
     alignContent: 'center',
     overflow: 'hidden'
   },

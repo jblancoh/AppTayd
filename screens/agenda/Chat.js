@@ -15,6 +15,7 @@ const DismissKeyboard = ({ children }) => (
   <KeyboardAvoidingView
     style={{ flex: 1 }}
     showsVerticalScrollIndicator={false}
+    behavior={Platform.OS == "ios" ? "padding" : ""}
   >
     {children}
   </KeyboardAvoidingView>

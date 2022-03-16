@@ -78,66 +78,62 @@ class RateServiceScreen extends React.Component {
     return (
       <Block flex center style={styles.home}>
         <StatusBar barStyle="dark-content" />
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.blocksContainer}>
-          <Block flex>
-            <Block flex row style={{ paddingTop: 10 }}>
-              <Image source={Images.ProfilePicture} style={{ borderRadius: 25, height: 60, width: 60, marginRight: 25 }} />
-              <Block flex>
-                <Text style={styles.nameTitle}>Agenda de {userData != null && userData.info ? userData.info.name : ''}</Text>
-                <Text style={styles.subtitle}>Organiza tus citas en TAYD</Text>
+        <Block flex>
+          <Block flex={1} row style={{ paddingTop: 10 }}>
+            <Image source={Images.ProfilePicture} style={{ borderRadius: 25, height: 60, width: 60, marginRight: 25 }} />
+            <Block flex>
+              <Text style={styles.nameTitle}>Agenda de {userData != null && userData.info ? userData.info.name : ''}</Text>
+              <Text style={styles.subtitle}>Organiza tus citas en TAYD</Text>
+            </Block>
+          </Block>
+
+          <Block flex={7}>
+            <Block flex style={{ marginTop: 5 }}>
+              <Block middle style={styles.cardContainer}>
+                <Text style={[styles.serviceTitle]}>¿Cómo fue tu experiencia?</Text>
+
+                <Text style={[styles.serviceSubtitle, { marginTop: 15, paddingHorizontal: 20 }]}>
+                  A continuación podrás calificar nuestra calidad de trabajo, fue un placer ayudarte.
+                </Text>
+
+                <Block style={{ marginVertical: 25 }}>
+                  <Rating
+                    count={5}
+                    showRating={false}
+                    defaultRating={0}
+                    onFinishRating={this.ratingCompleted}
+                  />
+                </Block>
+
+                <Text style={[styles.serviceTitle, { marginTop: 0 }]}>Déjanos tus comentarios</Text>
+
+                <Block width={width * 0.8} style={{ marginTop: 10 }}>
+                  <TextInput
+                    style={styles.inputs}
+                    placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
+                    multiline={true}
+                    numberOfLines={5}
+                    blurOnSubmit={false}
+                    onChangeText={(text) => this.setState({ comments: text })}
+                  />
+                </Block>
+
+                <Button
+                  round
+                  disabled={isLoading}
+                  loading={isLoading}
+                  loadingColor={nowTheme.COLORS.WHITE}
+                  color={nowTheme.COLORS.BASE}
+                  style={styles.button}
+                  onPress={() => this._handleNextAction()}>
+                  <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.WHITE}>
+                    ENVIAR
+                  </Text>
+                </Button>
               </Block>
             </Block>
-
-            <View style={{ height: height * 0.7 }}>
-              <ScrollView>
-                <Block flex style={{ marginTop: 20 }}>
-                  <Block middle style={styles.cardContainer}>
-                    <Text style={[styles.serviceTitle]}>¿Cómo fue tu experiencia?</Text>
-
-                    <Text style={[styles.serviceSubtitle, { marginTop: 15, paddingHorizontal: 20 }]}>
-                      A continuación podrás calificar nuestra calidad de trabajo, fue un placer ayudarte.
-                    </Text>
-
-                    <Block style={{ marginVertical: 25 }}>
-                      <Rating
-                        count={5}
-                        showRating={false}
-                        defaultRating={0}
-                        onFinishRating={this.ratingCompleted}
-                      />
-                    </Block>
-
-                    <Text style={[styles.serviceTitle, { marginTop: 0 }]}>Déjanos tus comentarios</Text>
-
-                    <Block width={width * 0.8} style={{ marginTop: 10 }}>
-                      <TextInput
-                        style={styles.inputs}
-                        placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
-                        multiline={true}
-                        numberOfLines={5}
-                        blurOnSubmit={false}
-                        onChangeText={(text) => this.setState({ comments: text })}
-                      />
-                    </Block>
-
-                    <Button
-                      round
-                      disabled={isLoading}
-                      loading={isLoading}
-                      loadingColor={nowTheme.COLORS.WHITE}
-                      color={nowTheme.COLORS.BASE}
-                      style={styles.button}
-                      onPress={() => this._handleNextAction()}>
-                      <Text style={{ fontFamily: 'trueno-semibold' }} size={14} color={nowTheme.COLORS.WHITE}>
-                        ENVIAR
-                      </Text>
-                    </Button>
-                  </Block>
-                </Block>
-              </ScrollView>
-            </View>
           </Block>
-        </ScrollView>
+        </Block>
         <Modal
           animationType="slide"
           transparent
@@ -176,6 +172,7 @@ const styles = StyleSheet.create({
   home: {
     width: width,
     backgroundColor: nowTheme.COLORS.BACKGROUND,
+    paddingTop: 30
   },
   nameTitle: {
     fontFamily: 'trueno-extrabold',

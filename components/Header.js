@@ -48,7 +48,7 @@ class Header extends React.Component {
     }
 
     if (back && goToScheduleTayder) {
-      return navigation.navigate("HomeTayder");
+      return navigation.navigate('DrawerTayder', { screen: 'HomeTayder' })
     }
 
     return back ? navigation.goBack() : navigation.openDrawer();

@@ -5,6 +5,7 @@ import { Block, theme, Text, Button } from "galio-framework";
 import { Images, nowTheme } from '../constants';
 import ServicesService from '../services/service';
 
+
 const { width, height } = Dimensions.get("screen");
 const smallScreen = height < 812 ? true : false;
 
@@ -19,6 +20,7 @@ class ServiceComponent extends React.Component {
       item: this.props.item,
       weekDay: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
       months: ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
+      userData: null,
     };
   }
 

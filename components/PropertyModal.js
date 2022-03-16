@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Modal, View, Image, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Modal, View, Image, Dimensions, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { Block, Text, theme, Button } from "galio-framework";
 import { nowTheme, Images } from '../constants'
 import PropertyService from '../services/property';
@@ -7,15 +7,15 @@ import PropertyService from '../services/property';
 const { width, height } = Dimensions.get("screen");
 const smallScreen = height < 812 ? true : false;
 
-export default class PropertyModalComponent extends React.Component {
+export default class PropertyModalComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showModal   : this.props.showPropertyModal,
-            user_id     : this.props.userId,
-            isLoading   : false,
-            activeValue : this.props.defaultValue,
-            properties  : [],
+            showModal: this.props.showPropertyModal,
+            user_id: this.props.userId,
+            isLoading: false,
+            activeValue: this.props.defaultValue,
+            properties: [],
         }
     }
 
@@ -26,8 +26,8 @@ export default class PropertyModalComponent extends React.Component {
     static getDerivedStateFromProps(nextProps, prevState) {
         const { showPropertyModal, defaultValue } = nextProps;
 
-        if(showPropertyModal !== prevState.showPropertyModal) {
-            return { showModal: showPropertyModal}
+        if (showPropertyModal !== prevState.showPropertyModal) {
+            return { showModal: showPropertyModal }
         }
         return null;
     }
@@ -35,7 +35,7 @@ export default class PropertyModalComponent extends React.Component {
     async _getProperties() {
         await PropertyService.getUserProperties(this.state.user_id)
             .then(response => {
-                this.setState({properties : response})
+                this.setState({ properties: response })
             })
             .catch(error => {
                 Alert.alert("No se encontraron domicilios vinculados a este usuario.");
@@ -47,7 +47,7 @@ export default class PropertyModalComponent extends React.Component {
     }
 
     render() {
-        let {showModal, isLoading, properties, activeValue} = this.state;
+        let { showModal, isLoading, properties, activeValue } = this.state;
         return (
             <Modal
                 animationType="fade"
@@ -58,16 +58,16 @@ export default class PropertyModalComponent extends React.Component {
                     <View style={styles.alertContainer}>
                         <Block middle>
                             <Text style={styles.modalTitle}>Cambiar Domicilio</Text>
-                            <View style={{height: height * 0.4, paddingHorizontal: 15}}>
+                            <View style={{ height: height * 0.4, paddingHorizontal: 15 }}>
                                 <ScrollView>
                                     {
                                         properties.map((item) => {
                                             return (
                                                 <Block middle style={[styles.cardContainer, activeValue == item.id ? styles.activeCard : styles.noActiveCard]} key={item.id}>
-                                                    <TouchableOpacity onPress={() => this.setState({activeValue : item.id})}>
+                                                    <TouchableOpacity onPress={() => this.setState({ activeValue: item.id })}>
                                                         <Block row style={[{ width: width - theme.SIZES.BASE * 4, paddingVertical: 10, paddingHorizontal: 15, alignItems: 'center' }]}>
                                                             <View style={{ paddingHorizontal: 25 }}>
-                                                                {item.property_type_id == 1 && (<Image source={activeValue == item.id ? Images.Icons.Casa_B : Images.Icons.Casa_G} style={styles.imageProperty} />) }
+                                                                {item.property_type_id == 1 && (<Image source={activeValue == item.id ? Images.Icons.Casa_B : Images.Icons.Casa_G} style={styles.imageProperty} />)}
                                                                 {item.property_type_id == 2 && (<Image source={activeValue == item.id ? Images.Icons.Departamento_B : Images.Icons.Departamento_G} style={styles.imageProperty} />)}
                                                                 {item.property_type_id == 3 && (<Image source={activeValue == item.id ? Images.Icons.Oficina_B : Images.Icons.Oficina_G} style={styles.imageProperty} />)}
                                                             </View>
@@ -90,7 +90,7 @@ export default class PropertyModalComponent extends React.Component {
                                     loading={isLoading}
                                     disabled={isLoading}
                                     color={nowTheme.COLORS.BASE}
-                                    style={[styles.button, {marginBottom: 25}]}
+                                    style={[styles.button, { marginBottom: 25 }]}
                                     onPress={() => this._handleAction()}>
                                     <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
                                         LISTO

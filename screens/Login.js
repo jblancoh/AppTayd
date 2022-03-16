@@ -8,6 +8,7 @@ import { Images, nowTheme } from '../constants/';
 import AuthenticationService from '../services/authentication';
 import { withNavigation } from '@react-navigation/compat';
 const { height, width } = Dimensions.get('screen');
+const smallScreen = height < 812 ? true : false;
 
 const DismissKeyboard = ({ children }) => (
   <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : ""} style={{ flex: 1, backgroundColor: nowTheme.COLORS.BASE }}>
@@ -19,8 +20,8 @@ class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: __DEV__ ? props.route.params?.isTayder ? 'chranmc11@gmail.com' : 'jonathan@yopmail.com' : '',
-      password: __DEV__ ? props.route.params?.isTayder ? 'Mendoza11' : 'Password123' : '',
+      email: __DEV__ ? props.route.params?.isTayder ? 'jonathan@yopmail.com' : 'usuario@yopmail.com' : '',
+      password: __DEV__ ? props.route.params?.isTayder ? 'Password123' : 'Password123' : '',
       isLoading: false,
     };
   }
@@ -40,133 +41,138 @@ class LoginScreen extends React.Component {
       password: this.state.password
     };
 
-    await AuthenticationService.login(params)
-      .then(async (response) => {
-        if (response.user != null) {
-          try {
-            await AsyncStorage.setItem('access_token', response.access_token);
-            await AsyncStorage.setItem('expires_at', response.expires_at);
-            await AsyncStorage.setItem('user', JSON.stringify(response.user));
+    try {
+      await AuthenticationService.login(params)
+        .then(async (response) => {
+          if (response.user != null) {
+            try {
+              await AsyncStorage.setItem('access_token', response.access_token);
+              await AsyncStorage.setItem('expires_at', response.expires_at);
+              await AsyncStorage.setItem('user', JSON.stringify(response.user));
 
-            this.setState({ isLoading: false });
-            if (response.user.first_login && !response.user.isTayder) {
-              this.props.navigation.navigate('PropertyLocation');
-            } else if (!response.user.first_login && !response.user.isTayder) {
-              this.props.navigation.navigate('DrawerClient', { screen: 'Home' });
-            } else if (response.user.first_login_tayder && response.user.isTayder && !response.user.confirmed && !response.user.on_review) {
-              this.props.navigation.navigate('DocumentosIndex');
-            } else if (response.user.first_login_tayder && response.user.isTayder && !response.user.confirmed && response.user.on_review) {
-              this.props.navigation.navigate('DocumentosValidacion');
-            } else if (response.user.first_login_tayder && response.user.isTayder && response.user.confirmed) {
-              this.props.navigation.navigate('Welcome');
-            } else if (!response.user.first_login_tayder && response.user.isTayder) {
-              this.props.navigation.navigate('DrawerTayder', { screen: 'HomeTayder' });
+              this.setState({ isLoading: false });
+              if (response.user.first_login && !response.user.isTayder) {
+                this.props.navigation.navigate('PropertyLocation');
+              } else if (!response.user.first_login && !response.user.isTayder) {
+                this.props.navigation.navigate('DrawerClient', { screen: 'Home' });
+              } else if (response.user.first_login_tayder && response.user.isTayder && !response.user.confirmed && !response.user.on_review) {
+                this.props.navigation.navigate('DocumentosIndex');
+              } else if (response.user.first_login_tayder && response.user.isTayder && !response.user.confirmed && response.user.on_review) {
+                this.props.navigation.navigate('DocumentosValidacion');
+              } else if (response.user.first_login_tayder && response.user.isTayder && response.user.confirmed) {
+                this.props.navigation.navigate('Welcome');
+              } else if (!response.user.first_login_tayder && response.user.isTayder) {
+                this.props.navigation.navigate('DrawerTayder', { screen: 'HomeTayder' });
+              }
+
+            } catch (error) {
+              this.setState({ isLoading: false });
+              Alert.alert('Inicio de sesión', 'Ocurrió un error inesperado al iniciar sesión.');
             }
-
-          } catch (error) {
+          } else {
             this.setState({ isLoading: false });
-            Alert.alert('Inicio de sesión', 'Ocurrió un error inesperado al iniciar sesión.');
+            Alert.alert('Inicio de sesión', 'Correo o contraseña incorrectas.');
           }
-        } else {
+        })
+        .catch(error => {
           this.setState({ isLoading: false });
-          Alert.alert('Inicio de sesión', 'Correo o contraseña incorrectas.');
-        }
-      })
-      .catch(error => {
-        this.setState({ isLoading: false });
-        Alert.alert('Upps!', 'Correo o contraseña incorrectas.');
-      })
+          Alert.alert('Upps!', 'Correo o contraseña incorrectas.');
+        })
+    } catch (error) {
+      console.log('error', error)
+    }
   }
 
   render() {
     return (
       <DismissKeyboard>
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.containerRed}>
-          <StatusBar barStyle="dark-content" />
-          <Block flex space="evenly">
-            <Image source={Images.Logo} style={styles.logoTayder} />
+        <Block flex={1}>
+          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.containerRed}>
+            <StatusBar barStyle="dark-content" />
+            <Block flex space="evenly">
+              <Image source={Images.Logo} style={styles.logoTayder} />
+              <Block middle>
+                <Text style={{ fontFamily: 'trueno-extrabold', textAlign: 'center', fontWeight: '700' }} color={nowTheme.COLORS.WHITE} size={40}>
+                  Iniciar sesión
+                </Text>
+              </Block>
 
-            <Block middle>
-              <Text style={{ fontFamily: 'trueno-extrabold', textAlign: 'center', fontWeight: '700' }} color={nowTheme.COLORS.WHITE} size={40}>
-                Iniciar sesión
-              </Text>
-            </Block>
+              <Block flex={1} middle space="between">
+                <Block center flex={0.9}>
+                  <Block flex space="between">
+                    <Block width={width * 0.8}>
+                      <Input
+                        placeholder="Correo electrónico"
+                        placeholderTextColor={nowTheme.COLORS.WHITE}
+                        color={nowTheme.COLORS.WHITE}
+                        type="email-address"
+                        onChangeText={(text) => this.setState({ email: text })}
+                        style={styles.inputs}
+                        iconContent={
+                          <Image style={styles.inputIcons} source={Images.Icons.Usuario_L} />
+                        }
+                        autoCapitalize='none'
+                      />
+                    </Block>
+                    <Block width={width * 0.8}>
+                      <Input
+                        placeholder="Contraseña"
+                        placeholderTextColor={nowTheme.COLORS.WHITE}
+                        color={nowTheme.COLORS.WHITE}
+                        password
+                        onChangeText={(text) => this.setState({ password: text })}
+                        style={styles.inputs}
+                        iconContent={
+                          <Image style={styles.inputIcons} source={Images.Icons.Password_L} />
+                        }
+                        iconColor={'#FFF'}
 
-            <Block flex={1} middle space="between">
-              <Block center flex={0.9}>
-                <Block flex space="between">
-                  <Block width={width * 0.8}>
-                    <Input
-                      placeholder="Correo electrónico"
-                      placeholderTextColor={nowTheme.COLORS.WHITE}
-                      color={nowTheme.COLORS.WHITE}
-                      type="email-address"
-                      onChangeText={(text) => this.setState({ email: text })}
-                      style={styles.inputs}
-                      iconContent={
-                        <Image style={styles.inputIcons} source={Images.Icons.Usuario_L} />
-                      }
-                      autoCapitalize='none'
-                    />
-                  </Block>
-                  <Block width={width * 0.8}>
-                    <Input
-                      placeholder="Contraseña"
-                      placeholderTextColor={nowTheme.COLORS.WHITE}
-                      color={nowTheme.COLORS.WHITE}
-                      password
-                      onChangeText={(text) => this.setState({ password: text })}
-                      style={styles.inputs}
-                      iconContent={
-                        <Image style={styles.inputIcons} source={Images.Icons.Password_L} />
-                      }
-                      iconColor={'#FFF'}
+                      />
+                    </Block>
 
-                    />
-                  </Block>
+                    <Block width={width * 0.8} style={{ marginTop: theme.SIZES.BASE * 0.8, marginBottom: 10 }}>
+                      <View style={{ flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>
+                        <Text style={{ fontFamily: 'trueno', fontSize: 12 }} color={nowTheme.COLORS.WHITE}>¿Aún no tienes una cuenta? </Text>
+                        <TouchableHighlight onPress={() => this.props.navigation.navigate('Register')}>
+                          <View>
+                            <Text style={{ fontFamily: 'trueno-semibold', fontSize: 12, fontWeight: '700' }} color={nowTheme.COLORS.WHITE}> Regístrate</Text>
+                          </View>
+                        </TouchableHighlight>
+                      </View>
+                    </Block>
 
-                  <Block width={width * 0.8} style={{ marginTop: theme.SIZES.BASE * 0.8, marginBottom: 10 }}>
-                    <View style={{ flexDirection: 'row', alignContent: 'center', justifyContent: 'center' }}>
-                      <Text style={{ fontFamily: 'trueno', fontSize: 12 }} color={nowTheme.COLORS.WHITE}>¿Aún no tienes una cuenta? </Text>
-                      <TouchableHighlight onPress={() => this.props.navigation.navigate('Register')}>
-                        <View>
-                          <Text style={{ fontFamily: 'trueno-semibold', fontSize: 12, fontWeight: '700' }} color={nowTheme.COLORS.WHITE}> Regístrate</Text>
-                        </View>
-                      </TouchableHighlight>
-                    </View>
-                  </Block>
+                    <Block width={width * 0.8} style={{ marginBottom: theme.SIZES.BASE * 2 }}>
+                      <View style={{ alignSelf: 'center', justifyContent: 'center' }}>
+                        <TouchableHighlight onPress={() => { }}>
+                          <View>
+                            <Text style={{ fontFamily: 'trueno-semibold', fontSize: 12, fontWeight: '700' }} color={nowTheme.COLORS.WHITE}>
+                              ¿No puedes acceder a tu cuenta?
+                            </Text>
+                          </View>
+                        </TouchableHighlight>
+                      </View>
+                    </Block>
 
-                  <Block width={width * 0.8} style={{ marginBottom: theme.SIZES.BASE * 2 }}>
-                    <View style={{ alignSelf: 'center', justifyContent: 'center' }}>
-                      <TouchableHighlight onPress={() => { }}>
-                        <View>
-                          <Text style={{ fontFamily: 'trueno-semibold', fontSize: 12, fontWeight: '700' }} color={nowTheme.COLORS.WHITE}>
-                            ¿No puedes acceder a tu cuenta?
-                          </Text>
-                        </View>
-                      </TouchableHighlight>
-                    </View>
-                  </Block>
-
-                  <Block center>
-                    <Button
-                      round
-                      color={nowTheme.COLORS.WHITE}
-                      style={styles.createButton}
-                      loading={this.state.isLoading}
-                      loadingColor={nowTheme.COLORS.BASE}
-                      disabled={this.state.isLoading}
-                      onPress={() => this._handleLogin()}>
-                      <Text style={{ fontFamily: 'montserrat-bold' }} size={14} color={nowTheme.COLORS.BASE}>
-                        INGRESAR
-                      </Text>
-                    </Button>
+                    <Block center>
+                      <Button
+                        round
+                        color={nowTheme.COLORS.WHITE}
+                        style={styles.createButton}
+                        loading={this.state.isLoading}
+                        loadingColor={nowTheme.COLORS.BASE}
+                        disabled={this.state.isLoading}
+                        onPress={() => this._handleLogin()}>
+                        <Text style={{ fontFamily: 'montserrat-bold' }} size={14} color={nowTheme.COLORS.BASE}>
+                          INGRESAR
+                        </Text>
+                      </Button>
+                    </Block>
                   </Block>
                 </Block>
               </Block>
             </Block>
-          </Block>
-        </ScrollView>
+          </ScrollView>
+        </Block>
       </DismissKeyboard>
     );
   }
@@ -181,7 +187,7 @@ const styles = StyleSheet.create({
 
   logoTayder: {
     width: 400,
-    height: 400,
+    height: smallScreen ? 350 : 400,
   },
 
   inputs: {

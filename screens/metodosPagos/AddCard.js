@@ -12,7 +12,7 @@ const smallScreen = height < 812 ? true : false;
 const stripe = require('stripe-client')(Env.STRIPE_PUBLIC_KEY);
 
 const DismissKeyboard = ({ children }) => (
-  <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "position" : "height"} style={{ flex: 1 }}>
+  <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : ""} style={{ flex: 1 }}>
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>{children}</TouchableWithoutFeedback>
   </KeyboardAvoidingView>
 );
@@ -141,9 +141,8 @@ export default class MetodoPagoAddCardScreen extends React.Component {
           <Block style={{ height: smallScreen ? height * 0.35 : height * 0.38 }}>
             <Image source={Images.MetodoPagoAddCard} style={styles.image} />
           </Block>
-
           <Block space="between" style={styles.padded}>
-            <View style={{ height: height * 0.6 }}>
+            <View style={{ height: height * 0.7 }}>
               <Block width={width * 0.8} style={{ paddingTop: 15 }}>
                 <Text style={[styles.subtitle]}>Propietario de la tarjeta</Text>
                 <Input
@@ -230,6 +229,7 @@ export default class MetodoPagoAddCardScreen extends React.Component {
               </Block>
             </View>
           </Block>
+
         </ScrollView>
       </DismissKeyboard>
     );

@@ -57,7 +57,7 @@ class ServiceFinishTayder extends React.Component {
                                 round
                                 color={nowTheme.COLORS.BASE}
                                 style={styles.button}
-                                onPress={() => navigation.navigate("HomeTayder")}>
+                                onPress={() => navigation.navigate('DrawerTayder', { screen: 'HomeTayder' })}>
                                 <Text style={{ fontFamily: 'trueno-semibold', color: nowTheme.COLORS.WHITE, }} size={14}>
                                     FINALIZAR
                                 </Text>

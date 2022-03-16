@@ -45,8 +45,9 @@ export default class HomeTayder extends React.Component {
     const { navigation } = this.props;
 
     await Actions.extractUserData().then((result) => {
+      console.log('result>>', result)
       if (result != null) {
-        this.setState({ userData: result.user, isFirstLogin: result.user.first_login_tayder, tayderName: result.user.info.name });
+        this.setState({ userData: result.user, isFirstLogin: result.user.first_login_tayder, tayderName: result.user?.info?.name });
       }
     });
 
@@ -55,10 +56,13 @@ export default class HomeTayder extends React.Component {
     this.focusListener = await navigation.addListener('focus', () => {
       this._getScheduledServices();
     });
+
   }
 
   componentWillUnmount() {
-    this.focusListener()
+    if (typeof this.focusListener === 'function') {
+      this.focusListener()
+    }
   }
 
   async _updateFirstLogin() {
@@ -68,7 +72,7 @@ export default class HomeTayder extends React.Component {
       .then(async (response) => {
         await Actions.removeUserData().then(() => { });
         await AsyncStorage.setItem('user', JSON.stringify(response));
-        this.setState({ isLoading: false, userData: response, isFirstLogin: response.first_login_tayder, tayderName: response.info.name });
+        this.setState({ isLoading: false, userData: response, isFirstLogin: response.first_login_tayder, tayderName: response?.info?.name });
       })
       .catch(e => console.error(e));
   }
