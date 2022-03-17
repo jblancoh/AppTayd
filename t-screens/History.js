@@ -31,7 +31,7 @@ class HistoryTayder extends React.Component {
 
         await Actions.extractUserData().then((result) => {
             if (result != null) {
-                this.setState({ userData: result.user, tayderName: result.user.info.name });
+                this.setState({ userData: result.user, tayderName: result?.user?.info?.name });
                 this._getServices();
             }
         });
@@ -42,7 +42,9 @@ class HistoryTayder extends React.Component {
     }
 
     componentWillUnmount() {
-        this.focusListener()
+        if (typeof this.focusListener === 'function') {
+            this.focusListener()
+        }
     }
 
     async _getServices() {

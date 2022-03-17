@@ -59,11 +59,13 @@ class ServiceInfoTayder extends React.Component {
   }
 
   componentWillUnmount() {
-    this.focusListener()
+    if (typeof this.focusListener === 'function') {
+      this.focusListener()
+    }
   }
 
   formatDateTime = (item) => {
-    let arrItem = item.dt_request.split(" ");
+    let arrItem = item?.dt_request.split(" ");
     let arrDate = arrItem[0].split("-");
     let arrTime = arrItem[1].split(":");
 
@@ -184,7 +186,7 @@ class ServiceInfoTayder extends React.Component {
             </View>
           )
         }
-        <Block flex={1.7} space="between">
+        <Block flex={smallScreen ? 1.7 : 2} space="between">
           <ScrollView>
             <Block flex={0.6} style={{ alignItems: 'center' }}>
               <View style={[styles.section]}>
@@ -329,16 +331,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: height * 0.62,
-  },
-  padded: {
-    top: smallScreen ? 350 : 390,
-    justifyContent: 'center',
-    alignSelf: 'center',
-    paddingHorizontal: theme.SIZES.BASE * 1.3,
-    position: 'absolute',
-    bottom: theme.SIZES.BASE,
-    zIndex: 2,
-    width: width,
   },
   textExtraBold: {
     fontFamily: 'trueno-extrabold',

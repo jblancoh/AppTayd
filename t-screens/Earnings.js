@@ -29,7 +29,7 @@ export default class EarningsTayder extends React.Component {
 
         await Actions.extractUserData().then((result) => {
             if (result != null) {
-                this.setState({ userData: result.user, tayderName: result.user.info.name });
+                this.setState({ userData: result.user, tayderName: result?.user?.info?.name });
             }
         });
 
@@ -41,11 +41,13 @@ export default class EarningsTayder extends React.Component {
     }
 
     componentWillUnmount() {
-        this.focusListener()
+        if (typeof this.focusListener === 'function') {
+            this.focusListener()
+        }
     }
 
     async _getEarnings() {
-        await ServicesService.getUserEarnings(this.state.userData.id)
+        await ServicesService.getUserEarnings(this.state?.userData?.id)
             .then(response => this.setState({ countServices: response.count, totalServices: parseFloat(response.subtotal) }))
             .catch(error => console.error(error));
     }

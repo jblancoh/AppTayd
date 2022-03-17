@@ -45,7 +45,6 @@ export default class HomeTayder extends React.Component {
     const { navigation } = this.props;
 
     await Actions.extractUserData().then((result) => {
-      console.log('result>>', result)
       if (result != null) {
         this.setState({ userData: result.user, isFirstLogin: result.user.first_login_tayder, tayderName: result.user?.info?.name });
       }

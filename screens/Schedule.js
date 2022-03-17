@@ -9,6 +9,7 @@ import { iPhoneX } from "../constants/utils";
 import Actions from "../lib/actions";
 import env from '../lib/enviroment';
 import ServicesService from "../services/service";
+import _ from 'lodash';
 
 const { width, height } = Dimensions.get("screen");
 const smallScreen = height < 812 ? true : false;
@@ -23,9 +24,10 @@ class Schedule extends React.Component {
             weekDay: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
             months: ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
             services: [],
+            loading: false,
+            currentService: null,
         }
     }
-
     async componentDidMount() {
         const { navigation } = this.props;
 
@@ -48,6 +50,9 @@ class Schedule extends React.Component {
         this.focusListener = await navigation.addListener('focus', () => {
             this._getServices();
         });
+        this.setState({
+            currentService: this.state.services
+        })
     }
 
     componentWillUnmount() {
@@ -57,16 +62,35 @@ class Schedule extends React.Component {
         if (typeof this.focusListener === 'function') {
             this.focusListener()
         }
-        // if (typeof this._getServices === 'function') {
-        //     this._getServices()
-        // }
+        this.setState({
+            currentService: null
+        })
     }
 
     async _getServices() {
+        this.setState({
+            loading: true
+        })
         await ServicesService.listScheduled(this.state.userData.id)
             .then(response => {
-                this.setState({ services: response, showMore: response.length > 0 ? true : false })
-                // this.forceUpdate()
+                this.setState({
+                    services: response,
+                    showMore: response.length > 0 ? true : false,
+                    loading: false
+                })
+                if (response.length > 0) {
+                    this.setState({
+                        currentService: response[0]
+                    })
+                }
+                if (response.length === 0 && !_.isEmpty(this.state.currentService)) {
+                    this.props.navigation.navigate("RateService", {
+                        service: this.state.currentService
+                    })
+                    this.setState({
+                        currentService: null
+                    })
+                }
             })
             .catch(error => {
                 Alert.alert("No se encontraron servicios vinculados a este usuario.");
@@ -106,7 +130,7 @@ class Schedule extends React.Component {
                         ) : (
                             <View style={{ height: height * (smallScreen ? 0.70 : 0.68) }}>
                                 <ScrollView>
-                                    {this.state.services.map((item) => <ServiceComponent key={item.id} item={item} onClose={() => this._getServices()} {...this.props} />)}
+                                    {this.state.services.map((item) => <ServiceComponent key={item.id} item={item} onClose={() => this._getServices()} {...this.props} isLoadingService={this.state.loading} />)}
                                 </ScrollView>
                             </View>
                         )

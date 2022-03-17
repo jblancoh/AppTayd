@@ -40,7 +40,7 @@ class AgendaChatScreen extends React.Component {
 
     await Actions.extractUserData().then((result) => {
       if (result != null) {
-        this.setState({ userData: result.user, userName: `${result.user.info.name}` });
+        this.setState({ userData: result.user, userName: `${result?.user?.info?.name}` });
         this._getMessages();
       }
     });
@@ -66,7 +66,9 @@ class AgendaChatScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    this.focusListener()
+    if (typeof this.focusListener === 'function') {
+      this.focusListener()
+    }
   }
 
   async _getMessages() {

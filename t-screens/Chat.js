@@ -22,7 +22,7 @@ const DismissKeyboard = ({ children }) => (
   <KeyboardAvoidingView
     style={{ flex: 1 }}
     showsVerticalScrollIndicator={false}
-    behavior={Platform.OS == "ios" ? "position" : ""}
+    behavior={Platform.OS == "ios" ? "padding" : ""}
   >
     {children}
   </KeyboardAvoidingView>
@@ -46,7 +46,7 @@ class ChatTayderScreen extends React.Component {
 
     await Actions.extractUserData().then((result) => {
       if (result != null) {
-        this.setState({ userData: result.user, userName: `${result.user.info.name}` });
+        this.setState({ userData: result.user, userName: `${result?.user?.info?.name}` });
         this._getMessages();
       }
     });
@@ -71,7 +71,9 @@ class ChatTayderScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    this.focusListener()
+    if (typeof this.focusListener === 'function') {
+      this.focusListener()
+    }
   }
 
   async _getMessages() {

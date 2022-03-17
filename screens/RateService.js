@@ -13,6 +13,7 @@ const smallScreen = height < 812 ? true : false;
 class RateServiceScreen extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       userData: null,
       service: this.props.route.params.service,
@@ -25,7 +26,6 @@ class RateServiceScreen extends React.Component {
 
   async componentDidMount() {
     const { navigation } = this.props;
-
     await Actions.extractUserData().then((result) => {
       if (result != null) {
         this.setState({ userData: result.user });
