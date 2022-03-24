@@ -26,6 +26,7 @@ class Schedule extends React.Component {
             services: [],
             loading: false,
             currentService: null,
+            isCancelled: false
         }
     }
     async componentDidMount() {
@@ -83,18 +84,29 @@ class Schedule extends React.Component {
                         currentService: response[0]
                     })
                 }
-                if (response.length === 0 && !_.isEmpty(this.state.currentService)) {
+                if (response.length === 0 && !_.isEmpty(this.state.currentService) && !this.state.isCancelled) {
                     this.props.navigation.navigate("RateService", {
                         service: this.state.currentService
                     })
                     this.setState({
-                        currentService: null
+                        currentService: null,
+                        isCancelled: false
+                    })
+                } else {
+                    this.setState({
+                        isCancelled: false
                     })
                 }
             })
             .catch(error => {
                 Alert.alert("No se encontraron servicios vinculados a este usuario.");
             })
+    }
+
+    _cancelCurrentService = () => {
+        this.setState({
+            isCancelled: true
+        })
     }
 
     renderBlocks = () => {
@@ -130,7 +142,18 @@ class Schedule extends React.Component {
                         ) : (
                             <View style={{ height: height * (smallScreen ? 0.70 : 0.68) }}>
                                 <ScrollView>
-                                    {this.state.services.map((item) => <ServiceComponent key={item.id} item={item} onClose={() => this._getServices()} {...this.props} isLoadingService={this.state.loading} />)}
+                                    {this.state.services.map((item) => {
+                                        return (
+                                            <ServiceComponent
+                                                key={item.id}
+                                                item={item}
+                                                onClose={() => this._getServices()}
+                                                {...this.props}
+                                                isLoadingService={this.state.loading}
+                                                cancelCurrentService={this._cancelCurrentService}
+                                            />
+                                        )
+                                    })}
                                 </ScrollView>
                             </View>
                         )
