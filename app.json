@@ -7,7 +7,7 @@
       "ios",
       "android"
     ],
-    "version": "1.3.3",
+    "version": "1.0",
     "orientation": "portrait",
     "icon": "./assets/ic_launcher.png",
     "updates": {
@@ -38,7 +38,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.tayd.taydApp",
-      "buildNumber": "1.3.3",
+      "buildNumber": "1.3.5",
       "splash": {
         "image": "./assets/splash/splash.png",
         "resizeMode": "contain"

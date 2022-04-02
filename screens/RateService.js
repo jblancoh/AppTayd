@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Dimensions, ScrollView, Image, View, TextInput, Alert, Modal, StatusBar } from "react-native";
+import { StyleSheet, Dimensions, Keyboard, Image, View, TextInput, Alert, Modal, StatusBar } from "react-native";
 import { Block, theme, Text, Button } from "galio-framework";
 
 import { TabBar, Rating } from "../components";
@@ -113,8 +113,11 @@ class RateServiceScreen extends React.Component {
                     placeholderTextColor={nowTheme.COLORS.PLACEHOLDER}
                     multiline={true}
                     numberOfLines={5}
-                    blurOnSubmit={false}
+                    blurOnSubmit={true}
                     onChangeText={(text) => this.setState({ comments: text })}
+                    returnKeyType="done"
+                    onSubmitEditing={() => { Keyboard.dismiss() }}
+
                   />
                 </Block>
 

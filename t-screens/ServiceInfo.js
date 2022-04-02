@@ -65,7 +65,8 @@ class ServiceInfoTayder extends React.Component {
   }
 
   formatDateTime = (item) => {
-    let arrItem = item?.dt_request.split(" ");
+    console.log('item?.dt_request', item.dt_request)
+    let arrItem = item.dt_request.split(" ");
     let arrDate = arrItem[0].split("-");
     let arrTime = arrItem[1].split(":");
 
@@ -149,7 +150,6 @@ class ServiceInfoTayder extends React.Component {
 
   render() {
     const { serviceDetails, propertyDist, service, mapRefresh, showModal, isLoading, isCanceled } = this.state;
-
     return (
       <Block flex safe style={styles.container}>
         <StatusBar barStyle="dark-content" />
@@ -186,47 +186,51 @@ class ServiceInfoTayder extends React.Component {
             </View>
           )
         }
-        <Block flex={smallScreen ? 1.7 : 2} space="between">
+        <Block flex={smallScreen ? 1.7 : 2} space="between" style={{ top: 20 }}>
           <ScrollView>
             <Block flex={0.6} style={{ alignItems: 'center' }}>
-              <View style={[styles.section]}>
-                <Image source={Images.Icons.Calendario} style={[{ width: 60, height: 60, marginTop: 20 }]} />
-                <Block style={[styles.sectionItem, styles.sectionBorder, { width: 280 }]}>
-                  <Text style={[styles.textExtraBold]}>Cita aceptada</Text>
-                  <Text style={[styles.textNormal]}>
-                    <Text style={styles.textBold}>{service?.request_user_name} </Text>
-                    agendó una cita contigo para el {this.formatDateTime(service)}
-                  </Text>
-                </Block>
-              </View>
+              {service &&
+                <>
+                  <View style={[styles.section]}>
+                    <Image source={Images.Icons.Calendario} style={[{ width: 60, height: 60, marginTop: 20 }]} />
+                    <Block style={[styles.sectionItem, styles.sectionBorder, { width: 280 }]}>
+                      <Text style={[styles.textExtraBold]}>Cita aceptada</Text>
+                      {service &&
+                        <Text style={[styles.textNormal]}>
+                          <Text style={styles.textBold}>{service?.request_user_name} </Text>
+                          agendó una cita contigo para el {this.formatDateTime(service)}
+                        </Text>
+                      }
+                    </Block>
+                  </View>
 
-              <View style={[styles.section]}>
-                <Image source={Images.Icons.Ubicacion2} style={[{ width: 45, height: 63, marginTop: 20 }]} />
-                <Block style={[styles.sectionItem, styles.sectionBorder, { width: 280 }]}>
-                  <Text style={[styles.textRedBold]}>Dirección:</Text>
-                  <TouchableOpacity
-                    onPress={this._showLocation}
-                  >
-                    <Text style={[styles.textNormal]}>{service.service_type_id == 1 ? service.property_name : service.address}</Text>
-                  </TouchableOpacity>
-                </Block>
-              </View>
+                  <View style={[styles.section]}>
+                    <Image source={Images.Icons.Ubicacion2} style={[{ width: 45, height: 63, marginTop: 20 }]} />
+                    <Block style={[styles.sectionItem, styles.sectionBorder, { width: 280 }]}>
+                      <Text style={[styles.textRedBold]}>Dirección:</Text>
+                      <TouchableOpacity
+                        onPress={this._showLocation}
+                      >
+                        <Text style={[styles.textNormal]}>{service.service_type_id == 1 ? service.property_name : service.address}</Text>
+                      </TouchableOpacity>
+                    </Block>
+                  </View>
+                  <View style={[styles.section]}>
+                    <Image source={service.service_type_id == 1 ? Images.Icons.Inmueble : Images.Icons.Vehiculo} style={[{ width: 60, height: 60, marginTop: 20 }]} />
+                    <Block style={[styles.sectionItem, styles.sectionBorder, { width: 280 }]}>
+                      <Text style={[styles.textRedBold]}>{service.service_type_id == 1 ? `Inmuebles: ${service.property_type_name}` : `Servicio: ${service.vehicle_type}`}</Text>
+                      <Text style={[styles.textNormal]}>{service.service_type_id == 1 ? propertyDist : serviceDetails}</Text>
+                    </Block>
+                  </View>
 
-              <View style={[styles.section]}>
-                <Image source={service.service_type_id == 1 ? Images.Icons.Inmueble : Images.Icons.Vehiculo} style={[{ width: 60, height: 60, marginTop: 20 }]} />
-                <Block style={[styles.sectionItem, styles.sectionBorder, { width: 280 }]}>
-                  <Text style={[styles.textRedBold]}>{service.service_type_id == 1 ? `Inmuebles: ${service.property_type_name}` : `Servicio: ${service.vehicle_type}`}</Text>
-                  <Text style={[styles.textNormal]}>{service.service_type_id == 1 ? propertyDist : serviceDetails}</Text>
-                </Block>
-              </View>
-
-              <View style={[styles.section, { marginVertical: 10 }]}>
-                <Block style={{ width: 60 }} />
-                <Block style={[styles.sectionItem, { width: 300 }]}>
-                  <Text style={[styles.textBold]}>{service.has_consumables ? 'Se solicitaron insumos.' : 'No se solicitaron insumos.'}</Text>
-                </Block>
-              </View>
-
+                  <View style={[styles.section, { marginVertical: 10 }]}>
+                    <Block style={{ width: 60 }} />
+                    <Block style={[styles.sectionItem, { width: 300 }]}>
+                      <Text style={[styles.textBold]}>{service.has_consumables ? 'Se solicitaron insumos.' : 'No se solicitaron insumos.'}</Text>
+                    </Block>
+                  </View>
+                </>
+              }
               <Block middle style={{ marginBottom: 25 }}>
                 <Block row style={{ marginBottom: 15 }}>
                   <Button

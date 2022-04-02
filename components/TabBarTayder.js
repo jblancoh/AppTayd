@@ -80,7 +80,7 @@ export default class TabBarTayder extends React.Component {
             .then(response => {
                 this.setState({ showAlert: false, data: null, isLoading: false });
                 this.props.navigation.navigate("ServiceInfoTayder", {
-                    service: response[0]
+                    service: response
                 });
             })
             .catch(error => {
